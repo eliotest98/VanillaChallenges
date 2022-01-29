@@ -1,1 +1,1 @@
-# VanillaChalnges
+# VanillaChallenges
