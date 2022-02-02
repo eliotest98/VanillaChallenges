@@ -1,0 +1,29 @@
+name: VanillaChallenges
+version: maven-version-number
+main: io.eliotesta98.VanillaChallenges.Core.Main
+api-version: 1.13
+authors: [ eliotesta98 ]
+softdepend: [ ]
+depend: [ ]
+commands:
+  vc:
+    aliases: [ vanillachallenges ]
+permissions:
+  vc.reload.command:
+    description: for /vc reload
+    default: op
+  vc.help.command:
+    description: for /vc help
+    default: op
+  vc.next.command:
+    description: for /vc next
+    default: op
+  vc.top.command:
+    description: for /vc top
+    default: op
+  vc.points.command:
+    description: for /vc points
+    default: op
+  vc.points.admin.command:
+    description: for /vc points [playerName]
+    default: op

@@ -1,0 +1,60 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #    
+#                                                                                               #
+#                                     Vanilla Challenges                                        #
+#                                   Created by eliotesta98                                      #
+#                                                                                               #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #   
+
+Configuration:
+  # List of Challenges
+  Challenges:
+    # BlockPlaceChallenge
+    BlockPlace:
+      TypeChallenge: 'BlockPlaceChallenge'
+      # Block you want placed for challenge, if you want all blocks write ALL
+      Block: ALL
+      # Block you want place the block, if you want all write ALL
+      BlockOnPlaced: GRASS_BLOCK
+      # Title challenge
+      Title: '&aPlacer'
+      # Description of Challenge
+      Description: '&ePlace blocks on Grass Block for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Reward: 'IRON_INGOT:16'
+    IronBreak:
+      TypeChallenge: 'BlockBreakChallenge'
+      # Block you want break for challenge, if you want all blocks write ALL
+      Block: ALL
+      Title: '&aBraker'
+      # Description of Challenge
+      Description: '&eBrake blocks for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Reward: 'IRON_INGOT:16'
+
+# Messages
+Message:
+  commandFooter: '&7(&7&l(&c&l!&7&l)&7) &9&l[] optional value, <> required'
+  commandVcReloadHelp: '&e/vc &6<reload> &7command reload Plugin'
+  commandVcHelpHelp: '&e/vc &6<help> &7command help for VanillaChallenge Plugin'
+  commandVcNextHelp: '&e/vc &6<next> &7go to the next challenge'
+  commandVcTopHelp: '&e/vc &6<top> &7for see the top 3'
+  commandVcPointsHelp: '&e/vc &6<points> [playerName] &7for see your points or points of another player'
+
+  errorYouAreNotAPlayer: '&cYou are not a player'
+  errorCommandNotFound: '&cCommand not found'
+  errorNoPerms: '&cInsufficient permission'
+
+  pointsInfo: '&a&l{player} points are {number}'
+  topPlayers: '&a&l{number}° place: {player} with {points}'
+
+Debug:
+  # Commands time execution
+  Commands: false
+  # Block Place Event time execution
+  BlockPlaceEvent: false
+  # Block Break Event time execution
+  BlockBreakEvent: false
+  # Enabled time execution
+  Enabled: false
+  # Disabled time execution
+  Disabled: false
