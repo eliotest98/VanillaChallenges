@@ -25,7 +25,9 @@ public class ConfigGestion {
             String reward = file.getString("Configuration.Challenges." + challengeName + ".Reward");
             String title = file.getString("Configuration.Challenges." + challengeName + ".Title");
             String subTitle = file.getString("Configuration.Challenges." + challengeName + ".Description");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward,title,subTitle);
+            String item =  file.getString("Configuration.Challenges." + challengeName + ".Item");
+            String itemInHand = file.getString("Configuration.Challenges." + challengeName + ".ItemInHand");
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward,title,subTitle,item,itemInHand);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");

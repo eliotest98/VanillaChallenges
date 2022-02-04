@@ -19,6 +19,8 @@ public class Challenge {
     private String reward = "nessuno";
     private String title = "nessuno";
     private String subTitle = "nessuno";
+    private String item = "ALL";
+    private String itemInHand = "ALL";
     // timer del salvataggio punti
     int number = 20*60*10;
     private BukkitTask task;
@@ -27,13 +29,15 @@ public class Challenge {
 
     }
 
-    public Challenge(String block, String blockOnPlace,String typeChallenge, String reward, String title, String subTitle) {
+    public Challenge(String block, String blockOnPlace,String typeChallenge, String reward, String title, String subTitle, String item, String itemInHand) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
         this.reward = reward;
         this.title = title;
         this.subTitle = subTitle;
+        this.item = item;
+        this.itemInHand = itemInHand;
     }
 
     public String getBlock() {
@@ -182,6 +186,22 @@ public class Challenge {
 
     public void setSubTitle(String subTitle) {
         this.subTitle = subTitle;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public String getItemInHand() {
+        return itemInHand;
+    }
+
+    public void setItemInHand(String itemInHand) {
+        this.itemInHand = itemInHand;
     }
 
     @Override

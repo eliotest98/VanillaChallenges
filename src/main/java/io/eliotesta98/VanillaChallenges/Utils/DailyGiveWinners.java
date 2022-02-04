@@ -31,8 +31,8 @@ public class DailyGiveWinners implements Listener {
         long tempo = System.currentTimeMillis();
         if (winners.isEmpty()) {
             if (debug) {
-                debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("BlockPlaceEvent");
+                debugUtils.addLine("DailyGiveRewardEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("DailyGiveRewardEvent");
             }
             return;
         }

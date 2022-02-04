@@ -25,10 +25,22 @@ Configuration:
       TypeChallenge: 'BlockBreakChallenge'
       # Block you want break for challenge, if you want all blocks write ALL
       Block: ALL
+      # Type of item in main hand for break this blocks, if you want all items write ALL
+      ItemInHand: DIAMOND_PICKAXE
       # Title challenge
       Title: '&c&l[Vanilla Challenge] &aBreaker Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eBreak all type of block for receive points'
+      Description: '&c&l[Vanilla Challenge] &eBreak all type of block with diamond pickaxe for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Reward: 'IRON_INGOT:16'
+    Crafter:
+      TypeChallenge: 'CraftingChallenge'
+      # Item you want crafting for challenge, if you want all items write ALL
+      Item: ALL
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aCrafting Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eCraft any item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
       Reward: 'IRON_INGOT:16'
   BroadcastMessage:
@@ -61,6 +73,8 @@ Debug:
   BlockBreakEvent: false
   # Daily Give Reward Event time execution
   DailyGiveRewardEvent: false
+  # Craft Item Event time execution
+  CraftItemEvent: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution

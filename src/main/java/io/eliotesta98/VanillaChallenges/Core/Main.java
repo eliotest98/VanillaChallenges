@@ -4,6 +4,7 @@ import io.eliotesta98.VanillaChallenges.Database.ChallengeDB;
 import io.eliotesta98.VanillaChallenges.Database.ConfigGestion;
 import io.eliotesta98.VanillaChallenges.Events.BlockBreakEvent;
 import io.eliotesta98.VanillaChallenges.Events.BlockPlaceEvent;
+import io.eliotesta98.VanillaChallenges.Events.CraftingEvent;
 import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
@@ -130,6 +131,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new BlockPlaceEvent(),this);
         } else if (typeChallenge.equalsIgnoreCase("BlockBreakChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new BlockBreakEvent(),this);
+        } else if (typeChallenge.equalsIgnoreCase("CraftingChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new CraftingEvent(),this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }
