@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Comandi;
 
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
+import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import io.eliotesta98.VanillaChallenges.Utils.ReloadUtil;
 import org.bukkit.Bukkit;
@@ -76,6 +77,15 @@ public class Commands implements CommandExecutor {
                             @Override
                             public void run() {
                                 H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers();
+                                while(!topPlayers.isEmpty()) {
+                                    DailyWinner dailyWinner = new DailyWinner();
+                                    dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
+                                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                                    dailyWinner.setReward(Main.dailyChallenge.getReward());
+                                    H2Database.instance.insertDailyWinner(dailyWinner);
+                                    topPlayers.remove(0);
+                                }
                                 ReloadUtil.reload();
                             }
                         });
@@ -258,6 +268,15 @@ public class Commands implements CommandExecutor {
                             @Override
                             public void run() {
                                 H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers();
+                                while(!topPlayers.isEmpty()) {
+                                    DailyWinner dailyWinner = new DailyWinner();
+                                    dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
+                                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                                    dailyWinner.setReward(Main.dailyChallenge.getReward());
+                                    H2Database.instance.insertDailyWinner(dailyWinner);
+                                    topPlayers.remove(0);
+                                }
                                 ReloadUtil.reload();
                             }
                         });

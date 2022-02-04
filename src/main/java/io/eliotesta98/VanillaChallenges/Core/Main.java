@@ -1,23 +1,19 @@
 package io.eliotesta98.VanillaChallenges.Core;
 
 import io.eliotesta98.VanillaChallenges.Database.ChallengeDB;
-import io.eliotesta98.VanillaChallenges.Database.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.ConfigGestion;
 import io.eliotesta98.VanillaChallenges.Events.BlockBreakEvent;
 import io.eliotesta98.VanillaChallenges.Events.BlockPlaceEvent;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
+import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import io.eliotesta98.VanillaChallenges.Utils.*;
-
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
-
 import org.bukkit.*;
 import org.bukkit.command.*;
 
@@ -28,6 +24,7 @@ public class Main extends JavaPlugin {
     public static Challenge dailyChallenge;
     public static ChallengeDB currentlyChallengeDB;
     private CheckDay checkDay;
+    private BrodcastDailyChallenge brodcastDailyChallenge;
 
     public void onEnable() {
         DebugUtils debugsistem = new DebugUtils();
@@ -130,16 +127,21 @@ public class Main extends JavaPlugin {
         }
         String typeChallenge = insertDailyChallenges();
         if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents((Listener) new BlockPlaceEvent(), (Plugin) this);
+            Bukkit.getServer().getPluginManager().registerEvents(new BlockPlaceEvent(),this);
         } else if (typeChallenge.equalsIgnoreCase("BlockBreakChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents((Listener) new BlockBreakEvent(), (Plugin) this);
+            Bukkit.getServer().getPluginManager().registerEvents(new BlockBreakEvent(),this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }
+        Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
         loadPlayersPoints();
         checkDay = new CheckDay();
         // ogni 60 minuti
         checkDay.start(20 * 60 * 60);
+        brodcastDailyChallenge = new BrodcastDailyChallenge();
+        if(config.getTimeBrodcastMessageTitle() != 0) {
+            brodcastDailyChallenge.start((long) config.getTimeBrodcastMessageTitle() *60*20);
+        }
         getCommand("vc").setExecutor((CommandExecutor) new Commands());
         if (config.getDebug().get("Enabled")) {
             debugsistem.addLine("Enabled execution time= " + (System.currentTimeMillis() - tempo));
@@ -153,6 +155,9 @@ public class Main extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "VanillaChallenges has been disabled, §cBye bye! §e:(");
         if (checkDay != null) {
             checkDay.stop();
+        }
+        if(config.getTimeBrodcastMessageTitle() != 0) {
+            brodcastDailyChallenge.stop();
         }
         dailyChallenge.clearPlayers();
         H2Database.disconnect();

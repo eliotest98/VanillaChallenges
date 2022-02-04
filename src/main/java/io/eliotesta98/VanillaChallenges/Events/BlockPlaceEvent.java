@@ -67,7 +67,7 @@ public class BlockPlaceEvent implements Listener {
                         return;
                     }
                 }
-                Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
+                //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
             }
         });
     }

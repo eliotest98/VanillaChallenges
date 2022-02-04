@@ -16,21 +16,24 @@ Configuration:
       # Block you want place the block, if you want all write ALL
       BlockOnPlaced: GRASS_BLOCK
       # Title challenge
-      Title: '&aPlacer'
+      Title: '&c&l[Vanilla Challenge] &aBlock Placer Challenge'
       # Description of Challenge
-      Description: '&ePlace blocks on Grass Block for receive points'
+      Description: '&c&l[Vanilla Challenge] &ePlace blocks on Grass Block for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
       Reward: 'IRON_INGOT:16'
-    IronBreak:
+    Breaker:
       TypeChallenge: 'BlockBreakChallenge'
       # Block you want break for challenge, if you want all blocks write ALL
       Block: ALL
-      Title: '&aBraker'
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aBreaker Challenge'
       # Description of Challenge
-      Description: '&eBrake blocks for receive points'
+      Description: '&c&l[Vanilla Challenge] &eBreak all type of block for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
       Reward: 'IRON_INGOT:16'
-
+  BroadcastMessage:
+    # time in minutes 0 to disabled
+    TimeTitleChallenges: 10
 # Messages
 Message:
   commandFooter: '&7(&7&l(&c&l!&7&l)&7) &9&l[] optional value, <> required'
@@ -45,7 +48,9 @@ Message:
   errorNoPerms: '&cInsufficient permission'
 
   pointsInfo: '&a&l{player} points are {number}'
-  topPlayers: '&a&l{number}° place: {player} with {points}'
+  actuallyInTop: '&c&l[Vanilla Challenge] &a&lActually in top there are:'
+  topPlayers: '&a&l{number}° place: {player} with {points} points'
+  challengeReward: '&c&l[Vanilla Challenge] &a&lYou complete the challenge and arrive at top 3 players, receive x{number} of {item}'
 
 Debug:
   # Commands time execution
@@ -54,6 +59,8 @@ Debug:
   BlockPlaceEvent: false
   # Block Break Event time execution
   BlockBreakEvent: false
+  # Daily Give Reward Event time execution
+  DailyGiveRewardEvent: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution

@@ -2,8 +2,6 @@ package io.eliotesta98.VanillaChallenges.Database;
 
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConfigGestion {
@@ -11,6 +9,7 @@ public class ConfigGestion {
     private HashMap<String, Boolean> debug = new HashMap<String, Boolean>();
     private HashMap<String, String> messages = new HashMap<String, String>();
     private HashMap<String, Challenge> challenges = new HashMap<String, Challenge>();
+    private int timeBrodcastMessageTitle;
 
     public ConfigGestion(FileConfiguration file) {
         for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
@@ -23,9 +22,13 @@ public class ConfigGestion {
             String block = file.getString("Configuration.Challenges." + challengeName + ".Block");
             String blockOnPlaced = file.getString("Configuration.Challenges." + challengeName + ".BlockOnPlaced");
             String typeChallenge = file.getString("Configuration.Challenges." + challengeName + ".TypeChallenge");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge);
+            String reward = file.getString("Configuration.Challenges." + challengeName + ".Reward");
+            String title = file.getString("Configuration.Challenges." + challengeName + ".Title");
+            String subTitle = file.getString("Configuration.Challenges." + challengeName + ".Description");
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward,title,subTitle);
             challenges.put(challengeName, challenge);
         }
+        timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
     }
 
     public HashMap<String, Boolean> getDebug() {
@@ -52,4 +55,11 @@ public class ConfigGestion {
         this.challenges = challenges;
     }
 
+    public int getTimeBrodcastMessageTitle() {
+        return timeBrodcastMessageTitle;
+    }
+
+    public void setTimeBrodcastMessageTitle(int timeBrodcastMessageTitle) {
+        this.timeBrodcastMessageTitle = timeBrodcastMessageTitle;
+    }
 }

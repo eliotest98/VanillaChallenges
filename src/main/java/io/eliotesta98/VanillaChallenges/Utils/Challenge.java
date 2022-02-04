@@ -16,16 +16,24 @@ public class Challenge {
     private String block = "ALL";
     private String blockOnPlace = "ALL";
     private String typeChallenge = "nessuna";
+    private String reward = "nessuno";
+    private String title = "nessuno";
+    private String subTitle = "nessuno";
+    // timer del salvataggio punti
+    int number = 20*60*10;
     private BukkitTask task;
 
     public Challenge() {
 
     }
 
-    public Challenge(String block, String blockOnPlace,String typeChallenge) {
+    public Challenge(String block, String blockOnPlace,String typeChallenge, String reward, String title, String subTitle) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
+        this.reward = reward;
+        this.title = title;
+        this.subTitle = subTitle;
     }
 
     public String getBlock() {
@@ -91,7 +99,7 @@ public class Challenge {
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
+                //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
                 for (Map.Entry<String, Integer> player : players.entrySet()) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
@@ -100,10 +108,9 @@ public class Challenge {
                         }
                     });
                 }
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
+                //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
             }
-            //ogni 10 minuti
-        }, 0, 20*60*10);
+        }, 0, number);
     }
 
     public void stopTask() {
@@ -116,6 +123,14 @@ public class Challenge {
         } else {
             return players.get(playerName);
         }
+    }
+
+    public String getReward() {
+        return reward;
+    }
+
+    public void setReward(String reward) {
+        this.reward = reward;
     }
 
     public ArrayList<Challenger> getTopPlayers() {
@@ -152,7 +167,23 @@ public class Challenge {
         }
         return top;
     }
-    
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
+
     @Override
     public String toString() {
         return "Challenge{" +
