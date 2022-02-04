@@ -21,7 +21,7 @@ Configuration:
       Description: '&c&l[Vanilla Challenge] &ePlace blocks on Grass Block for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
       Reward: 'IRON_INGOT:16'
-    Breaker:
+    BlockBreaker:
       TypeChallenge: 'BlockBreakChallenge'
       # Block you want break for challenge, if you want all blocks write ALL
       Block: ALL
@@ -41,6 +41,26 @@ Configuration:
       Title: '&c&l[Vanilla Challenge] &aCrafting Challenge'
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eCraft any item for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Reward: 'IRON_INGOT:16'
+    Cooker:
+      TypeChallenge: 'CookerChallenge'
+      # Item you want cook for challenge, if you want all items write ALL
+      Item: ALL
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aCook Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eCook any item for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Reward: 'IRON_INGOT:16'
+    Consumer:
+      TypeChallenge: 'ConsumeChallenge'
+      # Item you want to consume for challenge, if you want all items write ALL
+      Item: ALL
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aConsume Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eConsume any item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
       Reward: 'IRON_INGOT:16'
   BroadcastMessage:
@@ -75,6 +95,10 @@ Debug:
   DailyGiveRewardEvent: false
   # Craft Item Event time execution
   CraftItemEvent: false
+  # Furnace Cook Event time execution
+  FurnaceCookEvent: false
+  # Item Consume Event time execution
+  ItemConsumeEvent: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution

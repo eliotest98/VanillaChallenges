@@ -89,6 +89,20 @@ public class Challenge {
         }
     }
 
+    public void increment(String playerName, int amount) {
+        if (!players.containsKey(playerName)) {
+            players.put(playerName, amount);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
+                @Override
+                public void run() {
+                    H2Database.instance.insertChallenger(playerName, 1);
+                }
+            });
+        } else {
+            players.replace(playerName, players.get(playerName) + amount);
+        }
+    }
+
     public void clearPlayers() {
         stopTask();
         players.clear();
