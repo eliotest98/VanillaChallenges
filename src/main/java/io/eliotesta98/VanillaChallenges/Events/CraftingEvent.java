@@ -23,7 +23,7 @@ public class CraftingEvent implements Listener {
                 if (itemCrafting.equalsIgnoreCase("ALL")) {
                     Main.dailyChallenge.increment(e.getWhoClicked().getName());
                 } else {
-                    if (e.getInventory().getRecipe().getResult().getType().toString() == itemCrafting) {
+                    if (e.getRecipe().getResult().getType().toString().equalsIgnoreCase(itemCrafting)) {
                         Main.dailyChallenge.increment(e.getWhoClicked().getName());
                     }
                 }
