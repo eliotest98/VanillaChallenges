@@ -20,7 +20,7 @@ Configuration:
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &ePlace blocks on Grass Block for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
-      Reward: 'IRON_INGOT:16'
+      Reward: 'NOBODY'
     BlockBreaker:
       TypeChallenge: 'BlockBreakChallenge'
       # Block you want break for challenge, if you want all blocks write ALL
@@ -32,7 +32,7 @@ Configuration:
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eBreak all type of block for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
-      Reward: 'IRON_INGOT:16'
+      Reward: 'NOBODY'
     Crafter:
       TypeChallenge: 'CraftingChallenge'
       # Item you want crafting for challenge, if you want all items write ALL
@@ -42,7 +42,7 @@ Configuration:
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eCraft any item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
-      Reward: 'IRON_INGOT:16'
+      Reward: 'NOBODY'
     Cooker:
       TypeChallenge: 'CookerChallenge'
       # Item you want cook for challenge, if you want all items write ALL
@@ -52,7 +52,7 @@ Configuration:
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eCook any item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
-      Reward: 'IRON_INGOT:16'
+      Reward: 'NOBODY'
     Consumer:
       TypeChallenge: 'ConsumeChallenge'
       # Item you want to consume for challenge, if you want all items write ALL
@@ -62,15 +62,15 @@ Configuration:
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eConsume any item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
-      Reward: 'IRON_INGOT:16'
+      Reward: 'NOBODY'
     ExpCollector:
         TypeChallenge: 'CollectorExpChallenge'
         # Title challenge
         Title: '&c&l[Vanilla Challenge] &aCollect Challenge'
         # Description of Challenge
         Description: '&c&l[Vanilla Challenge] &eCollect Experience for receive points'
-        # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
-        Reward: 'IRON_INGOT:16'
+        # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+        Reward: 'NOBODY'
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10

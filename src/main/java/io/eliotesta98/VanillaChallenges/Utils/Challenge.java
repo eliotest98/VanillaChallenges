@@ -6,6 +6,8 @@ import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -152,34 +154,19 @@ public class Challenge {
     }
 
     public ArrayList<Challenger> getTopPlayers() {
-        Challenger primo = new Challenger();
-        Challenger secondo = new Challenger();
-        Challenger terzo = new Challenger();
         ArrayList<Challenger> top = new ArrayList<>();
-        int i = 1;
         for (Map.Entry<String, Integer> player : players.entrySet()) {
-            if(i == 1) {
-                primo = new Challenger(player.getKey(),player.getValue());
-                top.add(primo);
-                i++;
-            } else if(i == 2) {
-                secondo = new Challenger(player.getKey(),player.getValue());
-                top.add(secondo);
-                i++;
-            } else if(i == 3) {
-                terzo = new Challenger(player.getKey(),player.getValue());
-                top.add(terzo);
-                i++;
+            Challenger current = new Challenger(player.getKey(),player.getValue());
+            if(top.isEmpty()) {
+                top.add(current);
             } else {
-                if(player.getValue() > primo.getPoints()) {
-                    primo.setNomePlayer(player.getKey());
-                    primo.setPoints(player.getValue());
-                } else if(player.getValue() > secondo.getPoints()) {
-                    secondo.setNomePlayer(player.getKey());
-                    secondo.setPoints(player.getValue());
-                } else if(player.getValue() > terzo.getPoints()) {
-                    terzo.setNomePlayer(player.getKey());
-                    terzo.setPoints(player.getValue());
+                for(int x = 0; x < top.size(); x++) {
+                    if(current.getPoints() > top.get(x).getPoints()) {
+                        top.add(x,current);
+                    }
+                    if(x == 2) {
+                        break;
+                    }
                 }
             }
         }
