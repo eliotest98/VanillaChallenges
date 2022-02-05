@@ -14,16 +14,20 @@ public class KillMobEvent implements Listener {
     private String mobKill = Main.dailyChallenge.getMob();
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPickUpExp(org.bukkit.event.entity.EntityDeathEvent e) {
+    public void onKillEvent(org.bukkit.event.entity.EntityDeathEvent e) {
         long tempo = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 if(mobKill.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getEntity().getKiller().getName());
+                    if(e.getEntity().getKiller() != null) {
+                        Main.dailyChallenge.increment(e.getEntity().getKiller().getName());
+                    }
                 } else {
                     if(mobKill.equalsIgnoreCase(e.getEntity().getName())) {
-                        Main.dailyChallenge.increment(e.getEntity().getKiller().getName());
+                        if(e.getEntity().getKiller() != null) {
+                            Main.dailyChallenge.increment(e.getEntity().getKiller().getName());
+                        }
                     }
                 }
             }

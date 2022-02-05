@@ -14,7 +14,7 @@ public class BreedEvent implements Listener {
     private String mobBreed = Main.dailyChallenge.getMob();
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPickUpExp(org.bukkit.event.entity.EntityBreedEvent e) {
+    public void onBreedAnimals(org.bukkit.event.entity.EntityBreedEvent e) {
         long tempo = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override

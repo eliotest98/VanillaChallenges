@@ -91,6 +91,16 @@ Configuration:
       Description: '&c&l[Vanilla Challenge] &eBreed mob for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
+    Feeder:
+      TypeChallenge: 'FeedChallenge'
+      # Item you want to feed for challenge, if you want all items write ALL
+      Item: ALL
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aFeed Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eEat items or starve for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10
@@ -133,6 +143,8 @@ Debug:
   KillEvent: false
   # Breed Event time execution
   BreedEvent: false
+  # Feed Event time execution
+  FeedEvent: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution
