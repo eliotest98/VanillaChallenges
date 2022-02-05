@@ -19,7 +19,7 @@ Configuration:
       Title: '&c&l[Vanilla Challenge] &aBlock Placer Challenge'
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &ePlace blocks on Grass Block for receive points'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
     BlockBreaker:
       TypeChallenge: 'BlockBreakChallenge'
@@ -31,7 +31,7 @@ Configuration:
       Title: '&c&l[Vanilla Challenge] &aBreaker Challenge'
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eBreak all type of block for receive points'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
     Crafter:
       TypeChallenge: 'CraftingChallenge'
@@ -41,7 +41,7 @@ Configuration:
       Title: '&c&l[Vanilla Challenge] &aCrafting Challenge'
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eCraft any item for receive points'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
     Cooker:
       TypeChallenge: 'CookerChallenge'
@@ -51,7 +51,7 @@ Configuration:
       Title: '&c&l[Vanilla Challenge] &aCook Challenge'
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eCook any item for receive points'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
     Consumer:
       TypeChallenge: 'ConsumeChallenge'
@@ -61,7 +61,7 @@ Configuration:
       Title: '&c&l[Vanilla Challenge] &aConsume Challenge'
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eConsume any item for receive points'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
     ExpCollector:
         TypeChallenge: 'CollectorExpChallenge'
@@ -71,6 +71,16 @@ Configuration:
         Description: '&c&l[Vanilla Challenge] &eCollect Experience for receive points'
         # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
         Reward: 'NOBODY'
+    Killer:
+      TypeChallenge: 'KillChallenge'
+      # Mob you want to kill for challenge, if you want all mobs write ALL
+      Mob: ALL
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aKill Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eKill any mob for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10
