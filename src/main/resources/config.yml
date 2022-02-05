@@ -26,11 +26,11 @@ Configuration:
       # Block you want break for challenge, if you want all blocks write ALL
       Block: ALL
       # Type of item in main hand for break this blocks, if you want all items write ALL
-      ItemInHand: DIAMOND_PICKAXE
+      ItemInHand: ALL
       # Title challenge
       Title: '&c&l[Vanilla Challenge] &aBreaker Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eBreak all type of block with diamond pickaxe for receive points'
+      Description: '&c&l[Vanilla Challenge] &eBreak all type of block for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
       Reward: 'IRON_INGOT:16'
     Crafter:
@@ -63,6 +63,14 @@ Configuration:
       Description: '&c&l[Vanilla Challenge] &eConsume any item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
       Reward: 'IRON_INGOT:16'
+    ExpCollector:
+        TypeChallenge: 'CollectorExpChallenge'
+        # Title challenge
+        Title: '&c&l[Vanilla Challenge] &aCollect Challenge'
+        # Description of Challenge
+        Description: '&c&l[Vanilla Challenge] &eCollect Experience for receive points'
+        # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+        Reward: 'IRON_INGOT:16'
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10
@@ -99,6 +107,8 @@ Debug:
   FurnaceCookEvent: false
   # Item Consume Event time execution
   ItemConsumeEvent: false
+  # Exp Collector Event time execution
+  ExpCollectorEvent: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution

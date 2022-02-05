@@ -135,6 +135,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new FurnaceBurnEvent(),this);
         } else if (typeChallenge.equalsIgnoreCase("ConsumeChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new ItemConsumeEvent(),this);
+        } else if (typeChallenge.equalsIgnoreCase("CollectorExpChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new ExpCollector(),this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }

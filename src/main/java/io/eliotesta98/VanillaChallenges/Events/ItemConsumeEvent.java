@@ -15,7 +15,6 @@ public class ItemConsumeEvent implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onItemConsume(org.bukkit.event.player.PlayerItemDamageEvent e) {
-        System.out.println(e.getPlayer().getName());
         long tempo = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override

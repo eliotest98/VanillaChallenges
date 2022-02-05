@@ -33,6 +33,9 @@ public class BrodcastDailyChallenge {
             @Override
             public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
+                    if(!p.hasPermission("vc.broadcast.timer")) {
+                        return;
+                    }
                     p.sendMessage("");
                     p.sendMessage(ChatColor.translateAlternateColorCodes('&', brodcastMessageTitle));
                     p.sendMessage(ChatColor.translateAlternateColorCodes('&', brodcastMessageSubTitle));
