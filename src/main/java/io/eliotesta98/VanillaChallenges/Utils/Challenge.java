@@ -158,15 +158,18 @@ public class Challenge {
     public ArrayList<Challenger> getTopPlayers() {
         ArrayList<Challenger> top = new ArrayList<>();
         for (Map.Entry<String, Integer> player : players.entrySet()) {
+            System.out.println("TOP: " + player.getKey());
             Challenger current = new Challenger(player.getKey(),player.getValue());
             if(top.isEmpty()) {
                 top.add(current);
             } else {
                 for(int x = 0; x < top.size(); x++) {
                     if(current.getPoints() > top.get(x).getPoints()) {
-                        top.add(x,current);
+                        top.set(x,current);
+                    } else {
+                        top.add(current);
                     }
-                    if(x == 2) {
+                    if(x == 1) {
                         break;
                     }
                 }
