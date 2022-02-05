@@ -139,6 +139,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new ExpCollector(),this);
         } else if (typeChallenge.equalsIgnoreCase("KillChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new KillMobEvent(),this);
+        } else if (typeChallenge.equalsIgnoreCase("BreedChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new BreedEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }

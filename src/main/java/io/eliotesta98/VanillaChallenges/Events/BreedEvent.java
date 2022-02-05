@@ -7,23 +7,27 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-public class KillMobEvent implements Listener {
+public class BreedEvent implements Listener {
 
     private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("KillEvent");
-    private String mobKill = Main.dailyChallenge.getMob();
+    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BreedEvent");
+    private String mobBreed = Main.dailyChallenge.getMob();
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPickUpExp(org.bukkit.event.entity.EntityDeathEvent e) {
+    public void onPickUpExp(org.bukkit.event.entity.EntityBreedEvent e) {
         long tempo = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if(mobKill.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getEntity().getKiller().getName());
+                if(mobBreed.equalsIgnoreCase("ALL")) {
+                    if(e.getBreeder() != null) {
+                        Main.dailyChallenge.increment(e.getBreeder().getName());
+                    }
                 } else {
-                    if(mobKill.equalsIgnoreCase(e.getEntity().getName())) {
-                        Main.dailyChallenge.increment(e.getEntity().getKiller().getName());
+                    if(mobBreed.equalsIgnoreCase(e.getEntity().getName())) {
+                        if(e.getBreeder() != null) {
+                            Main.dailyChallenge.increment(e.getBreeder().getName());
+                        }
                     }
                 }
             }
@@ -36,3 +40,4 @@ public class KillMobEvent implements Listener {
         return;
     }
 }
+
