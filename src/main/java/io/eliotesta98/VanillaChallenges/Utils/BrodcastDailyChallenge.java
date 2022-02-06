@@ -41,7 +41,7 @@ public class BrodcastDailyChallenge {
                     p.sendMessage(ChatColor.translateAlternateColorCodes('&', brodcastMessageSubTitle));
                     p.sendMessage("");
                     p.sendMessage(ChatColor.translateAlternateColorCodes('&',actuallyInTop));
-                    ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers();
+                    ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
                     int i = 1;
                     while (!top.isEmpty()) {
                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', topPlayers.replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + top.get(0).getPoints())));

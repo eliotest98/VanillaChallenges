@@ -37,7 +37,7 @@ public class CheckDay {
                         @Override
                         public void run() {
                             H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
-                            ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers();
+                            ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
                             while(!topPlayers.isEmpty()) {
                                 DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());

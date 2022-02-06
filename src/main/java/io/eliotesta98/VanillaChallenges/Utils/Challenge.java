@@ -155,28 +155,21 @@ public class Challenge {
         this.reward = reward;
     }
 
-    public ArrayList<Challenger> getTopPlayers() {
+    public ArrayList<Challenger> getTopPlayers(int numberOfTops) {
         ArrayList<Challenger> topList = new ArrayList<>();
-        ArrayList<String> nameTops = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < numberOfTops; i++) {
             Challenger challenger = new Challenger();
             for (Map.Entry<String, Integer> player : players.entrySet()) {
                 if (player.getValue() > challenger.getPoints()) {
-                    if (nameTops.isEmpty()) {
+                    boolean trovato = false;
+                    for (int x = 0; x < topList.size(); x++) {
+                        if (topList.get(x).getNomePlayer().equalsIgnoreCase(player.getKey())) {
+                            trovato = true;
+                            break;
+                        }
+                    }
+                    if (!trovato) {
                         challenger = new Challenger(player.getKey(), player.getValue());
-                        nameTops.add(player.getKey());
-                    } else {
-                        boolean trovato = false;
-                        for (int x = 0; x < nameTops.size(); x++) {
-                            if (nameTops.get(x).equalsIgnoreCase(player.getKey())) {
-                                trovato = true;
-                                break;
-                            }
-                        }
-                        if (!trovato) {
-                            challenger = new Challenger(player.getKey(), player.getValue());
-                            nameTops.add(player.getKey());
-                        }
                     }
                 }
             }

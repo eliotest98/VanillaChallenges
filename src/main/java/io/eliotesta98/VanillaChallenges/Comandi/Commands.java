@@ -77,7 +77,7 @@ public class Commands implements CommandExecutor {
                             @Override
                             public void run() {
                                 H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
-                                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers();
+                                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
                                 while(!topPlayers.isEmpty()) {
                                     DailyWinner dailyWinner = new DailyWinner();
                                     dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
@@ -179,7 +179,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers();
+                        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
                         int i = 1;
                         while (!top.isEmpty()) {
                             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', topPlayers.replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + top.get(0).getPoints())));
@@ -268,7 +268,7 @@ public class Commands implements CommandExecutor {
                             @Override
                             public void run() {
                                 H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
-                                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers();
+                                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
                                 while(!topPlayers.isEmpty()) {
                                     DailyWinner dailyWinner = new DailyWinner();
                                     dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
@@ -390,7 +390,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers();
+                        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
                         int i = 1;
                         while (!top.isEmpty()) {
                             p.sendMessage(ChatColor.translateAlternateColorCodes('&', topPlayers.replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + top.get(0).getPoints())));
