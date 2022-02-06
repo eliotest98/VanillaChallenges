@@ -25,14 +25,14 @@ public class Challenge {
     private String itemInHand = "ALL";
     private String mob = "ALL";
     // timer del salvataggio punti
-    int number = 20*60*10;
+    int number = 20 * 60 * 10;
     private BukkitTask task;
 
     public Challenge() {
 
     }
 
-    public Challenge(String block, String blockOnPlace,String typeChallenge, String reward, String title, String subTitle, String item, String itemInHand, String mob) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, String title, String subTitle, String item, String itemInHand, String mob) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
@@ -65,8 +65,8 @@ public class Challenge {
     }
 
     public void setPlayers(ArrayList<Challenger> challengers) {
-        while(!challengers.isEmpty()) {
-            players.put(challengers.get(0).getNomePlayer(),challengers.get(0).getPoints());
+        while (!challengers.isEmpty()) {
+            players.put(challengers.get(0).getNomePlayer(), challengers.get(0).getPoints());
             challengers.remove(0);
         }
     }
@@ -140,7 +140,7 @@ public class Challenge {
     }
 
     public int getPointFromPLayerName(String playerName) {
-        if(players.get(playerName) == null) {
+        if (players.get(playerName) == null) {
             return 0;
         } else {
             return players.get(playerName);
@@ -156,26 +156,37 @@ public class Challenge {
     }
 
     public ArrayList<Challenger> getTopPlayers() {
-        ArrayList<Challenger> top = new ArrayList<>();
-        for (Map.Entry<String, Integer> player : players.entrySet()) {
-            System.out.println("TOP: " + player.getKey());
-            Challenger current = new Challenger(player.getKey(),player.getValue());
-            if(top.isEmpty()) {
-                top.add(current);
-            } else {
-                for(int x = 0; x < top.size(); x++) {
-                    if(current.getPoints() > top.get(x).getPoints()) {
-                        top.set(x,current);
+        ArrayList<Challenger> topList = new ArrayList<>();
+        ArrayList<String> nameTops = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Challenger challenger = new Challenger();
+            for (Map.Entry<String, Integer> player : players.entrySet()) {
+                if (player.getValue() > challenger.getPoints()) {
+                    if (nameTops.isEmpty()) {
+                        challenger = new Challenger(player.getKey(), player.getValue());
+                        nameTops.add(player.getKey());
                     } else {
-                        top.add(current);
-                    }
-                    if(x == 1) {
-                        break;
+                        boolean trovato = false;
+                        for (int x = 0; x < nameTops.size(); x++) {
+                            if (nameTops.get(x).equalsIgnoreCase(player.getKey())) {
+                                trovato = true;
+                                break;
+                            }
+                        }
+                        if (!trovato) {
+                            challenger = new Challenger(player.getKey(), player.getValue());
+                            nameTops.add(player.getKey());
+                        }
                     }
                 }
             }
+            if (!challenger.getNomePlayer().equalsIgnoreCase("Notch")) {
+                topList.add(challenger);
+            } else {
+                break;
+            }
         }
-        return top;
+        return topList;
     }
 
     public String getTitle() {

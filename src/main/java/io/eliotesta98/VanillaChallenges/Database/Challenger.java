@@ -6,7 +6,8 @@ public class Challenger {
     private int points;
 
     public Challenger() {
-
+        this.nomePlayer = "Notch";
+        this.points = -1;
     }
 
     public Challenger(String nomePlayer, int points) {
