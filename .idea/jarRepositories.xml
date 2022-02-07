@@ -81,5 +81,10 @@
       <option name="name" value="minecraft-repo" />
       <option name="url" value="https://libraries.minecraft.net/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="mojang" />
+      <option name="name" value="mojang" />
+      <option name="url" value="https://libraries.minecraft.net/" />
+    </remote-repository>
   </component>
 </project>

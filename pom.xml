@@ -5,184 +5,161 @@
     <version>1.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8
-        </project.reporting.outputEncoding>
-        <!-- JDK Version -->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--  JDK Version  -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-	<build>
-		<defaultGoal>clean install</defaultGoal>
-		<finalName>VanillaChallenges-${project.version}</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>replacer</artifactId>
-				<version>1.5.3</version>
-				<executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<file>${project.build.directory}/classes/plugin.yml</file>
-					<replacements>
-						<replacement>
-							<token>maven-version-number</token>
-							<value>${project.version}</value>
-						</replacement>
-					</replacements>
-				</configuration>
-			</plugin>
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-shade-plugin</artifactId>
-			    <version>2.4.3</version>
-			    <executions>
-				<execution>
-				    <phase>package</phase>
-				    <goals>
-					<goal>shade</goal>
-				    </goals>
-				    <configuration>
-					<artifactSet>
-					    <includes>
-						<include>com.h2database:h2</include>
-						<include>com.zaxxer:HikariCP</include>
-					    </includes>
-					</artifactSet>
-				    </configuration>
-				</execution>
-				    </executions>
-			</plugin>
-		    </plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-	</build>
-
+    <build>
+        <defaultGoal>clean install</defaultGoal>
+        <finalName>VanillaChallenges-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <file>${project.build.directory}/classes/plugin.yml</file>
+                    <replacements>
+                        <replacement>
+                            <token>maven-version-number</token>
+                            <value>${project.version}</value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.slf4j</pattern>
+                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.org.slf4j </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.zaxxer</pattern>
+                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.com.zaxxer </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>de.tr7zw</pattern>
+                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.de.tr7zw </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.h2database</pattern>
+                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.com.h2database </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.h2</pattern>
+                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.org.h2 </shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
     <repositories>
-        <!-- Maven -->
         <repository>
+            <!--  Maven - H2  -->
             <id>www.seasar.org</id>
             <url>https://www.seasar.org/maven/maven2/</url>
         </repository>
-        <!-- SuperiorSkyBlock --> <!-- WildTools -->
         <repository>
-            <id>bg-repo</id>
-            <url>https://repo.bg-software.com/repository/api/</url>
-        </repository>
-        <!-- Vault --><!-- Lands --><!-- ShopGui --><!-- EcoEnchants -->
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <!-- EssentialsX -->
-        <repository>
-            <id>ci.ender.zone</id>
-            <url>https://ci.ender.zone/plugin/repository/everything/</url>
-        </repository>
-        <!-- NBT -->
-        <repository>
+            <!--  NBT  -->
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
             <layout>default</layout>
         </repository>
-        <!-- Spigot -->
         <repository>
+            <!--  Spigot  -->
             <id>spigot-public</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/public/
-            </url>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/public/ </url>
         </repository>
-        <!-- FabledSkyBlock -->
         <repository>
-            <id>songoda-merda-public</id>
-            <url>https://repo.songoda.com/repository/public/</url>
-        </repository>
-        <!-- CommonsCollection -->
-        <repository>
-            <id>maven-common-repo</id>
-            <url>https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
-            </url>
-        </repository>
-        <!-- WorldEdit -->
-        <repository>
-            <id>enginehub</id>
-            <url>https://maven.enginehub.org/repo/</url>
-        </repository>
-        <!-- PlotSquared -->
-        <repository>
-            <id>IntellectualSites</id>
-            <url>https://mvn.intellectualsites.com/content/groups/public/</url>
-        </repository>
-        <!-- TeamVK -->
-        <repository>
-            <id>teamvk-repo</id>
-            <url>https://raw.githubusercontent.com/TeamVK/maven-repository/master/release/</url>
-        </repository>
-        <!-- PAPI -->
-        <repository>
+            <!--  PAPI  -->
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
-            <id>minecraft-repo</id>
+            <!--  HikariCP  -->
+            <id>teamvk-repo</id>
+            <url>https://raw.githubusercontent.com/TeamVK/maven-repository/master/release/</url>
+        </repository>
+        <repository>
+            <!--  MojangAPI  -->
+            <id>mojang</id>
             <url>https://libraries.minecraft.net/</url>
         </repository>
     </repositories>
-
     <dependencies>
-        <!-- h2 -->
+        <!--  h2  -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>2.1.210</version>
             <scope>compile</scope>
         </dependency>
-        <!-- HikariCP (SQL improve) -->
+        <!--  HikariCP (SQL improve)  -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>4.0.3</version>
             <scope>compile</scope>
         </dependency>
-        <!-- Spigot -->
+        <!--  Spigot  -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.18.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!-- GameProfile -->
+        <!--  GameProfile  -->
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>authlib</artifactId>
             <version>1.5.21</version>
             <scope>provided</scope>
         </dependency>
-        <!-- NBT -->
+        <!--  NBT  -->
         <dependency>
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api-plugin</artifactId>
             <version>2.9.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <!-- PlaceholderAPI -->
+        <!--  PlaceholderAPI  -->
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
