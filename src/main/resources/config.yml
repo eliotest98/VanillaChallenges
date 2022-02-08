@@ -64,13 +64,13 @@ Configuration:
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
     ExpCollector:
-        TypeChallenge: 'CollectorExpChallenge'
-        # Title challenge
-        Title: '&c&l[Vanilla Challenge] &aCollect Challenge'
-        # Description of Challenge
-        Description: '&c&l[Vanilla Challenge] &eCollect Experience for receive points'
-        # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-        Reward: 'NOBODY'
+      TypeChallenge: 'CollectorExpChallenge'
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aCollect Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eCollect Experience for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
     Killer:
       TypeChallenge: 'KillChallenge'
       # Mob you want to kill for challenge, if you want all mobs write ALL
@@ -99,6 +99,36 @@ Configuration:
       Title: '&c&l[Vanilla Challenge] &aFeed Challenge'
       # Description of Challenge
       Description: '&c&l[Vanilla Challenge] &eEat items or starve for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
+    Shooter:
+      TypeChallenge: 'ShootChallenge'
+      # Force you want to apply for shoot arrow in challenge, if you want to disable use 0.0
+      Force: 1.0
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aShoot Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eShoot arrows at max power for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
+    JumperHorse:
+      TypeChallenge: 'JumpWithHorseChallenge'
+      # Power you want to apply for jump with horse in challenge, if you want to disable use 0.0
+      Power: 0.5
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aJump With Horse Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eJump with Horse at middle or plus power for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
+    Dyer:
+      TypeChallenge: 'ColorSheepChallenge'
+      # Color you want to use for challenge, if you want all colors write ALL
+      Color: ALL
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aColor Sheep Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eColor a Sheep with dye for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
   BroadcastMessage:
@@ -145,6 +175,12 @@ Debug:
   BreedEvent: false
   # Feed Event time execution
   FeedEvent: false
+  # Shoot Arrow Event time execution
+  ShootArrowEvent: false
+  # Jump Horse Event time execution
+  JumpHorseEvent: false
+  # Color Sheep Event time execution
+  ColorSheepEvent: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution

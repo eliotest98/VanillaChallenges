@@ -143,9 +143,16 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new BreedEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("FeedChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new EatEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("ShootChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new ShootArrowEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("JumpWithHorseChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new JumpHorseEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("ColorSheepChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new ColorSheepEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }
+        //Bukkit.getServer().getPluginManager().registerEvents(new Event(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
         loadPlayersPoints();
         checkDay = new CheckDay();

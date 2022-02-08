@@ -28,7 +28,10 @@ public class ConfigGestion {
             String item =  file.getString("Configuration.Challenges." + challengeName + ".Item");
             String mob =  file.getString("Configuration.Challenges." + challengeName + ".Mob");
             String itemInHand = file.getString("Configuration.Challenges." + challengeName + ".ItemInHand");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward,title,subTitle,item,itemInHand,mob);
+            double force = file.getDouble("Configuration.Challenges." + challengeName + ".Force");
+            double power = file.getDouble("Configuration.Challenges." + challengeName + ".Power");
+            String color = file.getString("Configuration.Challenges." + challengeName + ".Color");
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward,title,subTitle,item,itemInHand,mob,force,power,color);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");

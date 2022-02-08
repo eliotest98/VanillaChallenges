@@ -24,6 +24,9 @@ public class Challenge {
     private String item = "ALL";
     private String itemInHand = "ALL";
     private String mob = "ALL";
+    private String color = "ALL";
+    private double force = 0.0;
+    private double power = 0.0;
     // timer del salvataggio punti
     int number = 20 * 60 * 10;
     private BukkitTask task;
@@ -32,7 +35,7 @@ public class Challenge {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, String title, String subTitle, String item, String itemInHand, String mob) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, String title, String subTitle, String item, String itemInHand, String mob, double force, double power, String color) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
@@ -42,6 +45,33 @@ public class Challenge {
         this.item = item;
         this.itemInHand = itemInHand;
         this.mob = mob;
+        this.force = force;
+        this.power = power;
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public double getPower() {
+        return power;
+    }
+
+    public void setPower(double power) {
+        this.power = power;
+    }
+
+    public double getForce() {
+        return force;
+    }
+
+    public void setForce(double force) {
+        this.force = force;
     }
 
     public String getBlock() {
