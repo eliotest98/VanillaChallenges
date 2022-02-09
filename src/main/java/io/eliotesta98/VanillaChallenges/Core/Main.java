@@ -149,6 +149,10 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new JumpHorseEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("ColorSheepChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new ColorSheepEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("RaidChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new RaidEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("FishingChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new FishEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }

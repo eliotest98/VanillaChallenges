@@ -1,6 +1,5 @@
 package io.eliotesta98.VanillaChallenges.Events;
 
-import com.sun.org.apache.xpath.internal.objects.XNumber;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -13,7 +12,7 @@ public class EatEvent implements Listener {
 
     private HashMap<String,Integer> foodLevels = new HashMap<>();
     private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("KillEvent");
+    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
     private String item = Main.dailyChallenge.getItem();
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -55,8 +54,8 @@ public class EatEvent implements Listener {
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
         if (debugActive) {
-            debugUtils.addLine("ExpCollectorEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("ExpCollectorEvent");
+            debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
+            debugUtils.debug("EatEvent");
         }
         return;
     }

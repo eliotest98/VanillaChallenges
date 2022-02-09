@@ -7,34 +7,34 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-public class JumpHorseEvent implements Listener {
+public class FishEvent implements Listener {
 
     private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("JumpHorseEvent");
-    private double power = Main.dailyChallenge.getPower();
+    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("FishEvent");
+    private String fish = Main.dailyChallenge.getItem();
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onHorseJumpEvent(org.bukkit.event.entity.HorseJumpEvent e) {
-        if(e.getEntity().getOwner() == null) {
+    public void onPlayerFishEvent(org.bukkit.event.player.PlayerFishEvent e) {
+        if(e.getCaught() == null) {
             return;
         }
         long tempo = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if(power == 0.0) {
-                    Main.dailyChallenge.increment(e.getEntity().getOwner().getName());
+                if(fish.equalsIgnoreCase("ALL")) {
+                    Main.dailyChallenge.increment(e.getPlayer().getName());
                 } else {
-                    if(e.getPower() >= power) {
-                        Main.dailyChallenge.increment(e.getEntity().getOwner().getName());
+                    if(fish.equalsIgnoreCase(e.getCaught().getName())) {
+                        Main.dailyChallenge.increment(e.getPlayer().getName());
                     }
                 }
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
         if (debugActive) {
-            debugUtils.addLine("JumpHorseEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("JumpHorseEvent");
+            debugUtils.addLine("FishEvent execution time= " + (System.currentTimeMillis() - tempo));
+            debugUtils.debug("FishEvent");
         }
         return;
     }

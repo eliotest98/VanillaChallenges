@@ -17,13 +17,6 @@ public class BlockBreakEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockBreakEvent e) {
         long tempo = System.currentTimeMillis();
-        if (e.isCancelled()) {
-            if (debugActive) {
-                debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("BlockBreakEvent");
-            }
-            return;
-        }
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {

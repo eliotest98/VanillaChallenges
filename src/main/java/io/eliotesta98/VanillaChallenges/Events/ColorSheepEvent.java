@@ -33,8 +33,8 @@ public class ColorSheepEvent implements Listener {
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
         if (debugActive) {
-            debugUtils.addLine("ExpCollectorEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("ExpCollectorEvent");
+            debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
+            debugUtils.debug("ColorSheepEvent");
         }
         return;
     }

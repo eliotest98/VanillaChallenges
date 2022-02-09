@@ -20,13 +20,6 @@ public class BlockPlaceEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockPlaceEvent e) {
         long tempo = System.currentTimeMillis();
-        if (e.isCancelled()) {
-            if (debugActive) {
-                debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("BlockPlaceEvent");
-            }
-            return;
-        }
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {

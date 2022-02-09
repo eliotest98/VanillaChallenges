@@ -131,6 +131,24 @@ Configuration:
       Description: '&c&l[Vanilla Challenge] &eColor a Sheep with dye for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
+    Raider:
+      TypeChallenge: 'RaidChallenge'
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aRaid Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eWin raid for receive points (1 points for waves)'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
+    Fisher:
+      TypeChallenge: 'FishingChallenge'
+      # Item you want to fish for challenge, if you want all items write ALL
+      Item: ALL
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aFishing Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eFishing for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10
@@ -181,6 +199,12 @@ Debug:
   JumpHorseEvent: false
   # Color Sheep Event time execution
   ColorSheepEvent: false
+  # Raid Event time execution
+  RaidEvent: false
+  # Fish Event time execution
+  FishEvent: false
+  # Eat Event time execution
+  EatEvent: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution
