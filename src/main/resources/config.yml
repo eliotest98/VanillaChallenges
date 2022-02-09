@@ -149,6 +149,58 @@ Configuration:
       Description: '&c&l[Vanilla Challenge] &eFishing for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NOBODY'
+    Sprinter:
+      TypeChallenge: 'SprintChallenge'
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aSprint Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eSprint for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
+    Mover:
+      TypeChallenge: 'MoveChallenge'
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aMove Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eMove for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
+    Damager:
+      TypeChallenge: 'DamageChallenge'
+      # Cause you want to damage for challenge, if you want all causes write ALL
+      Cause: ALL
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aDamage Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eTake damage for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
+    Sneaker:
+      TypeChallenge: 'SneakChallenge'
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aSneak Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eSneak for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
+    ItemBreaker:
+      TypeChallenge: 'ItemBreakChallenge'
+      # Item you want to break for challenge, if you want all items write ALL
+      Item: ALL
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aBreak Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eBreak an item for receive points'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
+    Absorber:
+      TypeChallenge: 'SpongeAbsorbChallenge'
+      # Title challenge
+      Title: '&c&l[Vanilla Challenge] &aSponge Absorb Challenge'
+      # Description of Challenge
+      Description: '&c&l[Vanilla Challenge] &eAbsorb fluids with Sponge for receive points (1 point for 1 source)'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NOBODY'
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10
@@ -160,6 +212,7 @@ Message:
   commandVcNextHelp: '&e/vc &6<next> &7go to the next challenge'
   commandVcTopHelp: '&e/vc &6<top> &7for see the top 3'
   commandVcPointsHelp: '&e/vc &6<points> [playerName] &7for see your points or points of another player'
+  commandVcClear: '&e/vc &6<clear> &7for clear all Challenges and player Points'
 
   errorYouAreNotAPlayer: '&cYou are not a player'
   errorCommandNotFound: '&cCommand not found'
@@ -205,6 +258,18 @@ Debug:
   FishEvent: false
   # Eat Event time execution
   EatEvent: false
+  # Sprint Event time execution
+  SprintEvent: false
+  # Move Event time execution
+  MoveEvent: false
+  # Damage Event time execution
+  DamageEvent: false
+  # Sneak Event time execution
+  SneakEvent: false
+  # Item Break Event time execution
+  ItemBreakEvent: false
+  # Sponge Absorb Event time execution
+  SpongeAbsorbEvent: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution

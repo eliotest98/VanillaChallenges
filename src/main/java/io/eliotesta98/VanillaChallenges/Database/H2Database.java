@@ -33,6 +33,60 @@ public class H2Database {
         preparedStatement.close();
     }
 
+    public void clearChallenges(){
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "DROP TABLE Challenge");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS Challenge (`NomeChallenge` VARCHAR(100) NOT NULL PRIMARY KEY, `TimeResume` INT(15) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clearChallengers(){
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "DROP TABLE Challenger");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS Challenger (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clearDailyWinners(){
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "DROP TABLE DailyWinner");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS DailyWinner (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `NomeChallenge` VARCHAR(100) NOT NULL, `PlayerName` VARCHAR(100) NOT NULL, `Reward` VARCHAR(100) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clearAll(){
+        clearChallenges();
+        clearChallengers();
+        clearDailyWinners();
+    }
+
     public ArrayList<DailyWinner> getAllDailyWinners() {
         ArrayList<DailyWinner> dailyWinners = new ArrayList<DailyWinner>();
         ResultSet resultSet = null;

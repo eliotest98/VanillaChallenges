@@ -153,6 +153,18 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new RaidEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("FishingChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new FishEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("SprintChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new SprintEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("MoveChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new MoveEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("DamageChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new DamageEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("SneakChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new SneakEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("ItemBreakChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new ItemBreakEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("SpongeAbsorbChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new SpongeAbsorbeEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }

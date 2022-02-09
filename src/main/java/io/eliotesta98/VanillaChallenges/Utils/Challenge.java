@@ -25,6 +25,7 @@ public class Challenge {
     private String itemInHand = "ALL";
     private String mob = "ALL";
     private String color = "ALL";
+    private String cause = "ALL";
     private double force = 0.0;
     private double power = 0.0;
     // timer del salvataggio punti
@@ -35,7 +36,7 @@ public class Challenge {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, String title, String subTitle, String item, String itemInHand, String mob, double force, double power, String color) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, String title, String subTitle, String item, String itemInHand, String mob, double force, double power, String color, String cause) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
@@ -48,6 +49,15 @@ public class Challenge {
         this.force = force;
         this.power = power;
         this.color = color;
+        this.cause = cause;
+    }
+
+    public String getCause() {
+        return cause;
+    }
+
+    public void setCause(String cause) {
+        this.cause = cause;
     }
 
     public String getColor() {

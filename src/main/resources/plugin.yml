@@ -30,3 +30,6 @@ permissions:
   vc.points.admin.command:
     description: for /vc points [playerName]
     default: op
+  vc.clear.command:
+    description: for /vc clear
+    default: op
