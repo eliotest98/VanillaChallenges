@@ -9,9 +9,6 @@ commands:
   vc:
     aliases: [ vanillachallenges ]
 permissions:
-  vc.broadcast.timer:
-    description: for brodcast
-    default: op
   vc.reload.command:
     description: for /vc reload
     default: op
@@ -27,7 +24,7 @@ permissions:
   vc.points.command:
     description: for /vc points
     default: op
-  vc.points.admin.command:
+  vc.points.player.command:
     description: for /vc points [playerName]
     default: op
   vc.clear.command:

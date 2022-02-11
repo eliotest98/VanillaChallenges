@@ -3,14 +3,14 @@ package io.eliotesta98.VanillaChallenges.Database;
 public class Challenger {
 
     private String nomePlayer;
-    private int points;
+    private long points;
 
     public Challenger() {
         this.nomePlayer = "Notch";
         this.points = -1;
     }
 
-    public Challenger(String nomePlayer, int points) {
+    public Challenger(String nomePlayer, long points) {
         this.nomePlayer = nomePlayer;
         this.points = points;
     }
@@ -23,11 +23,11 @@ public class Challenger {
         this.nomePlayer = nomePlayer;
     }
 
-    public int getPoints() {
+    public long getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(long points) {
         this.points = points;
     }
 

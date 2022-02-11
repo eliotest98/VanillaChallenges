@@ -16,11 +16,11 @@ Configuration:
       # Block you want place the block, if you want all write ALL
       BlockOnPlaced: GRASS_BLOCK
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aBlock Placer Challenge'
+      Title: '&5[Vanilla Challenge] &7Block Placer Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &ePlace blocks on Grass Block for receive points'
+      Description: '&5[Vanilla Challenge] &7Place blocks on Grass Block for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'TURTLE_HELMET:1'
     BlockBreaker:
       TypeChallenge: 'BlockBreakChallenge'
       # Block you want break for challenge, if you want all blocks write ALL
@@ -28,179 +28,179 @@ Configuration:
       # Type of item in main hand for break this blocks, if you want all items write ALL
       ItemInHand: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aBreaker Challenge'
+      Title: '&5[Vanilla Challenge] &7Breaker Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eBreak all type of block for receive points'
+      Description: '&5[Vanilla Challenge] &7Break all type of block for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'TOTEM_OF_UNDYING:1'
     Crafter:
       TypeChallenge: 'CraftingChallenge'
       # Item you want crafting for challenge, if you want all items write ALL
       Item: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aCrafting Challenge'
+      Title: '&5[Vanilla Challenge] &7Crafting Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eCraft any item for receive points'
+      Description: '&5[Vanilla Challenge] &7Craft any item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'GHAST_TEAR:2'
     Cooker:
       TypeChallenge: 'CookerChallenge'
       # Item you want cook for challenge, if you want all items write ALL
       Item: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aCook Challenge'
+      Title: '&5[Vanilla Challenge] &7Cook Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eCook any item for receive points'
+      Description: '&5[Vanilla Challenge] &7Cook any item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'DRAGON_HEAD:1'
     Consumer:
       TypeChallenge: 'ConsumeChallenge'
       # Item you want to consume for challenge, if you want all items write ALL
       Item: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aConsume Challenge'
+      Title: '&5[Vanilla Challenge] &7Consume Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eConsume any item for receive points'
+      Description: '&5[Vanilla Challenge] &7Consume any item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'WITHER_SKELETON_SKULL:1'
     ExpCollector:
       TypeChallenge: 'CollectorExpChallenge'
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aCollect Challenge'
+      Title: '&5[Vanilla Challenge] &7Collect Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eCollect Experience for receive points'
+      Description: '&5[Vanilla Challenge] &7Collect Experience for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'DRAGON_HEAD:1'
     Killer:
       TypeChallenge: 'KillChallenge'
       # Mob you want to kill for challenge, if you want all mobs write ALL
       Mob: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aKill Challenge'
+      Title: '&5[Vanilla Challenge] &7Kill Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eKill any mob for receive points'
+      Description: '&5[Vanilla Challenge] &7Kill any mob for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'WITHER_SKELETON_SKULL:1'
     Breeder:
       TypeChallenge: 'BreedChallenge'
       # Mob you want to breed for challenge, if you want all mobs write ALL
       Mob: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aBreed Challenge'
+      Title: '&5[Vanilla Challenge] &7Breed Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eBreed mob for receive points'
+      Description: '&5[Vanilla Challenge] &7Breed mob for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'NAME_TAG:2'
     Feeder:
       TypeChallenge: 'FeedChallenge'
       # Item you want to feed for challenge, if you want all items write ALL
       Item: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aFeed Challenge'
+      Title: '&5[Vanilla Challenge] &7Feed Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eEat items or starve for receive points'
+      Description: '&5[Vanilla Challenge] &7Eat items or starve for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'ENDER_PEARL:4'
     Shooter:
       TypeChallenge: 'ShootChallenge'
       # Force you want to apply for shoot arrow in challenge, if you want to disable use 0.0
       Force: 1.0
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aShoot Challenge'
+      Title: '&5[Vanilla Challenge] &7Shoot Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eShoot arrows at max power for receive points'
+      Description: '&5[Vanilla Challenge] &7Shoot arrows at max power for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'HEART_OF_THE_SEA:1'
     JumperHorse:
       TypeChallenge: 'JumpWithHorseChallenge'
       # Power you want to apply for jump with horse in challenge, if you want to disable use 0.0
       Power: 0.5
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aJump With Horse Challenge'
+      Title: '&5[Vanilla Challenge] &7Jump With Horse Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eJump with Horse at middle or plus power for receive points'
+      Description: '&5[Vanilla Challenge] &7Jump with Horse at middle or plus power for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'SCUTE:2'
     Dyer:
       TypeChallenge: 'ColorSheepChallenge'
       # Color you want to use for challenge, if you want all colors write ALL
       Color: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aColor Sheep Challenge'
+      Title: '&5[Vanilla Challenge] &7Color Sheep Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eColor a Sheep with dye for receive points'
+      Description: '&5[Vanilla Challenge] &7Color a Sheep with dye for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'TOTEM_OF_UNDYING:1'
     Raider:
       TypeChallenge: 'RaidChallenge'
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aRaid Challenge'
+      Title: '&5[Vanilla Challenge] &7Raid Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eWin raid for receive points (1 points for waves)'
+      Description: '&5[Vanilla Challenge] &7Win raid for receive points (1 points for waves)'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'IRON_INGOT:64'
     Fisher:
       TypeChallenge: 'FishingChallenge'
       # Item you want to fish for challenge, if you want all items write ALL
       Item: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aFishing Challenge'
+      Title: '&5[Vanilla Challenge] &7Fishing Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eFishing for receive points'
+      Description: '&5[Vanilla Challenge] &7Fishing for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'GOLD_INGOT:32'
     Sprinter:
       TypeChallenge: 'SprintChallenge'
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aSprint Challenge'
+      Title: '&5[Vanilla Challenge] &7Sprint Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eSprint for receive points'
+      Description: '&5[Vanilla Challenge] &7Toggle Sprint for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'DIAMOND:16'
     Mover:
       TypeChallenge: 'MoveChallenge'
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aMove Challenge'
+      Title: '&5[Vanilla Challenge] &7Move Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eMove for receive points'
+      Description: '&5[Vanilla Challenge] &7Move for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'EMERALD:16'
     Damager:
       TypeChallenge: 'DamageChallenge'
       # Cause you want to damage for challenge, if you want all causes write ALL
       Cause: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aDamage Challenge'
+      Title: '&5[Vanilla Challenge] &7Damage Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eTake damage for receive points'
+      Description: '&5[Vanilla Challenge] &7Take damage for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'TOTEM_OF_UNDYING:1'
     Sneaker:
       TypeChallenge: 'SneakChallenge'
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aSneak Challenge'
+      Title: '&5[Vanilla Challenge] &7Sneak Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eSneak for receive points'
+      Description: '&5[Vanilla Challenge] &7Sneak for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
     ItemBreaker:
       TypeChallenge: 'ItemBreakChallenge'
       # Item you want to break for challenge, if you want all items write ALL
       Item: ALL
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aBreak Challenge'
+      Title: '&5[Vanilla Challenge] &7Break Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eBreak an item for receive points'
+      Description: '&5[Vanilla Challenge] &7Break an item for receive points'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
     Absorber:
       TypeChallenge: 'SpongeAbsorbChallenge'
       # Title challenge
-      Title: '&c&l[Vanilla Challenge] &aSponge Absorb Challenge'
+      Title: '&5[Vanilla Challenge] &7Sponge Absorb Challenge'
       # Description of Challenge
-      Description: '&c&l[Vanilla Challenge] &eAbsorb fluids with Sponge for receive points (1 point for 1 source)'
+      Description: '&5[Vanilla Challenge] &7Absorb fluids with Sponge for receive points (1 point for 1 source)'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NOBODY'
+      Reward: 'TNT:32'
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10
@@ -218,10 +218,13 @@ Message:
   errorCommandNotFound: '&cCommand not found'
   errorNoPerms: '&cInsufficient permission'
 
-  pointsInfo: '&a&l{player} points are {number}'
-  actuallyInTop: '&c&l[Vanilla Challenge] &a&lActually in top there are:'
-  topPlayers: '&a&l{number}° place: {player} with {points} points'
-  challengeReward: '&c&l[Vanilla Challenge] &a&lYou complete the challenge and arrive at top 3 players, receive x{number} of {item}'
+  pointsInfo: '&e{player} &7points are &b{number}'
+  actuallyInTop: '&5[Vanilla Challenge] &7Actually in top there are:'
+  topPlayers:
+    - '&6{number}° &e{player}&7 with &b{points}&7 points'
+    - '&7{number}° &e{player}&7 with &b{points}&7 points'
+    - '&8{number}° &e{player}&7 with &b{points}&7 points'
+  challengeReward: '&5[Vanilla Challenge] &7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
 
 Debug:
   # Commands time execution

@@ -230,7 +230,7 @@ public class H2Database {
         }).start();
     }
 
-    public void insertChallenger(String playerName, int points) {
+    public void insertChallenger(String playerName, long points) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO Challenger (PlayerName,Points) VALUES ('"
@@ -246,7 +246,7 @@ public class H2Database {
         }
     }
 
-    public void updateChallenger(String playerName, int points) {
+    public void updateChallenger(String playerName, long points) {
         new Thread(() -> {
             try {
                 PreparedStatement preparedStatement =

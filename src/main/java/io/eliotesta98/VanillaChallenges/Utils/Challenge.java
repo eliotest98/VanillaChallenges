@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class Challenge {
 
-    private HashMap<String, Integer> players = new HashMap<String, Integer>();
+    private HashMap<String, Long> players = new HashMap<String, Long>();
     private String block = "ALL";
     private String blockOnPlace = "ALL";
     private String typeChallenge = "nessuna";
@@ -100,7 +100,7 @@ public class Challenge {
         this.blockOnPlace = blockOnPlace;
     }
 
-    public HashMap<String, Integer> getPlayers() {
+    public HashMap<String, Long> getPlayers() {
         return players;
     }
 
@@ -121,7 +121,7 @@ public class Challenge {
 
     public void increment(String playerName) {
         if (!players.containsKey(playerName)) {
-            players.put(playerName, 1);
+            players.put(playerName, 1L);
             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                 @Override
                 public void run() {
@@ -133,7 +133,7 @@ public class Challenge {
         }
     }
 
-    public void increment(String playerName, int amount) {
+    public void increment(String playerName, long amount) {
         if (!players.containsKey(playerName)) {
             players.put(playerName, amount);
             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
@@ -153,7 +153,7 @@ public class Challenge {
     }
 
     public void stampaNumero(String playerName) {
-        int blocchiPiazzati = players.get(playerName);
+        long blocchiPiazzati = players.get(playerName);
         Bukkit.getPlayer(playerName).sendMessage(ChatColor.RED + typeChallenge + ": " + blocchiPiazzati);
     }
 
@@ -162,7 +162,7 @@ public class Challenge {
             @Override
             public void run() {
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
-                for (Map.Entry<String, Integer> player : players.entrySet()) {
+                for (Map.Entry<String, Long> player : players.entrySet()) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {
@@ -179,7 +179,7 @@ public class Challenge {
         task.cancel();
     }
 
-    public int getPointFromPLayerName(String playerName) {
+    public long getPointFromPLayerName(String playerName) {
         if (players.get(playerName) == null) {
             return 0;
         } else {
@@ -199,7 +199,7 @@ public class Challenge {
         ArrayList<Challenger> topList = new ArrayList<>();
         for (int i = 0; i < numberOfTops; i++) {
             Challenger challenger = new Challenger();
-            for (Map.Entry<String, Integer> player : players.entrySet()) {
+            for (Map.Entry<String, Long> player : players.entrySet()) {
                 if (player.getValue() > challenger.getPoints()) {
                     boolean trovato = false;
                     for (int x = 0; x < topList.size(); x++) {

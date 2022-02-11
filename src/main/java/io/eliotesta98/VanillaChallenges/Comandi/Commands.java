@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Comandi;
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
+import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
 import io.eliotesta98.VanillaChallenges.Utils.ReloadUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,7 +31,6 @@ public class Commands implements CommandExecutor {
     private final String commandVcClear = Main.instance.getConfigGestion().getMessages().get("commandVcClear");
 
     private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("pointsInfo");
-    private final String topPlayers = Main.instance.getConfigGestion().getMessages().get("topPlayers");
 
     private final boolean debugCommand = Main.instance.getConfigGestion().getDebug().get("Commands");
 
@@ -160,7 +160,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         } else {
-                            int points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
+                            long points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
                             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points)));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -195,9 +195,7 @@ public class Commands implements CommandExecutor {
                             }
                         });
                         return;
-                    } else if (args[0].
-
-                            equalsIgnoreCase("top")) {
+                    } else if (args[0].equalsIgnoreCase("top")) {
                         if (args.length != 1) {
                             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcTopHelp));
                             if (debugCommand) {
@@ -209,7 +207,7 @@ public class Commands implements CommandExecutor {
                         ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
                         int i = 1;
                         while (!top.isEmpty()) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', topPlayers.replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + top.get(0).getPoints())));
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.instance.getConfigGestion().getMessages().get("topPlayers"+i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
                             top.remove(0);
                             i++;
                         }
@@ -406,7 +404,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         if (args.length == 1) {
-                            int points = Main.instance.getDailyChallenge().getPointFromPLayerName(p.getName());
+                            long points = Main.instance.getDailyChallenge().getPointFromPLayerName(p.getName());
                             p.sendMessage(ChatColor.translateAlternateColorCodes('&', pointsInfo.replace("{player}", "Your").replace("{number}", "" + points)));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -422,7 +420,7 @@ public class Commands implements CommandExecutor {
                                 }
                                 return;
                             }
-                            int points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
+                            long points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
                             p.sendMessage(ChatColor.translateAlternateColorCodes('&', pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points)));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -452,7 +450,7 @@ public class Commands implements CommandExecutor {
                         ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
                         int i = 1;
                         while (!top.isEmpty()) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', topPlayers.replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + top.get(0).getPoints())));
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.instance.getConfigGestion().getMessages().get("topPlayers"+i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
                             top.remove(0);
                             i++;
                         }

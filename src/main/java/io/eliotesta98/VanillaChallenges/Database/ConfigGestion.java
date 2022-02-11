@@ -2,6 +2,7 @@ package io.eliotesta98.VanillaChallenges.Database;
 
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import org.bukkit.configuration.file.FileConfiguration;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConfigGestion {
@@ -16,7 +17,20 @@ public class ConfigGestion {
             debug.put(event, file.getBoolean("Debug." + event));
         }
         for (String message : file.getConfigurationSection("Message").getKeys(false)) {
-            messages.put(message, file.getString("Message." + message));
+            if (message.equalsIgnoreCase("topPlayers")) {
+                ArrayList<String> mexs = new ArrayList<>();
+                file.getStringList("Message.topPlayers").forEach(value -> {
+                    mexs.add(value);
+                });
+                int i = 1;
+                while (!mexs.isEmpty()) {
+                    messages.put("topPlayers" + i, mexs.get(0));
+                    mexs.remove(0);
+                    i++;
+                }
+            } else {
+                messages.put(message, file.getString("Message." + message));
+            }
         }
         for (String challengeName : file.getConfigurationSection("Configuration.Challenges").getKeys(false)) {
             String block = file.getString("Configuration.Challenges." + challengeName + ".Block");
@@ -25,14 +39,14 @@ public class ConfigGestion {
             String reward = file.getString("Configuration.Challenges." + challengeName + ".Reward");
             String title = file.getString("Configuration.Challenges." + challengeName + ".Title");
             String subTitle = file.getString("Configuration.Challenges." + challengeName + ".Description");
-            String item =  file.getString("Configuration.Challenges." + challengeName + ".Item");
-            String mob =  file.getString("Configuration.Challenges." + challengeName + ".Mob");
+            String item = file.getString("Configuration.Challenges." + challengeName + ".Item");
+            String mob = file.getString("Configuration.Challenges." + challengeName + ".Mob");
             String itemInHand = file.getString("Configuration.Challenges." + challengeName + ".ItemInHand");
             double force = file.getDouble("Configuration.Challenges." + challengeName + ".Force");
             double power = file.getDouble("Configuration.Challenges." + challengeName + ".Power");
             String color = file.getString("Configuration.Challenges." + challengeName + ".Color");
             String cause = file.getString("Configuration.Challenges." + challengeName + ".Cause");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward,title,subTitle,item,itemInHand,mob,force,power,color,cause);
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, subTitle, item, itemInHand, mob, force, power, color, cause);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
