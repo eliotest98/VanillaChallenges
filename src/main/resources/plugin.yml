@@ -30,3 +30,6 @@ permissions:
   vc.clear.command:
     description: for /vc clear
     default: op
+  vc.challenge.command:
+    description: for /vc challenge
+    deafult: op

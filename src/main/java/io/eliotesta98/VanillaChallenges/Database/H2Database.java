@@ -33,7 +33,7 @@ public class H2Database {
         preparedStatement.close();
     }
 
-    public void clearChallenges(){
+    public void clearChallenges() {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(
@@ -49,7 +49,7 @@ public class H2Database {
         }
     }
 
-    public void clearChallengers(){
+    public void clearChallengers() {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(
@@ -65,7 +65,7 @@ public class H2Database {
         }
     }
 
-    public void clearDailyWinners(){
+    public void clearDailyWinners() {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(
@@ -81,7 +81,7 @@ public class H2Database {
         }
     }
 
-    public void clearAll(){
+    public void clearAll() {
         clearChallenges();
         clearChallengers();
         clearDailyWinners();
@@ -215,6 +215,21 @@ public class H2Database {
             e.printStackTrace();
         }
         return points;
+    }
+
+    public boolean isPresent(String playerName) {
+        ResultSet resultSet = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT `PlayerName` FROM Challenger WHERE `PlayerName` ='" + playerName + "'");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                return true;
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void deleteChallengerWithName(String nomePlayer) {

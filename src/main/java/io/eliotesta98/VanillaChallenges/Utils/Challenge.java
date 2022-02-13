@@ -6,8 +6,6 @@ import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
-import org.checkerframework.checker.units.qual.C;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +27,7 @@ public class Challenge {
     private double force = 0.0;
     private double power = 0.0;
     // timer del salvataggio punti
-    int number = 20 * 60 * 10;
+    int number = 20 * 60;
     private BukkitTask task;
 
     public Challenge() {
@@ -122,12 +120,6 @@ public class Challenge {
     public void increment(String playerName) {
         if (!players.containsKey(playerName)) {
             players.put(playerName, 1L);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
-                @Override
-                public void run() {
-                    H2Database.instance.insertChallenger(playerName, 1);
-                }
-            });
         } else {
             players.replace(playerName, players.get(playerName) + 1);
         }
@@ -136,12 +128,6 @@ public class Challenge {
     public void increment(String playerName, long amount) {
         if (!players.containsKey(playerName)) {
             players.put(playerName, amount);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
-                @Override
-                public void run() {
-                    H2Database.instance.insertChallenger(playerName, 1);
-                }
-            });
         } else {
             players.replace(playerName, players.get(playerName) + amount);
         }
@@ -166,7 +152,11 @@ public class Challenge {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {
-                            H2Database.instance.updateChallenger(player.getKey(), player.getValue());
+                            if (H2Database.instance.isPresent(player.getKey())) {
+                                H2Database.instance.updateChallenger(player.getKey(), player.getValue());
+                            } else {
+                                H2Database.instance.insertChallenger(player.getKey(), player.getValue());
+                            }
                         }
                     });
                 }

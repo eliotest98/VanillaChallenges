@@ -17,6 +17,7 @@ public class BrodcastDailyChallenge {
     private String brodcastMessageTitle = Main.dailyChallenge.getTitle();
     private String brodcastMessageSubTitle = Main.dailyChallenge.getSubTitle();
     private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("actuallyInTop");
+    private final String timeInfo = Main.instance.getConfigGestion().getMessages().get("timeInfo");
 
     public void start(long time) {
         execute(time);
@@ -31,10 +32,13 @@ public class BrodcastDailyChallenge {
         task = scheduler.runTaskTimerAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                int timeResume = (Main.currentlyChallengeDB.getTimeResume()/60)/60;
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     p.sendMessage("");
                     p.sendMessage(ChatColor.translateAlternateColorCodes('&', brodcastMessageTitle));
                     p.sendMessage(ChatColor.translateAlternateColorCodes('&', brodcastMessageSubTitle));
+                    p.sendMessage("");
+                    p.sendMessage(ChatColor.translateAlternateColorCodes('&',timeInfo.replace("{hours}",timeResume +"")));
                     p.sendMessage("");
                     p.sendMessage(ChatColor.translateAlternateColorCodes('&',actuallyInTop));
                     ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);

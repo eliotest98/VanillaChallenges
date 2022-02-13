@@ -59,23 +59,19 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.slf4j</pattern>
-                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.org.slf4j </shadedPattern>
+                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.org.slf4j</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.zaxxer</pattern>
-                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.com.zaxxer </shadedPattern>
+                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.com.zaxxer</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>de.tr7zw</pattern>
-                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.de.tr7zw </shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.h2database</pattern>
-                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.com.h2database </shadedPattern>
+                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.de.tr7zw</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.h2</pattern>
-                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.org.h2 </shadedPattern>
+                                    <shadedPattern>com.heroxplugins.external.VanillaChallenges.org.h2</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -128,7 +124,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.1.210</version>
+            <version>1.4.200</version>
             <scope>compile</scope>
         </dependency>
         <!--  HikariCP (SQL improve)  -->

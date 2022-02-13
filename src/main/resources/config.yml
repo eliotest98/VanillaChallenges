@@ -136,7 +136,7 @@ Configuration:
       # Title challenge
       Title: '&5[Vanilla Challenge] &7Raid Challenge'
       # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Win raid for receive points (1 points for waves)'
+      Description: '&5[Vanilla Challenge] &7Win raid for receive points (100 points for waves at complete)'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'IRON_INGOT:64'
     Fisher:
@@ -213,12 +213,15 @@ Message:
   commandVcTopHelp: '&e/vc &6<top> &7for see the top 3'
   commandVcPointsHelp: '&e/vc &6<points> [playerName] &7for see your points or points of another player'
   commandVcClear: '&e/vc &6<clear> &7for clear all Challenges and player Points'
+  commandVcChallenge: '&e/vc &6<challenge> &7for see the daily challenge selected and time resume'
+  commandVcAddChallenge: '&e/vc &6<add> <playername> <points> &7for set points of a player'
 
   errorYouAreNotAPlayer: '&cYou are not a player'
   errorCommandNotFound: '&cCommand not found'
   errorNoPerms: '&cInsufficient permission'
 
   pointsInfo: '&e{player} &7points are &b{number}'
+  timeInfo: '&5[Vanilla Challenge] &7{hours} hours to the end of the challenge'
   actuallyInTop: '&5[Vanilla Challenge] &7Actually in top there are:'
   topPlayers:
     - '&6{number}° &e{player}&7 with &b{points}&7 points'

@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Core;
 
 import io.eliotesta98.VanillaChallenges.Database.ChallengeDB;
+import io.eliotesta98.VanillaChallenges.Database.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.ConfigGestion;
 import io.eliotesta98.VanillaChallenges.Events.*;
 import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;

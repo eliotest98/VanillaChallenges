@@ -23,7 +23,7 @@ public class RaidEvent implements Listener {
             @Override
             public void run() {
                 for(Player winner : e.getWinners()) {
-                    Main.dailyChallenge.increment(winner.getName(),e.getRaid().getTotalWaves());
+                    Main.dailyChallenge.increment(winner.getName(),e.getRaid().getTotalWaves() * 100L);
                 }
             }
         });

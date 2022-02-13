@@ -68,10 +68,6 @@
                   <shadedPattern>com.heroxplugins.external.VanillaChallenges.de.tr7zw</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>com.h2database</pattern>
-                  <shadedPattern>com.heroxplugins.external.VanillaChallenges.com.h2database</shadedPattern>
-                </relocation>
-                <relocation>
                   <pattern>org.h2</pattern>
                   <shadedPattern>com.heroxplugins.external.VanillaChallenges.org.h2</shadedPattern>
                 </relocation>
