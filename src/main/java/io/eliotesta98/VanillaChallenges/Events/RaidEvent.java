@@ -12,6 +12,7 @@ public class RaidEvent implements Listener {
 
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("RaidEvent");
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onRaidFinishEvent(org.bukkit.event.raid.RaidFinishEvent e) {
@@ -23,7 +24,7 @@ public class RaidEvent implements Listener {
             @Override
             public void run() {
                 for(Player winner : e.getWinners()) {
-                    Main.dailyChallenge.increment(winner.getName(),e.getRaid().getTotalWaves() * 100L);
+                    Main.dailyChallenge.increment(winner.getName(), (long) e.getRaid().getTotalWaves() * point);
                 }
             }
         });

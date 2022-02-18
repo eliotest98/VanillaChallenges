@@ -10,10 +10,12 @@ import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import io.eliotesta98.VanillaChallenges.Utils.*;
+
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+
 import org.bukkit.*;
 import org.bukkit.command.*;
 
@@ -25,6 +27,8 @@ public class Main extends JavaPlugin {
     public static ChallengeDB currentlyChallengeDB;
     private CheckDay checkDay;
     private BrodcastDailyChallenge brodcastDailyChallenge;
+    private OnlinePointsEvent onlinePointsEvent;
+    public static ExpansionPlaceholderAPI EPAPI;
 
     public void onEnable() {
         DebugUtils debugsistem = new DebugUtils();
@@ -125,21 +129,34 @@ public class Main extends JavaPlugin {
             onDisable();
             return;
         }
+        // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
+        getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+            public void run() {
+                if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                    if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
+                        Main.EPAPI = new ExpansionPlaceholderAPI().getInstance();
+                        Main.EPAPI.register();
+                        Bukkit.getServer().getConsoleSender().sendMessage(
+                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fPlaceholderApi&a!"));
+                    }
+                }
+            }
+        });
         String typeChallenge = insertDailyChallenges();
         if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new BlockPlaceEvent(),this);
+            Bukkit.getServer().getPluginManager().registerEvents(new BlockPlaceEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("BlockBreakChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new BlockBreakEvent(),this);
+            Bukkit.getServer().getPluginManager().registerEvents(new BlockBreakEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("CraftingChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new CraftingEvent(),this);
+            Bukkit.getServer().getPluginManager().registerEvents(new CraftingEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("CookerChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new FurnaceBurnEvent(),this);
+            Bukkit.getServer().getPluginManager().registerEvents(new FurnaceBurnEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("ConsumeChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new ItemConsumeEvent(),this);
+            Bukkit.getServer().getPluginManager().registerEvents(new ItemConsumeEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("CollectorExpChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new ExpCollector(),this);
+            Bukkit.getServer().getPluginManager().registerEvents(new ExpCollector(), this);
         } else if (typeChallenge.equalsIgnoreCase("KillChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new KillMobEvent(),this);
+            Bukkit.getServer().getPluginManager().registerEvents(new KillMobEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("BreedChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new BreedEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("FeedChallenge")) {
@@ -176,8 +193,11 @@ public class Main extends JavaPlugin {
         // ogni 60 minuti
         checkDay.start(20 * 60 * 60);
         brodcastDailyChallenge = new BrodcastDailyChallenge();
-        if(config.getTimeBrodcastMessageTitle() != 0) {
-            brodcastDailyChallenge.start((long) config.getTimeBrodcastMessageTitle() *60*20);
+        if (config.getTimeBrodcastMessageTitle() != 0) {
+            brodcastDailyChallenge.start((long) config.getTimeBrodcastMessageTitle() * 60 * 20);
+        }
+        if (config.isActiveOnlinePoints()) {
+            onlinePointsEvent = new OnlinePointsEvent();
         }
         getCommand("vc").setExecutor((CommandExecutor) new Commands());
         if (config.getDebug().get("Enabled")) {
@@ -193,8 +213,17 @@ public class Main extends JavaPlugin {
         if (checkDay != null) {
             checkDay.stop();
         }
-        if(config.getTimeBrodcastMessageTitle() != 0) {
+        if (config.getTimeBrodcastMessageTitle() != 0) {
             brodcastDailyChallenge.stop();
+        }
+        if (config.isActiveOnlinePoints()) {
+            onlinePointsEvent.stop();
+        }
+        if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
+            try {
+                Main.EPAPI.getInstance().unregister();
+            } catch (Exception e) {
+            }
         }
         dailyChallenge.clearPlayers();
         H2Database.disconnect();

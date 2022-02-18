@@ -15,6 +15,7 @@ public class DamageEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DamageEvent");
     private String cause = Main.dailyChallenge.getCause();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.entity.EntityDamageEvent e) {
@@ -24,11 +25,11 @@ public class DamageEvent implements Listener {
             public void run() {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (e.getEntity().getName().equalsIgnoreCase(player.getName())) {
-                        if(cause.equalsIgnoreCase("ALL")) {
-                            Main.dailyChallenge.increment(e.getEntity().getName(), (int) e.getFinalDamage());
+                        if (cause.equalsIgnoreCase("ALL")) {
+                            Main.dailyChallenge.increment(e.getEntity().getName(), (long) e.getFinalDamage() * point);
                         } else {
-                            if(cause.equalsIgnoreCase(e.getCause().toString())) {
-                                Main.dailyChallenge.increment(e.getEntity().getName(), (int) e.getFinalDamage());
+                            if (cause.equalsIgnoreCase(e.getCause().toString())) {
+                                Main.dailyChallenge.increment(e.getEntity().getName(), (long) e.getFinalDamage() * point);
                             }
                         }
                     }

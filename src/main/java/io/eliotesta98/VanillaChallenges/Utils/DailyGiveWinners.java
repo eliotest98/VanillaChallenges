@@ -1,12 +1,9 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
-import io.eliotesta98.VanillaChallenges.Database.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
-import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -58,7 +55,7 @@ public class DailyGiveWinners implements Listener {
                         if (e.getPlayer().getInventory().firstEmpty() != -1 && give) {
                             ItemStack item = new ItemStack(Material.getMaterial(reward[0]));
                             item.setAmount(Integer.parseInt(reward[1]));
-                            e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0])));
+                            e.getPlayer().sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0])));
                             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                                 @Override
                                 public void run() {

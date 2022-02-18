@@ -11,6 +11,7 @@ public class ExpCollector implements Listener {
 
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ExpCollectorEvent");
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPickUpExp(org.bukkit.event.player.PlayerExpChangeEvent e) {
@@ -18,7 +19,7 @@ public class ExpCollector implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                Main.dailyChallenge.increment(e.getPlayer().getName(),e.getAmount());
+                Main.dailyChallenge.increment(e.getPlayer().getName(), (long) e.getAmount() * point);
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());

@@ -12,6 +12,7 @@ public class FurnaceBurnEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("FurnaceCookEvent");
     private String itemBurn = Main.instance.getDailyChallenge().getItem();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCookItem(org.bukkit.event.inventory.FurnaceExtractEvent e) {
@@ -20,10 +21,10 @@ public class FurnaceBurnEvent implements Listener {
             @Override
             public void run() {
                 if (itemBurn.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName(),e.getItemAmount());
+                    Main.dailyChallenge.increment(e.getPlayer().getName(), (long) e.getItemAmount() * point);
                 } else {
                     if (e.getItemType().toString().equalsIgnoreCase(itemBurn)) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName(),e.getItemAmount());
+                        Main.dailyChallenge.increment(e.getPlayer().getName(), (long) e.getItemAmount() * point);
                     }
                 }
             }

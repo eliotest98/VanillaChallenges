@@ -32,6 +32,7 @@ public class CheckDay {
             @Override
             public void run() {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[VanillaChallenges] Backup challenge: " + Main.currentlyChallengeDB.toString());
+                Main.currentlyChallengeDB.setTimeResume(Main.currentlyChallengeDB.getTimeResume() - timeRemove);
                 if (Main.currentlyChallengeDB.getTimeResume() <= 0) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
@@ -43,14 +44,13 @@ public class CheckDay {
                                 dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
                                 dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
                                 dailyWinner.setReward(Main.dailyChallenge.getReward());
-                                H2Database.instance.insertDailyWinner(dailyWinner);
+                                H2Database.instance.updateDailyWinner(dailyWinner);
                                 topPlayers.remove(0);
                             }
                             ReloadUtil.reload();
                         }
                     });
                 } else {
-                    Main.currentlyChallengeDB.setTimeResume(Main.currentlyChallengeDB.getTimeResume() - timeRemove);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {

@@ -15,10 +15,20 @@ Configuration:
       Block: ALL
       # Block you want place the block, if you want all write ALL
       BlockOnPlaced: GRASS_BLOCK
+      # How many points you want give at place?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Block Placer Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Place blocks on Grass Block for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Block Place Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉&7Place block on Grass Block for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'TURTLE_HELMET:1'
     BlockBreaker:
@@ -27,183 +37,383 @@ Configuration:
       Block: ALL
       # Type of item in main hand for break this blocks, if you want all items write ALL
       ItemInHand: ALL
+      # How many points you want give at break?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Breaker Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Break all type of block for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Block Break Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Break all type of block for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'TOTEM_OF_UNDYING:1'
     Crafter:
       TypeChallenge: 'CraftingChallenge'
       # Item you want crafting for challenge, if you want all items write ALL
       Item: ALL
+      # How many points you want give at craft?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Crafting Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Craft any item for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                &7Crafting Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉      &7Craft any item for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'GHAST_TEAR:2'
     Cooker:
       TypeChallenge: 'CookerChallenge'
       # Item you want cook for challenge, if you want all items write ALL
       Item: ALL
+      # How many points you want give at cook?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Cook Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Cook any item for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Cooker Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉       &7Cook any item for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'DRAGON_HEAD:1'
     Consumer:
       TypeChallenge: 'ConsumeChallenge'
       # Item you want to consume for challenge, if you want all items write ALL
       Item: ALL
+      # How many points you want give at consume?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Consume Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Consume any item for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Consume Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Consume any item for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'WITHER_SKELETON_SKULL:1'
     ExpCollector:
       TypeChallenge: 'CollectorExpChallenge'
+      # How many points you want give at exp point?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Collect Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Collect Experience for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Collect Exp Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉     &7Collect experience for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7(1 point for 1 experience not level)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'DRAGON_HEAD:1'
     Killer:
       TypeChallenge: 'KillChallenge'
       # Mob you want to kill for challenge, if you want all mobs write ALL
       Mob: ALL
+      # How many points you want give at kill?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Kill Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Kill any mob for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                  &7Kill Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Kill any mob for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'WITHER_SKELETON_SKULL:1'
     Breeder:
       TypeChallenge: 'BreedChallenge'
       # Mob you want to breed for challenge, if you want all mobs write ALL
       Mob: ALL
+      # How many points you want give at breed?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Breed Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Breed mob for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                   &7Breed Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉          &7Breed mob for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉             &7(1 point when spawn child)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'NAME_TAG:2'
     Feeder:
       TypeChallenge: 'FeedChallenge'
       # Item you want to feed for challenge, if you want all items write ALL
       Item: ALL
+      # How many points you want give at feed?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Feed Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Eat items or starve for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                  &7Feed Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉     &7Eat item or starve for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉              &7(1 point for half leg)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'ENDER_PEARL:4'
     Shooter:
       TypeChallenge: 'ShootChallenge'
       # Force you want to apply for shoot arrow in challenge, if you want to disable use 0.0
       Force: 1.0
+      # How many points you want give at shoot?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Shoot Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Shoot arrows at max power for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                  &7Shoot Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Shoot arrow at max power for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'HEART_OF_THE_SEA:1'
     JumperHorse:
       TypeChallenge: 'JumpWithHorseChallenge'
       # Power you want to apply for jump with horse in challenge, if you want to disable use 0.0
-      Power: 0.5
+      Power: 0.3
+      # How many points you want give at jump?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Jump With Horse Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Jump with Horse at middle or plus power for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉             &7Jump Horse Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉     &7Jump with Horse for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'SCUTE:2'
     Dyer:
       TypeChallenge: 'ColorSheepChallenge'
       # Color you want to use for challenge, if you want all colors write ALL
       Color: ALL
+      # How many points you want give at coloring?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Color Sheep Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Color a Sheep with dye for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Color Sheep Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Color a Sheep with dye for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'TOTEM_OF_UNDYING:1'
     Raider:
       TypeChallenge: 'RaidChallenge'
+      # How many points you want give at wave raid?
+      Point: 100
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Raid Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Win raid for receive points (100 points for waves at complete)'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Raid Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉           &7Win raid for receive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7(100 points for waves if you win all)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'IRON_INGOT:64'
     Fisher:
       TypeChallenge: 'FishingChallenge'
       # Item you want to fish for challenge, if you want all items write ALL
       Item: ALL
+      # How many points you want give at wave raid?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Fishing Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Fishing for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                &7Fishing Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉           &7Fishing for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'GOLD_INGOT:32'
     Sprinter:
       TypeChallenge: 'SprintChallenge'
+      # How many points you want give at sprinting?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Sprint Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Toggle Sprint for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Sprint Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉       &7Toggle Sprint for recive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'DIAMOND:16'
     Mover:
       TypeChallenge: 'MoveChallenge'
+      # How many points you want give at move?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Move Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Move for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Move Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉             &7Move for recive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'EMERALD:16'
     Damager:
       TypeChallenge: 'DamageChallenge'
       # Cause you want to damage for challenge, if you want all causes write ALL
       Cause: ALL
+      # How many points you want give at damage?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Damage Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Take damage for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Damage Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Take damage for receive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉            &7(1 point for half heart)'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'TOTEM_OF_UNDYING:1'
     Sneaker:
       TypeChallenge: 'SneakChallenge'
+      # How many points you want give at sneaking?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Sneak Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Sneak for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Sneak Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉           &7Sneak for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
     ItemBreaker:
       TypeChallenge: 'ItemBreakChallenge'
       # Item you want to break for challenge, if you want all items write ALL
       Item: ALL
+      # How many points you want give at item break?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Break Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Break an item for receive points'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Item Break Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉      &7Break an item for receive 1 point'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
     Absorber:
       TypeChallenge: 'SpongeAbsorbChallenge'
+      # How many points you want give at water source absorbing?
+      Point: 1
       # Title challenge
-      Title: '&5[Vanilla Challenge] &7Sponge Absorb Challenge'
-      # Description of Challenge
-      Description: '&5[Vanilla Challenge] &7Absorb fluids with Sponge for receive points (1 point for 1 source)'
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Sponge Absorb Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉  &7Absorb fluids with Sponge for receive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉         &7(1 point for 1 water source)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'TNT:32'
+  # Points if remain online for x minutes
+  OnlinePoints:
+    # If You want this feature
+    Enabled: true
+    # Point at minutes
+    Point: 10
+    # Every time you want player remain online for give points
+    Minutes: 10
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10
+  Hooks:
+    PlaceholderAPI: false
 # Messages
 Message:
   commandFooter: '&7(&7&l(&c&l!&7&l)&7) &9&l[] optional value, <> required'
@@ -221,13 +431,13 @@ Message:
   errorNoPerms: '&cInsufficient permission'
 
   pointsInfo: '&e{player} &7points are &b{number}'
-  timeInfo: '&5[Vanilla Challenge] &7{hours} hours to the end of the challenge'
-  actuallyInTop: '&5[Vanilla Challenge] &7Actually in top there are:'
+  actuallyInTop: '&7Actually in top there are:'
   topPlayers:
     - '&6{number}° &e{player}&7 with &b{points}&7 points'
     - '&7{number}° &e{player}&7 with &b{points}&7 points'
     - '&8{number}° &e{player}&7 with &b{points}&7 points'
-  challengeReward: '&5[Vanilla Challenge] &7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
+  pointsEveryMinutes: '&7You collect {points} points in {minutes} minutes'
+  challengeReward: '&7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
 
 Debug:
   # Commands time execution

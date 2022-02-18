@@ -12,6 +12,7 @@ public class ItemBreakEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemBreakEvent");
     private String item = Main.dailyChallenge.getItem();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBreakItem(org.bukkit.event.player.PlayerItemBreakEvent e) {
@@ -19,11 +20,11 @@ public class ItemBreakEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if(item.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName());
+                if (item.equalsIgnoreCase("ALL")) {
+                    Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point * e.getBrokenItem().getType().getMaxDurability());
                 } else {
-                    if(item.equalsIgnoreCase(e.getBrokenItem().getType().toString())) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName());
+                    if (item.equalsIgnoreCase(e.getBrokenItem().getType().toString())) {
+                        Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point * e.getBrokenItem().getType().getMaxDurability());
                     }
                 }
             }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import io.eliotesta98.VanillaChallenges.Utils.ReloadUtil;
 
 public class H2Database {
 
@@ -46,6 +47,7 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
     }
 
@@ -62,6 +64,7 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
     }
 
@@ -78,6 +81,7 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
     }
 
@@ -104,6 +108,7 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
         return dailyWinners;
     }
@@ -121,20 +126,33 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
     }
 
     public void deleteDailyWinnerWithId(int id) {
-        new Thread(() -> {
-            try {
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("DELETE FROM DailyWinner WHERE `ID`='" + id + "'");
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("DELETE FROM DailyWinner WHERE `ID`='" + id + "'");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
+    }
+
+    public void updateDailyWinner(DailyWinner dailyWinner) {
+        ArrayList<DailyWinner> winners = getAllDailyWinners();
+        while(!winners.isEmpty()) {
+            if(winners.get(0).getPlayerName().equalsIgnoreCase(dailyWinner.getPlayerName())) {
+                deleteDailyWinnerWithId(winners.get(0).getId());
+                insertDailyWinner(dailyWinner);
+                return;
             }
-        }).start();
+            winners.remove(0);
+        }
+        insertDailyWinner(dailyWinner);
     }
 
     public ArrayList<ChallengeDB> getAllChallenges() {
@@ -152,21 +170,21 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
         return challengeDBS;
     }
 
     public void deleteChallengeWithName(String nomeChallenge) {
-        new Thread(() -> {
-            try {
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("DELETE FROM Challenge WHERE `NomeChallenge`='" + nomeChallenge + "'");
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("DELETE FROM Challenge WHERE `NomeChallenge`='" + nomeChallenge + "'");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
     }
 
     public void insertChallenge(String challengeName, int timeResume) {
@@ -182,20 +200,20 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
     }
 
     public void updateChallenge(String challengeName, int time) {
-        new Thread(() -> {
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement("UPDATE Challenge SET TimeResume = '" + time + "' WHERE NomeChallenge = '" + challengeName + "'");
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("UPDATE Challenge SET TimeResume = '" + time + "' WHERE NomeChallenge = '" + challengeName + "'");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
     }
 
     public ArrayList<Challenger> getAllChallengers() {
@@ -213,6 +231,7 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
         return points;
     }
@@ -228,21 +247,21 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
         return false;
     }
 
     public void deleteChallengerWithName(String nomePlayer) {
-        new Thread(() -> {
-            try {
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement("DELETE FROM Challenger WHERE `PlayerName`='" + nomePlayer + "'");
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("DELETE FROM Challenger WHERE `PlayerName`='" + nomePlayer + "'");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
     }
 
     public void insertChallenger(String playerName, long points) {
@@ -258,20 +277,20 @@ public class H2Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            ReloadUtil.reload();
         }
     }
 
     public void updateChallenger(String playerName, long points) {
-        new Thread(() -> {
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement("UPDATE Challenger SET Points = '" + points + "' WHERE PlayerName = '" + playerName + "'");
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("UPDATE Challenger SET Points = '" + points + "' WHERE PlayerName = '" + playerName + "'");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
     }
 
     public void createConnection(final String AbsolutePath) {

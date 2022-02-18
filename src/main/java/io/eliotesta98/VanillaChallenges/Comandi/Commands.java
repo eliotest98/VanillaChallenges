@@ -3,16 +3,17 @@ package io.eliotesta98.VanillaChallenges.Comandi;
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
+import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
 import io.eliotesta98.VanillaChallenges.Utils.ReloadUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
+
 import java.util.ArrayList;
 
 public class Commands implements CommandExecutor {
@@ -32,9 +33,8 @@ public class Commands implements CommandExecutor {
     private final String commandVcAddChallenge = Main.instance.getConfigGestion().getMessages().get("commandVcAddChallenge");
 
     private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("pointsInfo");
-    private final String brodcastMessageTitle = Main.dailyChallenge.getTitle();
-    private final String brodcastMessageSubTitle = Main.dailyChallenge.getSubTitle();
-    private final String timeInfo = Main.instance.getConfigGestion().getMessages().get("timeInfo");
+    private final ArrayList<String> brodcastMessageTitle = Main.dailyChallenge.getTitle();
+    private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("actuallyInTop");
 
     private final boolean debugCommand = Main.instance.getConfigGestion().getDebug().get("Commands");
 
@@ -47,7 +47,7 @@ public class Commands implements CommandExecutor {
                     DebugUtils debug = new DebugUtils();
                     long tempo = System.currentTimeMillis();
                     if (!command.getName().equalsIgnoreCase("vc")) {// comando se esiste
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', errorCommandNotFound));
+                        sender.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -64,23 +64,23 @@ public class Commands implements CommandExecutor {
                         finale = finale + commandVcReloadHelp + "\n";
                         finale = finale + commandVcTopHelp + "\n";
                         finale = finale + commandFooter;
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', finale));
+                        sender.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
                         return;
                         //TODO set
-                    } else if(args[0].equalsIgnoreCase("add")) {
-                        if(args.length == 1 || args.length == 2) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcAddChallenge));
+                    } else if (args[0].equalsIgnoreCase("add")) {
+                        if (args.length == 1 || args.length == 2) {
+                            sender.sendMessage(ColorUtils.applyColor(commandVcAddChallenge));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
                             }
                             return;
                         }
-                        Main.dailyChallenge.increment(args[1],Long.parseLong(args[2]));
+                        Main.dailyChallenge.increment(args[1], Long.parseLong(args[2]));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -89,18 +89,17 @@ public class Commands implements CommandExecutor {
                         //TODO challenge
                     } else if (args[0].equalsIgnoreCase("challenge")) {
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcChallenge));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcChallenge));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
                             }
                             return;
                         }
-                        int timeResume = (Main.currentlyChallengeDB.getTimeResume()/60)/60;
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', brodcastMessageTitle));
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', brodcastMessageSubTitle));
-                        sender.sendMessage("");
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',timeInfo.replace("{hours}",timeResume+"")));
+                        int timeResume = (Main.currentlyChallengeDB.getTimeResume() / 60) / 60;
+                        for (int i = 0; i < brodcastMessageTitle.size(); i++) {
+                            sender.sendMessage(ColorUtils.applyColor(brodcastMessageTitle.get(i).replace("{hours}", timeResume + "")));
+                        }
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -109,7 +108,7 @@ public class Commands implements CommandExecutor {
                         //TODO next
                     } else if (args[0].equalsIgnoreCase("clear")) {
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcClear));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcClear));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -126,7 +125,7 @@ public class Commands implements CommandExecutor {
                         //TODO next
                     } else if (args[0].equalsIgnoreCase("next")) {
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcNextHelp));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcNextHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -160,7 +159,7 @@ public class Commands implements CommandExecutor {
 
                             equalsIgnoreCase("help")) {
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcHelpHelp));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcHelpHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -177,7 +176,7 @@ public class Commands implements CommandExecutor {
                         finale = finale + commandVcReloadHelp + "\n";
                         finale = finale + commandVcTopHelp + "\n";
                         finale = finale + commandFooter;
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', finale));
+                        sender.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -186,7 +185,7 @@ public class Commands implements CommandExecutor {
                         //TODO points
                     } else if (args[0].equalsIgnoreCase("points")) {
                         if (args.length > 2) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcReloadHelp));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -194,7 +193,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         if (args.length == 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', errorYouAreNotAPlayer));
+                            sender.sendMessage(ColorUtils.applyColor(errorYouAreNotAPlayer));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -202,7 +201,7 @@ public class Commands implements CommandExecutor {
                             return;
                         } else {
                             long points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points)));
+                            sender.sendMessage(ColorUtils.applyColor(pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points)));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -213,7 +212,7 @@ public class Commands implements CommandExecutor {
                     // TODO vc reload
                     else if (args[0].equalsIgnoreCase("reload")) {
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcReloadHelp));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -223,9 +222,9 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                             @Override
                             public void run() {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Reloading..."));
+                                sender.sendMessage(ColorUtils.applyColor("&6Reloading..."));
                                 ReloadUtil.reload();
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aReloaded!"));
+                                sender.sendMessage(ColorUtils.applyColor("&aReloaded!"));
                                 if (debugCommand) {
                                     debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                     debug.debug("Commands");
@@ -236,17 +235,18 @@ public class Commands implements CommandExecutor {
                         return;
                     } else if (args[0].equalsIgnoreCase("top")) {
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcTopHelp));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
                             }
                             return;
                         }
+                        sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
                         ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
                         int i = 1;
                         while (!top.isEmpty()) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.instance.getConfigGestion().getMessages().get("topPlayers"+i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+                            sender.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
                             top.remove(0);
                             i++;
                         }
@@ -266,7 +266,7 @@ public class Commands implements CommandExecutor {
                         finale = finale + commandVcReloadHelp + "\n";
                         finale = finale + commandVcTopHelp + "\n";
                         finale = finale + commandFooter;
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', finale));
+                        sender.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -283,7 +283,7 @@ public class Commands implements CommandExecutor {
                     DebugUtils debug = new DebugUtils();
                     long tempo = System.currentTimeMillis();
                     if (!command.getName().equalsIgnoreCase("vc")) {// comando se esiste
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', errorCommandNotFound));
+                        p.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -292,7 +292,7 @@ public class Commands implements CommandExecutor {
                     } else if (args.length == 0) {
                         String finale = "&e&lVanillaChallenges &7● Version " + Main.instance.getDescription().getVersion()
                                 + " created by eliotesta98" + "\n\n";
-                        if(p.hasPermission("vc.challenge.command")) {
+                        if (p.hasPermission("vc.challenge.command")) {
                             finale = finale + commandVcChallenge + "\n";
                         }
                         if (p.hasPermission("vc.clear.command")) {
@@ -312,7 +312,7 @@ public class Commands implements CommandExecutor {
                             finale = finale + commandVcTopHelp + "\n";
                         }
                         finale = finale + commandFooter;
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', finale));
+                        p.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -321,7 +321,7 @@ public class Commands implements CommandExecutor {
                         //TODO challenge
                     } else if (args[0].equalsIgnoreCase("challenge")) {
                         if (!p.hasPermission("vc.challenge.command")) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', errorNoPerms));
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -329,18 +329,17 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         if (args.length != 1) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcChallenge));
+                            p.sendMessage(ColorUtils.applyColor(commandVcChallenge));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
                             }
                             return;
                         }
-                        int timeResume = (Main.currentlyChallengeDB.getTimeResume()/60)/60;
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', brodcastMessageTitle));
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', brodcastMessageSubTitle));
-                        p.sendMessage("");
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&',timeInfo.replace("{hours}",timeResume+"")));
+                        int timeResume = (Main.currentlyChallengeDB.getTimeResume() / 60) / 60;
+                        for (int i = 0; i < brodcastMessageTitle.size(); i++) {
+                            p.sendMessage(ColorUtils.applyColor(brodcastMessageTitle.get(i).replace("{hours}", timeResume + "")));
+                        }
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -349,7 +348,7 @@ public class Commands implements CommandExecutor {
                         //TODO clear
                     } else if (args[0].equalsIgnoreCase("clear")) {
                         if (!p.hasPermission("vc.clear.command")) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', errorNoPerms));
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -357,7 +356,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcClear));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcClear));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -374,7 +373,7 @@ public class Commands implements CommandExecutor {
                         //TODO next
                     } else if (args[0].equalsIgnoreCase("next")) {
                         if (!p.hasPermission("vc.next.command")) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', errorNoPerms));
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -382,7 +381,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcNextHelp));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcNextHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -414,7 +413,7 @@ public class Commands implements CommandExecutor {
                     // TODO cg help
                     else if (args[0].equalsIgnoreCase("help")) {
                         if (!p.hasPermission("vc.help.command")) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', errorNoPerms));
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -422,7 +421,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcHelpHelp));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcHelpHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -431,7 +430,7 @@ public class Commands implements CommandExecutor {
                         } else {
                             String finale = "&e&lVanillaChallenges &7● Version " + Main.instance.getDescription().getVersion()
                                     + " created by eliotesta98" + "\n\n";
-                            if(p.hasPermission("vc.challenge.command")) {
+                            if (p.hasPermission("vc.challenge.command")) {
                                 finale = finale + commandVcChallenge + "\n";
                             }
                             if (p.hasPermission("vc.clear.command")) {
@@ -451,7 +450,7 @@ public class Commands implements CommandExecutor {
                                 finale = finale + commandVcTopHelp + "\n";
                             }
                             finale = finale + commandFooter;
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', finale));
+                            p.sendMessage(ColorUtils.applyColor(finale));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -462,7 +461,7 @@ public class Commands implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("points")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.points.command")) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', errorNoPerms));
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -470,7 +469,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         if (args.length > 2) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcPointsHelp));
+                            p.sendMessage(ColorUtils.applyColor(commandVcPointsHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -479,7 +478,7 @@ public class Commands implements CommandExecutor {
                         }
                         if (args.length == 1) {
                             long points = Main.instance.getDailyChallenge().getPointFromPLayerName(p.getName());
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', pointsInfo.replace("{player}", "Your").replace("{number}", "" + points)));
+                            p.sendMessage(ColorUtils.applyColor(pointsInfo.replace("{player}", "Your").replace("{number}", "" + points)));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -487,7 +486,7 @@ public class Commands implements CommandExecutor {
                             return;
                         } else {
                             if (!p.hasPermission("vc.points.admin.command")) {
-                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', errorNoPerms));
+                                p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                                 if (debugCommand) {
                                     debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                     debug.debug("Commands");
@@ -495,7 +494,7 @@ public class Commands implements CommandExecutor {
                                 return;
                             }
                             long points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points)));
+                            p.sendMessage(ColorUtils.applyColor(pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points)));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -506,7 +505,7 @@ public class Commands implements CommandExecutor {
                     else if (args[0].equalsIgnoreCase("top")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.top.command")) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', errorNoPerms));
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -514,17 +513,18 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         if (args.length != 1) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcTopHelp));
+                            p.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
                             }
                             return;
                         }
+                        p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                         ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
                         int i = 1;
                         while (!top.isEmpty()) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.instance.getConfigGestion().getMessages().get("topPlayers"+i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+                            p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
                             top.remove(0);
                             i++;
                         }
@@ -538,7 +538,7 @@ public class Commands implements CommandExecutor {
                     else if (args[0].equalsIgnoreCase("reload")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.reload.command")) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', errorNoPerms));
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -546,7 +546,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         if (args.length != 1) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', commandVcReloadHelp));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -556,9 +556,9 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                             @Override
                             public void run() {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Reloading..."));
+                                sender.sendMessage(ColorUtils.applyColor("&6Reloading..."));
                                 ReloadUtil.reload();
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aReloaded!"));
+                                sender.sendMessage(ColorUtils.applyColor("&aReloaded!"));
                                 if (debugCommand) {
                                     debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                     debug.debug("Commands");
@@ -570,7 +570,7 @@ public class Commands implements CommandExecutor {
                     } else {
                         String finale = "&e&lVanillaChallenges &7● Version " + Main.instance.getDescription().getVersion()
                                 + " created by eliotesta98" + "\n\n";
-                        if(p.hasPermission("vc.challenge.command")) {
+                        if (p.hasPermission("vc.challenge.command")) {
                             finale = finale + commandVcChallenge + "\n";
                         }
                         if (p.hasPermission("vc.clear.command")) {
@@ -590,7 +590,7 @@ public class Commands implements CommandExecutor {
                             finale = finale + commandVcTopHelp + "\n";
                         }
                         finale = finale + commandFooter;
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', finale));
+                        p.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");

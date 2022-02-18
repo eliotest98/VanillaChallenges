@@ -1,7 +1,10 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,7 +13,9 @@ public class ConfigGestion {
     private HashMap<String, Boolean> debug = new HashMap<String, Boolean>();
     private HashMap<String, String> messages = new HashMap<String, String>();
     private HashMap<String, Challenge> challenges = new HashMap<String, Challenge>();
-    private int timeBrodcastMessageTitle;
+    private HashMap<String, Boolean> hooks = new HashMap<String, Boolean>();
+    private boolean activeOnlinePoints;
+    private int timeBrodcastMessageTitle,pointsOnlinePoints,minutesOnlinePoints;
 
     public ConfigGestion(FileConfiguration file) {
         for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
@@ -37,8 +42,10 @@ public class ConfigGestion {
             String blockOnPlaced = file.getString("Configuration.Challenges." + challengeName + ".BlockOnPlaced");
             String typeChallenge = file.getString("Configuration.Challenges." + challengeName + ".TypeChallenge");
             String reward = file.getString("Configuration.Challenges." + challengeName + ".Reward");
-            String title = file.getString("Configuration.Challenges." + challengeName + ".Title");
-            String subTitle = file.getString("Configuration.Challenges." + challengeName + ".Description");
+            ArrayList<String> title = new ArrayList<>();
+            file.getStringList("Configuration.Challenges." + challengeName + ".Title").forEach(value -> {
+                title.add(value);
+            });
             String item = file.getString("Configuration.Challenges." + challengeName + ".Item");
             String mob = file.getString("Configuration.Challenges." + challengeName + ".Mob");
             String itemInHand = file.getString("Configuration.Challenges." + challengeName + ".ItemInHand");
@@ -46,10 +53,17 @@ public class ConfigGestion {
             double power = file.getDouble("Configuration.Challenges." + challengeName + ".Power");
             String color = file.getString("Configuration.Challenges." + challengeName + ".Color");
             String cause = file.getString("Configuration.Challenges." + challengeName + ".Cause");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, subTitle, item, itemInHand, mob, force, power, color, cause);
+            int point = file.getInt("Configuration.Challenges." + challengeName + ".Point");
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, item, itemInHand, mob, force, power, color, cause, point);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
+        for (String hoock : file.getConfigurationSection("Configuration.Hooks").getKeys(false)) {
+            hooks.put(hoock, file.getBoolean("Configuration.Hooks." + hoock));
+        }
+        activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
+        pointsOnlinePoints = file.getInt("Configuration.OnlinePoints.Point");
+        minutesOnlinePoints = file.getInt("Configuration.OnlinePoints.Minutes");
     }
 
     public HashMap<String, Boolean> getDebug() {
@@ -82,5 +96,37 @@ public class ConfigGestion {
 
     public void setTimeBrodcastMessageTitle(int timeBrodcastMessageTitle) {
         this.timeBrodcastMessageTitle = timeBrodcastMessageTitle;
+    }
+
+    public HashMap<String, Boolean> getHooks() {
+        return hooks;
+    }
+
+    public void setHooks(HashMap<String, Boolean> hooks) {
+        this.hooks = hooks;
+    }
+
+    public boolean isActiveOnlinePoints() {
+        return activeOnlinePoints;
+    }
+
+    public void setActiveOnlinePoints(boolean activeOnlinePoints) {
+        this.activeOnlinePoints = activeOnlinePoints;
+    }
+
+    public int getPointsOnlinePoints() {
+        return pointsOnlinePoints;
+    }
+
+    public void setPointsOnlinePoints(int pointsOnlinePoints) {
+        this.pointsOnlinePoints = pointsOnlinePoints;
+    }
+
+    public int getMinutesOnlinePoints() {
+        return minutesOnlinePoints;
+    }
+
+    public void setMinutesOnlinePoints(int minutesOnlinePoints) {
+        this.minutesOnlinePoints = minutesOnlinePoints;
     }
 }

@@ -2,10 +2,12 @@ package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
+import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,12 +15,12 @@ import java.util.Map;
 public class Challenge {
 
     private HashMap<String, Long> players = new HashMap<String, Long>();
+    private HashMap<String, Long> min10PlayersPoints = new HashMap<String, Long>();
     private String block = "ALL";
     private String blockOnPlace = "ALL";
     private String typeChallenge = "nessuna";
     private String reward = "nessuno";
-    private String title = "nessuno";
-    private String subTitle = "nessuno";
+    private ArrayList<String> title = new ArrayList<>();
     private String item = "ALL";
     private String itemInHand = "ALL";
     private String mob = "ALL";
@@ -29,18 +31,18 @@ public class Challenge {
     // timer del salvataggio punti
     int number = 20 * 60;
     private BukkitTask task;
+    int point = 1;
 
     public Challenge() {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, String title, String subTitle, String item, String itemInHand, String mob, double force, double power, String color, String cause) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
         this.reward = reward;
         this.title = title;
-        this.subTitle = subTitle;
         this.item = item;
         this.itemInHand = itemInHand;
         this.mob = mob;
@@ -48,6 +50,15 @@ public class Challenge {
         this.power = power;
         this.color = color;
         this.cause = cause;
+        this.point = point;
+    }
+
+    public HashMap<String, Long> getMin10PlayersPoints() {
+        return min10PlayersPoints;
+    }
+
+    public void setMin10PlayersPoints(HashMap<String, Long> min10PlayersPoints) {
+        this.min10PlayersPoints = min10PlayersPoints;
     }
 
     public String getCause() {
@@ -117,11 +128,24 @@ public class Challenge {
         this.typeChallenge = typeChallenge;
     }
 
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
     public void increment(String playerName) {
         if (!players.containsKey(playerName)) {
-            players.put(playerName, 1L);
+            players.put(playerName, (long) point);
         } else {
-            players.replace(playerName, players.get(playerName) + 1);
+            players.replace(playerName, players.get(playerName) + point);
+        }
+        if (!min10PlayersPoints.containsKey(playerName)) {
+            min10PlayersPoints.put(playerName, (long) point);
+        } else {
+            min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + point);
         }
     }
 
@@ -130,6 +154,11 @@ public class Challenge {
             players.put(playerName, amount);
         } else {
             players.replace(playerName, players.get(playerName) + amount);
+        }
+        if (!min10PlayersPoints.containsKey(playerName)) {
+            min10PlayersPoints.put(playerName, amount);
+        } else {
+            min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + amount);
         }
     }
 
@@ -147,7 +176,7 @@ public class Challenge {
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
                 for (Map.Entry<String, Long> player : players.entrySet()) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
@@ -160,7 +189,16 @@ public class Challenge {
                         }
                     });
                 }
-                //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
+                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
+                while (!topPlayers.isEmpty()) {
+                    DailyWinner dailyWinner = new DailyWinner();
+                    dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
+                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                    dailyWinner.setReward(Main.dailyChallenge.getReward());
+                    H2Database.instance.updateDailyWinner(dailyWinner);
+                    topPlayers.remove(0);
+                }
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
             }
         }, 0, number);
     }
@@ -212,20 +250,12 @@ public class Challenge {
         return topList;
     }
 
-    public String getTitle() {
+    public ArrayList<String> getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(ArrayList<String> title) {
         this.title = title;
-    }
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
     }
 
     public String getItem() {
