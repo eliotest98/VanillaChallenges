@@ -15,7 +15,7 @@ public class ConfigGestion {
     private HashMap<String, Challenge> challenges = new HashMap<String, Challenge>();
     private HashMap<String, Boolean> hooks = new HashMap<String, Boolean>();
     private boolean activeOnlinePoints;
-    private int timeBrodcastMessageTitle,pointsOnlinePoints,minutesOnlinePoints;
+    private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints;
 
     public ConfigGestion(FileConfiguration file) {
         for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
@@ -54,7 +54,15 @@ public class ConfigGestion {
             String color = file.getString("Configuration.Challenges." + challengeName + ".Color");
             String cause = file.getString("Configuration.Challenges." + challengeName + ".Cause");
             int point = file.getInt("Configuration.Challenges." + challengeName + ".Point");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, item, itemInHand, mob, force, power, color, cause, point);
+            int pointsBoost = 0;
+            int multiplier = 1;
+            int minutes = 0;
+            if (file.getBoolean("Configuration.Challenges." + challengeName + ".Boost.Enabled")) {
+                pointsBoost = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Points");
+                multiplier = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Multiplier");
+                minutes = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Minutes");
+            }
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");

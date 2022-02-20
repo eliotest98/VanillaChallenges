@@ -27,7 +27,7 @@ public class Main extends JavaPlugin {
     public static ChallengeDB currentlyChallengeDB;
     private CheckDay checkDay;
     private BrodcastDailyChallenge brodcastDailyChallenge;
-    private OnlinePointsEvent onlinePointsEvent;
+    private OnlinePointsGive onlinePointsEvent;
     public static ExpansionPlaceholderAPI EPAPI;
 
     public void onEnable() {
@@ -197,7 +197,7 @@ public class Main extends JavaPlugin {
             brodcastDailyChallenge.start((long) config.getTimeBrodcastMessageTitle() * 60 * 20);
         }
         if (config.isActiveOnlinePoints()) {
-            onlinePointsEvent = new OnlinePointsEvent();
+            onlinePointsEvent = new OnlinePointsGive();
         }
         getCommand("vc").setExecutor((CommandExecutor) new Commands());
         if (config.getDebug().get("Enabled")) {
@@ -256,6 +256,7 @@ public class Main extends JavaPlugin {
                 } else {
                     currentlyChallengeDB = challenges.get(0);
                     dailyChallenge = config.getChallenges().get(challenges.get(0).getNomeChallenge());
+                    Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
                     return dailyChallenge.getTypeChallenge();
                 }
             }
@@ -266,6 +267,13 @@ public class Main extends JavaPlugin {
     public void loadPlayersPoints() {
         dailyChallenge.setPlayers(H2Database.instance.getAllChallengers());
         dailyChallenge.savePoints();
+        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
+        int i = 1;
+        while (!top.isEmpty()) {
+            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+            top.remove(0);
+            i++;
+        }
     }
 
     public ConfigGestion getConfigGestion() {
