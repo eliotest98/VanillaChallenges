@@ -6,6 +6,7 @@ import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
@@ -30,14 +31,19 @@ public class Challenge {
     private double power = 0.0;
     // timer del salvataggio punti
     int number = 20 * 60;
-    private BukkitTask task;
+    private BukkitTask task, boostingTask;
     int point = 1;
+    private int pointsBoost = 0;
+    private int multiplier = 1;
+    private int minutes = 0;
+    long countPointsChallenge = 0;
+    boolean startBoost = false;
 
     public Challenge() {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
@@ -51,6 +57,9 @@ public class Challenge {
         this.color = color;
         this.cause = cause;
         this.point = point;
+        this.pointsBoost = pointsBoost;
+        this.multiplier = multiplier;
+        this.minutes = minutes;
     }
 
     public HashMap<String, Long> getMin10PlayersPoints() {
@@ -137,34 +146,68 @@ public class Challenge {
     }
 
     public void increment(String playerName) {
-        if (!players.containsKey(playerName)) {
-            players.put(playerName, (long) point);
+        if (startBoost) {
+            if (!players.containsKey(playerName)) {
+                players.put(playerName, (long) point * multiplier);
+            } else {
+                players.replace(playerName, players.get(playerName) + ((long) point * multiplier));
+            }
+            if (!min10PlayersPoints.containsKey(playerName)) {
+                min10PlayersPoints.put(playerName, (long) point * multiplier);
+            } else {
+                min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + ((long) point * multiplier));
+            }
         } else {
-            players.replace(playerName, players.get(playerName) + point);
-        }
-        if (!min10PlayersPoints.containsKey(playerName)) {
-            min10PlayersPoints.put(playerName, (long) point);
-        } else {
-            min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + point);
+            countPointsChallenge = countPointsChallenge + point;
+            if (!players.containsKey(playerName)) {
+                players.put(playerName, (long) point);
+            } else {
+                players.replace(playerName, players.get(playerName) + point);
+            }
+            if (!min10PlayersPoints.containsKey(playerName)) {
+                min10PlayersPoints.put(playerName, (long) point);
+            } else {
+                min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + point);
+            }
+            checkPointsMultiplier();
         }
     }
 
     public void increment(String playerName, long amount) {
-        if (!players.containsKey(playerName)) {
-            players.put(playerName, amount);
+        if (startBoost) {
+            if (!players.containsKey(playerName)) {
+                players.put(playerName, amount * multiplier);
+            } else {
+                players.replace(playerName, players.get(playerName) + (amount * multiplier));
+            }
+            if (!min10PlayersPoints.containsKey(playerName)) {
+                min10PlayersPoints.put(playerName, amount * multiplier);
+            } else {
+                min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + (amount * multiplier));
+            }
         } else {
-            players.replace(playerName, players.get(playerName) + amount);
-        }
-        if (!min10PlayersPoints.containsKey(playerName)) {
-            min10PlayersPoints.put(playerName, amount);
-        } else {
-            min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + amount);
+            countPointsChallenge = countPointsChallenge + amount;
+            if (!players.containsKey(playerName)) {
+                players.put(playerName, amount);
+            } else {
+                players.replace(playerName, players.get(playerName) + amount);
+            }
+            if (!min10PlayersPoints.containsKey(playerName)) {
+                min10PlayersPoints.put(playerName, amount);
+            } else {
+                min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + amount);
+            }
+            checkPointsMultiplier();
         }
     }
 
     public void clearPlayers() {
         stopTask();
+        if (boostingTask != null) {
+            stopTaskBoost();
+        }
         players.clear();
+        min10PlayersPoints.clear();
     }
 
     public void stampaNumero(String playerName) {
@@ -176,15 +219,20 @@ public class Challenge {
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
+                //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
                 for (Map.Entry<String, Long> player : players.entrySet()) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {
-                            if (H2Database.instance.isPresent(player.getKey())) {
-                                H2Database.instance.updateChallenger(player.getKey(), player.getValue());
-                            } else {
-                                H2Database.instance.insertChallenger(player.getKey(), player.getValue());
+                            try {
+                                if (H2Database.instance.isPresent(player.getKey())) {
+                                    H2Database.instance.updateChallenger(player.getKey(), player.getValue());
+                                } else {
+                                    H2Database.instance.insertChallenger(player.getKey(), player.getValue());
+                                }
+                            } catch (Exception ex) {
+                                Bukkit.getServer().getConsoleSender().sendMessage(ex.getMessage());
+                                ReloadUtil.reload();
                             }
                         }
                     });
@@ -198,13 +246,20 @@ public class Challenge {
                     H2Database.instance.updateDailyWinner(dailyWinner);
                     topPlayers.remove(0);
                 }
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
+                if (startBoost && (boostingTask == null || boostingTask.isCancelled())) {
+                    startBoosting();
+                }
+                //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
             }
         }, 0, number);
     }
 
     public void stopTask() {
         task.cancel();
+    }
+
+    public void stopTaskBoost() {
+        boostingTask.cancel();
     }
 
     public long getPointFromPLayerName(String playerName) {
@@ -282,6 +337,46 @@ public class Challenge {
         this.mob = mob;
     }
 
+    public int getPointsBoost() {
+        return pointsBoost;
+    }
+
+    public void setPointsBoost(int pointsBoost) {
+        this.pointsBoost = pointsBoost;
+    }
+
+    public int getMultiplier() {
+        return multiplier;
+    }
+
+    public void setMultiplier(int multiplier) {
+        this.multiplier = multiplier;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
+    public boolean isActive() {
+        return startBoost || minutes == 0 || multiplier == 1 || pointsBoost == 0;
+    }
+
+    public void setStartBoost(boolean startBoost) {
+        this.startBoost = startBoost;
+    }
+
+    public long getCountPointsChallenge() {
+        return countPointsChallenge;
+    }
+
+    public void setCountPointsChallenge(long countPointsChallenge) {
+        this.countPointsChallenge = countPointsChallenge;
+    }
+
     @Override
     public String toString() {
         return "Challenge{" +
@@ -290,5 +385,33 @@ public class Challenge {
                 ", blockOnPlace='" + blockOnPlace + '\'' +
                 ", typeChallenge='" + typeChallenge + '\'' +
                 '}';
+    }
+
+    private void checkPointsMultiplier() {
+        if (minutes == 0 && multiplier == 1 && pointsBoost == 0) {
+            return;
+        }
+        if (countPointsChallenge > pointsBoost && !startBoost) {
+            countPointsChallenge = countPointsChallenge - pointsBoost;
+            startBoost = true;
+        }
+    }
+
+    private void startBoosting() {
+        boostingTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
+            int number = minutes;
+
+            @Override
+            public void run() {
+                number--;
+                if (number == 0) {
+                    startBoost = false;
+                    boostingTask.cancel();
+                }
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("boostMessage").replace("{number}", multiplier + "").replace("{minutes}", number + "")));
+                }
+            }
+        }, 0, number);
     }
 }

@@ -17,6 +17,15 @@ Configuration:
       BlockOnPlaced: GRASS_BLOCK
       # How many points you want give at place?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -39,6 +48,15 @@ Configuration:
       ItemInHand: ALL
       # How many points you want give at break?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -59,6 +77,15 @@ Configuration:
       Item: ALL
       # How many points you want give at craft?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -79,6 +106,15 @@ Configuration:
       Item: ALL
       # How many points you want give at cook?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -99,6 +135,15 @@ Configuration:
       Item: ALL
       # How many points you want give at consume?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -117,6 +162,15 @@ Configuration:
       TypeChallenge: 'CollectorExpChallenge'
       # How many points you want give at exp point?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 50000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -137,6 +191,15 @@ Configuration:
       Mob: ALL
       # How many points you want give at kill?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -157,6 +220,15 @@ Configuration:
       Mob: ALL
       # How many points you want give at breed?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -177,6 +249,15 @@ Configuration:
       Item: ALL
       # How many points you want give at feed?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -197,6 +278,15 @@ Configuration:
       Force: 1.0
       # How many points you want give at shoot?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -217,6 +307,15 @@ Configuration:
       Power: 0.3
       # How many points you want give at jump?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 5000
+        # Multiplier you want give when reached the number
+        Multiplier: 3
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -237,6 +336,15 @@ Configuration:
       Color: ALL
       # How many points you want give at coloring?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 5000
+        # Multiplier you want give when reached the number
+        Multiplier: 3
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -255,6 +363,15 @@ Configuration:
       TypeChallenge: 'RaidChallenge'
       # How many points you want give at wave raid?
       Point: 100
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 5000
+        # Multiplier you want give when reached the number
+        Multiplier: 5
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -275,6 +392,15 @@ Configuration:
       Item: ALL
       # How many points you want give at wave raid?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 5000
+        # Multiplier you want give when reached the number
+        Multiplier: 3
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -293,6 +419,15 @@ Configuration:
       TypeChallenge: 'SprintChallenge'
       # How many points you want give at sprinting?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 5000
+        # Multiplier you want give when reached the number
+        Multiplier: 3
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -311,6 +446,15 @@ Configuration:
       TypeChallenge: 'MoveChallenge'
       # How many points you want give at move?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 50000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -331,6 +475,15 @@ Configuration:
       Cause: ALL
       # How many points you want give at damage?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 4
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -349,6 +502,15 @@ Configuration:
       TypeChallenge: 'SneakChallenge'
       # How many points you want give at sneaking?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 5000
+        # Multiplier you want give when reached the number
+        Multiplier: 4
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -369,6 +531,15 @@ Configuration:
       Item: ALL
       # How many points you want give at item break?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 5000
+        # Multiplier you want give when reached the number
+        Multiplier: 4
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -387,6 +558,15 @@ Configuration:
       TypeChallenge: 'SpongeAbsorbChallenge'
       # How many points you want give at water source absorbing?
       Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
       # Title challenge
       Title:
         - '&8'
@@ -404,7 +584,7 @@ Configuration:
   # Points if remain online for x minutes
   OnlinePoints:
     # If You want this feature
-    Enabled: true
+    Enabled: false
     # Point at minutes
     Point: 10
     # Every time you want player remain online for give points
@@ -436,8 +616,10 @@ Message:
     - '&6{number}° &e{player}&7 with &b{points}&7 points'
     - '&7{number}° &e{player}&7 with &b{points}&7 points'
     - '&8{number}° &e{player}&7 with &b{points}&7 points'
-  pointsEveryMinutes: '&7You collect {points} points in {minutes} minutes'
+  pointsEveryMinutes: '&7You collect &b{points}&7 points in &e{minutes}&7 minutes'
   challengeReward: '&7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
+  boostMessage: '&5Start boosting!&7 You have &bx{number}&7 points for &e{minutes}&7 minutes'
+  pointsRemainForBoosting: '&7Remain &b{points}&7 points for start next boost!'
 
 Debug:
   # Commands time execution

@@ -1,4 +1,4 @@
-package io.eliotesta98.VanillaChallenges.Events;
+package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 
-public class OnlinePointsEvent implements Listener {
+public class OnlinePointsGive implements Listener {
 
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("RaidEvent");
@@ -20,7 +20,7 @@ public class OnlinePointsEvent implements Listener {
     HashMap<String, Integer> times = new HashMap<String, Integer>();
     private BukkitTask task;
 
-    public OnlinePointsEvent() {
+    public OnlinePointsGive() {
         check();
     }
 
