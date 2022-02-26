@@ -37,14 +37,25 @@ public class CheckDay {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {
-                            H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
                             ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
-                            while(!topPlayers.isEmpty()) {
+                            if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                                H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                H2Database.instance.clearTopYesterday();
+                            } else {
+                                Main.yamlDB.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                Main.yamlDB.saveTopYesterday(topPlayers);
+                            }
+                            while (!topPlayers.isEmpty()) {
                                 DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
                                 dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
                                 dailyWinner.setReward(Main.dailyChallenge.getReward());
-                                H2Database.instance.updateDailyWinner(dailyWinner);
+                                if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                                    H2Database.instance.updateDailyWinner(dailyWinner);
+                                    H2Database.instance.insertChallengerTopYesterday(topPlayers.get(0).getNomePlayer(), topPlayers.get(0).getPoints());
+                                } else {
+                                    Main.yamlDB.updateDailyWinner(dailyWinner);
+                                }
                                 topPlayers.remove(0);
                             }
                             ReloadUtil.reload();
@@ -54,7 +65,11 @@ public class CheckDay {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {
-                            H2Database.instance.updateChallenge(Main.currentlyChallengeDB.getNomeChallenge(), Main.currentlyChallengeDB.getTimeResume());
+                            if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                                H2Database.instance.updateChallenge(Main.currentlyChallengeDB.getNomeChallenge(), Main.currentlyChallengeDB.getTimeResume());
+                            } else {
+                                Main.yamlDB.updateChallenge(Main.currentlyChallengeDB.getNomeChallenge(), Main.currentlyChallengeDB.getTimeResume());
+                            }
                         }
                     });
                 }

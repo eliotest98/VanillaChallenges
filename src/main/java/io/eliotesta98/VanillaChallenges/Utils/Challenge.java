@@ -145,34 +145,6 @@ public class Challenge {
         this.point = point;
     }
 
-    public void increment(String playerName) {
-        if (startBoost) {
-            if (!players.containsKey(playerName)) {
-                players.put(playerName, (long) point * multiplier);
-            } else {
-                players.replace(playerName, players.get(playerName) + ((long) point * multiplier));
-            }
-            if (!min10PlayersPoints.containsKey(playerName)) {
-                min10PlayersPoints.put(playerName, (long) point * multiplier);
-            } else {
-                min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + ((long) point * multiplier));
-            }
-        } else {
-            countPointsChallenge = countPointsChallenge + point;
-            if (!players.containsKey(playerName)) {
-                players.put(playerName, (long) point);
-            } else {
-                players.replace(playerName, players.get(playerName) + point);
-            }
-            if (!min10PlayersPoints.containsKey(playerName)) {
-                min10PlayersPoints.put(playerName, (long) point);
-            } else {
-                min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + point);
-            }
-            checkPointsMultiplier();
-        }
-    }
-
     public void increment(String playerName, long amount) {
         if (startBoost) {
             if (!players.containsKey(playerName)) {
@@ -250,6 +222,44 @@ public class Challenge {
                     startBoosting();
                 }
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
+            }
+        }, 0, number);
+    }
+
+    public void savePointsYaml() {
+        task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
+            @Override
+            public void run() {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
+                for (Map.Entry<String, Long> player : players.entrySet()) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (Main.yamlDB.isPresent(player.getKey())) {
+                                    Main.yamlDB.updateChallenger(player.getKey(), player.getValue());
+                                } else {
+                                    Main.yamlDB.insertChallenger(player.getKey(), player.getValue());
+                                }
+                            } catch (Exception ex) {
+                                Bukkit.getServer().getConsoleSender().sendMessage(ex.getMessage());
+                                ReloadUtil.reload();
+                            }
+                        }
+                    });
+                }
+                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
+                while (!topPlayers.isEmpty()) {
+                    DailyWinner dailyWinner = new DailyWinner();
+                    dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
+                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                    dailyWinner.setReward(Main.dailyChallenge.getReward());
+                    topPlayers.remove(0);
+                }
+                if (startBoost && (boostingTask == null || boostingTask.isCancelled())) {
+                    startBoosting();
+                }
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
             }
         }, 0, number);
     }
@@ -381,9 +391,28 @@ public class Challenge {
     public String toString() {
         return "Challenge{" +
                 "players=" + players +
+                ", min10PlayersPoints=" + min10PlayersPoints +
                 ", block='" + block + '\'' +
                 ", blockOnPlace='" + blockOnPlace + '\'' +
                 ", typeChallenge='" + typeChallenge + '\'' +
+                ", reward='" + reward + '\'' +
+                ", title=" + title +
+                ", item='" + item + '\'' +
+                ", itemInHand='" + itemInHand + '\'' +
+                ", mob='" + mob + '\'' +
+                ", color='" + color + '\'' +
+                ", cause='" + cause + '\'' +
+                ", force=" + force +
+                ", power=" + power +
+                ", number=" + number +
+                ", task=" + task +
+                ", boostingTask=" + boostingTask +
+                ", point=" + point +
+                ", pointsBoost=" + pointsBoost +
+                ", multiplier=" + multiplier +
+                ", minutes=" + minutes +
+                ", countPointsChallenge=" + countPointsChallenge +
+                ", startBoost=" + startBoost +
                 '}';
     }
 

@@ -13,6 +13,7 @@ public class BlockBreakEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockBreakEvent");
     private String block = Main.instance.getDailyChallenge().getBlock();
     private String itemInHand = Main.instance.getDailyChallenge().getItemInHand();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockBreakEvent e) {
@@ -21,16 +22,16 @@ public class BlockBreakEvent implements Listener {
             @Override
             public void run() {
                 if (block.equalsIgnoreCase(e.getBlock().getType().toString())) {
-                    if(e.getPlayer().getInventory().getItemInMainHand().getType().toString().equalsIgnoreCase(itemInHand)){
-                        Main.instance.getDailyChallenge().increment(e.getPlayer().getName());
+                    if (e.getPlayer().getInventory().getItemInMainHand().getType().toString().equalsIgnoreCase(itemInHand)) {
+                        Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), point);
                         if (debugActive) {
                             debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                             debugUtils.debug("BlockBreakEvent");
                         }
                         return;
                     } else {
-                        if(itemInHand.equalsIgnoreCase("ALL")){
-                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName());
+                        if (itemInHand.equalsIgnoreCase("ALL")) {
+                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), point);
                             if (debugActive) {
                                 debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                                 debugUtils.debug("BlockBreakEvent");
@@ -46,16 +47,16 @@ public class BlockBreakEvent implements Listener {
                     }
                 } else {
                     if (block.equalsIgnoreCase("ALL")) {
-                        if(e.getPlayer().getInventory().getItemInMainHand().getType().toString().equalsIgnoreCase(itemInHand)){
-                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName());
+                        if (e.getPlayer().getInventory().getItemInMainHand().getType().toString().equalsIgnoreCase(itemInHand)) {
+                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), point);
                             if (debugActive) {
                                 debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                                 debugUtils.debug("BlockBreakEvent");
                             }
                             return;
                         } else {
-                            if(itemInHand.equalsIgnoreCase("ALL")){
-                                Main.instance.getDailyChallenge().increment(e.getPlayer().getName());
+                            if (itemInHand.equalsIgnoreCase("ALL")) {
+                                Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), point);
                                 if (debugActive) {
                                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                                     debugUtils.debug("BlockBreakEvent");

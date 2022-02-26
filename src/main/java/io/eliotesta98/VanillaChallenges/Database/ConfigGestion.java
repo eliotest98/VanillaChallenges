@@ -14,7 +14,8 @@ public class ConfigGestion {
     private HashMap<String, String> messages = new HashMap<String, String>();
     private HashMap<String, Challenge> challenges = new HashMap<String, Challenge>();
     private HashMap<String, Boolean> hooks = new HashMap<String, Boolean>();
-    private boolean activeOnlinePoints;
+    private boolean activeOnlinePoints, yesterdayTop;
+    private String database;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints;
 
     public ConfigGestion(FileConfiguration file) {
@@ -69,7 +70,14 @@ public class ConfigGestion {
         for (String hoock : file.getConfigurationSection("Configuration.Hooks").getKeys(false)) {
             hooks.put(hoock, file.getBoolean("Configuration.Hooks." + hoock));
         }
+        for (String db : file.getConfigurationSection("Configuration.Database").getKeys(false)) {
+            if (file.getBoolean("Configuration.Database." + db)) {
+                database = db;
+                break;
+            }
+        }
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
+        yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
         pointsOnlinePoints = file.getInt("Configuration.OnlinePoints.Point");
         minutesOnlinePoints = file.getInt("Configuration.OnlinePoints.Minutes");
     }
@@ -136,5 +144,21 @@ public class ConfigGestion {
 
     public void setMinutesOnlinePoints(int minutesOnlinePoints) {
         this.minutesOnlinePoints = minutesOnlinePoints;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+
+    public boolean isYesterdayTop() {
+        return yesterdayTop;
+    }
+
+    public void setYesterdayTop(boolean yesterdayTop) {
+        this.yesterdayTop = yesterdayTop;
     }
 }

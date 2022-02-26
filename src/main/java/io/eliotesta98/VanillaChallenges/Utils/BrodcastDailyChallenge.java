@@ -2,6 +2,7 @@ package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
+import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -36,7 +37,16 @@ public class BrodcastDailyChallenge {
                     for (int i = 0; i < brodcastMessageTitle.size(); i++) {
                         p.sendMessage(ColorUtils.applyColor(brodcastMessageTitle.get(i).replace("{hours}", timeResume + "")));
                     }
-                    ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
+                    ArrayList<Challenger> top;
+                    if(!Main.instance.getConfigGestion().isYesterdayTop()) {
+                        top = Main.dailyChallenge.getTopPlayers(3);
+                    } else {
+                        if(Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                            top = H2Database.instance.getAllChallengersTopYesterday();
+                        } else {
+                            top = new ArrayList<>(Main.yamlDB.getTopYesterday());
+                        }
+                    }
                     if (!top.isEmpty()) {
                         p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     }

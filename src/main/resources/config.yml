@@ -434,8 +434,8 @@ Configuration:
         - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
         - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Sprint Challenge'
         - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉       &7Toggle Sprint for recive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉  &7Sprint and move for receive 1 point at block'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7{hours} hours to the end of the challenge'
         - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
@@ -492,7 +492,7 @@ Configuration:
         - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
         - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Take damage for receive points'
         - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉            &7(1 point for half heart)'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉        &7{hours} hours to the end of the challenge'
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
@@ -581,6 +581,118 @@ Configuration:
         - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'TNT:32'
+    Harvester:
+      TypeChallenge: 'HarvestChallenge'
+      # How many points you want give at item dropped?
+      Point: 1
+      # Item you want to harvest for challenge, if you want all items write ALL
+      Item: ALL
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
+      # Title challenge
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Harvest Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Harvest blocks for receive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point for 1 item dropped)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'NAME_TAG:2'
+    EggThrower:
+      TypeChallenge: 'EggThrowerChallenge'
+      # How many points you want give at egg throw?
+      Point: 1
+      # if you want count spawn chicken write CHICKEN, if you not want count chicken write ALL
+      Mob: CHICKEN
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 2
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
+      # Title challenge
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉           &7Egg Thrower Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Throw eggs for receive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point for 1 chicken spawned)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'TNT:16'
+    Enchanter:
+      TypeChallenge: 'EnchantChallenge'
+      # How many points you want give at enchant?
+      Point: 3
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 5
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
+      # Title challenge
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉           &7Enchant Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Enchant for receive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point for 1 enchant applied at item)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'IRON_INGOT:64'
+    Chatter:
+      TypeChallenge: 'ChatChallenge'
+      # How many points you want give at character?
+      Point: 1
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 10000
+        # Multiplier you want give when reached the number
+        Multiplier: 5
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
+      # Title challenge
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉           &7Chat Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Write a words for receive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point at letter for word extract)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'GOLD_INGOT:32'
   # Points if remain online for x minutes
   OnlinePoints:
     # If You want this feature
@@ -592,8 +704,15 @@ Configuration:
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10
+  Top:
+    # if you want yesterday top with broadcast and commands
+    YesterdayTop: false
   Hooks:
     PlaceholderAPI: false
+  # If you want use H2 or .yml file for data storage
+  Database:
+    H2: true
+    Yaml: false
 # Messages
 Message:
   commandFooter: '&7(&7&l(&c&l!&7&l)&7) &9&l[] optional value, <> required'
@@ -610,7 +729,7 @@ Message:
   errorCommandNotFound: '&cCommand not found'
   errorNoPerms: '&cInsufficient permission'
 
-  pointsInfo: '&e{player} &7points are &b{number}'
+  pointsInfo: '&e{player} &7have &b{number}&7 points'
   actuallyInTop: '&7Actually in top there are:'
   topPlayers:
     - '&6{number}° &e{player}&7 with &b{points}&7 points'
@@ -620,6 +739,7 @@ Message:
   challengeReward: '&7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
   boostMessage: '&5Start boosting!&7 You have &bx{number}&7 points for &e{minutes}&7 minutes'
   pointsRemainForBoosting: '&7Remain &b{points}&7 points for start next boost!'
+  chatWord: '&7Write this word for receive &b{points}&7 points: &5{word}'
 
 Debug:
   # Commands time execution
@@ -668,6 +788,14 @@ Debug:
   ItemBreakEvent: false
   # Sponge Absorb Event time execution
   SpongeAbsorbEvent: false
+  # Harvest Event time execution
+  HarvestEvent: false
+  # Egg Event time execution
+  EggThrowEvent: false
+  # Enchant Item Event time execution
+  EnchantItemEvent: false
+  # Chat Event time execution
+  ChatEvent: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution

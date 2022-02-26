@@ -40,7 +40,7 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {// TODO console
+        if (!(sender instanceof Player)) {
             Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
                 @Override
                 public void run() {
@@ -70,7 +70,6 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                        //TODO set
                     } else if (args[0].equalsIgnoreCase("add")) {
                         if (args.length == 1 || args.length == 2) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcAddChallenge));
@@ -86,7 +85,6 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                        //TODO challenge
                     } else if (args[0].equalsIgnoreCase("challenge")) {
                         if (args.length != 1) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcChallenge));
@@ -105,7 +103,6 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                        //TODO next
                     } else if (args[0].equalsIgnoreCase("clear")) {
                         if (args.length != 1) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcClear));
@@ -118,11 +115,14 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                             @Override
                             public void run() {
-                                H2Database.instance.clearAll();
+                                if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                                    H2Database.instance.clearAll();
+                                } else {
+                                    Main.yamlDB.clearAll();
+                                }
                                 ReloadUtil.reload();
                             }
                         });
-                        //TODO next
                     } else if (args[0].equalsIgnoreCase("next")) {
                         if (args.length != 1) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcNextHelp));
@@ -135,15 +135,31 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                             @Override
                             public void run() {
-                                H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
-                                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
-                                while (!topPlayers.isEmpty()) {
-                                    DailyWinner dailyWinner = new DailyWinner();
-                                    dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
-                                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
-                                    dailyWinner.setReward(Main.dailyChallenge.getReward());
-                                    H2Database.instance.insertDailyWinner(dailyWinner);
-                                    topPlayers.remove(0);
+                                if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                                    H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                    ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
+                                    H2Database.instance.clearTopYesterday();
+                                    while (!topPlayers.isEmpty()) {
+                                        DailyWinner dailyWinner = new DailyWinner();
+                                        dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
+                                        dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                                        dailyWinner.setReward(Main.dailyChallenge.getReward());
+                                        H2Database.instance.insertDailyWinner(dailyWinner);
+                                        H2Database.instance.insertChallengerTopYesterday(topPlayers.get(0).getNomePlayer(), topPlayers.get(0).getPoints());
+                                        topPlayers.remove(0);
+                                    }
+                                } else {
+                                    Main.yamlDB.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                    ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
+                                    Main.yamlDB.saveTopYesterday(topPlayers);
+                                    while (!topPlayers.isEmpty()) {
+                                        DailyWinner dailyWinner = new DailyWinner();
+                                        dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
+                                        dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                                        dailyWinner.setReward(Main.dailyChallenge.getReward());
+                                        Main.yamlDB.insertDailyWinner(dailyWinner);
+                                        topPlayers.remove(0);
+                                    }
                                 }
                                 ReloadUtil.reload();
                             }
@@ -153,9 +169,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    // TODO vc help
-                    else if (args[0].
+                    } else if (args[0].
 
                             equalsIgnoreCase("help")) {
                         if (args.length != 1) {
@@ -182,7 +196,6 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                        //TODO points
                     } else if (args[0].equalsIgnoreCase("points")) {
                         if (args.length > 2) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
@@ -208,9 +221,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                    }
-                    // TODO vc reload
-                    else if (args[0].equalsIgnoreCase("reload")) {
+                    } else if (args[0].equalsIgnoreCase("reload")) {
                         if (args.length != 1) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                             if (debugCommand) {
@@ -243,7 +254,16 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
-                        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
+                        ArrayList<Challenger> top;
+                        if (!Main.instance.getConfigGestion().isYesterdayTop()) {
+                            top = Main.dailyChallenge.getTopPlayers(3);
+                        } else {
+                            if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                                top = H2Database.instance.getAllChallengersTopYesterday();
+                            } else {
+                                top = new ArrayList<>(Main.yamlDB.getTopYesterday());
+                            }
+                        }
                         int i = 1;
                         while (!top.isEmpty()) {
                             sender.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
@@ -275,7 +295,7 @@ public class Commands implements CommandExecutor {
                     }
                 }
             });
-        } else {// TODO player
+        } else {
             Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
                 @Override
                 public void run() {
@@ -318,7 +338,6 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                        //TODO challenge
                     } else if (args[0].equalsIgnoreCase("challenge")) {
                         if (!p.hasPermission("vc.challenge.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -345,7 +364,6 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                        //TODO clear
                     } else if (args[0].equalsIgnoreCase("clear")) {
                         if (!p.hasPermission("vc.clear.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -366,11 +384,14 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                             @Override
                             public void run() {
-                                H2Database.instance.clearAll();
+                                if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                                    H2Database.instance.clearAll();
+                                } else {
+                                    Main.yamlDB.clearAll();
+                                }
                                 ReloadUtil.reload();
                             }
                         });
-                        //TODO next
                     } else if (args[0].equalsIgnoreCase("next")) {
                         if (!p.hasPermission("vc.next.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -391,15 +412,31 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                             @Override
                             public void run() {
-                                H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
-                                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
-                                while (!topPlayers.isEmpty()) {
-                                    DailyWinner dailyWinner = new DailyWinner();
-                                    dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
-                                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
-                                    dailyWinner.setReward(Main.dailyChallenge.getReward());
-                                    H2Database.instance.insertDailyWinner(dailyWinner);
-                                    topPlayers.remove(0);
+                                if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                                    H2Database.instance.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                    ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
+                                    H2Database.instance.clearTopYesterday();
+                                    while (!topPlayers.isEmpty()) {
+                                        DailyWinner dailyWinner = new DailyWinner();
+                                        dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
+                                        dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                                        dailyWinner.setReward(Main.dailyChallenge.getReward());
+                                        H2Database.instance.insertDailyWinner(dailyWinner);
+                                        H2Database.instance.insertChallengerTopYesterday(topPlayers.get(0).getNomePlayer(), topPlayers.get(0).getPoints());
+                                        topPlayers.remove(0);
+                                    }
+                                } else {
+                                    Main.yamlDB.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                    ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
+                                    Main.yamlDB.saveTopYesterday(topPlayers);
+                                    while (!topPlayers.isEmpty()) {
+                                        DailyWinner dailyWinner = new DailyWinner();
+                                        dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
+                                        dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                                        dailyWinner.setReward(Main.dailyChallenge.getReward());
+                                        Main.yamlDB.insertDailyWinner(dailyWinner);
+                                        topPlayers.remove(0);
+                                    }
                                 }
                                 ReloadUtil.reload();
                             }
@@ -409,9 +446,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    // TODO cg help
-                    else if (args[0].equalsIgnoreCase("help")) {
+                    } else if (args[0].equalsIgnoreCase("help")) {
                         if (!p.hasPermission("vc.help.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
@@ -457,7 +492,6 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        //TODO points
                     } else if (args[0].equalsIgnoreCase("points")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.points.command")) {
@@ -501,8 +535,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                    }     //TODO top
-                    else if (args[0].equalsIgnoreCase("top")) {
+                    } else if (args[0].equalsIgnoreCase("top")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.top.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -521,7 +554,16 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         p.sendMessage(ColorUtils.applyColor(actuallyInTop));
-                        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
+                        ArrayList<Challenger> top;
+                        if (!Main.instance.getConfigGestion().isYesterdayTop()) {
+                            top = Main.dailyChallenge.getTopPlayers(3);
+                        } else {
+                            if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+                                top = H2Database.instance.getAllChallengersTopYesterday();
+                            } else {
+                                top = new ArrayList<>(Main.yamlDB.getTopYesterday());
+                            }
+                        }
                         int i = 1;
                         while (!top.isEmpty()) {
                             p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
@@ -533,9 +575,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    // TODO cg reload
-                    else if (args[0].equalsIgnoreCase("reload")) {
+                    } else if (args[0].equalsIgnoreCase("reload")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.reload.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));

@@ -12,6 +12,7 @@ public class ColorSheepEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ColorSheepEvent");
     private String color = Main.dailyChallenge.getColor();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onColorSheep(org.bukkit.event.entity.SheepDyeWoolEvent e) {
@@ -23,10 +24,10 @@ public class ColorSheepEvent implements Listener {
             @Override
             public void run() {
                 if (color.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName());
+                    Main.dailyChallenge.increment(e.getPlayer().getName(), point);
                 } else {
                     if (e.getColor().toString().equalsIgnoreCase(color)) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName());
+                        Main.dailyChallenge.increment(e.getPlayer().getName(), point);
                     }
                 }
             }

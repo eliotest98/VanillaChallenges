@@ -12,6 +12,7 @@ public class BreedEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BreedEvent");
     private String mobBreed = Main.dailyChallenge.getMob();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBreedAnimals(org.bukkit.event.entity.EntityBreedEvent e) {
@@ -19,14 +20,14 @@ public class BreedEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if(mobBreed.equalsIgnoreCase("ALL")) {
-                    if(e.getBreeder() != null) {
-                        Main.dailyChallenge.increment(e.getBreeder().getName());
+                if (mobBreed.equalsIgnoreCase("ALL")) {
+                    if (e.getBreeder() != null) {
+                        Main.dailyChallenge.increment(e.getBreeder().getName(), point);
                     }
                 } else {
-                    if(mobBreed.equalsIgnoreCase(e.getEntity().getName())) {
-                        if(e.getBreeder() != null) {
-                            Main.dailyChallenge.increment(e.getBreeder().getName());
+                    if (mobBreed.equalsIgnoreCase(e.getEntity().getName())) {
+                        if (e.getBreeder() != null) {
+                            Main.dailyChallenge.increment(e.getBreeder().getName(), point);
                         }
                     }
                 }
