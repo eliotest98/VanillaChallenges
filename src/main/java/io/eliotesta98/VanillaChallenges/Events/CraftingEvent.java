@@ -13,6 +13,7 @@ public class CraftingEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("CraftItemEvent");
     private String itemCrafting = Main.instance.getDailyChallenge().getItem();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCraftingItem(CraftItemEvent e) {
@@ -21,10 +22,10 @@ public class CraftingEvent implements Listener {
             @Override
             public void run() {
                 if (itemCrafting.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getWhoClicked().getName());
+                    Main.dailyChallenge.increment(e.getWhoClicked().getName(), point);
                 } else {
                     if (e.getRecipe().getResult().getType().toString().equalsIgnoreCase(itemCrafting)) {
-                        Main.dailyChallenge.increment(e.getWhoClicked().getName());
+                        Main.dailyChallenge.increment(e.getWhoClicked().getName(), point);
                     }
                 }
             }

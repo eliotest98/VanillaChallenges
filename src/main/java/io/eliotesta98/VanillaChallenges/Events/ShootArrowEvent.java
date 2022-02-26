@@ -13,6 +13,7 @@ public class ShootArrowEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ShootArrowEvent");
     private double force = Main.dailyChallenge.getForce();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onShootEvent(org.bukkit.event.entity.EntityShootBowEvent e) {
@@ -20,18 +21,18 @@ public class ShootArrowEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if(force == 0.0) {
-                    for(Player player: Bukkit.getOnlinePlayers()){
-                        if(player.getName().equalsIgnoreCase(e.getEntity().getName())) {
-                            Main.dailyChallenge.increment(e.getEntity().getName());
+                if (force == 0.0) {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (player.getName().equalsIgnoreCase(e.getEntity().getName())) {
+                            Main.dailyChallenge.increment(e.getEntity().getName(), point);
                             break;
                         }
                     }
                 } else {
-                    if(e.getForce() >= force) {
-                        for(Player player: Bukkit.getOnlinePlayers()){
-                            if(player.getName().equalsIgnoreCase(e.getEntity().getName())) {
-                                Main.dailyChallenge.increment(e.getEntity().getName());
+                    if (e.getForce() >= force) {
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            if (player.getName().equalsIgnoreCase(e.getEntity().getName())) {
+                                Main.dailyChallenge.increment(e.getEntity().getName(), point);
                                 break;
                             }
                         }

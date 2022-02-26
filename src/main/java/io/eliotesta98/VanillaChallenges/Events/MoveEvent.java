@@ -11,29 +11,30 @@ import java.util.HashMap;
 
 public class MoveEvent implements Listener {
 
-    private HashMap<String,Double> distances = new HashMap<String, Double>();
+    private HashMap<String, Double> distances = new HashMap<String, Double>();
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("MoveEvent");
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
-        if(e.getTo() == null) {
+        if (e.getTo() == null) {
             return;
         }
         long tempo = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if(distances.get(e.getPlayer().getName()) == null) {
-                    distances.put(e.getPlayer().getName(),e.getFrom().distance(e.getTo()));
+                if (distances.get(e.getPlayer().getName()) == null) {
+                    distances.put(e.getPlayer().getName(), e.getFrom().distance(e.getTo()));
                 } else {
                     double old = distances.get(e.getPlayer().getName());
                     double newDouble = old + e.getFrom().distance(e.getTo());
-                    if(newDouble > 1.0) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName());
-                        distances.replace(e.getPlayer().getName(),newDouble-1.0);
+                    if (newDouble > 1.0) {
+                        Main.dailyChallenge.increment(e.getPlayer().getName(), point);
+                        distances.replace(e.getPlayer().getName(), newDouble - 1.0);
                     } else {
-                        distances.replace(e.getPlayer().getName(),newDouble);
+                        distances.replace(e.getPlayer().getName(), newDouble);
                     }
                 }
             }

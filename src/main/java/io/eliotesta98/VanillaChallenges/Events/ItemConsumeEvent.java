@@ -12,6 +12,7 @@ public class ItemConsumeEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemConsumeEvent");
     private String itemConsume = Main.instance.getDailyChallenge().getItem();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onItemConsume(org.bukkit.event.player.PlayerItemDamageEvent e) {
@@ -20,10 +21,10 @@ public class ItemConsumeEvent implements Listener {
             @Override
             public void run() {
                 if (itemConsume.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName());
+                    Main.dailyChallenge.increment(e.getPlayer().getName(), point);
                 } else {
                     if (e.getItem().getType().toString().equalsIgnoreCase(itemConsume)) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName());
+                        Main.dailyChallenge.increment(e.getPlayer().getName(), point);
                     }
                 }
             }

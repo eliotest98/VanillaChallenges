@@ -12,6 +12,7 @@ public class KillMobEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("KillEvent");
     private String mobKill = Main.dailyChallenge.getMob();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onKillEvent(org.bukkit.event.entity.EntityDeathEvent e) {
@@ -19,14 +20,14 @@ public class KillMobEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if(mobKill.equalsIgnoreCase("ALL")) {
-                    if(e.getEntity().getKiller() != null) {
-                        Main.dailyChallenge.increment(e.getEntity().getKiller().getName());
+                if (mobKill.equalsIgnoreCase("ALL")) {
+                    if (e.getEntity().getKiller() != null) {
+                        Main.dailyChallenge.increment(e.getEntity().getKiller().getName(), point);
                     }
                 } else {
-                    if(mobKill.equalsIgnoreCase(e.getEntity().getName())) {
-                        if(e.getEntity().getKiller() != null) {
-                            Main.dailyChallenge.increment(e.getEntity().getKiller().getName());
+                    if (mobKill.equalsIgnoreCase(e.getEntity().getName())) {
+                        if (e.getEntity().getKiller() != null) {
+                            Main.dailyChallenge.increment(e.getEntity().getKiller().getName(), point);
                         }
                     }
                 }

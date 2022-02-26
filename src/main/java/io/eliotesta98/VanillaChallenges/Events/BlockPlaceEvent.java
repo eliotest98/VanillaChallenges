@@ -16,6 +16,7 @@ public class BlockPlaceEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockPlaceEvent");
     private String block = Main.instance.getDailyChallenge().getBlock();
     private String blockOnPlaced = Main.instance.getDailyChallenge().getBlockOnPlace();
+    private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockPlaceEvent e) {
@@ -25,10 +26,10 @@ public class BlockPlaceEvent implements Listener {
             public void run() {
                 if (block.equalsIgnoreCase("ALL")) {
                     if (blockOnPlaced.equalsIgnoreCase("ALL")) {
-                        Main.instance.getDailyChallenge().increment(e.getPlayer().getName());
+                        Main.instance.getDailyChallenge().increment(e.getPlayer().getName(),point);
                     } else {
                         if (blockOnPlaced.equalsIgnoreCase(e.getBlockAgainst().getType().toString())) {
-                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName());
+                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName(),point);
                         } else {
                             if (debugActive) {
                                 debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
@@ -40,10 +41,10 @@ public class BlockPlaceEvent implements Listener {
                 } else {
                     if (block.equalsIgnoreCase(e.getBlockPlaced().getType().toString())) {
                         if (blockOnPlaced.equalsIgnoreCase("ALL")) {
-                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName());
+                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName(),point);
                         } else {
                             if (blockOnPlaced.equalsIgnoreCase(e.getBlockAgainst().getType().toString())) {
-                                Main.instance.getDailyChallenge().increment(e.getPlayer().getName());
+                                Main.instance.getDailyChallenge().increment(e.getPlayer().getName(),point);
                             } else {
                                 if (debugActive) {
                                     debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));

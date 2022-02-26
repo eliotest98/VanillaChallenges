@@ -29,7 +29,7 @@ public class EatEvent implements Listener {
                     } else {
                         foodLevels.put(e.getEntity().getName(), 20);
                     }
-                    Main.dailyChallenge.increment(e.getEntity().getName());
+                    Main.dailyChallenge.increment(e.getEntity().getName(), point);
                 } else {
                     if (e.getItem() != null) {
                         int number = e.getFoodLevel() - foodLevels.get(e.getEntity().getName());
@@ -49,7 +49,7 @@ public class EatEvent implements Listener {
                     } else {
                         foodLevels.remove(e.getEntity().getName());
                         foodLevels.put(e.getEntity().getName(), e.getFoodLevel());
-                        Main.dailyChallenge.increment(e.getEntity().getName());
+                        Main.dailyChallenge.increment(e.getEntity().getName(), point);
                     }
                 }
             }

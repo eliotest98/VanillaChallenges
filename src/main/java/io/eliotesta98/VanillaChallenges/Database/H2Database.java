@@ -3,10 +3,17 @@ package io.eliotesta98.VanillaChallenges.Database;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Utils.Challenge;
+import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
+import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
 import io.eliotesta98.VanillaChallenges.Utils.ReloadUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 public class H2Database {
 
@@ -32,6 +39,55 @@ public class H2Database {
                 "CREATE TABLE IF NOT EXISTS DailyWinner (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `NomeChallenge` VARCHAR(100) NOT NULL, `PlayerName` VARCHAR(100) NOT NULL, `Reward` VARCHAR(100) NOT NULL);");
         preparedStatement.executeUpdate();
         preparedStatement.close();
+        preparedStatement = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS TopYesterday (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
+    }
+
+
+
+    public static String insertDailyChallenges() {
+        ArrayList<ChallengeDB> challenges = H2Database.instance.getAllChallenges();
+        int count = 1;
+        if (challenges.isEmpty()) {
+            String nome = "nessuno";
+            for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallenges().entrySet()) {
+                if (count == 1) {
+                    Main.dailyChallenge = challenge.getValue();
+                    nome = challenge.getValue().getTypeChallenge();
+                    Main.currentlyChallengeDB = new ChallengeDB(challenge.getKey(), 86400);
+                }
+                H2Database.instance.insertChallenge(challenge.getKey(), 86400);
+                count++;
+            }
+            return nome;
+        } else {
+            while (!challenges.isEmpty()) {
+                if (challenges.get(0).getTimeResume() <= 0) {
+                    H2Database.instance.deleteChallengeWithName(challenges.get(0).getNomeChallenge());
+                    challenges.remove(0);
+                } else {
+                    Main.currentlyChallengeDB = challenges.get(0);
+                    Main.dailyChallenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(0).getNomeChallenge());
+                    Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
+                    return Main.dailyChallenge.getTypeChallenge();
+                }
+            }
+            return "nessuno";
+        }
+    }
+
+    public static void loadPlayersPoints() {
+        Main.dailyChallenge.setPlayers(H2Database.instance.getAllChallengers());
+        Main.dailyChallenge.savePoints();
+        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
+        int i = 1;
+        while (!top.isEmpty()) {
+            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+            top.remove(0);
+            i++;
+        }
     }
 
     public void clearChallenges() {
@@ -85,10 +141,28 @@ public class H2Database {
         }
     }
 
+    public void clearTopYesterday() {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "DROP TABLE TopYesterday");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS TopYesterday (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
+    }
+
     public void clearAll() {
         clearChallenges();
         clearChallengers();
         clearDailyWinners();
+        clearTopYesterday();
     }
 
     public ArrayList<DailyWinner> getAllDailyWinners() {
@@ -144,8 +218,8 @@ public class H2Database {
 
     public void updateDailyWinner(DailyWinner dailyWinner) {
         ArrayList<DailyWinner> winners = getAllDailyWinners();
-        while(!winners.isEmpty()) {
-            if(winners.get(0).getPlayerName().equalsIgnoreCase(dailyWinner.getPlayerName())) {
+        while (!winners.isEmpty()) {
+            if (winners.get(0).getPlayerName().equalsIgnoreCase(dailyWinner.getPlayerName())) {
                 deleteDailyWinnerWithId(winners.get(0).getId());
                 insertDailyWinner(dailyWinner);
                 return;
@@ -285,6 +359,67 @@ public class H2Database {
         try {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("UPDATE Challenger SET Points = '" + points + "' WHERE PlayerName = '" + playerName + "'");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
+    }
+
+    public ArrayList<Challenger> getAllChallengersTopYesterday() {
+        ArrayList<Challenger> points = new ArrayList<Challenger>();
+        ResultSet resultSet = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM TopYesterday");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                final Challenger point = new Challenger();
+                point.setPoints(resultSet.getInt("Points"));
+                point.setNomePlayer(resultSet.getString("PlayerName"));
+                points.add(point);
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
+        return points;
+    }
+
+    public void deleteTopChallengerWithName(String nomePlayer) {
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("DELETE FROM TopYesterday WHERE `PlayerName`='" + nomePlayer + "'");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
+    }
+
+    public void insertChallengerTopYesterday(String playerName, long points) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO TopYesterday (PlayerName,Points) VALUES ('"
+                            + playerName + "','" + points
+                            + "')");
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Insert failed, no rows affected.");
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
+    }
+
+    public void updateChallengerTopYesterday(String playerName, long points) {
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("UPDATE TopYesterday SET Points = '" + points + "' WHERE PlayerName = '" + playerName + "'");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
