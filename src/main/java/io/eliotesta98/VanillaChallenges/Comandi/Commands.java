@@ -152,14 +152,18 @@ public class Commands implements CommandExecutor {
                                     Main.yamlDB.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
                                     ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
                                     Main.yamlDB.saveTopYesterday(topPlayers);
+                                    int number = Main.yamlDB.lastDailyWinnerId();
                                     while (!topPlayers.isEmpty()) {
+                                        number++;
                                         DailyWinner dailyWinner = new DailyWinner();
+                                        dailyWinner.setId(number);
                                         dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
                                         dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
                                         dailyWinner.setReward(Main.dailyChallenge.getReward());
                                         Main.yamlDB.insertDailyWinner(dailyWinner);
                                         topPlayers.remove(0);
                                     }
+                                    Main.yamlDB.backupDb();
                                 }
                                 ReloadUtil.reload();
                             }
@@ -429,14 +433,18 @@ public class Commands implements CommandExecutor {
                                     Main.yamlDB.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
                                     ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
                                     Main.yamlDB.saveTopYesterday(topPlayers);
+                                    int number = Main.yamlDB.lastDailyWinnerId();
                                     while (!topPlayers.isEmpty()) {
+                                        number++;
                                         DailyWinner dailyWinner = new DailyWinner();
+                                        dailyWinner.setId(number);
                                         dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
                                         dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
                                         dailyWinner.setReward(Main.dailyChallenge.getReward());
                                         Main.yamlDB.insertDailyWinner(dailyWinner);
                                         topPlayers.remove(0);
                                     }
+                                    Main.yamlDB.backupDb();
                                 }
                                 ReloadUtil.reload();
                             }

@@ -10,8 +10,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class YamlDB {
 
@@ -41,6 +44,10 @@ public class YamlDB {
                 for (String number : file.getConfigurationSection("DailyWinners").getKeys(false)) {
                     DailyWinner dailyWinner = new DailyWinner(Integer.parseInt(number), file.getString("DailyWinners." + number + ".PlayerName"), file.getString("DailyWinners." + number + ".NomeChallenge"), file.getString("DailyWinners." + number + ".Reward"));
                     dailyWinners.add(dailyWinner);
+                }
+                for (String playerName : file.getConfigurationSection("TopYesterday").getKeys(false)) {
+                    Challenger challenger = new Challenger(playerName, file.getInt("TopYesterday." + playerName));
+                    topYesterday.add(challenger);
                 }
             }
         } else {
@@ -72,9 +79,62 @@ public class YamlDB {
         }
     }
 
+    public void backupDb() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String data = sdf.format(timestamp);
+        File configFile = new File(Main.instance.getDataFolder() +
+                File.separator + "backup", data + ".yml");
+        if (!configFile.exists()) {
+            try {
+                File folder = new File(Main.instance.getDataFolder() +
+                        File.separator + "backup");
+                boolean folderCreate = folder.mkdir();
+                if (!folderCreate) {
+                    if (folder.listFiles().length > 4) {
+                        folder.listFiles()[0].delete();
+                    }
+                }
+                configFile.createNewFile();
+                YamlConfiguration file = YamlConfiguration.loadConfiguration(configFile);
+                for (int i = 0; i < playerPoints.size(); i++) {
+                    file.set("Points." + playerPoints.get(i).getNomePlayer(), playerPoints.get(i).getPoints());
+                }
+                for (int i = 0; i < challenges.size(); i++) {
+                    file.set("Challenges." + challenges.get(i).getNomeChallenge(), challenges.get(i).getTimeResume());
+                }
+                for (int i = 0; i < dailyWinners.size(); i++) {
+                    file.set("DailyWinners." + dailyWinners.get(i).getId() + ".PlayerName", dailyWinners.get(i).getPlayerName());
+                    file.set("DailyWinners." + dailyWinners.get(i).getId() + ".NomeChallenge", dailyWinners.get(i).getNomeChallenge());
+                    file.set("DailyWinners." + dailyWinners.get(i).getId() + ".Reward", dailyWinners.get(i).getReward());
+                }
+                for (int i = 0; i < topYesterday.size(); i++) {
+                    file.set("TopYesterday." + topYesterday.get(i).getNomePlayer(), topYesterday.get(i).getPoints());
+                }
+                file.save(configFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+    }
+
     public void saveTopYesterday(ArrayList<Challenger> newTopYesterday) {
+        removeTopYesterday();
         for (int i = 0; i < newTopYesterday.size(); i++) {
             file.set("TopYesterday." + newTopYesterday.get(i).getNomePlayer(), newTopYesterday.get(i).getPoints());
+        }
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    public void removeTopYesterday() {
+        for (int i = 0; i < topYesterday.size(); i++) {
+            file.set("TopYesterday." + topYesterday.get(i).getNomePlayer(), null);
         }
         try {
             saveFile();
@@ -197,23 +257,6 @@ public class YamlDB {
         }
     }
 
-    public void updateDailyWinner(DailyWinner dailyWinner) {
-        for (int i = 0; i < dailyWinners.size(); i++) {
-            if (dailyWinners.get(i).getId() == dailyWinner.getId()) {
-                file.set("DailyWinners." + dailyWinner.getId() + ".PlayerName", dailyWinner.getPlayerName());
-                file.set("DailyWinners." + dailyWinner.getId() + ".NomeChallenge", dailyWinner.getNomeChallenge());
-                file.set("DailyWinners." + dailyWinner.getId() + ".Reward", dailyWinner.getReward());
-                break;
-            }
-        }
-        try {
-            saveFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-    }
-
     public void deleteDailyWinnerWithId(int id) {
         file.set("DailyWinners." + id, null);
         try {
@@ -238,6 +281,16 @@ public class YamlDB {
 
     public ArrayList<DailyWinner> getAllDailyWinners() {
         return dailyWinners;
+    }
+
+    public int lastDailyWinnerId() {
+        int last = 0;
+        for (DailyWinner dailyWinner : dailyWinners) {
+            if (dailyWinner.getId() > last) {
+                last = dailyWinner.getId();
+            }
+        }
+        return last;
     }
 
     public void clearAll() {
