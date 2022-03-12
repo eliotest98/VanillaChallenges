@@ -1,7 +1,9 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -14,40 +16,52 @@ import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
 import io.eliotesta98.VanillaChallenges.Utils.ReloadUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-public class H2Database {
+public class H2Database implements Database {
 
     public static Connection connection = null;
     private static HikariConfig config = new HikariConfig();
     private static HikariDataSource ds = null;
     public static H2Database instance = null;
 
-    public H2Database(final String AbsolutePath) throws SQLException, ClassNotFoundException {
-        instance = this;
-        createConnection(AbsolutePath);
-        connection = getConnection();
-
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS Challenge (`NomeChallenge` VARCHAR(100) NOT NULL PRIMARY KEY, `TimeResume` INT(15) NOT NULL);");
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
-        preparedStatement = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS Challenger (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
-        preparedStatement = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS DailyWinner (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `NomeChallenge` VARCHAR(100) NOT NULL, `PlayerName` VARCHAR(100) NOT NULL, `Reward` VARCHAR(100) NOT NULL);");
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
-        preparedStatement = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS TopYesterday (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
+    public H2Database() {
+        initialize(Main.instance.getDataFolder().getAbsolutePath());
     }
 
+    @Override
+    public void initialize(String AbsolutePath) {
+        instance = this;
+        createConnection(AbsolutePath);
+        try {
+            connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS Challenge (`NomeChallenge` VARCHAR(100) NOT NULL PRIMARY KEY, `TimeResume` INT(15) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS Challenger (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS DailyWinner (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `NomeChallenge` VARCHAR(100) NOT NULL, `PlayerName` VARCHAR(100) NOT NULL, `Reward` VARCHAR(100) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS TopYesterday (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            Main.instance.getServer().getConsoleSender().sendMessage("Folder: '" + com.zaxxer.hikari.HikariConfig.class
+                    .getProtectionDomain().getCodeSource().getLocation().getPath() + "'");
+            Main.instance.getServer().getConsoleSender().sendMessage("§cError Database not connected!");
+            e.printStackTrace();
+            Main.instance.onDisable();
+        }
+    }
 
-
-    public static String insertDailyChallenges() {
+    @Override
+    public String insertDailyChallenges() {
         ArrayList<ChallengeDB> challenges = H2Database.instance.getAllChallenges();
         int count = 1;
         if (challenges.isEmpty()) {
@@ -78,7 +92,8 @@ public class H2Database {
         }
     }
 
-    public static void loadPlayersPoints() {
+    @Override
+    public void loadPlayersPoints() {
         Main.dailyChallenge.setPlayers(H2Database.instance.getAllChallengers());
         Main.dailyChallenge.savePoints();
         ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
@@ -107,6 +122,7 @@ public class H2Database {
         }
     }
 
+    @Override
     public void clearChallengers() {
         PreparedStatement preparedStatement = null;
         try {
@@ -141,7 +157,8 @@ public class H2Database {
         }
     }
 
-    public void clearTopYesterday() {
+    @Override
+    public void removeTopYesterday() {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(
@@ -158,13 +175,22 @@ public class H2Database {
         }
     }
 
+    @Override
+    public void saveTopYesterday(ArrayList<Challenger> newTopYesterday) {
+        for (int i = 0; i < newTopYesterday.size(); i++) {
+            insertChallengerTopYesterday(newTopYesterday.get(0).getNomePlayer(), newTopYesterday.get(0).getPoints());
+        }
+    }
+
+    @Override
     public void clearAll() {
         clearChallenges();
         clearChallengers();
         clearDailyWinners();
-        clearTopYesterday();
+        removeTopYesterday();
     }
 
+    @Override
     public ArrayList<DailyWinner> getAllDailyWinners() {
         ArrayList<DailyWinner> dailyWinners = new ArrayList<DailyWinner>();
         ResultSet resultSet = null;
@@ -187,6 +213,7 @@ public class H2Database {
         return dailyWinners;
     }
 
+    @Override
     public void insertDailyWinner(DailyWinner dailyWinner) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -204,6 +231,7 @@ public class H2Database {
         }
     }
 
+    @Override
     public void deleteDailyWinnerWithId(int id) {
         try {
             PreparedStatement preparedStatement = connection
@@ -216,6 +244,7 @@ public class H2Database {
         }
     }
 
+    @Override
     public void updateDailyWinner(DailyWinner dailyWinner) {
         ArrayList<DailyWinner> winners = getAllDailyWinners();
         while (!winners.isEmpty()) {
@@ -249,6 +278,7 @@ public class H2Database {
         return challengeDBS;
     }
 
+    @Override
     public void deleteChallengeWithName(String nomeChallenge) {
         try {
             PreparedStatement preparedStatement = connection
@@ -278,6 +308,7 @@ public class H2Database {
         }
     }
 
+    @Override
     public void updateChallenge(String challengeName, int time) {
         try {
             PreparedStatement preparedStatement =
@@ -310,6 +341,7 @@ public class H2Database {
         return points;
     }
 
+    @Override
     public boolean isPresent(String playerName) {
         ResultSet resultSet = null;
         try {
@@ -338,6 +370,7 @@ public class H2Database {
         }
     }
 
+    @Override
     public void insertChallenger(String playerName, long points) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -355,6 +388,7 @@ public class H2Database {
         }
     }
 
+    @Override
     public void updateChallenger(String playerName, long points) {
         try {
             PreparedStatement preparedStatement =
@@ -367,6 +401,7 @@ public class H2Database {
         }
     }
 
+    @Override
     public ArrayList<Challenger> getAllChallengersTopYesterday() {
         ArrayList<Challenger> points = new ArrayList<Challenger>();
         ResultSet resultSet = null;
@@ -387,18 +422,6 @@ public class H2Database {
         return points;
     }
 
-    public void deleteTopChallengerWithName(String nomePlayer) {
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM TopYesterday WHERE `PlayerName`='" + nomePlayer + "'");
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ReloadUtil.reload();
-        }
-    }
-
     public void insertChallengerTopYesterday(String playerName, long points) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -416,15 +439,49 @@ public class H2Database {
         }
     }
 
-    public void updateChallengerTopYesterday(String playerName, long points) {
-        try {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("UPDATE TopYesterday SET Points = '" + points + "' WHERE PlayerName = '" + playerName + "'");
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ReloadUtil.reload();
+    @Override
+    public int lastDailyWinnerId() {
+        return 0;
+    }
+
+    @Override
+    public void backupDb(int numberOfBackupFiles) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String data = sdf.format(timestamp);
+        File configFile = new File(Main.instance.getDataFolder() +
+                File.separator + "backup", data + ".yml");
+        if (!configFile.exists()) {
+            try {
+                File folder = new File(Main.instance.getDataFolder() +
+                        File.separator + "backup");
+                boolean folderCreate = folder.mkdir();
+                if (!folderCreate) {
+                    if (folder.listFiles().length > numberOfBackupFiles) {
+                        folder.listFiles()[0].delete();
+                    }
+                }
+                configFile.createNewFile();
+                YamlConfiguration file = YamlConfiguration.loadConfiguration(configFile);
+                for (Map.Entry<String, Long> players : Main.dailyChallenge.getPlayers().entrySet()) {
+                    file.set("Points." + players.getKey(), players.getValue());
+                }
+                for (ChallengeDB challenge : getAllChallenges()) {
+                    file.set("Challenges." + challenge.getNomeChallenge(), challenge.getTimeResume());
+                }
+                for (DailyWinner dailyWinner : getAllDailyWinners()) {
+                    file.set("DailyWinners." + dailyWinner.getId() + ".PlayerName", dailyWinner.getPlayerName());
+                    file.set("DailyWinners." + dailyWinner.getId() + ".NomeChallenge", dailyWinner.getNomeChallenge());
+                    file.set("DailyWinners." + dailyWinner.getId() + ".Reward", dailyWinner.getReward());
+                }
+                for (Challenger top : getAllChallengersTopYesterday()) {
+                    file.set("TopYesterday." + top.getNomePlayer(), top.getPoints());
+                }
+                file.save(configFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
         }
     }
 
@@ -438,7 +495,8 @@ public class H2Database {
         return ds.getConnection();
     }
 
-    public static void disconnect() {
+    @Override
+    public void disconnect() {
         try {
             connection.close();
         } catch (SQLException e) {

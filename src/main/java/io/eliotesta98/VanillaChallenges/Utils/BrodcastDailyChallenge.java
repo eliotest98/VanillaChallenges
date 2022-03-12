@@ -41,11 +41,7 @@ public class BrodcastDailyChallenge {
                     if(!Main.instance.getConfigGestion().isYesterdayTop()) {
                         top = Main.dailyChallenge.getTopPlayers(3);
                     } else {
-                        if(Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
-                            top = H2Database.instance.getAllChallengersTopYesterday();
-                        } else {
-                            top = new ArrayList<>(Main.yamlDB.getTopYesterday());
-                        }
+                        top = Main.db.getAllChallengersTopYesterday();
                     }
                     if (!top.isEmpty()) {
                         p.sendMessage(ColorUtils.applyColor(actuallyInTop));

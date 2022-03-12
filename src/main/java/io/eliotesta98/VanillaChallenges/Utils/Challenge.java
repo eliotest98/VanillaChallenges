@@ -3,12 +3,10 @@ package io.eliotesta98.VanillaChallenges.Utils;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
-import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -197,14 +195,14 @@ public class Challenge {
                         @Override
                         public void run() {
                             try {
-                                if (H2Database.instance.isPresent(player.getKey())) {
-                                    H2Database.instance.updateChallenger(player.getKey(), player.getValue());
+                                if (Main.db.isPresent(player.getKey())) {
+                                    Main.db.updateChallenger(player.getKey(), player.getValue());
                                 } else {
-                                    H2Database.instance.insertChallenger(player.getKey(), player.getValue());
+                                    Main.db.insertChallenger(player.getKey(), player.getValue());
                                 }
                             } catch (Exception ex) {
                                 Bukkit.getServer().getConsoleSender().sendMessage(ex.getMessage());
-                                ReloadUtil.reload();
+                                return;
                             }
                         }
                     });
@@ -215,51 +213,12 @@ public class Challenge {
                     dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
                     dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
                     dailyWinner.setReward(Main.dailyChallenge.getReward());
-                    H2Database.instance.updateDailyWinner(dailyWinner);
                     topPlayers.remove(0);
                 }
                 if (startBoost && (boostingTask == null || boostingTask.isCancelled())) {
                     startBoosting();
                 }
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
-            }
-        }, 0, number);
-    }
-
-    public void savePointsYaml() {
-        task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
-                for (Map.Entry<String, Long> player : players.entrySet()) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (Main.yamlDB.isPresent(player.getKey())) {
-                                    Main.yamlDB.updateChallenger(player.getKey(), player.getValue());
-                                } else {
-                                    Main.yamlDB.insertChallenger(player.getKey(), player.getValue());
-                                }
-                            } catch (Exception ex) {
-                                Bukkit.getServer().getConsoleSender().sendMessage(ex.getMessage());
-                                ReloadUtil.reload();
-                            }
-                        }
-                    });
-                }
-                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
-                while (!topPlayers.isEmpty()) {
-                    DailyWinner dailyWinner = new DailyWinner();
-                    dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
-                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
-                    dailyWinner.setReward(Main.dailyChallenge.getReward());
-                    topPlayers.remove(0);
-                }
-                if (startBoost && (boostingTask == null || boostingTask.isCancelled())) {
-                    startBoosting();
-                }
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
             }
         }, 0, number);
     }
