@@ -21,11 +21,7 @@ public class DailyGiveWinners implements Listener {
     private String challengeReward = Main.instance.getConfigGestion().getMessages().get("challengeReward");
 
     public DailyGiveWinners() {
-        if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
-            winners = H2Database.instance.getAllDailyWinners();
-        } else {
-            winners = Main.yamlDB.getAllDailyWinners();
-        }
+        winners = Main.db.getAllDailyWinners();
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -51,11 +47,7 @@ public class DailyGiveWinners implements Listener {
                             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
-                                        H2Database.instance.deleteDailyWinnerWithId(winners.get(number).getId());
-                                    } else {
-                                        Main.yamlDB.deleteDailyWinnerWithId(winners.get(number).getId());
-                                    }
+                                    Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
                                     winners.remove(number);
                                 }
                             });
@@ -68,11 +60,7 @@ public class DailyGiveWinners implements Listener {
                                 @Override
                                 public void run() {
                                     e.getPlayer().getInventory().addItem(item);
-                                    if (Main.instance.getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
-                                        H2Database.instance.deleteDailyWinnerWithId(winners.get(number).getId());
-                                    } else {
-                                        Main.yamlDB.deleteDailyWinnerWithId(winners.get(number).getId());
-                                    }
+                                    Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
                                     winners.remove(number);
                                 }
                             });

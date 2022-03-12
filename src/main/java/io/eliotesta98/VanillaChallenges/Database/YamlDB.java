@@ -14,9 +14,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-public class YamlDB {
+public class YamlDB implements Database{
 
     private FileConfiguration file;
     private File configFile;
@@ -25,11 +24,21 @@ public class YamlDB {
     private ArrayList<DailyWinner> dailyWinners = new ArrayList<DailyWinner>();
     private ArrayList<Challenger> topYesterday = new ArrayList<Challenger>();
 
-    public YamlDB() throws IOException {
+    public YamlDB() {
+        initialize("");
+    }
+
+    @Override
+    public void initialize(String AbsolutePath) {
         configFile = new File(Main.instance.getDataFolder(), "database.yml");
 
         if (!configFile.exists()) {
-            boolean create = configFile.createNewFile();
+            boolean create = false;
+            try {
+                create = configFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             if (create) {
                 file = YamlConfiguration.loadConfiguration(configFile);
             } else {
@@ -79,7 +88,8 @@ public class YamlDB {
         }
     }
 
-    public void backupDb() {
+    @Override
+    public void backupDb(int numberOfBackupFiles) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String data = sdf.format(timestamp);
@@ -91,7 +101,7 @@ public class YamlDB {
                         File.separator + "backup");
                 boolean folderCreate = folder.mkdir();
                 if (!folderCreate) {
-                    if (folder.listFiles().length > 4) {
+                    if (folder.listFiles().length > numberOfBackupFiles) {
                         folder.listFiles()[0].delete();
                     }
                 }
@@ -119,8 +129,8 @@ public class YamlDB {
         }
     }
 
+    @Override
     public void saveTopYesterday(ArrayList<Challenger> newTopYesterday) {
-        removeTopYesterday();
         for (int i = 0; i < newTopYesterday.size(); i++) {
             file.set("TopYesterday." + newTopYesterday.get(i).getNomePlayer(), newTopYesterday.get(i).getPoints());
         }
@@ -132,6 +142,7 @@ public class YamlDB {
         }
     }
 
+    @Override
     public void removeTopYesterday() {
         for (int i = 0; i < topYesterday.size(); i++) {
             file.set("TopYesterday." + topYesterday.get(i).getNomePlayer(), null);
@@ -144,14 +155,12 @@ public class YamlDB {
         }
     }
 
-    public ArrayList<Challenger> getTopYesterday() {
+    @Override
+    public ArrayList<Challenger> getAllChallengersTopYesterday() {
         return topYesterday;
     }
 
-    public void saveFile() throws IOException {
-        file.save(configFile);
-    }
-
+    @Override
     public boolean isPresent(String playerName) {
         for (int i = 0; i < playerPoints.size(); i++) {
             if (playerName.equalsIgnoreCase(playerPoints.get(i).getNomePlayer())) {
@@ -173,6 +182,7 @@ public class YamlDB {
         }
     }
 
+    @Override
     public String insertDailyChallenges() {
         int count = 1;
         if (challenges.isEmpty()) {
@@ -204,9 +214,10 @@ public class YamlDB {
         }
     }
 
+    @Override
     public void loadPlayersPoints() {
         Main.dailyChallenge.setPlayers(playerPoints);
-        Main.dailyChallenge.savePointsYaml();
+        Main.dailyChallenge.savePoints();
         ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
         int i = 1;
         while (!top.isEmpty()) {
@@ -216,6 +227,12 @@ public class YamlDB {
         }
     }
 
+    @Override
+    public void disconnect() {
+        return;
+    }
+
+    @Override
     public void deleteChallengeWithName(String challengeName) {
         file.set("Challenges." + challengeName, null);
         try {
@@ -226,6 +243,7 @@ public class YamlDB {
         }
     }
 
+    @Override
     public void updateChallenge(String nomeChallenge, int number) {
         file.set("Challenges." + nomeChallenge, number);
         try {
@@ -236,6 +254,7 @@ public class YamlDB {
         }
     }
 
+    @Override
     public void updateChallenger(String playerName, long value) {
         file.set("Points." + playerName, (int) value);
         try {
@@ -246,6 +265,7 @@ public class YamlDB {
         }
     }
 
+    @Override
     public void insertChallenger(String playerName, long value) {
         playerPoints.add(new Challenger(playerName, (int) value));
         file.set("Points." + playerName, (int) value);
@@ -257,6 +277,19 @@ public class YamlDB {
         }
     }
 
+    @Override
+    public void clearChallengers() {
+        file.set("Points", null);
+        playerPoints.clear();
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    @Override
     public void deleteDailyWinnerWithId(int id) {
         file.set("DailyWinners." + id, null);
         try {
@@ -267,6 +300,7 @@ public class YamlDB {
         }
     }
 
+    @Override
     public void insertDailyWinner(DailyWinner dailyWinner) {
         file.set("DailyWinners." + dailyWinner.getId() + ".PlayerName", dailyWinner.getPlayerName());
         file.set("DailyWinners." + dailyWinner.getId() + ".NomeChallenge", dailyWinner.getNomeChallenge());
@@ -279,10 +313,26 @@ public class YamlDB {
         }
     }
 
+    @Override
+    public void updateDailyWinner(DailyWinner dailyWinner) {
+        ArrayList<DailyWinner> winners = getAllDailyWinners();
+        while (!winners.isEmpty()) {
+            if (winners.get(0).getPlayerName().equalsIgnoreCase(dailyWinner.getPlayerName())) {
+                deleteDailyWinnerWithId(winners.get(0).getId());
+                insertDailyWinner(dailyWinner);
+                return;
+            }
+            winners.remove(0);
+        }
+        insertDailyWinner(dailyWinner);
+    }
+
+    @Override
     public ArrayList<DailyWinner> getAllDailyWinners() {
         return dailyWinners;
     }
 
+    @Override
     public int lastDailyWinnerId() {
         int last = 0;
         for (DailyWinner dailyWinner : dailyWinners) {
@@ -293,7 +343,13 @@ public class YamlDB {
         return last;
     }
 
+    @Override
     public void clearAll() {
         configFile.delete();
     }
+
+    public void saveFile() throws IOException {
+        file.save(configFile);
+    }
+
 }

@@ -21,10 +21,10 @@ public class ItemBreakEvent implements Listener {
             @Override
             public void run() {
                 if (item.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point * e.getBrokenItem().getType().getMaxDurability());
+                    Main.dailyChallenge.increment(e.getPlayer().getName(), point);
                 } else {
                     if (item.equalsIgnoreCase(e.getBrokenItem().getType().toString())) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point * e.getBrokenItem().getType().getMaxDurability());
+                        Main.dailyChallenge.increment(e.getPlayer().getName(), point);
                     }
                 }
             }

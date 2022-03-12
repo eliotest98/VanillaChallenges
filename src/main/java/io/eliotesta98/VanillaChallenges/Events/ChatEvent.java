@@ -19,28 +19,33 @@ public class ChatEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ChatEvent");
     private int point = Main.dailyChallenge.getPoint();
     private BukkitScheduler scheduler = Bukkit.getScheduler();
-    private BukkitTask task;
+    private static BukkitTask task;
     private String word = "";
     private final String message = Main.instance.getConfigGestion().getMessages().get("chatWord");
-    private final String alphabet = "abcdefghijklmnopqrstuvywxz0123456789/*-+.:;_-!£$%&()=?'^òàèìù#@[]{}§*é°ç,";
+    private final String alphabet = "abcdefghijklmnopqrstuvywxz0123456789";
+    private final String correctAnswer = Main.instance.getConfigGestion().getMessages().get("correctAnswer");
 
     public ChatEvent() {
-        //ogni 4 minuti
-        start(20 * 60 * 4);
+        //ogni 2 minuti
+        start(20 * 60 * 2);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onSneak(org.bukkit.event.player.AsyncPlayerChatEvent e) {
+    public void onPlayerChat(org.bukkit.event.player.AsyncPlayerChatEvent e) {
         long tempo = System.currentTimeMillis();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
-                if (e.getMessage().equalsIgnoreCase(word)) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point * word.length());
-                    word = "";
-                }
+        if (debugActive) {
+            debugUtils.addLine("ChatEvent message: " + e.getMessage() + " word: " + word);
+        }
+        if (e.getMessage().equalsIgnoreCase(word)) {
+            Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point * word.length());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.sendMessage(ColorUtils.applyColor(correctAnswer.replace("{player}", e.getPlayer().getName())));
             }
-        });
+            if (debugActive) {
+                debugUtils.addLine("ChatEvent add " + (point * word.length()) + " points at " + e.getPlayer().getName());
+            }
+            word = "";
+        }
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
         if (debugActive) {
             debugUtils.addLine("ChatEvent execution time= " + (System.currentTimeMillis() - tempo));
@@ -53,24 +58,21 @@ public class ChatEvent implements Listener {
         execute(time);
     }
 
-    public void stop() {
+    public static void stop() {
         task.cancel();
     }
-
 
     public void execute(long time) {
         task = scheduler.runTaskTimerAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if (word.equalsIgnoreCase("")) {
-                    generateWord();
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ColorUtils.applyColor(message.replace("{points}", word.length() + "").replace("{word}", word)));
-                    }
-                } else {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ColorUtils.applyColor(message.replace("{points}", word.length() + "").replace("{word}", word)));
-                    }
+                if (debugActive) {
+                    debugUtils.addLine("ChatEvent world broadcasted: " + word);
+                }
+                word = "";
+                generateWord();
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.sendMessage(ColorUtils.applyColor(message.replace("{points}", (word.length() * point) + "").replace("{word}", word)));
                 }
             }
         }, 0, time);
@@ -82,6 +84,9 @@ public class ChatEvent implements Listener {
         int number = random.nextInt(15) + 1;
         for (int i = 0; i < number; i++) {
             word = word + alphabet.charAt(random.nextInt(alphabet.length()));
+        }
+        if (debugActive) {
+            debugUtils.addLine("ChatEvent world generated: " + word);
         }
     }
 }

@@ -7,10 +7,7 @@ import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Utils.*;
-
 import java.io.*;
-import java.sql.SQLException;
-
 import org.bukkit.*;
 import org.bukkit.command.*;
 
@@ -24,7 +21,8 @@ public class Main extends JavaPlugin {
     private BrodcastDailyChallenge brodcastDailyChallenge;
     private OnlinePointsGive onlinePointsEvent;
     public static ExpansionPlaceholderAPI EPAPI;
-    public static YamlDB yamlDB;
+    private String typeChallenge = "";
+    public static Database db;
 
     public void onEnable() {
         DebugUtils debugsistem = new DebugUtils();
@@ -117,40 +115,17 @@ public class Main extends JavaPlugin {
             }
         });
         getServer().getConsoleSender().sendMessage("§aConfiguration Loaded!");
-        String typeChallenge = "";
+        getServer().getConsoleSender().sendMessage("§6Connection to database!");
         if (config.getDatabase().equalsIgnoreCase("H2")) {
-            getServer().getConsoleSender().sendMessage("§6Connection to database!");
-            try {
-                getServer().getConsoleSender().sendMessage("HikariCP Folder '" + com.zaxxer.hikari.HikariConfig.class
-                        .getProtectionDomain().getCodeSource().getLocation().getPath().toString() + "'");
-                new H2Database(getDataFolder().getAbsolutePath());
-                getServer().getConsoleSender().sendMessage("§aDatabase connected!");
-            } catch (ClassNotFoundException | SQLException e) {
-                getServer().getConsoleSender().sendMessage("Folder: '" + com.zaxxer.hikari.HikariConfig.class
-                        .getProtectionDomain().getCodeSource().getLocation().getPath().toString() + "'");
-                getServer().getConsoleSender().sendMessage("§cError Database not connected!");
-                e.printStackTrace();
-                onDisable();
-                return;
-            } catch (Exception ex) {
-                getServer().getConsoleSender().sendMessage("Folder: '" + com.zaxxer.hikari.HikariConfig.class
-                        .getProtectionDomain().getCodeSource().getLocation().getPath().toString() + "'");
-                ex.printStackTrace();
-                onDisable();
-                return;
-            }
-            typeChallenge = H2Database.insertDailyChallenges();
+            getServer().getConsoleSender().sendMessage("HikariCP Folder '" + com.zaxxer.hikari.HikariConfig.class
+                    .getProtectionDomain().getCodeSource().getLocation().getPath() + "'");
+            db = new H2Database();
         } else {
-            try {
-                yamlDB = new YamlDB();
-            } catch (IOException e) {
-                e.printStackTrace();
-                onDisable();
-                return;
-            }
-            typeChallenge = yamlDB.insertDailyChallenges();
+            db = new YamlDB();
         }
+        getServer().getConsoleSender().sendMessage("§aDatabase connected!");
 
+        typeChallenge = db.insertDailyChallenges();
         if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new BlockPlaceEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("BlockBreakChallenge")) {
@@ -199,15 +174,13 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new EnchantEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("ChatChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new ChatEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("ItemCollectionChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new ItemCollector(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }
         Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
-        if (config.getDatabase().equalsIgnoreCase("H2")) {
-            H2Database.loadPlayersPoints();
-        } else {
-            yamlDB.loadPlayersPoints();
-        }
+        db.loadPlayersPoints();
         checkDay = new CheckDay();
         // ogni 60 minuti
         checkDay.start(20 * 60 * 60);
@@ -238,6 +211,12 @@ public class Main extends JavaPlugin {
         if (config.isActiveOnlinePoints()) {
             onlinePointsEvent.stop();
         }
+        if (typeChallenge.equalsIgnoreCase("ChatChallenge")) {
+            ChatEvent.stop();
+        }
+        if(typeChallenge.equalsIgnoreCase("")) {
+            ItemCollector.stop();
+        }
         if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
             try {
                 Main.EPAPI.getInstance().unregister();
@@ -245,9 +224,7 @@ public class Main extends JavaPlugin {
             }
         }
         dailyChallenge.clearPlayers();
-        if (config.getDatabase().equalsIgnoreCase("H2")) {
-            H2Database.disconnect();
-        }
+        db.disconnect();
         if (config.getDebug().get("Disabled")) {
             debugsistem.addLine("Disabled execution time= " + (System.currentTimeMillis() - tempo));
             debugsistem.debug("Disabled");

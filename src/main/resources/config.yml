@@ -530,12 +530,12 @@ Configuration:
       # Item you want to break for challenge, if you want all items write ALL
       Item: ALL
       # How many points you want give at item break?
-      Point: 1
+      Point: 100
       # if you want a multiplier based on all players
       Boost:
         Enabled: false
         #Number you want reached for give the multiplier
-        Points: 5000
+        Points: 10000
         # Multiplier you want give when reached the number
         Multiplier: 4
         # For how many minutes you want give the multiplier?
@@ -562,7 +562,7 @@ Configuration:
       Boost:
         Enabled: false
         #Number you want reached for give the multiplier
-        Points: 10000
+        Points: 100000
         # Multiplier you want give when reached the number
         Multiplier: 2
         # For how many minutes you want give the multiplier?
@@ -685,7 +685,7 @@ Configuration:
         - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
         - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉           &7Chat Challenge'
         - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Write a words for receive points'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Write a word for receive points'
         - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point at letter for word extract)'
         - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
@@ -693,6 +693,42 @@ Configuration:
         - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'GOLD_INGOT:32'
+    ItemCollector:
+      TypeChallenge: 'ItemCollectionChallenge'
+      # How many points you want give at character?
+      Point: 1
+      # Item you want to harvest for challenge, if you want all items write ALL
+      Item: ALL
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 50000
+        # Multiplier you want give when reached the number
+        Multiplier: 5
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
+      # Title challenge
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉        &7Item Collection Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Collect items in a chest for receive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉ &7(1 point at item pay attention you lose all items in the chest)'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'DIAMOND:8'
+  # If you want reset the player points at the end of every challenge
+  ResetPointsAtNewChallenge: false
+  CollectionChallengeItem:
+    Type: CHEST
+    Name: "&7Chest Collector"
+    Lore:
+      - "&7Place this chest and use it for collect items"
   # Points if remain online for x minutes
   OnlinePoints:
     # If You want this feature
@@ -713,17 +749,20 @@ Configuration:
   Database:
     H2: true
     Yaml: false
+  Backup:
+    Enabled: true
+    NumberOfFilesInFolder: 4
 # Messages
 Message:
-  commandFooter: '&7(&7&l(&c&l!&7&l)&7) &9&l[] optional value, <> required'
-  commandVcReloadHelp: '&e/vc &6<reload> &7command reload Plugin'
-  commandVcHelpHelp: '&e/vc &6<help> &7command help for VanillaChallenge Plugin'
-  commandVcNextHelp: '&e/vc &6<next> &7go to the next challenge'
-  commandVcTopHelp: '&e/vc &6<top> &7for see the top 3'
-  commandVcPointsHelp: '&e/vc &6<points> [playerName] &7for see your points or points of another player'
-  commandVcClear: '&e/vc &6<clear> &7for clear all Challenges and player Points'
-  commandVcChallenge: '&e/vc &6<challenge> &7for see the daily challenge selected and time resume'
-  commandVcAddChallenge: '&e/vc &6<add> <playername> <points> &7for set points of a player'
+  commandFooter: '&7(&7&l(&c&l!&7&l)&7) &9[] optional value, <> required'
+  commandVcReloadHelp: '   &e/vc &6<reload> &7command reload Plugin'
+  commandVcHelpHelp: '   &e/vc &6<help> &7command help for VanillaChallenge Plugin'
+  commandVcNextHelp: '   &e/vc &6<next> &7go to the next challenge'
+  commandVcTopHelp: '   &e/vc &6<top> &7for see the top 3'
+  commandVcPointsHelp: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
+  commandVcClear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
+  commandVcChallenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
+  commandVcAddChallenge: '   &e/vc &6<add> <playername> <points> &7for set points of a player'
 
   errorYouAreNotAPlayer: '&cYou are not a player'
   errorCommandNotFound: '&cCommand not found'
@@ -740,6 +779,7 @@ Message:
   boostMessage: '&5Start boosting!&7 You have &bx{number}&7 points for &e{minutes}&7 minutes'
   pointsRemainForBoosting: '&7Remain &b{points}&7 points for start next boost!'
   chatWord: '&7Write this word for receive &b{points}&7 points: &5{word}'
+  correctAnswer: '&e{player} &7write the correct answer!'
 
 Debug:
   # Commands time execution
@@ -796,6 +836,8 @@ Debug:
   EnchantItemEvent: false
   # Chat Event time execution
   ChatEvent: false
+  # Item Collector Event time execution
+  ItemCollector: false
   # Enabled time execution
   Enabled: false
   # Disabled time execution

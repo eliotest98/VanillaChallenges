@@ -2,7 +2,9 @@ package io.eliotesta98.VanillaChallenges.Database;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
+import io.eliotesta98.VanillaChallenges.Utils.ItemUtils;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
@@ -14,9 +16,10 @@ public class ConfigGestion {
     private HashMap<String, String> messages = new HashMap<String, String>();
     private HashMap<String, Challenge> challenges = new HashMap<String, Challenge>();
     private HashMap<String, Boolean> hooks = new HashMap<String, Boolean>();
-    private boolean activeOnlinePoints, yesterdayTop;
+    private boolean activeOnlinePoints, yesterdayTop, resetPointsAtNewChallenge, backupEnabled;
     private String database;
-    private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints;
+    private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup;
+    private ItemStack chestCollection;
 
     public ConfigGestion(FileConfiguration file) {
         for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
@@ -76,10 +79,18 @@ public class ConfigGestion {
                 break;
             }
         }
+        resetPointsAtNewChallenge = file.getBoolean("Configuration.ResetPointsAtNewChallenge");
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
+        backupEnabled = file.getBoolean("Configuration.Backup.Enabled");
+        numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
         pointsOnlinePoints = file.getInt("Configuration.OnlinePoints.Point");
         minutesOnlinePoints = file.getInt("Configuration.OnlinePoints.Minutes");
+        ArrayList<String> lore = new ArrayList<>();
+        file.getStringList("Configuration.CollectionChallengeItem.Lore").forEach(value -> {
+            lore.add(value);
+        });
+        chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
     }
 
     public HashMap<String, Boolean> getDebug() {
@@ -160,5 +171,37 @@ public class ConfigGestion {
 
     public void setYesterdayTop(boolean yesterdayTop) {
         this.yesterdayTop = yesterdayTop;
+    }
+
+    public boolean isResetPointsAtNewChallenge() {
+        return resetPointsAtNewChallenge;
+    }
+
+    public void setResetPointsAtNewChallenge(boolean resetPointsAtNewChallenge) {
+        this.resetPointsAtNewChallenge = resetPointsAtNewChallenge;
+    }
+
+    public ItemStack getChestCollection() {
+        return chestCollection;
+    }
+
+    public void setChestCollection(ItemStack chestCollection) {
+        this.chestCollection = chestCollection;
+    }
+
+    public boolean isBackupEnabled() {
+        return backupEnabled;
+    }
+
+    public void setBackupEnabled(boolean backupEnabled) {
+        this.backupEnabled = backupEnabled;
+    }
+
+    public int getNumberOfFilesInFolderForBackup() {
+        return numberOfFilesInFolderForBackup;
+    }
+
+    public void setNumberOfFilesInFolderForBackup(int numberOfFilesInFolderForBackup) {
+        this.numberOfFilesInFolderForBackup = numberOfFilesInFolderForBackup;
     }
 }
