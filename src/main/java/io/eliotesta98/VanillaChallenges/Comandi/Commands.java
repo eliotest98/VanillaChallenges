@@ -28,7 +28,7 @@ public class Commands implements CommandExecutor {
     private final String commandVcTopHelp = Main.instance.getConfigGestion().getMessages().get("commandVcTopHelp");
     private final String commandVcClear = Main.instance.getConfigGestion().getMessages().get("commandVcClear");
     private final String commandVcChallenge = Main.instance.getConfigGestion().getMessages().get("commandVcChallenge");
-    private final String commandVcAddChallenge = Main.instance.getConfigGestion().getMessages().get("commandVcAddChallenge");
+    private final String commandVcEconomyChallenge = Main.instance.getConfigGestion().getMessages().get("commandVcEconomyChallenge");
 
     private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("pointsInfo");
     private final ArrayList<String> brodcastMessageTitle = Main.dailyChallenge.getTitle();
@@ -73,7 +73,7 @@ public class Commands implements CommandExecutor {
                         return;
                     } else if (args[0].equalsIgnoreCase("add")) {
                         if (args.length == 1 || args.length == 2) {
-                            sender.sendMessage(ColorUtils.applyColor(commandVcAddChallenge));
+                            sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -81,6 +81,21 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         Main.dailyChallenge.increment(args[1], Long.parseLong(args[2]));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                        return;
+                    } else if (args[0].equalsIgnoreCase("remove")) {
+                        if (args.length == 1 || args.length == 2) {
+                            sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        Main.dailyChallenge.increment(args[1], -Long.parseLong(args[2]));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");

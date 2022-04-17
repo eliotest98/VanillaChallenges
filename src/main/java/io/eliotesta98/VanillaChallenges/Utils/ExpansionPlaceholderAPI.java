@@ -60,7 +60,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
             return MoneyUtils.transform(Main.dailyChallenge.getPointFromPLayerName(p.getName()));
         }
         // %vanillachallenges_dailychallenge_nome%
-        if (identifier.contains("dailychallenge_nome")) {
+        if (identifier.contains("dailychallenge_name")) {
             return Main.currentlyChallengeDB.getNomeChallenge();
         }
         // %vanillachallenges_dailychallenge_time%
