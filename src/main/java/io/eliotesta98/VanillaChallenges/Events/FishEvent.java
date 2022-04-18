@@ -16,27 +16,39 @@ public class FishEvent implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerFishEvent(org.bukkit.event.player.PlayerFishEvent e) {
+        long tempo = System.currentTimeMillis();
         if (e.getCaught() == null) {
+            if (debugActive) {
+                debugUtils.addLine("FishEvent Caugh= null");
+                debugUtils.addLine("FishEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("FishEvent");
+            }
             return;
         }
-        long tempo = System.currentTimeMillis();
+        final String playerName = e.getPlayer().getName();
+        final String fishCaugh = e.getCaught().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("FishEvent PlayerFishing= " + playerName);
                 if (fish.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName(), point);
+                    debugUtils.addLine("FishEvent Conditions= 0");
+                    Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    if (fish.equalsIgnoreCase(e.getCaught().getName())) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName(), point);
+                    debugUtils.addLine("FishEvent FishCaughByPlayer= " + fishCaugh);
+                    debugUtils.addLine("FishEvent FishCaughConfig= " + fish);
+                    if (fish.equalsIgnoreCase(fishCaugh)) {
+                        debugUtils.addLine("FishEvent Conditions= 1");
+                        Main.dailyChallenge.increment(playerName, point);
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("FishEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("FishEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("FishEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("FishEvent");
-        }
-        return;
     }
 }

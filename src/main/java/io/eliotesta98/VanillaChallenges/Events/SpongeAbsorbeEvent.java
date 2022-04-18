@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Events;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -30,23 +31,26 @@ public class SpongeAbsorbeEvent implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onSneak(org.bukkit.event.block.SpongeAbsorbEvent e) {
+    public void onAbsorb(org.bukkit.event.block.SpongeAbsorbEvent e) {
         long tempo = System.currentTimeMillis();
+        final Block spongeBlock = e.getBlock();
+        final int amount = e.getBlocks().size();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if (players.get(e.getBlock().getLocation().toString()) != null) {
-                    Main.dailyChallenge.increment(players.get(e.getBlock().getLocation().toString()), (long) e.getBlocks().size() * point);
-                    players.remove(players.get(e.getBlock().getLocation().toString()));
+                debugUtils.addLine("SpongeAbsorbEvent PlayerAbsorbing= " + players.get(spongeBlock.getLocation().toString()));
+                if (players.get(spongeBlock.getLocation().toString()) != null) {
+                    Main.dailyChallenge.increment(players.get(spongeBlock.getLocation().toString()), (long) amount * point);
+                    players.remove(players.get(spongeBlock.getLocation().toString()));
                 }
+                if (debugActive) {
+                    debugUtils.addLine("SpongeAbsorbEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("SpongeAbsorbEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("SpongeAbsorbEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("SpongeAbsorbEvent");
-        }
-        return;
     }
 }
 

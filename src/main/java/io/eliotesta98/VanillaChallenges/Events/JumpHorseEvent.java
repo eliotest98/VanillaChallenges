@@ -16,27 +16,38 @@ public class JumpHorseEvent implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onHorseJumpEvent(org.bukkit.event.entity.HorseJumpEvent e) {
+        long tempo = System.currentTimeMillis();
         if (e.getEntity().getOwner() == null) {
+            if (debugActive) {
+                debugUtils.addLine("JumpHorseEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("JumpHorseEvent");
+            }
             return;
         }
-        long tempo = System.currentTimeMillis();
+        final String playerName = e.getEntity().getOwner().getName();
+        final double powerJump = e.getPower();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("JumpHorseEvent PlayerJumping= " + playerName);
                 if (power == 0.0) {
-                    Main.dailyChallenge.increment(e.getEntity().getOwner().getName(), point);
+                    debugUtils.addLine("JumpHorseEvent Conditions= 0");
+                    Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    if (e.getPower() >= power) {
-                        Main.dailyChallenge.increment(e.getEntity().getOwner().getName(), point);
+                    debugUtils.addLine("JumpHorseEvent PowerJumpByPlayer= " + powerJump);
+                    debugUtils.addLine("JumpHorseEvent PowerJumpConfig= " + power);
+                    if (powerJump >= power) {
+                        debugUtils.addLine("JumpHorseEvent Conditions= 1");
+                        Main.dailyChallenge.increment(playerName, point);
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("JumpHorseEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("JumpHorseEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("JumpHorseEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("JumpHorseEvent");
-        }
-        return;
     }
 }

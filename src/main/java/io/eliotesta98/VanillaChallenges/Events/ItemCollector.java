@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -40,23 +41,23 @@ public class ItemCollector implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent e) {
         long tempo = System.currentTimeMillis();
+        final Inventory playerInventory = e.getPlayer().getInventory();
+        final String playerName = e.getPlayer().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if (chestLocation.get(e.getPlayer().getName()) == null && e.getPlayer().getInventory().firstEmpty() != -1) {
-                    if (debugActive) {
-                        debugUtils.addLine("ItemCollector Player Join Name = " + e.getPlayer().getName());
-                    }
-                    chestLocation.put(e.getPlayer().getName(), new Location(Bukkit.getWorld("world"), 0, -100, 0));
-                    e.getPlayer().getInventory().addItem(Main.instance.getConfigGestion().getChestCollection());
+                if (chestLocation.get(playerName) == null && playerInventory.firstEmpty() != -1) {
+                    debugUtils.addLine("ItemCollector PlayerJoinName = " + playerName);
+                    chestLocation.put(playerName, new Location(Bukkit.getWorld("world"), 0, -100, 0));
+                    playerInventory.addItem(Main.instance.getConfigGestion().getChestCollection());
+                }
+                if (debugActive) {
+                    debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ItemCollector");
+                    return;
                 }
             }
         });
-        if (debugActive) {
-            debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("ItemCollector");
-        }
-        return;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

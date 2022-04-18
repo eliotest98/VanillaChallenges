@@ -18,23 +18,40 @@ public class CraftingEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCraftingItem(CraftItemEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getWhoClicked().getName();
+        final String recipePlayer = e.getRecipe().getResult().getType().toString();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("BlockBreakEvent PlayerCrafting= " + playerName);
                 if (itemCrafting.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getWhoClicked().getName(), point);
+                    debugUtils.addLine("CraftItemEvent Conditions= 0");
+                    Main.dailyChallenge.increment(playerName, point);
+                    if (debugActive) {
+                        debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("CraftItemEvent");
+                    }
+                    return;
                 } else {
-                    if (e.getRecipe().getResult().getType().toString().equalsIgnoreCase(itemCrafting)) {
-                        Main.dailyChallenge.increment(e.getWhoClicked().getName(), point);
+                    debugUtils.addLine("CraftItemEvent RecipePlayer= " + recipePlayer);
+                    debugUtils.addLine("CraftItemEvent RecipeConfig= " + itemCrafting);
+                    if (recipePlayer.equalsIgnoreCase(itemCrafting)) {
+                        debugUtils.addLine("CraftItemEvent Conditions= 1");
+                        Main.dailyChallenge.increment(playerName, point);
+                        if (debugActive) {
+                            debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
+                            debugUtils.debug("CraftItemEvent");
+                        }
+                        return;
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("CraftItemEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getWhoClicked().getName());
-        if (debugActive) {
-            debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("CraftItemEvent");
-        }
-        return;
     }
 }

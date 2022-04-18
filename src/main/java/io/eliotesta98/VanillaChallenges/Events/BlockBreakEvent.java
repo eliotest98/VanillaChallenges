@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 public class BlockBreakEvent implements Listener {
 
@@ -18,26 +19,32 @@ public class BlockBreakEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockBreakEvent e) {
         long tempo = System.currentTimeMillis();
+        final String blockBreaking = e.getBlock().getType().toString();
+        final ItemStack itemInMainHand = e.getPlayer().getInventory().getItemInMainHand();
+        final String playerName = e.getPlayer().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if (block.equalsIgnoreCase(e.getBlock().getType().toString())) {
-                    if (e.getPlayer().getInventory().getItemInMainHand().getType().toString().equalsIgnoreCase(itemInHand)) {
-                        Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), point);
+                debugUtils.addLine("BlockBreakEvent PlayerBreaking= " + playerName);
+                debugUtils.addLine("BlockBreakEvent BlockConfig= " + block);
+                debugUtils.addLine("BlockBreakEvent BlockBreaking= " + blockBreaking);
+                if (block.equalsIgnoreCase(blockBreaking)) {
+                    debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemInHand);
+                    debugUtils.addLine("BlockBreakEvent ItemInHandBreaking= " + itemInMainHand.getType());
+                    if (itemInMainHand.getType().toString().equalsIgnoreCase(itemInHand)) {
+                        debugUtils.addLine("BlockBreakEvent Conditions= 1 - 1");
+                        // 1 - 1
+                        Main.instance.getDailyChallenge().increment(playerName, point);
                         if (debugActive) {
                             debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                             debugUtils.debug("BlockBreakEvent");
                         }
                         return;
                     } else {
+                        // 1 - 0
                         if (itemInHand.equalsIgnoreCase("ALL")) {
-                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), point);
-                            if (debugActive) {
-                                debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                                debugUtils.debug("BlockBreakEvent");
-                            }
-                            return;
-                        } else {
+                            debugUtils.addLine("BlockBreakEvent Conditions= 1 - 0");
+                            Main.instance.getDailyChallenge().increment(playerName, point);
                             if (debugActive) {
                                 debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                                 debugUtils.debug("BlockBreakEvent");
@@ -47,22 +54,22 @@ public class BlockBreakEvent implements Listener {
                     }
                 } else {
                     if (block.equalsIgnoreCase("ALL")) {
-                        if (e.getPlayer().getInventory().getItemInMainHand().getType().toString().equalsIgnoreCase(itemInHand)) {
-                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), point);
+                        // 0 - 1
+                        debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemInHand);
+                        debugUtils.addLine("BlockBreakEvent ItemInHandBreaking= " + itemInMainHand.getType());
+                        if (itemInMainHand.getType().toString().equalsIgnoreCase(itemInHand)) {
+                            debugUtils.addLine("BlockBreakEvent Conditions= 0 - 1");
+                            Main.instance.getDailyChallenge().increment(playerName, point);
                             if (debugActive) {
                                 debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                                 debugUtils.debug("BlockBreakEvent");
                             }
                             return;
                         } else {
+                            // 0 - 0
                             if (itemInHand.equalsIgnoreCase("ALL")) {
-                                Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), point);
-                                if (debugActive) {
-                                    debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                                    debugUtils.debug("BlockBreakEvent");
-                                }
-                                return;
-                            } else {
+                                debugUtils.addLine("BlockBreakEvent Conditions= 0 - 0");
+                                Main.instance.getDailyChallenge().increment(playerName, point);
                                 if (debugActive) {
                                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                                     debugUtils.debug("BlockBreakEvent");
@@ -70,15 +77,14 @@ public class BlockBreakEvent implements Listener {
                                 return;
                             }
                         }
-                    } else {
-                        if (debugActive) {
-                            debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                            debugUtils.debug("BlockBreakEvent");
-                        }
-                        return;
                     }
                 }
-                //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
+                if (debugActive) {
+                    debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("BlockBreakEvent");
+                }
+                return;
+                //Main.instance.getDailyChallenge().stampaNumero(playerName);
             }
         });
     }

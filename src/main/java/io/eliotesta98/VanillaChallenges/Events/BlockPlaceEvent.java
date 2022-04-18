@@ -21,16 +21,30 @@ public class BlockPlaceEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockPlaceEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getPlayer().getName();
+        final String materialBlockOnPlaced = e.getBlockAgainst().getType().toString();
+        final String materialBlockPlaced = e.getBlockPlaced().getType().toString();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("BlockBreakEvent PlayerPlacing= " + playerName);
                 if (block.equalsIgnoreCase("ALL")) {
                     if (blockOnPlaced.equalsIgnoreCase("ALL")) {
-                        Main.instance.getDailyChallenge().increment(e.getPlayer().getName(),point);
+                        // 0 - 0
+                        debugUtils.addLine("BlockPlaceEvent Conditions= 0 - 0");
+                        Main.instance.getDailyChallenge().increment(playerName, point);
+                        if (debugActive) {
+                            debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
+                            debugUtils.debug("BlockPlaceEvent");
+                        }
+                        return;
                     } else {
-                        if (blockOnPlaced.equalsIgnoreCase(e.getBlockAgainst().getType().toString())) {
-                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName(),point);
-                        } else {
+                        debugUtils.addLine("BlockPlaceEvent BlockOnPlacedByPlayer= " + materialBlockOnPlaced);
+                        debugUtils.addLine("BlockPlaceEvent BlockOnPlacedConfig= " + blockOnPlaced);
+                        if (blockOnPlaced.equalsIgnoreCase(materialBlockOnPlaced)) {
+                            debugUtils.addLine("BlockPlaceEvent Conditions= 0 - 1");
+                            // 0 - 1
+                            Main.instance.getDailyChallenge().increment(playerName, point);
                             if (debugActive) {
                                 debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
                                 debugUtils.debug("BlockPlaceEvent");
@@ -39,13 +53,25 @@ public class BlockPlaceEvent implements Listener {
                         }
                     }
                 } else {
-                    if (block.equalsIgnoreCase(e.getBlockPlaced().getType().toString())) {
+                    debugUtils.addLine("BlockPlaceEvent BlockPlacedByPlayer= " + materialBlockPlaced);
+                    debugUtils.addLine("BlockPlaceEvent BlockPlacedConfig= " + block);
+                    if (block.equalsIgnoreCase(materialBlockPlaced)) {
                         if (blockOnPlaced.equalsIgnoreCase("ALL")) {
-                            Main.instance.getDailyChallenge().increment(e.getPlayer().getName(),point);
+                            // 1 - 0
+                            debugUtils.addLine("BlockPlaceEvent Conditions= 1 - 0");
+                            Main.instance.getDailyChallenge().increment(playerName, point);
+                            if (debugActive) {
+                                debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
+                                debugUtils.debug("BlockPlaceEvent");
+                            }
+                            return;
                         } else {
-                            if (blockOnPlaced.equalsIgnoreCase(e.getBlockAgainst().getType().toString())) {
-                                Main.instance.getDailyChallenge().increment(e.getPlayer().getName(),point);
-                            } else {
+                            debugUtils.addLine("BlockPlaceEvent BlockOnPlacedByPlayer= " + materialBlockOnPlaced);
+                            debugUtils.addLine("BlockPlaceEvent BlockOnPlacedConfig= " + blockOnPlaced);
+                            if (blockOnPlaced.equalsIgnoreCase(materialBlockOnPlaced)) {
+                                // 1 - 1
+                                debugUtils.addLine("BlockPlaceEvent Conditions= 1 - 1");
+                                Main.instance.getDailyChallenge().increment(playerName, point);
                                 if (debugActive) {
                                     debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
                                     debugUtils.debug("BlockPlaceEvent");
@@ -53,15 +79,14 @@ public class BlockPlaceEvent implements Listener {
                                 return;
                             }
                         }
-                    } else {
-                        if (debugActive) {
-                            debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                            debugUtils.debug("BlockPlaceEvent");
-                        }
-                        return;
                     }
                 }
-                //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
+                if (debugActive) {
+                    debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("BlockPlaceEvent");
+                }
+                return;
+                //Main.instance.getDailyChallenge().stampaNumero(playerName);
             }
         });
     }

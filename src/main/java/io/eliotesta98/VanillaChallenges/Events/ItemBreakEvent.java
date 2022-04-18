@@ -17,24 +17,31 @@ public class ItemBreakEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBreakItem(org.bukkit.event.player.PlayerItemBreakEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getPlayer().getName();
+        final String brokenItemByPlayer = e.getBrokenItem().getType().toString();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("ItemBreakEvent PlayerBreaking= " + playerName);
                 if (item.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName(), point);
+                    debugUtils.addLine("ItemBreakEvent Conditions= 0");
+                    Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    if (item.equalsIgnoreCase(e.getBrokenItem().getType().toString())) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName(), point);
+                    debugUtils.addLine("ItemBreakEvent ItemBrokenByPlayer= " + brokenItemByPlayer);
+                    debugUtils.addLine("ItemBreakEvent ItemBrokenConfig= " + item);
+                    if (item.equalsIgnoreCase(brokenItemByPlayer)) {
+                        debugUtils.addLine("ItemBreakEvent Conditions= 1");
+                        Main.dailyChallenge.increment(playerName, point);
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("ItemBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ItemBreakEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("ItemBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("ItemBreakEvent");
-        }
-        return;
     }
 }
 

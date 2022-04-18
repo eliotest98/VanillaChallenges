@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
@@ -20,45 +21,53 @@ public class EatEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onFoodLevelChange(org.bukkit.event.entity.FoodLevelChangeEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getEntity().getName();
+        final int foodLevel = e.getFoodLevel();
+        final ItemStack itemUsedByPlayer = e.getItem();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if (foodLevels.get(e.getEntity().getName()) == null) {
-                    if (e.getFoodLevel() <= 20) {
-                        foodLevels.put(e.getEntity().getName(), e.getFoodLevel());
+                debugUtils.addLine("BlockBreakEvent PlayerEating= " + playerName);
+                if (foodLevels.get(playerName) == null) {
+                    if (foodLevel <= 20) {
+                        foodLevels.put(playerName, foodLevel);
                     } else {
-                        foodLevels.put(e.getEntity().getName(), 20);
+                        foodLevels.put(playerName, 20);
                     }
-                    Main.dailyChallenge.increment(e.getEntity().getName(), point);
+                    Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    if (e.getItem() != null) {
-                        int number = e.getFoodLevel() - foodLevels.get(e.getEntity().getName());
-                        foodLevels.remove(e.getEntity().getName());
-                        if (e.getFoodLevel() <= 20) {
-                            foodLevels.put(e.getEntity().getName(), e.getFoodLevel());
+                    if (itemUsedByPlayer != null) {
+                        int number = foodLevel - foodLevels.get(playerName);
+                        foodLevels.remove(playerName);
+                        if (foodLevel <= 20) {
+                            foodLevels.put(playerName, foodLevel);
                         } else {
-                            foodLevels.put(e.getEntity().getName(), 20);
+                            foodLevels.put(playerName, 20);
                         }
                         if (item.equalsIgnoreCase("ALL")) {
-                            Main.dailyChallenge.increment(e.getEntity().getName(), (long) number * point);
+                            debugUtils.addLine("EatEvent Conditions= 0");
+                            Main.dailyChallenge.increment(playerName, (long) number * point);
                         } else {
-                            if (e.getItem().getType().toString().equalsIgnoreCase(item)) {
-                                Main.dailyChallenge.increment(e.getEntity().getName(), (long) number * point);
+                            debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + itemUsedByPlayer);
+                            debugUtils.addLine("EatEvent ItemConsumedConfig= " + item);
+                            if (itemUsedByPlayer.getType().toString().equalsIgnoreCase(item)) {
+                                debugUtils.addLine("EatEvent Conditions= 1");
+                                Main.dailyChallenge.increment(playerName, (long) number * point);
                             }
                         }
                     } else {
-                        foodLevels.remove(e.getEntity().getName());
-                        foodLevels.put(e.getEntity().getName(), e.getFoodLevel());
-                        Main.dailyChallenge.increment(e.getEntity().getName(), point);
+                        foodLevels.remove(playerName);
+                        foodLevels.put(playerName, foodLevel);
+                        Main.dailyChallenge.increment(playerName, point);
                     }
                 }
+                //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
+                if (debugActive) {
+                    debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("EatEvent");
+                }
+                return;
             }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("EatEvent");
-        }
-        return;
     }
 }

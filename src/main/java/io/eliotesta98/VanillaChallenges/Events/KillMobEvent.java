@@ -17,27 +17,41 @@ public class KillMobEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onKillEvent(org.bukkit.event.entity.EntityDeathEvent e) {
         long tempo = System.currentTimeMillis();
+        String pName = "";
+        if (e.getEntity().getKiller() != null) {
+            pName = e.getEntity().getKiller().getName();
+        } else {
+            if (debugActive) {
+                debugUtils.addLine("KillEvent PlayerKilling= null");
+                debugUtils.addLine("KillEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("KillEvent");
+            }
+            return;
+        }
+        final String playerName = pName;
+        final String mobKilled = e.getEntity().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("KillEvent PlayerKilling= " + playerName);
                 if (mobKill.equalsIgnoreCase("ALL")) {
-                    if (e.getEntity().getKiller() != null) {
-                        Main.dailyChallenge.increment(e.getEntity().getKiller().getName(), point);
-                    }
+                    debugUtils.addLine("KillEvent Conditions= 0");
+                    Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    if (mobKill.equalsIgnoreCase(e.getEntity().getName())) {
-                        if (e.getEntity().getKiller() != null) {
-                            Main.dailyChallenge.increment(e.getEntity().getKiller().getName(), point);
-                        }
+                    debugUtils.addLine("KillEvent MobKillByPlayer= " + mobKilled);
+                    debugUtils.addLine("KillEvent MobKillConfig= " + mobKill);
+                    if (mobKill.equalsIgnoreCase(mobKilled)) {
+                        debugUtils.addLine("KillEvent Conditions= 1");
+                        Main.dailyChallenge.increment(playerName, point);
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("KillEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("KillEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("KillEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("KillEvent");
-        }
-        return;
     }
 }

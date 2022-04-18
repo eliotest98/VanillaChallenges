@@ -17,23 +17,31 @@ public class FurnaceBurnEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCookItem(org.bukkit.event.inventory.FurnaceExtractEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getPlayer().getName();
+        final String itemBurnByPlayer = e.getItemType().toString();
+        final int amount = e.getItemAmount();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("FurnaceCookEvent PlayerCooking= " + playerName);
                 if (itemBurn.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName(), (long) e.getItemAmount() * point);
+                    debugUtils.addLine("FurnaceCookEvent Conditions= 0");
+                    Main.dailyChallenge.increment(playerName, (long) amount * point);
                 } else {
-                    if (e.getItemType().toString().equalsIgnoreCase(itemBurn)) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName(), (long) e.getItemAmount() * point);
+                    debugUtils.addLine("FurnaceCookEvent ItemBurnByPlayer= " + itemBurnByPlayer);
+                    debugUtils.addLine("FurnaceCookEvent ItemBurnConfig= " + itemBurn);
+                    if (itemBurnByPlayer.equalsIgnoreCase(itemBurn)) {
+                        debugUtils.addLine("FurnaceCookEvent Conditions= 1");
+                        Main.dailyChallenge.increment(playerName, (long) amount * point);
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("FurnaceCookEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("FurnaceCookEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("FurnaceCookEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("FurnaceCookEvent");
-        }
-        return;
     }
 }

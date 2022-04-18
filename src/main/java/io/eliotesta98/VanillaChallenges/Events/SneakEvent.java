@@ -16,18 +16,20 @@ public class SneakEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSneak(org.bukkit.event.player.PlayerToggleSneakEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getPlayer().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                Main.dailyChallenge.increment(e.getPlayer().getName(), point);
+                debugUtils.addLine("SneakEvent PlayerSkeaking= " + playerName);
+                Main.dailyChallenge.increment(playerName, point);
+                if (debugActive) {
+                    debugUtils.addLine("SneakEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("SneakEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("SneakEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("SneakEvent");
-        }
-        return;
     }
 }
 

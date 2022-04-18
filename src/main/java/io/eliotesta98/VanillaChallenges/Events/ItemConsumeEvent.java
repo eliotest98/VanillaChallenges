@@ -17,23 +17,30 @@ public class ItemConsumeEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onItemConsume(org.bukkit.event.player.PlayerItemDamageEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getPlayer().getName();
+        final String itemConsumingByPlayer = e.getItem().getType().toString();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("ItemConsumeEvent PlayerConsuming= " + playerName);
                 if (itemConsume.equalsIgnoreCase("ALL")) {
-                    Main.dailyChallenge.increment(e.getPlayer().getName(), point);
+                    debugUtils.addLine("ItemConsumeEvent Conditions= 0");
+                    Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    if (e.getItem().getType().toString().equalsIgnoreCase(itemConsume)) {
-                        Main.dailyChallenge.increment(e.getPlayer().getName(), point);
+                    debugUtils.addLine("ItemConsumeEvent ItemConsumeByPlayer= " + itemConsumingByPlayer);
+                    debugUtils.addLine("ItemConsumeEvent ItemConsumeConfig= " + itemConsume);
+                    if (itemConsumingByPlayer.equalsIgnoreCase(itemConsume)) {
+                        debugUtils.addLine("ItemConsumeEvent Conditions= 1");
+                        Main.dailyChallenge.increment(playerName, point);
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("ItemConsumeEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ItemConsumeEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("ItemConsumeEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("ItemConsumeEvent");
-        }
-        return;
     }
 }

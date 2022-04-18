@@ -18,33 +18,40 @@ public class ShootArrowEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onShootEvent(org.bukkit.event.entity.EntityShootBowEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getEntity().getName();
+        final double forceShoot = e.getForce();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("ShootArrowEvent PlayerShooting= " + playerName);
                 if (force == 0.0) {
+                    debugUtils.addLine("ShootArrowEvent Conditions= 0");
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (player.getName().equalsIgnoreCase(e.getEntity().getName())) {
-                            Main.dailyChallenge.increment(e.getEntity().getName(), point);
+                        if (player.getName().equalsIgnoreCase(playerName)) {
+                            Main.dailyChallenge.increment(playerName, point);
                             break;
                         }
                     }
                 } else {
-                    if (e.getForce() >= force) {
+                    debugUtils.addLine("ShootArrowEvent ForceShootByPlayer= " + forceShoot);
+                    debugUtils.addLine("ShootArrowEvent ForceShootConfig= " + force);
+                    if (forceShoot >= force) {
+                        debugUtils.addLine("ShootArrowEvent Conditions= 1");
                         for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (player.getName().equalsIgnoreCase(e.getEntity().getName())) {
-                                Main.dailyChallenge.increment(e.getEntity().getName(), point);
+                            if (player.getName().equalsIgnoreCase(playerName)) {
+                                Main.dailyChallenge.increment(playerName, point);
                                 break;
                             }
                         }
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("ShootArrowEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ShootArrowEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("ShootArrowEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("ShootArrowEvent");
-        }
-        return;
     }
 }

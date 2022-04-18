@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Events;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,6 +24,7 @@ public class SprintEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                debugUtils.addLine("SprintEvent ToggledSprintPlayer= " + e.getPlayer().getName());
                 if (players.get(e.getPlayer().getName()) != null) {
                     boolean sprint = players.get(e.getPlayer().getName());
                     if (sprint) {
@@ -33,48 +35,57 @@ public class SprintEvent implements Listener {
                 } else {
                     players.put(e.getPlayer().getName(), true);
                 }
+                if (debugActive) {
+                    debugUtils.addLine("SprintEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("SprintEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("SprintEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("SprintEvent");
-        }
-        return;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
+        long tempo = System.currentTimeMillis();
         if (e.getTo() == null) {
+            if (debugActive) {
+                debugUtils.addLine("SprintEvent EndLocation= null");
+                debugUtils.addLine("SprintEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("SprintEvent");
+            }
             return;
         }
-        long tempo = System.currentTimeMillis();
+        final String playerName = e.getPlayer().getName();
+        final Location from = e.getFrom();
+        final Location to = e.getTo();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if (players.get(e.getPlayer().getName()) != null) {
-                    if (players.get(e.getPlayer().getName())) {
-                        if (distances.get(e.getPlayer().getName()) == null) {
-                            distances.put(e.getPlayer().getName(), e.getFrom().distance(e.getTo()));
+                debugUtils.addLine("SprintEvent PlayerSprinting= " + playerName);
+                if (players.get(playerName) != null) {
+                    if (players.get(playerName)) {
+                        if (distances.get(playerName) == null) {
+                            distances.put(playerName, from.distance(to));
                         } else {
-                            double old = distances.get(e.getPlayer().getName());
-                            double newDouble = old + e.getFrom().distance(e.getTo());
+                            double old = distances.get(playerName);
+                            double newDouble = old + from.distance(to);
                             if (newDouble > 1.0) {
-                                Main.dailyChallenge.increment(e.getPlayer().getName(), point);
-                                distances.replace(e.getPlayer().getName(), newDouble - 1.0);
+                                Main.dailyChallenge.increment(playerName, point);
+                                distances.replace(playerName, newDouble - 1.0);
                             } else {
-                                distances.replace(e.getPlayer().getName(), newDouble);
+                                distances.replace(playerName, newDouble);
                             }
                         }
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("SprintEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("SprintEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("MoveEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("MoveEvent");
-        }
-        return;
     }
 }

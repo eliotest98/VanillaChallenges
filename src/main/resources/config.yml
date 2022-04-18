@@ -6,39 +6,6 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #   
 
 Configuration:
-  # Example Challenge 1.8:
-  #     Shooter:
-  #      TypeChallenge: 'ShootChallenge'
-  #      # Force you want to apply for shoot arrow in challenge, if you want to disable use 0.0
-  #      Force: 1.0
-  #      # How many points you want give at shoot?
-  #      Point: 1
-  #      # if you want a multiplier based on all players
-  #      Boost:
-  #        Enabled: false
-  #        #Number you want reached for give the multiplier
-  #        Points: 10000
-  #        # Multiplier you want give when reached the number
-  #        Multiplier: 2
-  #        # For how many minutes you want give the multiplier?
-  #        Minutes: 10
-  #      # Title challenge
-  #      Title:
-  #      - '&8'
-  #      - "&8\u2589\u2589&b\u2589\u2589\u2589&8\u2589\u2589\u2589&b\u2589\u2589"
-  #      - "&8\u2589&b\u2589\u2589&8\u2589\u2589\u2589\u2589&b\u2589\u2589\u2589    \
-  #        \          &7Shoot Challenge"
-  #      - "&b\u2589\u2589&6\u2589&8\u2589\u2589\u2589&b\u2589\u2589\u2589&8\u2589"
-  #      - "&b\u2589&8\u2589\u2589&6\u2589&8\u2589&b\u2589\u2589\u2589&8\u2589\u2589\
-  #        &7Shoot a arrow at max power for receive 1 point"
-  #      - "&b\u2589&8\u2589\u2589\u2589&6\u2589\u2589&b\u2589&8\u2589\u2589\u2589  \
-  #        \  &7{hours} hours to the end of the challenge"
-  #      - "&8\u2589\u2589\u2589\u2589&6\u2589\u2589&8\u2589\u2589\u2589\u2589"
-  #      - "&8\u2589\u2589\u2589&6\u2589&8\u2589\u2589&6\u2589&8\u2589\u2589\u2589"
-  #      - "&8\u2589\u2589&6\u2589&8\u2589\u2589\u2589\u2589&6\u2589&8\u2589\u2589"
-  #      - '&8'
-  #      # Reward in blocks EX: GLASS;10 for block type 1.8 and :number for number of block give NOBODY for no reward
-  #      Reward: GLASS;10:1'
   # List of Challenges
   Challenges:
     # BlockPlaceChallenge
