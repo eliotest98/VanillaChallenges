@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -141,6 +142,14 @@ public class Challenge {
 
     public void setPoint(int point) {
         this.point = point;
+    }
+
+    public void incrementCommands(String playerName, long amount) {
+        if (!players.containsKey(playerName)) {
+            players.put(playerName, amount);
+        } else {
+            players.replace(playerName, players.get(playerName) + amount);
+        }
     }
 
     public void increment(String playerName, long amount) {

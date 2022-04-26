@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
+
 import java.util.ArrayList;
 
 public class Commands implements CommandExecutor {
@@ -80,7 +81,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        Main.dailyChallenge.increment(args[1], Long.parseLong(args[2]));
+                        Main.dailyChallenge.incrementCommands(args[1], Long.parseLong(args[2]));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -95,7 +96,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        Main.dailyChallenge.increment(args[1], -Long.parseLong(args[2]));
+                        Main.dailyChallenge.incrementCommands(args[1], -Long.parseLong(args[2]));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -151,7 +152,7 @@ public class Commands implements CommandExecutor {
                                 Main.db.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
                                 Main.db.removeTopYesterday();
                                 Main.db.saveTopYesterday(topPlayers);
-                                if(Main.instance.getConfigGestion().isBackupEnabled()) {
+                                if (Main.instance.getConfigGestion().isBackupEnabled()) {
                                     Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                                 }
                                 int number = Main.db.lastDailyWinnerId();
@@ -422,7 +423,7 @@ public class Commands implements CommandExecutor {
                                 Main.db.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
                                 Main.db.removeTopYesterday();
                                 Main.db.saveTopYesterday(topPlayers);
-                                if(Main.instance.getConfigGestion().isBackupEnabled()) {
+                                if (Main.instance.getConfigGestion().isBackupEnabled()) {
                                     Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                                 }
                                 int number = Main.db.lastDailyWinnerId();
