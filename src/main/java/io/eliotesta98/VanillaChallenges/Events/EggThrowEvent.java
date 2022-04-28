@@ -23,18 +23,26 @@ public class EggThrowEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("EggThrowEvent PlayerThrowing= " + playerName);
-                debugUtils.addLine("EggThrowEvent MobConfig= " + mob);
+                if (debugActive) {
+                    debugUtils.addLine("EggThrowEvent PlayerThrowing= " + playerName);
+                    debugUtils.addLine("EggThrowEvent MobConfig= " + mob);
+                }
                 if (mob.equalsIgnoreCase("CHICKEN")) {
-                    debugUtils.addLine("EggThrowEvent Hatching= " + hatching);
+                    if (debugActive) {
+                        debugUtils.addLine("EggThrowEvent Hatching= " + hatching);
+                    }
                     if (hatching) {
                         Main.dailyChallenge.increment(playerName, (long) point * numberHatches);
                     } else {
                         Main.dailyChallenge.increment(playerName, (long) point);
                     }
-                    debugUtils.addLine("EggThrowEvent Conditions= 1");
+                    if (debugActive) {
+                        debugUtils.addLine("EggThrowEvent Conditions= 1");
+                    }
                 } else {
-                    debugUtils.addLine("EggThrowEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("EggThrowEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, point);
                 }
                 if (debugActive) {

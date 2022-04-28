@@ -23,15 +23,23 @@ public class FurnaceBurnEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("FurnaceCookEvent PlayerCooking= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("FurnaceCookEvent PlayerCooking= " + playerName);
+                }
                 if (itemBurn.equalsIgnoreCase("ALL")) {
-                    debugUtils.addLine("FurnaceCookEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("FurnaceCookEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, (long) amount * point);
                 } else {
-                    debugUtils.addLine("FurnaceCookEvent ItemBurnByPlayer= " + itemBurnByPlayer);
-                    debugUtils.addLine("FurnaceCookEvent ItemBurnConfig= " + itemBurn);
+                    if (debugActive) {
+                        debugUtils.addLine("FurnaceCookEvent ItemBurnByPlayer= " + itemBurnByPlayer);
+                        debugUtils.addLine("FurnaceCookEvent ItemBurnConfig= " + itemBurn);
+                    }
                     if (itemBurnByPlayer.equalsIgnoreCase(itemBurn)) {
-                        debugUtils.addLine("FurnaceCookEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("FurnaceCookEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(playerName, (long) amount * point);
                     }
                 }

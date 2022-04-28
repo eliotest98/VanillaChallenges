@@ -26,23 +26,31 @@ public class HarvestEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("HarvestEvent PlayerHarvesting= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("HarvestEvent PlayerHarvesting= " + playerName);
+                }
                 if (item.equalsIgnoreCase("ALL")) {
                     int number = 0;
                     for (int i = 0; i < itemsHarvested.size(); i++) {
                         number = number + itemsHarvested.get(i).getAmount();
                     }
-                    debugUtils.addLine("HarvestEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("HarvestEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, (long) point * number);
                 } else {
-                    debugUtils.addLine("HarvestEvent BlockHarvestedByPlayer= " + blockHarvested);
-                    debugUtils.addLine("HarvestEvent BlockHarvestedConfig= " + item);
+                    if (debugActive) {
+                        debugUtils.addLine("HarvestEvent BlockHarvestedByPlayer= " + blockHarvested);
+                        debugUtils.addLine("HarvestEvent BlockHarvestedConfig= " + item);
+                    }
                     if (item.equalsIgnoreCase(blockHarvested)) {
                         int number = 0;
                         for (int i = 0; i < itemsHarvested.size(); i++) {
                             number = number + itemsHarvested.get(i).getAmount();
                         }
-                        debugUtils.addLine("HarvestEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("HarvestEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(playerName, (long) point * number);
                     }
                 }

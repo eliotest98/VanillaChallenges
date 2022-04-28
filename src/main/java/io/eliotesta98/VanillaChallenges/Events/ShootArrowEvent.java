@@ -23,9 +23,13 @@ public class ShootArrowEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("ShootArrowEvent PlayerShooting= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("ShootArrowEvent PlayerShooting= " + playerName);
+                }
                 if (force == 0.0) {
-                    debugUtils.addLine("ShootArrowEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("ShootArrowEvent Conditions= 0");
+                    }
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (player.getName().equalsIgnoreCase(playerName)) {
                             Main.dailyChallenge.increment(playerName, point);
@@ -33,10 +37,14 @@ public class ShootArrowEvent implements Listener {
                         }
                     }
                 } else {
-                    debugUtils.addLine("ShootArrowEvent ForceShootByPlayer= " + forceShoot);
-                    debugUtils.addLine("ShootArrowEvent ForceShootConfig= " + force);
+                    if (debugActive) {
+                        debugUtils.addLine("ShootArrowEvent ForceShootByPlayer= " + forceShoot);
+                        debugUtils.addLine("ShootArrowEvent ForceShootConfig= " + force);
+                    }
                     if (forceShoot >= force) {
-                        debugUtils.addLine("ShootArrowEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("ShootArrowEvent Conditions= 1");
+                        }
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if (player.getName().equalsIgnoreCase(playerName)) {
                                 Main.dailyChallenge.increment(playerName, point);

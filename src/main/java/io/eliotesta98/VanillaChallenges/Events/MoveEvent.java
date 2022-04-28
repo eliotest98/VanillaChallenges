@@ -34,7 +34,9 @@ public class MoveEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("MoveEvent PlayerMoving= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("MoveEvent PlayerMoving= " + playerName);
+                }
                 if (distances.get(playerName) == null) {
                     distances.put(playerName, from.distance(to));
                 } else {

@@ -33,15 +33,23 @@ public class KillMobEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("KillEvent PlayerKilling= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("KillEvent PlayerKilling= " + playerName);
+                }
                 if (mobKill.equalsIgnoreCase("ALL")) {
-                    debugUtils.addLine("KillEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("KillEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    debugUtils.addLine("KillEvent MobKillByPlayer= " + mobKilled);
-                    debugUtils.addLine("KillEvent MobKillConfig= " + mobKill);
+                    if (debugActive) {
+                        debugUtils.addLine("KillEvent MobKillByPlayer= " + mobKilled);
+                        debugUtils.addLine("KillEvent MobKillConfig= " + mobKill);
+                    }
                     if (mobKill.equalsIgnoreCase(mobKilled)) {
-                        debugUtils.addLine("KillEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("KillEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(playerName, point);
                     }
                 }

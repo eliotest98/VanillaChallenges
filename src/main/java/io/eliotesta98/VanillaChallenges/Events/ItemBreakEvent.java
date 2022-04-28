@@ -22,15 +22,23 @@ public class ItemBreakEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("ItemBreakEvent PlayerBreaking= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("ItemBreakEvent PlayerBreaking= " + playerName);
+                }
                 if (item.equalsIgnoreCase("ALL")) {
-                    debugUtils.addLine("ItemBreakEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("ItemBreakEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    debugUtils.addLine("ItemBreakEvent ItemBrokenByPlayer= " + brokenItemByPlayer);
-                    debugUtils.addLine("ItemBreakEvent ItemBrokenConfig= " + item);
+                    if (debugActive) {
+                        debugUtils.addLine("ItemBreakEvent ItemBrokenByPlayer= " + brokenItemByPlayer);
+                        debugUtils.addLine("ItemBreakEvent ItemBrokenConfig= " + item);
+                    }
                     if (item.equalsIgnoreCase(brokenItemByPlayer)) {
-                        debugUtils.addLine("ItemBreakEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("ItemBreakEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(playerName, point);
                     }
                 }

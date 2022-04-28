@@ -22,15 +22,23 @@ public class ItemConsumeEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("ItemConsumeEvent PlayerConsuming= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("ItemConsumeEvent PlayerConsuming= " + playerName);
+                }
                 if (itemConsume.equalsIgnoreCase("ALL")) {
-                    debugUtils.addLine("ItemConsumeEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("ItemConsumeEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    debugUtils.addLine("ItemConsumeEvent ItemConsumeByPlayer= " + itemConsumingByPlayer);
-                    debugUtils.addLine("ItemConsumeEvent ItemConsumeConfig= " + itemConsume);
+                    if (debugActive) {
+                        debugUtils.addLine("ItemConsumeEvent ItemConsumeByPlayer= " + itemConsumingByPlayer);
+                        debugUtils.addLine("ItemConsumeEvent ItemConsumeConfig= " + itemConsume);
+                    }
                     if (itemConsumingByPlayer.equalsIgnoreCase(itemConsume)) {
-                        debugUtils.addLine("ItemConsumeEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("ItemConsumeEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(playerName, point);
                     }
                 }

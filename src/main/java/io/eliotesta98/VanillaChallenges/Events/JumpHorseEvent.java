@@ -29,15 +29,23 @@ public class JumpHorseEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("JumpHorseEvent PlayerJumping= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("JumpHorseEvent PlayerJumping= " + playerName);
+                }
                 if (power == 0.0) {
-                    debugUtils.addLine("JumpHorseEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("JumpHorseEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    debugUtils.addLine("JumpHorseEvent PowerJumpByPlayer= " + powerJump);
-                    debugUtils.addLine("JumpHorseEvent PowerJumpConfig= " + power);
+                    if (debugActive) {
+                        debugUtils.addLine("JumpHorseEvent PowerJumpByPlayer= " + powerJump);
+                        debugUtils.addLine("JumpHorseEvent PowerJumpConfig= " + power);
+                    }
                     if (powerJump >= power) {
-                        debugUtils.addLine("JumpHorseEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("JumpHorseEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(playerName, point);
                     }
                 }

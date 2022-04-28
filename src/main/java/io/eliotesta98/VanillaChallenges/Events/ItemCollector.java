@@ -47,7 +47,9 @@ public class ItemCollector implements Listener {
             @Override
             public void run() {
                 if (chestLocation.get(playerName) == null && playerInventory.firstEmpty() != -1) {
-                    debugUtils.addLine("ItemCollector PlayerJoinName = " + playerName);
+                    if (debugActive) {
+                        debugUtils.addLine("ItemCollector PlayerJoinName = " + playerName);
+                    }
                     chestLocation.put(playerName, new Location(Bukkit.getWorld("world"), 0, -100, 0));
                     playerInventory.addItem(Main.instance.getConfigGestion().getChestCollection());
                 }

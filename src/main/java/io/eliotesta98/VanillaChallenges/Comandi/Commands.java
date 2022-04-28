@@ -34,6 +34,8 @@ public class Commands implements CommandExecutor {
     private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("pointsInfo");
     private final ArrayList<String> brodcastMessageTitle = Main.dailyChallenge.getTitle();
     private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("actuallyInTop");
+    private final String pointsadd = Main.instance.getConfigGestion().getMessages().get("pointsadd");
+    private final String pointsremove = Main.instance.getConfigGestion().getMessages().get("pointsremove");
 
     private final boolean debugCommand = Main.instance.getConfigGestion().getDebug().get("Commands");
     private final boolean resetPoints = Main.instance.getConfigGestion().isResetPointsAtNewChallenge();
@@ -82,6 +84,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         Main.dailyChallenge.incrementCommands(args[1], Long.parseLong(args[2]));
+                        sender.sendMessage(ColorUtils.applyColor(pointsadd.replace("{points}", args[2]).replace("{player}", args[1])));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
@@ -97,6 +100,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         Main.dailyChallenge.incrementCommands(args[1], -Long.parseLong(args[2]));
+                        sender.sendMessage(ColorUtils.applyColor(pointsremove.replace("{points}", args[2]).replace("{player}", args[1])));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");

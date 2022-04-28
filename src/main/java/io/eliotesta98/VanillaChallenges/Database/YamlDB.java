@@ -13,9 +13,10 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
-public class YamlDB implements Database{
+public class YamlDB implements Database {
 
     private FileConfiguration file;
     private File configFile;
@@ -187,13 +188,18 @@ public class YamlDB implements Database{
         int count = 1;
         if (challenges.isEmpty()) {
             String nome = "nessuno";
-            for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallenges().entrySet()) {
+            ArrayList<String> keys = new ArrayList<String>(Main.instance.getConfigGestion().getChallenges().keySet());
+            if (Main.instance.getConfigGestion().isRandomChallengeGeneration()) {
+                Collections.shuffle(keys);
+            }
+            for (String key : keys) {
+                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key);
                 if (count == 1) {
-                    Main.dailyChallenge = challenge.getValue();
-                    nome = challenge.getValue().getTypeChallenge();
-                    Main.currentlyChallengeDB = new ChallengeDB(challenge.getKey(), 86400);
+                    Main.dailyChallenge = challenge;
+                    nome = challenge.getTypeChallenge();
+                    Main.currentlyChallengeDB = new ChallengeDB(key, 86400);
                 }
-                challenges.add(new ChallengeDB(challenge.getKey(), 86400));
+                challenges.add(new ChallengeDB(key, 86400));
                 count++;
             }
             saveChallenges();

@@ -30,9 +30,13 @@ public class ColorSheepEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("BlockBreakEvent PlayerColoring= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("BlockBreakEvent PlayerColoring= " + playerName);
+                }
                 if (color.equalsIgnoreCase("ALL")) {
-                    debugUtils.addLine("ColorSheepEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("ColorSheepEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, point);
                     if (debugActive) {
                         debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
@@ -40,10 +44,14 @@ public class ColorSheepEvent implements Listener {
                     }
                     return;
                 } else {
-                    debugUtils.addLine("ColorSheepEvent ColorByPlayer= " + colorPlayer);
-                    debugUtils.addLine("ColorSheepEvent ColorConfig= " + color);
+                    if (debugActive) {
+                        debugUtils.addLine("ColorSheepEvent ColorByPlayer= " + colorPlayer);
+                        debugUtils.addLine("ColorSheepEvent ColorConfig= " + color);
+                    }
                     if (colorPlayer.equalsIgnoreCase(color)) {
-                        debugUtils.addLine("ColorSheepEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("ColorSheepEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(playerName, point);
                         if (debugActive) {
                             debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));

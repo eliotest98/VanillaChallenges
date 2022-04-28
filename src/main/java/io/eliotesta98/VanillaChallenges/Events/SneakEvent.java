@@ -20,7 +20,9 @@ public class SneakEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("SneakEvent PlayerSkeaking= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("SneakEvent PlayerSkeaking= " + playerName);
+                }
                 Main.dailyChallenge.increment(playerName, point);
                 if (debugActive) {
                     debugUtils.addLine("SneakEvent execution time= " + (System.currentTimeMillis() - tempo));

@@ -21,7 +21,9 @@ public class EnchantEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("EnchantItemEvent PlayerEnchanting= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("EnchantItemEvent PlayerEnchanting= " + playerName);
+                }
                 Main.dailyChallenge.increment(playerName, (long) point * numberOfEnchants);
                 if (debugActive) {
                     debugUtils.addLine("EnchantItemEvent execution time= " + (System.currentTimeMillis() - tempo));

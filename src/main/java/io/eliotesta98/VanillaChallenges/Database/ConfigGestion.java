@@ -1,12 +1,9 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.ItemUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.units.qual.C;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,9 +13,9 @@ public class ConfigGestion {
     private HashMap<String, String> messages = new HashMap<String, String>();
     private HashMap<String, Challenge> challenges = new HashMap<String, Challenge>();
     private HashMap<String, Boolean> hooks = new HashMap<String, Boolean>();
-    private boolean activeOnlinePoints, yesterdayTop, resetPointsAtNewChallenge, backupEnabled;
+    private boolean activeOnlinePoints, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration;
     private String database;
-    private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup;
+    private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number, time;
     private ItemStack chestCollection;
 
     public ConfigGestion(FileConfiguration file) {
@@ -58,6 +55,8 @@ public class ConfigGestion {
             String color = file.getString("Configuration.Challenges." + challengeName + ".Color");
             String cause = file.getString("Configuration.Challenges." + challengeName + ".Cause");
             int point = file.getInt("Configuration.Challenges." + challengeName + ".Point");
+            int number = file.getInt("Configuration.Challenges." + challengeName + ".Number");
+            int time = file.getInt("Configuration.Challenges." + challengeName + ".Time");
             int pointsBoost = 0;
             int multiplier = 1;
             int minutes = 0;
@@ -66,7 +65,7 @@ public class ConfigGestion {
                 multiplier = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Multiplier");
                 minutes = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Minutes");
             }
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes);
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
@@ -83,6 +82,7 @@ public class ConfigGestion {
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
         backupEnabled = file.getBoolean("Configuration.Backup.Enabled");
+        randomChallengeGeneration = file.getBoolean("Configuration.RandomChallengeGeneration");
         numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
         pointsOnlinePoints = file.getInt("Configuration.OnlinePoints.Point");
         minutesOnlinePoints = file.getInt("Configuration.OnlinePoints.Minutes");
@@ -203,5 +203,29 @@ public class ConfigGestion {
 
     public void setNumberOfFilesInFolderForBackup(int numberOfFilesInFolderForBackup) {
         this.numberOfFilesInFolderForBackup = numberOfFilesInFolderForBackup;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public boolean isRandomChallengeGeneration() {
+        return randomChallengeGeneration;
+    }
+
+    public void setRandomChallengeGeneration(boolean randomChallengeGeneration) {
+        this.randomChallengeGeneration = randomChallengeGeneration;
     }
 }

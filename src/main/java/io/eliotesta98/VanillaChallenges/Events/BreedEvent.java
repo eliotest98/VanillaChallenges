@@ -33,20 +33,26 @@ public class BreedEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("BlockBreakEvent PlayerBreeding= " + pName);
+                if (debugActive) {
+                    debugUtils.addLine("BlockBreakEvent PlayerBreeding= " + pName);
+                }
                 if (mobBreed.equalsIgnoreCase("ALL")) {
                     Main.dailyChallenge.increment(pName, point);
-                    debugUtils.addLine("BreedEvent Conditions= 0");
                     if (debugActive) {
+                        debugUtils.addLine("BreedEvent Conditions= 0");
                         debugUtils.addLine("BreedEvent execution time= " + (System.currentTimeMillis() - tempo));
                         debugUtils.debug("BreedEvent");
                     }
                     return;
                 } else {
-                    debugUtils.addLine("BreedEvent MobBreedByPlayer= " + mobBreeded);
-                    debugUtils.addLine("BreedEvent MobBreedConfig= " + mobBreed);
+                    if (debugActive) {
+                        debugUtils.addLine("BreedEvent MobBreedByPlayer= " + mobBreeded);
+                        debugUtils.addLine("BreedEvent MobBreedConfig= " + mobBreed);
+                    }
                     if (mobBreed.equalsIgnoreCase(mobBreeded)) {
-                        debugUtils.addLine("BreedEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("BreedEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(pName, point);
                         if (debugActive) {
                             debugUtils.addLine("BreedEvent execution time= " + (System.currentTimeMillis() - tempo));

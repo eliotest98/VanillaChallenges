@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Challenge {
@@ -28,8 +29,10 @@ public class Challenge {
     private String cause = "ALL";
     private double force = 0.0;
     private double power = 0.0;
+    private int number = 0;
+    private int time = 1;
     // timer del salvataggio punti
-    int number = 20 * 60;
+    int timeNumber = 20 * 60;
     private BukkitTask task, boostingTask;
     int point = 1;
     private int pointsBoost = 0;
@@ -42,7 +45,7 @@ public class Challenge {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes, int number, int time) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
@@ -59,6 +62,8 @@ public class Challenge {
         this.pointsBoost = pointsBoost;
         this.multiplier = multiplier;
         this.minutes = minutes;
+        this.number = number;
+        this.time = time;
     }
 
     public HashMap<String, Long> getMin10PlayersPoints() {
@@ -199,7 +204,8 @@ public class Challenge {
             @Override
             public void run() {
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
-                for (Map.Entry<String, Long> player : players.entrySet()) {
+                for (Iterator<Map.Entry<String, Long>> it = players.entrySet().iterator(); it.hasNext(); ) {
+                    Map.Entry<String, Long> player = it.next();
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {
@@ -229,7 +235,7 @@ public class Challenge {
                 }
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
             }
-        }, 0, number);
+        }, 0, timeNumber);
     }
 
     public void stopTask() {
@@ -355,6 +361,22 @@ public class Challenge {
         this.countPointsChallenge = countPointsChallenge;
     }
 
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
     @Override
     public String toString() {
         return "Challenge{" +
@@ -372,7 +394,7 @@ public class Challenge {
                 ", cause='" + cause + '\'' +
                 ", force=" + force +
                 ", power=" + power +
-                ", number=" + number +
+                ", timeNumber=" + timeNumber +
                 ", task=" + task +
                 ", boostingTask=" + boostingTask +
                 ", point=" + point +
@@ -409,6 +431,6 @@ public class Challenge {
                     p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("boostMessage").replace("{number}", multiplier + "").replace("{minutes}", number + "")));
                 }
             }
-        }, 0, number);
+        }, 0, timeNumber);
     }
 }

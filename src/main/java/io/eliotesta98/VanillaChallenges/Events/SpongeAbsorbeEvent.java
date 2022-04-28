@@ -38,7 +38,9 @@ public class SpongeAbsorbeEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("SpongeAbsorbEvent PlayerAbsorbing= " + players.get(spongeBlock.getLocation().toString()));
+                if (debugActive) {
+                    debugUtils.addLine("SpongeAbsorbEvent PlayerAbsorbing= " + players.get(spongeBlock.getLocation().toString()));
+                }
                 if (players.get(spongeBlock.getLocation().toString()) != null) {
                     Main.dailyChallenge.increment(players.get(spongeBlock.getLocation().toString()), (long) amount * point);
                     players.remove(players.get(spongeBlock.getLocation().toString()));

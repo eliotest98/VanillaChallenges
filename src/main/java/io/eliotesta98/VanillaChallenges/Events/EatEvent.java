@@ -27,7 +27,9 @@ public class EatEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("BlockBreakEvent PlayerEating= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("BlockBreakEvent PlayerEating= " + playerName);
+                }
                 if (foodLevels.get(playerName) == null) {
                     if (foodLevel <= 20) {
                         foodLevels.put(playerName, foodLevel);
@@ -45,13 +47,19 @@ public class EatEvent implements Listener {
                             foodLevels.put(playerName, 20);
                         }
                         if (item.equalsIgnoreCase("ALL")) {
-                            debugUtils.addLine("EatEvent Conditions= 0");
+                            if (debugActive) {
+                                debugUtils.addLine("EatEvent Conditions= 0");
+                            }
                             Main.dailyChallenge.increment(playerName, (long) number * point);
                         } else {
-                            debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + itemUsedByPlayer);
-                            debugUtils.addLine("EatEvent ItemConsumedConfig= " + item);
+                            if (debugActive) {
+                                debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + itemUsedByPlayer);
+                                debugUtils.addLine("EatEvent ItemConsumedConfig= " + item);
+                            }
                             if (itemUsedByPlayer.getType().toString().equalsIgnoreCase(item)) {
-                                debugUtils.addLine("EatEvent Conditions= 1");
+                                if (debugActive) {
+                                    debugUtils.addLine("EatEvent Conditions= 1");
+                                }
                                 Main.dailyChallenge.increment(playerName, (long) number * point);
                             }
                         }

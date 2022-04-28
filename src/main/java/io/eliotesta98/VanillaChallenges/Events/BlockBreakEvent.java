@@ -25,14 +25,20 @@ public class BlockBreakEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("BlockBreakEvent PlayerBreaking= " + playerName);
-                debugUtils.addLine("BlockBreakEvent BlockConfig= " + block);
-                debugUtils.addLine("BlockBreakEvent BlockBreaking= " + blockBreaking);
+                if (debugActive) {
+                    debugUtils.addLine("BlockBreakEvent PlayerBreaking= " + playerName);
+                    debugUtils.addLine("BlockBreakEvent BlockConfig= " + block);
+                    debugUtils.addLine("BlockBreakEvent BlockBreaking= " + blockBreaking);
+                }
                 if (block.equalsIgnoreCase(blockBreaking)) {
-                    debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemInHand);
-                    debugUtils.addLine("BlockBreakEvent ItemInHandBreaking= " + itemInMainHand.getType());
+                    if (debugActive) {
+                        debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemInHand);
+                        debugUtils.addLine("BlockBreakEvent ItemInHandBreaking= " + itemInMainHand.getType());
+                    }
                     if (itemInMainHand.getType().toString().equalsIgnoreCase(itemInHand)) {
-                        debugUtils.addLine("BlockBreakEvent Conditions= 1 - 1");
+                        if (debugActive) {
+                            debugUtils.addLine("BlockBreakEvent Conditions= 1 - 1");
+                        }
                         // 1 - 1
                         Main.instance.getDailyChallenge().increment(playerName, point);
                         if (debugActive) {
@@ -43,7 +49,9 @@ public class BlockBreakEvent implements Listener {
                     } else {
                         // 1 - 0
                         if (itemInHand.equalsIgnoreCase("ALL")) {
-                            debugUtils.addLine("BlockBreakEvent Conditions= 1 - 0");
+                            if (debugActive) {
+                                debugUtils.addLine("BlockBreakEvent Conditions= 1 - 0");
+                            }
                             Main.instance.getDailyChallenge().increment(playerName, point);
                             if (debugActive) {
                                 debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
@@ -54,11 +62,15 @@ public class BlockBreakEvent implements Listener {
                     }
                 } else {
                     if (block.equalsIgnoreCase("ALL")) {
-                        // 0 - 1
-                        debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemInHand);
-                        debugUtils.addLine("BlockBreakEvent ItemInHandBreaking= " + itemInMainHand.getType());
+                        if (debugActive) {
+                            // 0 - 1
+                            debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemInHand);
+                            debugUtils.addLine("BlockBreakEvent ItemInHandBreaking= " + itemInMainHand.getType());
+                        }
                         if (itemInMainHand.getType().toString().equalsIgnoreCase(itemInHand)) {
-                            debugUtils.addLine("BlockBreakEvent Conditions= 0 - 1");
+                            if (debugActive) {
+                                debugUtils.addLine("BlockBreakEvent Conditions= 0 - 1");
+                            }
                             Main.instance.getDailyChallenge().increment(playerName, point);
                             if (debugActive) {
                                 debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
@@ -68,7 +80,9 @@ public class BlockBreakEvent implements Listener {
                         } else {
                             // 0 - 0
                             if (itemInHand.equalsIgnoreCase("ALL")) {
-                                debugUtils.addLine("BlockBreakEvent Conditions= 0 - 0");
+                                if (debugActive) {
+                                    debugUtils.addLine("BlockBreakEvent Conditions= 0 - 0");
+                                }
                                 Main.instance.getDailyChallenge().increment(playerName, point);
                                 if (debugActive) {
                                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));

@@ -30,15 +30,23 @@ public class FishEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("FishEvent PlayerFishing= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("FishEvent PlayerFishing= " + playerName);
+                }
                 if (fish.equalsIgnoreCase("ALL")) {
-                    debugUtils.addLine("FishEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("FishEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, point);
                 } else {
-                    debugUtils.addLine("FishEvent FishCaughByPlayer= " + fishCaugh);
-                    debugUtils.addLine("FishEvent FishCaughConfig= " + fish);
+                    if (debugActive) {
+                        debugUtils.addLine("FishEvent FishCaughByPlayer= " + fishCaugh);
+                        debugUtils.addLine("FishEvent FishCaughConfig= " + fish);
+                    }
                     if (fish.equalsIgnoreCase(fishCaugh)) {
-                        debugUtils.addLine("FishEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("FishEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(playerName, point);
                     }
                 }

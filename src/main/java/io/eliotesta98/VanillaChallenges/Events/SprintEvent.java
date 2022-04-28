@@ -24,7 +24,9 @@ public class SprintEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("SprintEvent ToggledSprintPlayer= " + e.getPlayer().getName());
+                if (debugActive) {
+                    debugUtils.addLine("SprintEvent ToggledSprintPlayer= " + e.getPlayer().getName());
+                }
                 if (players.get(e.getPlayer().getName()) != null) {
                     boolean sprint = players.get(e.getPlayer().getName());
                     if (sprint) {
@@ -62,7 +64,9 @@ public class SprintEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("SprintEvent PlayerSprinting= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("SprintEvent PlayerSprinting= " + playerName);
+                }
                 if (players.get(playerName) != null) {
                     if (players.get(playerName)) {
                         if (distances.get(playerName) == null) {

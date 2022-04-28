@@ -24,17 +24,25 @@ public class DamageEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("BlockBreakEvent PlayerDamaging= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("BlockBreakEvent PlayerDamaging= " + playerName);
+                }
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (playerName.equalsIgnoreCase(player.getName())) {
                         if (cause.equalsIgnoreCase("ALL")) {
-                            debugUtils.addLine("DamageEvent Conditions= 0");
+                            if (debugActive) {
+                                debugUtils.addLine("DamageEvent Conditions= 0");
+                            }
                             Main.dailyChallenge.increment(playerName, (long) finalDamage * point);
                         } else {
-                            debugUtils.addLine("DamageEvent CausePlayer= " + causePlayer);
-                            debugUtils.addLine("DamageEvent CauseConfig= " + cause);
+                            if (debugActive) {
+                                debugUtils.addLine("DamageEvent CausePlayer= " + causePlayer);
+                                debugUtils.addLine("DamageEvent CauseConfig= " + cause);
+                            }
                             if (cause.equalsIgnoreCase(causePlayer)) {
-                                debugUtils.addLine("DamageEvent Conditions= 1");
+                                if (debugActive) {
+                                    debugUtils.addLine("DamageEvent Conditions= 1");
+                                }
                                 Main.dailyChallenge.increment(playerName, (long) finalDamage * point);
                             }
                         }

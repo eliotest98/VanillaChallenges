@@ -30,7 +30,9 @@ public class RaidEvent implements Listener {
             @Override
             public void run() {
                 for (Player winner : e.getWinners()) {
-                    debugUtils.addLine("RaidEvent RaidWinner= " + winner.getName());
+                    if (debugActive) {
+                        debugUtils.addLine("RaidEvent RaidWinner= " + winner.getName());
+                    }
                     Main.dailyChallenge.increment(winner.getName(), (long) totalWaves * point);
                 }
                 if (debugActive) {

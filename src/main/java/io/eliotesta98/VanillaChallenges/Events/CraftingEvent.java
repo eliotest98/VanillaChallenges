@@ -23,9 +23,13 @@ public class CraftingEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("BlockBreakEvent PlayerCrafting= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("BlockBreakEvent PlayerCrafting= " + playerName);
+                }
                 if (itemCrafting.equalsIgnoreCase("ALL")) {
-                    debugUtils.addLine("CraftItemEvent Conditions= 0");
+                    if (debugActive) {
+                        debugUtils.addLine("CraftItemEvent Conditions= 0");
+                    }
                     Main.dailyChallenge.increment(playerName, point);
                     if (debugActive) {
                         debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
@@ -33,10 +37,14 @@ public class CraftingEvent implements Listener {
                     }
                     return;
                 } else {
-                    debugUtils.addLine("CraftItemEvent RecipePlayer= " + recipePlayer);
-                    debugUtils.addLine("CraftItemEvent RecipeConfig= " + itemCrafting);
+                    if (debugActive) {
+                        debugUtils.addLine("CraftItemEvent RecipePlayer= " + recipePlayer);
+                        debugUtils.addLine("CraftItemEvent RecipeConfig= " + itemCrafting);
+                    }
                     if (recipePlayer.equalsIgnoreCase(itemCrafting)) {
-                        debugUtils.addLine("CraftItemEvent Conditions= 1");
+                        if (debugActive) {
+                            debugUtils.addLine("CraftItemEvent Conditions= 1");
+                        }
                         Main.dailyChallenge.increment(playerName, point);
                         if (debugActive) {
                             debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));

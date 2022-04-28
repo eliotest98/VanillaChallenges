@@ -21,7 +21,9 @@ public class ExpCollector implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                debugUtils.addLine("ExpCollectorEvent PlayerCollecting= " + playerName);
+                if (debugActive) {
+                    debugUtils.addLine("ExpCollectorEvent PlayerCollecting= " + playerName);
+                }
                 Main.dailyChallenge.increment(playerName, (long) amount * point);
                 if (debugActive) {
                     debugUtils.addLine("ExpCollectorEvent execution time= " + (System.currentTimeMillis() - tempo));
