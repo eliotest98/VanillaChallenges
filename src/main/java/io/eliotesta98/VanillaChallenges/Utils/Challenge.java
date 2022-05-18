@@ -27,6 +27,7 @@ public class Challenge {
     private String mob = "ALL";
     private String color = "ALL";
     private String cause = "ALL";
+    private String vehicle = "ALL";
     private double force = 0.0;
     private double power = 0.0;
     private int number = 0;
@@ -38,14 +39,15 @@ public class Challenge {
     private int pointsBoost = 0;
     private int multiplier = 1;
     private int minutes = 0;
-    long countPointsChallenge = 0;
-    boolean startBoost = false;
+    private long countPointsChallenge = 0;
+    private boolean startBoost = false;
+    private String sneaking = "NOBODY";
 
     public Challenge() {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes, int number, int time) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes, int number, int time, String vehicle, String sneaking) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
@@ -64,6 +66,8 @@ public class Challenge {
         this.minutes = minutes;
         this.number = number;
         this.time = time;
+        this.vehicle = vehicle;
+        this.sneaking = sneaking;
     }
 
     public HashMap<String, Long> getMin10PlayersPoints() {
@@ -375,6 +379,22 @@ public class Challenge {
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+    public String getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public String getSneaking() {
+        return sneaking;
+    }
+
+    public void setSneaking(String sneaking) {
+        this.sneaking = sneaking;
     }
 
     @Override

@@ -12,19 +12,29 @@ public class ExpCollector implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ExpCollectorEvent");
     private int point = Main.dailyChallenge.getPoint();
+    private String sneaking = Main.dailyChallenge.getSneaking();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPickUpExp(org.bukkit.event.player.PlayerExpChangeEvent e) {
         long tempo = System.currentTimeMillis();
         final String playerName = e.getPlayer().getName();
         final int amount = e.getAmount();
+        final boolean sneakingPlayer = e.getPlayer().isSneaking();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 if (debugActive) {
                     debugUtils.addLine("ExpCollectorEvent PlayerCollecting= " + playerName);
+                    debugUtils.addLine("ExpCollectorEvent PlayerSneaking= " + sneakingPlayer);
+                    debugUtils.addLine("ExpCollectorEvent ConfigSneaking= " + sneaking);
                 }
-                Main.dailyChallenge.increment(playerName, (long) amount * point);
+                if (sneaking.equalsIgnoreCase("NOBODY")) {
+                    Main.dailyChallenge.increment(playerName, (long) amount * point);
+                } else {
+                    if (Boolean.parseBoolean(sneaking) == sneakingPlayer) {
+                        Main.dailyChallenge.increment(playerName, (long) amount * point);
+                    }
+                }
                 if (debugActive) {
                     debugUtils.addLine("ExpCollectorEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("ExpCollectorEvent");

@@ -13,6 +13,7 @@ public class ColorSheepEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ColorSheepEvent");
     private String color = Main.dailyChallenge.getColor();
     private int point = Main.dailyChallenge.getPoint();
+    private String sneaking = Main.dailyChallenge.getSneaking();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onColorSheep(org.bukkit.event.entity.SheepDyeWoolEvent e) {
@@ -27,30 +28,19 @@ public class ColorSheepEvent implements Listener {
         }
         final String playerName = e.getPlayer().getName();
         final String colorPlayer = e.getColor().toString();
+        final boolean playerSneaking = e.getPlayer().isSneaking();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 if (debugActive) {
                     debugUtils.addLine("BlockBreakEvent PlayerColoring= " + playerName);
+                    debugUtils.addLine("BlockBreakEvent PlayerSneaking= " + playerSneaking);
+                    debugUtils.addLine("BlockBreakEvent ConfigSneaking= " + sneaking);
                 }
-                if (color.equalsIgnoreCase("ALL")) {
-                    if (debugActive) {
-                        debugUtils.addLine("ColorSheepEvent Conditions= 0");
-                    }
-                    Main.dailyChallenge.increment(playerName, point);
-                    if (debugActive) {
-                        debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug("ColorSheepEvent");
-                    }
-                    return;
-                } else {
-                    if (debugActive) {
-                        debugUtils.addLine("ColorSheepEvent ColorByPlayer= " + colorPlayer);
-                        debugUtils.addLine("ColorSheepEvent ColorConfig= " + color);
-                    }
-                    if (colorPlayer.equalsIgnoreCase(color)) {
+                if (sneaking.equalsIgnoreCase("NOBODY")) {
+                    if (color.equalsIgnoreCase("ALL")) {
                         if (debugActive) {
-                            debugUtils.addLine("ColorSheepEvent Conditions= 1");
+                            debugUtils.addLine("ColorSheepEvent Conditions= 0");
                         }
                         Main.dailyChallenge.increment(playerName, point);
                         if (debugActive) {
@@ -58,6 +48,52 @@ public class ColorSheepEvent implements Listener {
                             debugUtils.debug("ColorSheepEvent");
                         }
                         return;
+                    } else {
+                        if (debugActive) {
+                            debugUtils.addLine("ColorSheepEvent ColorByPlayer= " + colorPlayer);
+                            debugUtils.addLine("ColorSheepEvent ColorConfig= " + color);
+                        }
+                        if (colorPlayer.equalsIgnoreCase(color)) {
+                            if (debugActive) {
+                                debugUtils.addLine("ColorSheepEvent Conditions= 1");
+                            }
+                            Main.dailyChallenge.increment(playerName, point);
+                            if (debugActive) {
+                                debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
+                                debugUtils.debug("ColorSheepEvent");
+                            }
+                            return;
+                        }
+                    }
+                } else {
+                    if (Boolean.parseBoolean(sneaking) == playerSneaking) {
+                        if (color.equalsIgnoreCase("ALL")) {
+                            if (debugActive) {
+                                debugUtils.addLine("ColorSheepEvent Conditions= 0");
+                            }
+                            Main.dailyChallenge.increment(playerName, point);
+                            if (debugActive) {
+                                debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
+                                debugUtils.debug("ColorSheepEvent");
+                            }
+                            return;
+                        } else {
+                            if (debugActive) {
+                                debugUtils.addLine("ColorSheepEvent ColorByPlayer= " + colorPlayer);
+                                debugUtils.addLine("ColorSheepEvent ColorConfig= " + color);
+                            }
+                            if (colorPlayer.equalsIgnoreCase(color)) {
+                                if (debugActive) {
+                                    debugUtils.addLine("ColorSheepEvent Conditions= 1");
+                                }
+                                Main.dailyChallenge.increment(playerName, point);
+                                if (debugActive) {
+                                    debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
+                                    debugUtils.debug("ColorSheepEvent");
+                                }
+                                return;
+                            }
+                        }
                     }
                 }
             }

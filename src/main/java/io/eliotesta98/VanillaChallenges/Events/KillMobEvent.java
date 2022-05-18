@@ -13,13 +13,16 @@ public class KillMobEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("KillEvent");
     private String mobKill = Main.dailyChallenge.getMob();
     private int point = Main.dailyChallenge.getPoint();
+    private String sneaking = Main.dailyChallenge.getSneaking();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onKillEvent(org.bukkit.event.entity.EntityDeathEvent e) {
         long tempo = System.currentTimeMillis();
         String pName = "";
+        boolean sneakingPlayer = false;
         if (e.getEntity().getKiller() != null) {
             pName = e.getEntity().getKiller().getName();
+            sneakingPlayer = e.getEntity().getKiller().isSneaking();
         } else {
             if (debugActive) {
                 debugUtils.addLine("KillEvent PlayerKilling= null");
@@ -30,27 +33,50 @@ public class KillMobEvent implements Listener {
         }
         final String playerName = pName;
         final String mobKilled = e.getEntity().getName();
+        boolean finalSneakingPlayer = sneakingPlayer;
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 if (debugActive) {
                     debugUtils.addLine("KillEvent PlayerKilling= " + playerName);
                 }
-                if (mobKill.equalsIgnoreCase("ALL")) {
-                    if (debugActive) {
-                        debugUtils.addLine("KillEvent Conditions= 0");
-                    }
-                    Main.dailyChallenge.increment(playerName, point);
-                } else {
-                    if (debugActive) {
-                        debugUtils.addLine("KillEvent MobKillByPlayer= " + mobKilled);
-                        debugUtils.addLine("KillEvent MobKillConfig= " + mobKill);
-                    }
-                    if (mobKill.equalsIgnoreCase(mobKilled)) {
+                if (sneaking.equalsIgnoreCase("NOBODY")) {
+                    if (mobKill.equalsIgnoreCase("ALL")) {
                         if (debugActive) {
-                            debugUtils.addLine("KillEvent Conditions= 1");
+                            debugUtils.addLine("KillEvent Conditions= 0");
                         }
                         Main.dailyChallenge.increment(playerName, point);
+                    } else {
+                        if (debugActive) {
+                            debugUtils.addLine("KillEvent MobKillByPlayer= " + mobKilled);
+                            debugUtils.addLine("KillEvent MobKillConfig= " + mobKill);
+                        }
+                        if (mobKill.equalsIgnoreCase(mobKilled)) {
+                            if (debugActive) {
+                                debugUtils.addLine("KillEvent Conditions= 1");
+                            }
+                            Main.dailyChallenge.increment(playerName, point);
+                        }
+                    }
+                } else {
+                    if (Boolean.parseBoolean(sneaking) == finalSneakingPlayer) {
+                        if (mobKill.equalsIgnoreCase("ALL")) {
+                            if (debugActive) {
+                                debugUtils.addLine("KillEvent Conditions= 0");
+                            }
+                            Main.dailyChallenge.increment(playerName, point);
+                        } else {
+                            if (debugActive) {
+                                debugUtils.addLine("KillEvent MobKillByPlayer= " + mobKilled);
+                                debugUtils.addLine("KillEvent MobKillConfig= " + mobKill);
+                            }
+                            if (mobKill.equalsIgnoreCase(mobKilled)) {
+                                if (debugActive) {
+                                    debugUtils.addLine("KillEvent Conditions= 1");
+                                }
+                                Main.dailyChallenge.increment(playerName, point);
+                            }
+                        }
                     }
                 }
                 if (debugActive) {

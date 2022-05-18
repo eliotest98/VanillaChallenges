@@ -15,6 +15,8 @@ Configuration:
       Block: ALL
       # Block you want place the block, if you want all write ALL
       BlockOnPlaced: GRASS_BLOCK
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
       # How many points you want give at place?
       Point: 1
       # if you want a multiplier based on all players
@@ -38,14 +40,17 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TURTLE_HELMET:1'
+      # Reward in blocks EX: IRON_INGOT:16 (Type:Quantity) NOBODY for no reward.
+      # Reward with command EX: [command]:give %player% TURTLE_HELMET 1 or NOBODY for no reward.
+      Reward: '[command]:give %player% TURTLE_HELMET 1'
     BlockBreaker:
       TypeChallenge: 'BlockBreakChallenge'
       # Block you want break for challenge, if you want all blocks write ALL
       Block: ALL
       # Type of item in main hand for break this blocks, if you want all items write ALL
       ItemInHand: ALL
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
       # How many points you want give at break?
       Point: 1
       # if you want a multiplier based on all players
@@ -133,6 +138,8 @@ Configuration:
       TypeChallenge: 'ConsumeChallenge'
       # Item you want to consume for challenge, if you want all items write ALL
       Item: ALL
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
       # How many points you want give at consume?
       Point: 1
       # if you want a multiplier based on all players
@@ -160,6 +167,8 @@ Configuration:
       Reward: 'WITHER_SKELETON_SKULL:1'
     ExpCollector:
       TypeChallenge: 'CollectorExpChallenge'
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
       # How many points you want give at exp point?
       Point: 1
       # if you want a multiplier based on all players
@@ -189,6 +198,8 @@ Configuration:
       TypeChallenge: 'KillChallenge'
       # Mob you want to kill for challenge, if you want all mobs write ALL
       Mob: ALL
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
       # How many points you want give at kill?
       Point: 1
       # if you want a multiplier based on all players
@@ -334,6 +345,8 @@ Configuration:
       TypeChallenge: 'ColorSheepChallenge'
       # Color you want to use for challenge, if you want all colors write ALL
       Color: ALL
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
       # How many points you want give at coloring?
       Point: 1
       # if you want a multiplier based on all players
@@ -390,6 +403,8 @@ Configuration:
       TypeChallenge: 'FishingChallenge'
       # Item you want to fish for challenge, if you want all items write ALL
       Item: ALL
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
       # How many points you want give at wave raid?
       Point: 1
       # if you want a multiplier based on all players
@@ -529,6 +544,8 @@ Configuration:
       TypeChallenge: 'ItemBreakChallenge'
       # Item you want to break for challenge, if you want all items write ALL
       Item: ALL
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
       # How many points you want give at item break?
       Point: 100
       # if you want a multiplier based on all players
@@ -585,6 +602,8 @@ Configuration:
       TypeChallenge: 'HarvestChallenge'
       # How many points you want give at item dropped?
       Point: 1
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
       # Item you want to harvest for challenge, if you want all items write ALL
       Item: ALL
       # if you want a multiplier based on all players
@@ -612,10 +631,12 @@ Configuration:
       Reward: 'NAME_TAG:2'
     EggThrower:
       TypeChallenge: 'EggThrowerChallenge'
-      # How many points you want give at egg throw?
-      Point: 1
       # if you want count spawn chicken write CHICKEN, if you not want count chicken write ALL
       Mob: CHICKEN
+      # Able or disable Sneak when place Es. true or false or NOBODY
+      Sneaking: 'NOBODY'
+      # How many points you want give at egg throw?
+      Point: 1
       # if you want a multiplier based on all players
       Boost:
         Enabled: false
@@ -753,6 +774,35 @@ Configuration:
         - '&8'
       # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
       Reward: 'SHULKER_BOX:1'
+    BoatMove:
+      TypeChallenge: 'VehicleMoveChallenge'
+      # How many points you want give for movement?
+      Point: 1
+      # What vehicle you want use the player? ALL for all Vehicle
+      Vehicle: 'BOAT'
+      # if you want a multiplier based on all players
+      Boost:
+        Enabled: false
+        #Number you want reached for give the multiplier
+        Points: 50000
+        # Multiplier you want give when reached the number
+        Multiplier: 5
+        # For how many minutes you want give the multiplier?
+        Minutes: 10
+      # Title challenge
+      Title:
+        - '&8'
+        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉       &7Boat Move Challenge'
+        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉  &7Move with a boat for receive points'
+        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉'
+        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉     &7{hours} hours to the end of the challenge'
+        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+        - '&8'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
+      Reward: 'SHULKER_BOX:1'
   #If you want random generation of Challenges
   RandomChallengeGeneration: false
   # If you want reset the player points at the end of every challenge
@@ -877,6 +927,8 @@ Debug:
   ItemCollector: false
   # Inventory Challenge Event debug
   Inventory: false
+  # Vehicle Move Challenge Event debug
+  VehicleMoveEvent: false
   # Enabled debug
   Enabled: false
   # Disabled debug

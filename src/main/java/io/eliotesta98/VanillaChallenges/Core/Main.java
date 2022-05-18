@@ -180,6 +180,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new ItemCollector(), this);
         } else if (typeChallenge.equalsIgnoreCase("InventoryConditionChallenge")) {
             new InventoryCheck();
+        } else if (typeChallenge.equalsIgnoreCase("VehicleMoveChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new VehicleMoveEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }

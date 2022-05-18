@@ -13,33 +13,59 @@ public class ItemBreakEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemBreakEvent");
     private String item = Main.dailyChallenge.getItem();
     private int point = Main.dailyChallenge.getPoint();
+    private String sneaking = Main.dailyChallenge.getSneaking();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBreakItem(org.bukkit.event.player.PlayerItemBreakEvent e) {
         long tempo = System.currentTimeMillis();
         final String playerName = e.getPlayer().getName();
         final String brokenItemByPlayer = e.getBrokenItem().getType().toString();
+        final boolean playerSneaking = e.getPlayer().isSneaking();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 if (debugActive) {
                     debugUtils.addLine("ItemBreakEvent PlayerBreaking= " + playerName);
+                    debugUtils.addLine("ItemBreakEvent PlayerSneaking= " + playerSneaking);
+                    debugUtils.addLine("ItemBreakEvent ConfigSneaking= " + sneaking);
                 }
-                if (item.equalsIgnoreCase("ALL")) {
-                    if (debugActive) {
-                        debugUtils.addLine("ItemBreakEvent Conditions= 0");
-                    }
-                    Main.dailyChallenge.increment(playerName, point);
-                } else {
-                    if (debugActive) {
-                        debugUtils.addLine("ItemBreakEvent ItemBrokenByPlayer= " + brokenItemByPlayer);
-                        debugUtils.addLine("ItemBreakEvent ItemBrokenConfig= " + item);
-                    }
-                    if (item.equalsIgnoreCase(brokenItemByPlayer)) {
+                if (sneaking.equalsIgnoreCase("NOBODY")) {
+                    if (item.equalsIgnoreCase("ALL")) {
                         if (debugActive) {
-                            debugUtils.addLine("ItemBreakEvent Conditions= 1");
+                            debugUtils.addLine("ItemBreakEvent Conditions= 0");
                         }
                         Main.dailyChallenge.increment(playerName, point);
+                    } else {
+                        if (debugActive) {
+                            debugUtils.addLine("ItemBreakEvent ItemBrokenByPlayer= " + brokenItemByPlayer);
+                            debugUtils.addLine("ItemBreakEvent ItemBrokenConfig= " + item);
+                        }
+                        if (item.equalsIgnoreCase(brokenItemByPlayer)) {
+                            if (debugActive) {
+                                debugUtils.addLine("ItemBreakEvent Conditions= 1");
+                            }
+                            Main.dailyChallenge.increment(playerName, point);
+                        }
+                    }
+                } else {
+                    if (Boolean.parseBoolean(sneaking) == playerSneaking) {
+                        if (item.equalsIgnoreCase("ALL")) {
+                            if (debugActive) {
+                                debugUtils.addLine("ItemBreakEvent Conditions= 0");
+                            }
+                            Main.dailyChallenge.increment(playerName, point);
+                        } else {
+                            if (debugActive) {
+                                debugUtils.addLine("ItemBreakEvent ItemBrokenByPlayer= " + brokenItemByPlayer);
+                                debugUtils.addLine("ItemBreakEvent ItemBrokenConfig= " + item);
+                            }
+                            if (item.equalsIgnoreCase(brokenItemByPlayer)) {
+                                if (debugActive) {
+                                    debugUtils.addLine("ItemBreakEvent Conditions= 1");
+                                }
+                                Main.dailyChallenge.increment(playerName, point);
+                            }
+                        }
                     }
                 }
                 if (debugActive) {

@@ -54,6 +54,7 @@ public class ConfigGestion {
             double power = file.getDouble("Configuration.Challenges." + challengeName + ".Power");
             String color = file.getString("Configuration.Challenges." + challengeName + ".Color");
             String cause = file.getString("Configuration.Challenges." + challengeName + ".Cause");
+            String vehicle = file.getString("Configuration.Challenges." + challengeName + ".Vehicle");
             int point = file.getInt("Configuration.Challenges." + challengeName + ".Point");
             int number = file.getInt("Configuration.Challenges." + challengeName + ".Number");
             int time = file.getInt("Configuration.Challenges." + challengeName + ".Time");
@@ -65,7 +66,8 @@ public class ConfigGestion {
                 multiplier = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Multiplier");
                 minutes = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Minutes");
             }
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time);
+            String sneaking = file.getString("Configuration.Challenges."+challengeName+".Sneaking");
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time, vehicle, sneaking);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");

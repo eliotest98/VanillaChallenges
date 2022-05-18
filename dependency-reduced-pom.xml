@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>VanillaChallenges</groupId>
   <artifactId>VanillaChallenges</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.5</version>
   <build>
     <defaultGoal>clean install</defaultGoal>
     <resources>

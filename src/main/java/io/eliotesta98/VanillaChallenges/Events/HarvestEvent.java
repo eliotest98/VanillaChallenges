@@ -16,6 +16,7 @@ public class HarvestEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("HarvestEvent");
     private String item = Main.dailyChallenge.getItem();
     private int point = Main.dailyChallenge.getPoint();
+    private String sneaking = Main.dailyChallenge.getSneaking();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onHarvestEvent(org.bukkit.event.player.PlayerHarvestBlockEvent e) {
@@ -23,35 +24,68 @@ public class HarvestEvent implements Listener {
         final String playerName = e.getPlayer().getName();
         final List<ItemStack> itemsHarvested = e.getItemsHarvested();
         final String blockHarvested = e.getHarvestedBlock().getType().toString();
+        final boolean sneakingPlayer = e.getPlayer().isSneaking();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 if (debugActive) {
                     debugUtils.addLine("HarvestEvent PlayerHarvesting= " + playerName);
+                    debugUtils.addLine("HarvestEvent PlayerSneaking= " + sneakingPlayer);
+                    debugUtils.addLine("HarvestEvent ConfigSneaking= " + sneaking);
                 }
-                if (item.equalsIgnoreCase("ALL")) {
-                    int number = 0;
-                    for (int i = 0; i < itemsHarvested.size(); i++) {
-                        number = number + itemsHarvested.get(i).getAmount();
-                    }
-                    if (debugActive) {
-                        debugUtils.addLine("HarvestEvent Conditions= 0");
-                    }
-                    Main.dailyChallenge.increment(playerName, (long) point * number);
-                } else {
-                    if (debugActive) {
-                        debugUtils.addLine("HarvestEvent BlockHarvestedByPlayer= " + blockHarvested);
-                        debugUtils.addLine("HarvestEvent BlockHarvestedConfig= " + item);
-                    }
-                    if (item.equalsIgnoreCase(blockHarvested)) {
+                if (sneaking.equalsIgnoreCase("NOBODY")) {
+                    if (item.equalsIgnoreCase("ALL")) {
                         int number = 0;
                         for (int i = 0; i < itemsHarvested.size(); i++) {
                             number = number + itemsHarvested.get(i).getAmount();
                         }
                         if (debugActive) {
-                            debugUtils.addLine("HarvestEvent Conditions= 1");
+                            debugUtils.addLine("HarvestEvent Conditions= 0");
                         }
                         Main.dailyChallenge.increment(playerName, (long) point * number);
+                    } else {
+                        if (debugActive) {
+                            debugUtils.addLine("HarvestEvent BlockHarvestedByPlayer= " + blockHarvested);
+                            debugUtils.addLine("HarvestEvent BlockHarvestedConfig= " + item);
+                        }
+                        if (item.equalsIgnoreCase(blockHarvested)) {
+                            int number = 0;
+                            for (int i = 0; i < itemsHarvested.size(); i++) {
+                                number = number + itemsHarvested.get(i).getAmount();
+                            }
+                            if (debugActive) {
+                                debugUtils.addLine("HarvestEvent Conditions= 1");
+                            }
+                            Main.dailyChallenge.increment(playerName, (long) point * number);
+                        }
+                    }
+                } else {
+                    if (sneakingPlayer == Boolean.parseBoolean(sneaking)) {
+                        if (item.equalsIgnoreCase("ALL")) {
+                            int number = 0;
+                            for (int i = 0; i < itemsHarvested.size(); i++) {
+                                number = number + itemsHarvested.get(i).getAmount();
+                            }
+                            if (debugActive) {
+                                debugUtils.addLine("HarvestEvent Conditions= 0");
+                            }
+                            Main.dailyChallenge.increment(playerName, (long) point * number);
+                        } else {
+                            if (debugActive) {
+                                debugUtils.addLine("HarvestEvent BlockHarvestedByPlayer= " + blockHarvested);
+                                debugUtils.addLine("HarvestEvent BlockHarvestedConfig= " + item);
+                            }
+                            if (item.equalsIgnoreCase(blockHarvested)) {
+                                int number = 0;
+                                for (int i = 0; i < itemsHarvested.size(); i++) {
+                                    number = number + itemsHarvested.get(i).getAmount();
+                                }
+                                if (debugActive) {
+                                    debugUtils.addLine("HarvestEvent Conditions= 1");
+                                }
+                                Main.dailyChallenge.increment(playerName, (long) point * number);
+                            }
+                        }
                     }
                 }
                 if (debugActive) {
