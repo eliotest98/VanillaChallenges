@@ -47,18 +47,21 @@ public class CheckDay {
                             Main.db.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
                             Main.db.removeTopYesterday();
                             Main.db.saveTopYesterday(topPlayers);
-                            if(Main.instance.getConfigGestion().isBackupEnabled()) {
+                            if (Main.instance.getConfigGestion().isBackupEnabled()) {
                                 Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                             }
                             int number = Main.db.lastDailyWinnerId();
                             while (!topPlayers.isEmpty()) {
                                 number++;
                                 DailyWinner dailyWinner = new DailyWinner();
-                                dailyWinner.setId(number);
                                 dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
                                 dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
-                                dailyWinner.setReward(Main.dailyChallenge.getReward());
-                                Main.db.insertDailyWinner(dailyWinner);
+                                for (int i = 0; i < Main.dailyChallenge.getRewards().size(); i++) {
+                                    dailyWinner.setId(number);
+                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                    Main.db.insertDailyWinner(dailyWinner);
+                                    number++;
+                                }
                                 topPlayers.remove(0);
                             }
                             if (resetPoints) {

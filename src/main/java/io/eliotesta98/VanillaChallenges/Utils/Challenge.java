@@ -20,7 +20,7 @@ public class Challenge {
     private String block = "ALL";
     private String blockOnPlace = "ALL";
     private String typeChallenge = "nessuna";
-    private String reward = "nessuno";
+    private ArrayList<String> rewards = new ArrayList<>();
     private ArrayList<String> title = new ArrayList<>();
     private String item = "ALL";
     private String itemInHand = "ALL";
@@ -47,11 +47,11 @@ public class Challenge {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes, int number, int time, String vehicle, String sneaking) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, ArrayList<String> rewards, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes, int number, int time, String vehicle, String sneaking) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
-        this.reward = reward;
+        this.rewards = rewards;
         this.title = title;
         this.item = item;
         this.itemInHand = itemInHand;
@@ -226,14 +226,6 @@ public class Challenge {
                         }
                     });
                 }
-                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
-                while (!topPlayers.isEmpty()) {
-                    DailyWinner dailyWinner = new DailyWinner();
-                    dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
-                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
-                    dailyWinner.setReward(Main.dailyChallenge.getReward());
-                    topPlayers.remove(0);
-                }
                 if (startBoost && (boostingTask == null || boostingTask.isCancelled())) {
                     startBoosting();
                 }
@@ -258,12 +250,12 @@ public class Challenge {
         }
     }
 
-    public String getReward() {
-        return reward;
+    public ArrayList<String> getRewards() {
+        return rewards;
     }
 
-    public void setReward(String reward) {
-        this.reward = reward;
+    public void setRewards(ArrayList<String> reward) {
+        this.rewards = rewards;
     }
 
     public ArrayList<Challenger> getTopPlayers(int numberOfTops) {
@@ -405,7 +397,7 @@ public class Challenge {
                 ", block='" + block + '\'' +
                 ", blockOnPlace='" + blockOnPlace + '\'' +
                 ", typeChallenge='" + typeChallenge + '\'' +
-                ", reward='" + reward + '\'' +
+                ", reward='" + rewards + '\'' +
                 ", title=" + title +
                 ", item='" + item + '\'' +
                 ", itemInHand='" + itemInHand + '\'' +

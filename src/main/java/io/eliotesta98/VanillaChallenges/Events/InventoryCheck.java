@@ -17,6 +17,7 @@ public class InventoryCheck {
     private int numberSlot = Main.instance.getDailyChallenge().getNumber();
     private int timeTaskInMinute = Main.instance.getDailyChallenge().getTime();
     private int point = Main.dailyChallenge.getPoint();
+    private String item = Main.dailyChallenge.getItem();
 
     public InventoryCheck() {
         start();
@@ -37,18 +38,33 @@ public class InventoryCheck {
                 long tempo = System.currentTimeMillis();
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     int sizeInventory = 0;
+                    boolean itemCheck = false;
+                    if(item.equalsIgnoreCase("ALL")) {
+                        itemCheck = true;
+                    }
                     for (int i = 0; i < p.getInventory().getStorageContents().length; i++) {
                         if (p.getInventory().getItem(i) != null) {
                             sizeInventory++;
+                            if(p.getInventory().getItem(i).getType().toString().equalsIgnoreCase(item) && !itemCheck) {
+                                itemCheck = true;
+                            }
                         }
                     }
                     if (debugActive) {
                         debugUtils.addLine("InventoryChallenge Player= " + p.getName());
                         debugUtils.addLine("InventoryChallenge InventorySizePlayer= " + sizeInventory);
                         debugUtils.addLine("InventoryChallenge InventorySizeConfig= " + numberSlot);
+                        debugUtils.addLine("InventoryChallenge InventoryItemConfig= " + item);
+                        debugUtils.addLine("InventoryChallenge InventoryItemCheck= " + itemCheck);
                     }
-                    if (sizeInventory == numberSlot) {
-                        Main.instance.getDailyChallenge().increment(p.getName(), point);
+                    if(numberSlot != -1) {
+                        if (sizeInventory == numberSlot && itemCheck) {
+                            Main.instance.getDailyChallenge().increment(p.getName(), point);
+                        }
+                    } else {
+                        if(itemCheck) {
+                            Main.instance.getDailyChallenge().increment(p.getName(), point);
+                        }
                     }
                 }
                 if (debugActive) {

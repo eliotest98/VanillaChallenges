@@ -40,9 +40,10 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 (Type:Quantity) NOBODY for no reward.
-      # Reward with command EX: [command]:give %player% TURTLE_HELMET 1 or NOBODY for no reward.
-      Reward: '[command]:give %player% TURTLE_HELMET 1'
+      # Reward in blocks EX: IRON_INGOT:16 (Type:Quantity)
+      # Reward with command EX: [command]:give %player% TURTLE_HELMET 1
+      Rewards:
+        - '[command]:give %player% TURTLE_HELMET 1'
     BlockBreaker:
       TypeChallenge: 'BlockBreakChallenge'
       # Block you want break for challenge, if you want all blocks write ALL
@@ -74,8 +75,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TOTEM_OF_UNDYING:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'TOTEM_OF_UNDYING:1'
     Crafter:
       TypeChallenge: 'CraftingChallenge'
       # Item you want crafting for challenge, if you want all items write ALL
@@ -103,8 +105,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'GHAST_TEAR:2'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'GHAST_TEAR:2'
     Cooker:
       TypeChallenge: 'CookerChallenge'
       # Item you want cook for challenge, if you want all items write ALL
@@ -132,8 +135,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'DRAGON_HEAD:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'DRAGON_HEAD:1'
     Consumer:
       TypeChallenge: 'ConsumeChallenge'
       # Item you want to consume for challenge, if you want all items write ALL
@@ -163,8 +167,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'WITHER_SKELETON_SKULL:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+       - 'WITHER_SKELETON_SKULL:1'
     ExpCollector:
       TypeChallenge: 'CollectorExpChallenge'
       # Able or disable Sneak when place Es. true or false or NOBODY
@@ -192,8 +197,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'DRAGON_HEAD:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'DRAGON_HEAD:1'
     Killer:
       TypeChallenge: 'KillChallenge'
       # Mob you want to kill for challenge, if you want all mobs write ALL
@@ -223,8 +229,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'WITHER_SKELETON_SKULL:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'WITHER_SKELETON_SKULL:1'
     Breeder:
       TypeChallenge: 'BreedChallenge'
       # Mob you want to breed for challenge, if you want all mobs write ALL
@@ -252,8 +259,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NAME_TAG:2'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'NAME_TAG:2'
     Feeder:
       TypeChallenge: 'FeedChallenge'
       # Item you want to feed for challenge, if you want all items write ALL
@@ -281,8 +289,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'ENDER_PEARL:4'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'ENDER_PEARL:4'
     Shooter:
       TypeChallenge: 'ShootChallenge'
       # Force you want to apply for shoot arrow in challenge, if you want to disable use 0.0
@@ -310,8 +319,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'HEART_OF_THE_SEA:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'HEART_OF_THE_SEA:1'
     JumperHorse:
       TypeChallenge: 'JumpWithHorseChallenge'
       # Power you want to apply for jump with horse in challenge, if you want to disable use 0.0
@@ -339,8 +349,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'SCUTE:2'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'SCUTE:2'
     Dyer:
       TypeChallenge: 'ColorSheepChallenge'
       # Color you want to use for challenge, if you want all colors write ALL
@@ -370,8 +381,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TOTEM_OF_UNDYING:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'TOTEM_OF_UNDYING:1'
     Raider:
       TypeChallenge: 'RaidChallenge'
       # How many points you want give at wave raid?
@@ -397,8 +409,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'IRON_INGOT:64'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'IRON_INGOT:64'
     Fisher:
       TypeChallenge: 'FishingChallenge'
       # Item you want to fish for challenge, if you want all items write ALL
@@ -428,8 +441,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'GOLD_INGOT:32'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'GOLD_INGOT:32'
     Sprinter:
       TypeChallenge: 'SprintChallenge'
       # How many points you want give at sprinting?
@@ -455,8 +469,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'DIAMOND:16'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'DIAMOND:16'
     Mover:
       TypeChallenge: 'MoveChallenge'
       # How many points you want give at move?
@@ -482,8 +497,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'EMERALD:16'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'EMERALD:16'
     Damager:
       TypeChallenge: 'DamageChallenge'
       # Cause you want to damage for challenge, if you want all causes write ALL
@@ -511,8 +527,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TOTEM_OF_UNDYING:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'TOTEM_OF_UNDYING:1'
     Sneaker:
       TypeChallenge: 'SneakChallenge'
       # How many points you want give at sneaking?
@@ -538,8 +555,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY
+      Rewards:
+        - 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
     ItemBreaker:
       TypeChallenge: 'ItemBreakChallenge'
       # Item you want to break for challenge, if you want all items write ALL
@@ -569,8 +587,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
     Absorber:
       TypeChallenge: 'SpongeAbsorbChallenge'
       # How many points you want give at water source absorbing?
@@ -596,8 +615,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TNT:32'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'TNT:32'
     Harvester:
       TypeChallenge: 'HarvestChallenge'
       # How many points you want give at item dropped?
@@ -627,8 +647,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NAME_TAG:2'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'NAME_TAG:2'
     EggThrower:
       TypeChallenge: 'EggThrowerChallenge'
       # if you want count spawn chicken write CHICKEN, if you not want count chicken write ALL
@@ -658,8 +679,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TNT:16'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'TNT:16'
     Enchanter:
       TypeChallenge: 'EnchantChallenge'
       # How many points you want give at enchant?
@@ -685,8 +707,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'IRON_INGOT:64'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'IRON_INGOT:64'
     Chatter:
       TypeChallenge: 'ChatChallenge'
       # How many points you want give at character?
@@ -712,8 +735,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'GOLD_INGOT:32'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'GOLD_INGOT:32'
     ItemCollector:
       TypeChallenge: 'ItemCollectionChallenge'
       # How many points you want give at character?
@@ -741,16 +765,19 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉     &7{hours} hours to the end of the challenge'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'DIAMOND:8'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'DIAMOND:8'
     InventoryControl:
       TypeChallenge: 'InventoryConditionChallenge'
       # How many points you want give if respect condition?
       Point: 10
-      # Number of slots you want employed for receive points (min = 0, max all inventory)
+      # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)
       Number: 10
       # Every x minutes you want check condition
       Time: 2
+      # Item you want checked (ALL for all items)
+      Item: ALL
       # if you want a multiplier based on all players
       Boost:
         Enabled: false
@@ -772,8 +799,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉     &7{hours} hours to the end of the challenge'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'SHULKER_BOX:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'SHULKER_BOX:1'
     BoatMove:
       TypeChallenge: 'VehicleMoveChallenge'
       # How many points you want give for movement?
@@ -801,8 +829,9 @@ Configuration:
         - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉     &7{hours} hours to the end of the challenge'
         - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
         - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'SHULKER_BOX:1'
+      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+      Rewards:
+        - 'SHULKER_BOX:1'
   #If you want random generation of Challenges
   RandomChallengeGeneration: false
   # If you want reset the player points at the end of every challenge

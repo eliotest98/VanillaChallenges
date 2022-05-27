@@ -49,7 +49,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS TopYesterday (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS TopYesterday (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `PlayerName` VARCHAR(100) NOT NULL, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -172,7 +172,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS TopYesterday (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS TopYesterday (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `PlayerName` VARCHAR(100) NOT NULL, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {

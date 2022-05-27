@@ -42,7 +42,7 @@ public class ConfigGestion {
             String block = file.getString("Configuration.Challenges." + challengeName + ".Block");
             String blockOnPlaced = file.getString("Configuration.Challenges." + challengeName + ".BlockOnPlaced");
             String typeChallenge = file.getString("Configuration.Challenges." + challengeName + ".TypeChallenge");
-            String reward = file.getString("Configuration.Challenges." + challengeName + ".Reward");
+            ArrayList<String> rewards = (ArrayList<String>) file.getStringList("Configuration.Challenges." + challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>();
             file.getStringList("Configuration.Challenges." + challengeName + ".Title").forEach(value -> {
                 title.add(value);
@@ -67,7 +67,7 @@ public class ConfigGestion {
                 minutes = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Minutes");
             }
             String sneaking = file.getString("Configuration.Challenges."+challengeName+".Sneaking");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, reward, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time, vehicle, sneaking);
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time, vehicle, sneaking);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");

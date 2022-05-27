@@ -166,7 +166,12 @@ public class Commands implements CommandExecutor {
                                     dailyWinner.setId(number);
                                     dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
                                     dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
-                                    dailyWinner.setReward(Main.dailyChallenge.getReward());
+                                    for (int i = 0; i < Main.dailyChallenge.getRewards().size(); i++) {
+                                        dailyWinner.setId(number);
+                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                        Main.db.insertDailyWinner(dailyWinner);
+                                        number++;
+                                    }
                                     Main.db.insertDailyWinner(dailyWinner);
                                     topPlayers.remove(0);
                                 }
@@ -437,7 +442,12 @@ public class Commands implements CommandExecutor {
                                     dailyWinner.setId(number);
                                     dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
                                     dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
-                                    dailyWinner.setReward(Main.dailyChallenge.getReward());
+                                    for (int i = 0; i < Main.dailyChallenge.getRewards().size(); i++) {
+                                        dailyWinner.setId(number);
+                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                        Main.db.insertDailyWinner(dailyWinner);
+                                        number++;
+                                    }
                                     Main.db.insertDailyWinner(dailyWinner);
                                     topPlayers.remove(0);
                                 }
