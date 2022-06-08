@@ -2,7 +2,6 @@ package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
-import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitScheduler;

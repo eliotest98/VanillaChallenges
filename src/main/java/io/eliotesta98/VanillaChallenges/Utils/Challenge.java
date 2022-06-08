@@ -2,16 +2,11 @@ package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
-import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class Challenge {
 
@@ -208,7 +203,7 @@ public class Challenge {
             @Override
             public void run() {
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
-                HashMap<String, Long> copyMap = new HashMap<String, Long>(players);
+                HashMap<String, Long> copyMap = new HashMap<String, Long>(Collections.synchronizedMap(players));
                 for (Map.Entry<String, Long> player : copyMap.entrySet()) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
@@ -220,7 +215,7 @@ public class Challenge {
                                     Main.db.insertChallenger(player.getKey(), player.getValue());
                                 }
                             } catch (Exception ex) {
-                                Bukkit.getServer().getConsoleSender().sendMessage(ex.getMessage());
+                                Bukkit.getServer().getConsoleSender().sendMessage("Save Points Runtime: " + ex.getMessage());
                                 return;
                             }
                         }
@@ -260,29 +255,34 @@ public class Challenge {
 
     public ArrayList<Challenger> getTopPlayers(int numberOfTops) {
         ArrayList<Challenger> topList = new ArrayList<>();
-        for (int i = 0; i < numberOfTops; i++) {
-            Challenger challenger = new Challenger();
-            for (Map.Entry<String, Long> player : players.entrySet()) {
-                if (player.getValue() > challenger.getPoints()) {
-                    boolean trovato = false;
-                    for (int x = 0; x < topList.size(); x++) {
-                        if (topList.get(x).getNomePlayer().equalsIgnoreCase(player.getKey())) {
-                            trovato = true;
-                            break;
+        try{
+            for (int i = 0; i < numberOfTops; i++) {
+                Challenger challenger = new Challenger();
+                for (Map.Entry<String, Long> player : players.entrySet()) {
+                    if (player.getValue() > challenger.getPoints()) {
+                        boolean trovato = false;
+                        for (int x = 0; x < topList.size(); x++) {
+                            if (topList.get(x).getNomePlayer().equalsIgnoreCase(player.getKey())) {
+                                trovato = true;
+                                break;
+                            }
+                        }
+                        if (!trovato) {
+                            challenger = new Challenger(player.getKey(), player.getValue());
                         }
                     }
-                    if (!trovato) {
-                        challenger = new Challenger(player.getKey(), player.getValue());
-                    }
+                }
+                if (!challenger.getNomePlayer().equalsIgnoreCase("Notch")) {
+                    topList.add(challenger);
+                } else {
+                    break;
                 }
             }
-            if (!challenger.getNomePlayer().equalsIgnoreCase("Notch")) {
-                topList.add(challenger);
-            } else {
-                break;
-            }
+            return topList;
+        } catch (Exception ex) {
+            Bukkit.getServer().getConsoleSender().sendMessage("Top Players: " + ex.getMessage());
+            return  topList;
         }
-        return topList;
     }
 
     public ArrayList<String> getTitle() {

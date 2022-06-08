@@ -1,0 +1,34 @@
+BlockBreaker:
+  TypeChallenge: 'BlockBreakChallenge'
+  # Block you want break for challenge, if you want all blocks write ALL
+  Block: ALL
+  # Type of item in main hand for break this blocks, if you want all items write ALL
+  ItemInHand: ALL
+  # Able or disable Sneak when place Es. true or false or NOBODY
+  Sneaking: 'NOBODY'
+  # How many points you want give at break?
+  Point: 1
+  # if you want a multiplier based on all players
+  Boost:
+    Enabled: false
+    #Number you want reached for give the multiplier
+    Points: 10000
+    # Multiplier you want give when reached the number
+    Multiplier: 2
+    # For how many minutes you want give the multiplier?
+    Minutes: 10
+  # Title challenge
+  Title:
+    - '&8'
+    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Block Break Challenge'
+    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Break all type of block for receive 1 point'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8'
+  # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  Rewards:
+    - 'TOTEM_OF_UNDYING:1'

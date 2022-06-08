@@ -1,0 +1,32 @@
+Fisher:
+  TypeChallenge: 'FishingChallenge'
+  # Item you want to fish for challenge, if you want all items write ALL
+  Item: ALL
+  # Able or disable Sneak when place Es. true or false or NOBODY
+  Sneaking: 'NOBODY'
+  # How many points you want give at wave raid?
+  Point: 1
+  # if you want a multiplier based on all players
+  Boost:
+    Enabled: false
+    #Number you want reached for give the multiplier
+    Points: 5000
+    # Multiplier you want give when reached the number
+    Multiplier: 3
+    # For how many minutes you want give the multiplier?
+    Minutes: 10
+  # Title challenge
+  Title:
+    - '&8'
+    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                &7Fishing Challenge'
+    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉           &7Fishing for receive 1 point'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8'
+  # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  Rewards:
+    - 'GOLD_INGOT:32'

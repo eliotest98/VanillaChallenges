@@ -1,10 +1,18 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
+import io.eliotesta98.VanillaChallenges.Utils.FileCreator;
 import io.eliotesta98.VanillaChallenges.Utils.ItemUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ConfigGestion {
@@ -38,35 +46,70 @@ public class ConfigGestion {
                 messages.put(message, file.getString("Message." + message));
             }
         }
-        for (String challengeName : file.getConfigurationSection("Configuration.Challenges").getKeys(false)) {
-            String block = file.getString("Configuration.Challenges." + challengeName + ".Block");
-            String blockOnPlaced = file.getString("Configuration.Challenges." + challengeName + ".BlockOnPlaced");
-            String typeChallenge = file.getString("Configuration.Challenges." + challengeName + ".TypeChallenge");
-            ArrayList<String> rewards = (ArrayList<String>) file.getStringList("Configuration.Challenges." + challengeName + ".Rewards");
+        File folder = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges");
+        boolean folderCreate = folder.mkdir();
+        if (folderCreate) {
+            ArrayList<File> files = new ArrayList<>();
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "BlockBreaker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "BlockPlacer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Cooker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Crafter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Consumer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "ExpCollector.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Killer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Breeder.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Feeder.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Shooter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "JumperHorse.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dyer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Raider.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Fisher.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Sprinter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Mover.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Damager.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Sneaker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "ItemBreaker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Absorber.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Harvester.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "EggThrower.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Enchanter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Chatter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "ItemCollector.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "InventoryControl.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "BoatMove.yml"));
+            FileCreator.createAllFiles(files);
+        }
+        for (File fileChallenge : folder.listFiles()) {
+            YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
+            String challengeName = fileChallenge.getName().replace(".yml","");
+            String block = yamlChallenge.getString(challengeName + ".Block");
+            String blockOnPlaced = yamlChallenge.getString(challengeName + ".BlockOnPlaced");
+            String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
+            ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>();
-            file.getStringList("Configuration.Challenges." + challengeName + ".Title").forEach(value -> {
+            yamlChallenge.getStringList(challengeName + ".Title").forEach(value -> {
                 title.add(value);
             });
-            String item = file.getString("Configuration.Challenges." + challengeName + ".Item");
-            String mob = file.getString("Configuration.Challenges." + challengeName + ".Mob");
-            String itemInHand = file.getString("Configuration.Challenges." + challengeName + ".ItemInHand");
-            double force = file.getDouble("Configuration.Challenges." + challengeName + ".Force");
-            double power = file.getDouble("Configuration.Challenges." + challengeName + ".Power");
-            String color = file.getString("Configuration.Challenges." + challengeName + ".Color");
-            String cause = file.getString("Configuration.Challenges." + challengeName + ".Cause");
-            String vehicle = file.getString("Configuration.Challenges." + challengeName + ".Vehicle");
-            int point = file.getInt("Configuration.Challenges." + challengeName + ".Point");
-            int number = file.getInt("Configuration.Challenges." + challengeName + ".Number");
-            int time = file.getInt("Configuration.Challenges." + challengeName + ".Time");
+            String item = yamlChallenge.getString(challengeName + ".Item");
+            String mob = yamlChallenge.getString(challengeName + ".Mob");
+            String itemInHand = yamlChallenge.getString(challengeName + ".ItemInHand");
+            double force = yamlChallenge.getDouble(challengeName + ".Force");
+            double power = yamlChallenge.getDouble(challengeName + ".Power");
+            String color = yamlChallenge.getString(challengeName + ".Color");
+            String cause = yamlChallenge.getString(challengeName + ".Cause");
+            String vehicle = yamlChallenge.getString(challengeName + ".Vehicle");
+            int point = yamlChallenge.getInt(challengeName + ".Point");
+            int number = yamlChallenge.getInt(challengeName + ".Number");
+            int time = yamlChallenge.getInt(challengeName + ".Time");
             int pointsBoost = 0;
             int multiplier = 1;
             int minutes = 0;
-            if (file.getBoolean("Configuration.Challenges." + challengeName + ".Boost.Enabled")) {
-                pointsBoost = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Points");
-                multiplier = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Multiplier");
-                minutes = file.getInt("Configuration.Challenges." + challengeName + ".Boost.Minutes");
+            if (yamlChallenge.getBoolean(challengeName + ".Boost.Enabled")) {
+                pointsBoost = yamlChallenge.getInt(challengeName + ".Boost.Multiplier");
+                minutes = yamlChallenge.getInt(challengeName + ".Boost.Minutes");
             }
-            String sneaking = file.getString("Configuration.Challenges."+challengeName+".Sneaking");
+            String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
             Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time, vehicle, sneaking);
             challenges.put(challengeName, challenge);
         }
