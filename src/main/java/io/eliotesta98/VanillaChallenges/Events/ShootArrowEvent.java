@@ -13,6 +13,7 @@ public class ShootArrowEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ShootArrowEvent");
     private double force = Main.dailyChallenge.getForce();
+    private String onGround = Main.dailyChallenge.getOnGround();
     private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -20,35 +21,44 @@ public class ShootArrowEvent implements Listener {
         long tempo = System.currentTimeMillis();
         final String playerName = e.getEntity().getName();
         final double forceShoot = e.getForce();
+        final boolean onGroundPlayer = e.getEntity().isOnGround();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 if (debugActive) {
                     debugUtils.addLine("ShootArrowEvent PlayerShooting= " + playerName);
+                    debugUtils.addLine("ShootArrowEvent ForceShootByPlayer= " + forceShoot);
+                    debugUtils.addLine("ShootArrowEvent ForceShootConfig= " + force);
+                    debugUtils.addLine("ShootArrowEvent OnGroundConfig= " + onGround);
+                    debugUtils.addLine("ShootArrowEvent OnGroundPlayer= " + onGroundPlayer);
                 }
-                if (force == 0.0) {
-                    if (debugActive) {
-                        debugUtils.addLine("ShootArrowEvent Conditions= 0");
-                    }
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (player.getName().equalsIgnoreCase(playerName)) {
+                if (onGround.equalsIgnoreCase("NOBODY")) {
+                    if (force == 0.0) {
+                        Player p = Bukkit.getPlayer(playerName);
+                        if (p != null) {
                             Main.dailyChallenge.increment(playerName, point);
-                            break;
+                        }
+                    } else {
+                        if (forceShoot >= force) {
+                            Player p = Bukkit.getPlayer(playerName);
+                            if (p != null) {
+                                Main.dailyChallenge.increment(playerName, point);
+                            }
                         }
                     }
                 } else {
-                    if (debugActive) {
-                        debugUtils.addLine("ShootArrowEvent ForceShootByPlayer= " + forceShoot);
-                        debugUtils.addLine("ShootArrowEvent ForceShootConfig= " + force);
-                    }
-                    if (forceShoot >= force) {
-                        if (debugActive) {
-                            debugUtils.addLine("ShootArrowEvent Conditions= 1");
-                        }
-                        for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (player.getName().equalsIgnoreCase(playerName)) {
+                    if (onGroundPlayer == onGround.equalsIgnoreCase("true")) {
+                        if (force == 0.0) {
+                            Player p = Bukkit.getPlayer(playerName);
+                            if (p != null) {
                                 Main.dailyChallenge.increment(playerName, point);
-                                break;
+                            }
+                        } else {
+                            if (forceShoot >= force) {
+                                Player p = Bukkit.getPlayer(playerName);
+                                if (p != null) {
+                                    Main.dailyChallenge.increment(playerName, point);
+                                }
                             }
                         }
                     }

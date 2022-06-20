@@ -65,7 +65,9 @@ Message:
   pointsEveryMinutes: '&7You collect &b{points}&7 points in &e{minutes}&7 minutes'
   challengeReward: '&7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
   boostMessage: '&5Start boosting!&7 You have &bx{number}&7 points for &e{minutes}&7 minutes'
+  boostMessageSinglePlayer: '&5Start personal boosting!&7Only you have &bx{number}&7 points for &e{minutes}&7 minutes'
   pointsRemainForBoosting: '&7Remain &b{points}&7 points for start next boost!'
+  pointsRemainForBoostingSinglePlayer: '&7Remain &b{points}&7 points for start next personal boost!'
   chatWord: '&7Write this word for receive &b{points}&7 points: &5{word}'
   correctAnswer: '&e{player} &7write the correct answer!'
   pointsadd: '&b{points} &7points added at &e{player}'
@@ -132,6 +134,8 @@ Debug:
   Inventory: false
   # Vehicle Move Challenge Event debug
   VehicleMoveEvent: false
+  # Jump Challenge Event debug
+  JumpEvent: false
   # Enabled debug
   Enabled: false
   # Disabled debug

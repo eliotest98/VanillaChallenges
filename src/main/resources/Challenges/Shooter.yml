@@ -4,15 +4,26 @@ Shooter:
   Force: 1.0
   # How many points you want give at shoot?
   Point: 1
+  # if you want player is on ground or not 'NOBODY' for disable
+  OnGround: 'NOBODY'
   # if you want a multiplier based on all players
   Boost:
     Enabled: false
-    #Number you want reached for give the multiplier
+    # Number you want reached for give the multiplier
     Points: 10000
     # Multiplier you want give when reached the number
     Multiplier: 2
     # For how many minutes you want give the multiplier?
     Minutes: 10
+  # if you want a multiplier based on a single player
+  BoostPlayer:
+    Enabled: false
+    # Number you want reached for give the multiplier
+    Points: 5000
+    # Multiplier you want give when reached the number
+    Multiplier: 4
+    # For how many minutes you want give the multiplier?
+    Minutes: 2
   # Title challenge
   Title:
     - '&8'

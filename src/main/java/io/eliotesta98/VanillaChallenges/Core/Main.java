@@ -95,7 +95,7 @@ public class Main extends JavaPlugin {
             configname = "config.yml";
 
             //esempio
-            String splits = "Configuration.Challenges:bho";
+            String splits = "bho";
             String[] strings = splits.split(":");
             cfg.syncWithConfig(configFile, this.getResource(configname), strings);
         } catch (IOException e) {
@@ -182,6 +182,8 @@ public class Main extends JavaPlugin {
             new InventoryCheck();
         } else if (typeChallenge.equalsIgnoreCase("VehicleMoveChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new VehicleMoveEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("JumpChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new JumpEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }

@@ -62,6 +62,7 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "Feeder.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "Shooter.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "JumperHorse.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Jumper.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dyer.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "Raider.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "Fisher.yml"));
@@ -82,7 +83,7 @@ public class ConfigGestion {
         }
         for (File fileChallenge : folder.listFiles()) {
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
-            String challengeName = fileChallenge.getName().replace(".yml","");
+            String challengeName = fileChallenge.getName().replace(".yml", "");
             String block = yamlChallenge.getString(challengeName + ".Block");
             String blockOnPlaced = yamlChallenge.getString(challengeName + ".BlockOnPlaced");
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
@@ -106,11 +107,21 @@ public class ConfigGestion {
             int multiplier = 1;
             int minutes = 0;
             if (yamlChallenge.getBoolean(challengeName + ".Boost.Enabled")) {
-                pointsBoost = yamlChallenge.getInt(challengeName + ".Boost.Multiplier");
+                pointsBoost = yamlChallenge.getInt(challengeName + ".Boost.Points");
+                multiplier = yamlChallenge.getInt(challengeName + ".Boost.Multiplier");
                 minutes = yamlChallenge.getInt(challengeName + ".Boost.Minutes");
             }
+            int pointsBoostSinglePlayer = 0;
+            int multiplierSinglePlayer = 1;
+            int minutesSinglePlayer = 0;
+            if (yamlChallenge.getBoolean(challengeName + ".BoostPlayer.Enabled")) {
+                pointsBoostSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Points");
+                multiplierSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Multiplier");
+                minutesSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Minutes");
+            }
             String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time, vehicle, sneaking);
+            String onGround = yamlChallenge.getString(challengeName + ".OnGround");
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time, vehicle, sneaking,onGround,pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");

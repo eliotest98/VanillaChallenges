@@ -13,6 +13,15 @@ Breeder:
     Multiplier: 2
     # For how many minutes you want give the multiplier?
     Minutes: 10
+  # if you want a multiplier based on a single player
+  BoostPlayer:
+    Enabled: false
+    # Number you want reached for give the multiplier
+    Points: 5000
+    # Multiplier you want give when reached the number
+    Multiplier: 4
+    # For how many minutes you want give the multiplier?
+    Minutes: 2
   # Title challenge
   Title:
     - '&8'

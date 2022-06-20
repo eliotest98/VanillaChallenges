@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Events;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -15,7 +16,7 @@ public class KillMobEvent implements Listener {
     private int point = Main.dailyChallenge.getPoint();
     private String sneaking = Main.dailyChallenge.getSneaking();
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onKillEvent(org.bukkit.event.entity.EntityDeathEvent e) {
         long tempo = System.currentTimeMillis();
         String pName = "";
@@ -34,6 +35,7 @@ public class KillMobEvent implements Listener {
         final String playerName = pName;
         final String mobKilled = e.getEntity().getName();
         boolean finalSneakingPlayer = sneakingPlayer;
+        e
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
