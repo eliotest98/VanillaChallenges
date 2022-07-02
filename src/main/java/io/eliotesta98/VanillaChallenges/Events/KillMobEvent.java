@@ -35,7 +35,6 @@ public class KillMobEvent implements Listener {
         final String playerName = pName;
         final String mobKilled = e.getEntity().getName();
         boolean finalSneakingPlayer = sneakingPlayer;
-        e
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {

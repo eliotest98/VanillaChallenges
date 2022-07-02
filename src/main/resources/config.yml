@@ -50,6 +50,7 @@ Message:
   commandVcClear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
   commandVcChallenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
   commandVcEconomyChallenge: '   &e/vc &6<add|remove> <playername> <points> &7for add or remove points of a player'
+  commandVcReward: '   &e/vc &6<reward> &7for receive reward of win'
 
   errorYouAreNotAPlayer: '&cYou are not a player'
   errorCommandNotFound: '&cCommand not found'

@@ -538,7 +538,9 @@ public class Challenge {
                     tasksSinglePlayers.remove(playerName);
                 }
                 Player p = Bukkit.getPlayer(playerName);
-                p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("boostMessageSinglePlayer").replace("{number}", multiplierSinglePlayer + "").replace("{minutes}", number + "")));
+                if(p != null) {
+                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("boostMessageSinglePlayer").replace("{number}", multiplierSinglePlayer + "").replace("{minutes}", number + "")));
+                }
             }
         }, 0, timeNumber);
         tasksSinglePlayers.put(playerName, boostSingleTask);

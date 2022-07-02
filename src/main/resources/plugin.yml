@@ -33,3 +33,6 @@ permissions:
   vc.challenge.command:
     description: for /vc challenge
     deafult: op
+  vc.reward.command:
+    description: for /vc reward
+    default: op
