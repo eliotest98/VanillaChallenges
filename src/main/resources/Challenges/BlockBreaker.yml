@@ -39,5 +39,6 @@ BlockBreaker:
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TOTEM_OF_UNDYING 1
   Rewards:
     - 'TOTEM_OF_UNDYING:1'

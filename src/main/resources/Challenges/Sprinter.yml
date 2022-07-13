@@ -2,6 +2,10 @@ Sprinter:
   TypeChallenge: 'SprintChallenge'
   # How many points you want give at sprinting?
   Point: 1
+  # Block you want step on for challenge, if you want all blocks write ALL
+  Block: ALL
+  # Item you want checked in hand (ALL for all items)
+  Item: ALL
   # if you want a multiplier based on all players
   Boost:
     Enabled: false

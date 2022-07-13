@@ -16,27 +16,81 @@ public class SprintEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SprintEvent");
     private HashMap<String, Boolean> players = new HashMap<String, Boolean>();
     private HashMap<String, Double> distances = new HashMap<String, Double>();
+    private String block = Main.dailyChallenge.getBlock();
+    private String item = Main.dailyChallenge.getItem();
     private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSprint(org.bukkit.event.player.PlayerToggleSprintEvent e) {
         long tempo = System.currentTimeMillis();
+        final String blockWalk = e.getPlayer().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
+        final String itemInHand = e.getPlayer().getItemInHand().getType().toString();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 if (debugActive) {
                     debugUtils.addLine("SprintEvent ToggledSprintPlayer= " + e.getPlayer().getName());
+                    debugUtils.addLine("SprintEvent BlockStepOnPlayer= " + blockWalk);
+                    debugUtils.addLine("SprintEvent BlockStepOnConfig= " + block);
+                    debugUtils.addLine("SprintEvent ItemInHandConfig= " + item);
+                    debugUtils.addLine("SprintEvent ItemInHandPlayer= " + itemInHand);
                 }
-                if (players.get(e.getPlayer().getName()) != null) {
-                    boolean sprint = players.get(e.getPlayer().getName());
-                    if (sprint) {
-                        players.replace(e.getPlayer().getName(), false);
+                if (item.equalsIgnoreCase("ALL")) {
+                    if (block.equalsIgnoreCase("ALL")) {
+                        if (players.get(e.getPlayer().getName()) != null) {
+                            boolean sprint = players.get(e.getPlayer().getName());
+                            if (sprint) {
+                                players.replace(e.getPlayer().getName(), false);
+                            } else {
+                                players.replace(e.getPlayer().getName(), true);
+                            }
+                        } else {
+                            players.put(e.getPlayer().getName(), true);
+                        }
                     } else {
-                        players.replace(e.getPlayer().getName(), true);
+                        if (block.equalsIgnoreCase(blockWalk)) {
+                            if (players.get(e.getPlayer().getName()) != null) {
+                                boolean sprint = players.get(e.getPlayer().getName());
+                                if (sprint) {
+                                    players.replace(e.getPlayer().getName(), false);
+                                } else {
+                                    players.replace(e.getPlayer().getName(), true);
+                                }
+                            } else {
+                                players.put(e.getPlayer().getName(), true);
+                            }
+                        }
                     }
                 } else {
-                    players.put(e.getPlayer().getName(), true);
+                    if (item.equalsIgnoreCase(itemInHand)) {
+                        if (block.equalsIgnoreCase("ALL")) {
+                            if (players.get(e.getPlayer().getName()) != null) {
+                                boolean sprint = players.get(e.getPlayer().getName());
+                                if (sprint) {
+                                    players.replace(e.getPlayer().getName(), false);
+                                } else {
+                                    players.replace(e.getPlayer().getName(), true);
+                                }
+                            } else {
+                                players.put(e.getPlayer().getName(), true);
+                            }
+                        } else {
+                            if (block.equalsIgnoreCase(blockWalk)) {
+                                if (players.get(e.getPlayer().getName()) != null) {
+                                    boolean sprint = players.get(e.getPlayer().getName());
+                                    if (sprint) {
+                                        players.replace(e.getPlayer().getName(), false);
+                                    } else {
+                                        players.replace(e.getPlayer().getName(), true);
+                                    }
+                                } else {
+                                    players.put(e.getPlayer().getName(), true);
+                                }
+                            }
+                        }
+                    }
                 }
+
                 if (debugActive) {
                     debugUtils.addLine("SprintEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("SprintEvent");
