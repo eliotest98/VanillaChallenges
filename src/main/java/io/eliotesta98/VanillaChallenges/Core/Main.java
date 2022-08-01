@@ -184,6 +184,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new VehicleMoveEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("JumpChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new JumpEvent(), this);
+        } else if(typeChallenge.equalsIgnoreCase("DyerChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new DyeEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }

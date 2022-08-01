@@ -1,25 +1,21 @@
 Dyer:
-  TypeChallenge: 'ColorSheepChallenge'
-  # Color you want to use for challenge, if you want all colors write ALL
-  Color: ALL
-  # Able or disable Sneak when place Es. true or false or NOBODY
-  Sneaking: 'NOBODY'
-  # How many points you want give at coloring?
+  TypeChallenge: 'DyerChallenge'
+  # How many points you want give at death?
   Point: 1
   # if you want a multiplier based on all players
   Boost:
     Enabled: false
     #Number you want reached for give the multiplier
-    Points: 5000
+    Points: 1000
     # Multiplier you want give when reached the number
-    Multiplier: 3
+    Multiplier: 2
     # For how many minutes you want give the multiplier?
     Minutes: 10
   # if you want a multiplier based on a single player
   BoostPlayer:
     Enabled: false
     # Number you want reached for give the multiplier
-    Points: 5000
+    Points: 20
     # Multiplier you want give when reached the number
     Multiplier: 4
     # For how many minutes you want give the multiplier?
@@ -28,14 +24,15 @@ Dyer:
   Title:
     - '&8'
     - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Color Sheep Challenge'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Dye Challenge'
     - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Color a Sheep with dye for receive 1 point'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Dye for receive points'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉             &7(1 point for 1 death)'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
     - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
   Rewards:
-    - 'TOTEM_OF_UNDYING:1'
+    - 'TNT:32'

@@ -137,6 +137,8 @@ Debug:
   VehicleMoveEvent: false
   # Jump Challenge Event debug
   JumpEvent: false
+  # Dye Challenge Event debug
+  DyeEvent: false
   # Enabled debug
   Enabled: false
   # Disabled debug

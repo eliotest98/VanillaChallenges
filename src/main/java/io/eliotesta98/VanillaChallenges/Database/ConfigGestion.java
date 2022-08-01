@@ -79,6 +79,7 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "ItemCollector.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "InventoryControl.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "BoatMove.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dyer.yml"));
             FileCreator.createAllFiles(files);
         }
         for (File fileChallenge : folder.listFiles()) {

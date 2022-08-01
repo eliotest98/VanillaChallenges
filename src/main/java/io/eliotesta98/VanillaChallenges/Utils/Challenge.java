@@ -275,7 +275,7 @@ public class Challenge {
             @Override
             public void run() {
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
-                HashMap<String, Long> copyMap = new HashMap<String, Long>(Collections.synchronizedMap(players));
+                HashMap<String, Long> copyMap = new HashMap<String, Long>(players);
                 for (Map.Entry<String, Long> player : copyMap.entrySet()) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
