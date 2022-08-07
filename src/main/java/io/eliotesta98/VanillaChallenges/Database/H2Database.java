@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -48,7 +49,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS TopYesterday (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS TopYesterday (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `PlayerName` VARCHAR(100) NOT NULL, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -66,13 +67,18 @@ public class H2Database implements Database {
         int count = 1;
         if (challenges.isEmpty()) {
             String nome = "nessuno";
-            for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallenges().entrySet()) {
+            ArrayList<String> keys = new ArrayList<String>(Main.instance.getConfigGestion().getChallenges().keySet());
+            if (Main.instance.getConfigGestion().isRandomChallengeGeneration()) {
+                Collections.shuffle(keys);
+            }
+            for (String key : keys) {
+                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key);
                 if (count == 1) {
-                    Main.dailyChallenge = challenge.getValue();
-                    nome = challenge.getValue().getTypeChallenge();
-                    Main.currentlyChallengeDB = new ChallengeDB(challenge.getKey(), 86400);
+                    Main.dailyChallenge = challenge;
+                    nome = challenge.getTypeChallenge();
+                    Main.currentlyChallengeDB = new ChallengeDB(key, 86400);
                 }
-                H2Database.instance.insertChallenge(challenge.getKey(), 86400);
+                H2Database.instance.insertChallenge(key, 86400);
                 count++;
             }
             return nome;
@@ -166,7 +172,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS TopYesterday (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS TopYesterday (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `PlayerName` VARCHAR(100) NOT NULL, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {

@@ -17,28 +17,53 @@ public class BreedEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBreedAnimals(org.bukkit.event.entity.EntityBreedEvent e) {
         long tempo = System.currentTimeMillis();
+        String playerName = "";
+        if (e.getBreeder() != null) {
+            playerName = e.getBreeder().getName();
+        } else {
+            if (debugActive) {
+                debugUtils.addLine("BreedEvent Breeder= null");
+                debugUtils.addLine("BreedEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("BreedEvent");
+            }
+            return;
+        }
+        final String pName = playerName;
+        final String mobBreeded = e.getEntity().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                if (debugActive) {
+                    debugUtils.addLine("BlockBreakEvent PlayerBreeding= " + pName);
+                }
                 if (mobBreed.equalsIgnoreCase("ALL")) {
-                    if (e.getBreeder() != null) {
-                        Main.dailyChallenge.increment(e.getBreeder().getName(), point);
+                    Main.dailyChallenge.increment(pName, point);
+                    if (debugActive) {
+                        debugUtils.addLine("BreedEvent Conditions= 0");
+                        debugUtils.addLine("BreedEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("BreedEvent");
                     }
+                    return;
                 } else {
-                    if (mobBreed.equalsIgnoreCase(e.getEntity().getName())) {
-                        if (e.getBreeder() != null) {
-                            Main.dailyChallenge.increment(e.getBreeder().getName(), point);
+                    if (debugActive) {
+                        debugUtils.addLine("BreedEvent MobBreedByPlayer= " + mobBreeded);
+                        debugUtils.addLine("BreedEvent MobBreedConfig= " + mobBreed);
+                    }
+                    if (mobBreed.equalsIgnoreCase(mobBreeded)) {
+                        if (debugActive) {
+                            debugUtils.addLine("BreedEvent Conditions= 1");
                         }
+                        Main.dailyChallenge.increment(pName, point);
+                        if (debugActive) {
+                            debugUtils.addLine("BreedEvent execution time= " + (System.currentTimeMillis() - tempo));
+                            debugUtils.debug("BreedEvent");
+                        }
+                        return;
                     }
                 }
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("BreedEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("BreedEvent");
-        }
-        return;
     }
 }
 

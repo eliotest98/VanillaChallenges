@@ -54,12 +54,11 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         if (p == null) {
             return "Player not found";
         }
-
         // %vanillachallenges_points%
-        if (identifier.contains("points")) {
+        if (identifier.equalsIgnoreCase("points")) {
             return MoneyUtils.transform(Main.dailyChallenge.getPointFromPLayerName(p.getName()));
         }
-        // %vanillachallenges_dailychallenge_nome%
+        // %vanillachallenges_dailychallenge_name%
         if (identifier.contains("dailychallenge_name")) {
             return Main.currentlyChallengeDB.getNomeChallenge();
         }
@@ -68,14 +67,14 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
             int timeResume = (Main.currentlyChallengeDB.getTimeResume() / 60) / 60;
             return timeResume + "";
         }
-        // %vanillachallenges_dailychallenge_name_top_#% # = number
-        if (identifier.contains("dailychallenge_name_top_")) {
-            String number = identifier.replace("dailychallenge_name_top_", "");
+        // %vanillachallenges_dailychallenge_top_name_#% # = number
+        if (identifier.contains("dailychallenge_top_name_")) {
+            String number = identifier.replace("dailychallenge_top_name_", "");
             int numberTop = 1;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
-                return "%vanillachallenges_dailychallenge_name_top_" + number + "% is not valid please use a number! Ex: %vanillachallenges_dailychallenge_name_top_1";
+                return "%vanillachallenges_top_name_" + number + "% is not valid please use a number! Ex: %vanillachallenges_dailychallenge_top_name_1%";
             }
             if (numberTop < 1) {
                 numberTop = 1;
@@ -87,40 +86,61 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
                 return top.get(top.size() - 1).getNomePlayer();
             }
         }
-        // %vanillachallenges_dailychallenge_points_top_#% # = number
-        if (identifier.contains("dailychallenge_points_top_")) {
-            String number = identifier.replace("dailychallenge_points_top_", "");
+        // %vanillachallenges_dailychallenge_top_points_#% # = number
+        if (identifier.contains("dailychallenge_top_points_")) {
+            String number = identifier.replace("dailychallenge_top_points_", "");
             int numberTop = 1;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
-                return "%vanillachallenges_dailychallenge_points_top_" + number + "% is not valid please use a number! Ex: %vanillachallenges_dailychallenge_points_top_1";
+                return "%vanillachallenges_dailychallenge_top_points_" + number + "% is not valid please use a number! Ex: %vanillachallenges_dailychallenge_top_points_1%";
             }
             if (numberTop < 1) {
                 numberTop = 1;
             }
             ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(numberTop);
             if (top.size() >= numberTop) {
-                return top.get(numberTop - 1).getPoints() + "";
+                return MoneyUtils.transform(top.get(numberTop - 1).getPoints());
             } else {
-                return top.get(top.size() - 1).getPoints() + "";
+                return MoneyUtils.transform(top.get(top.size() - 1).getPoints());
             }
         }
-        // %vanillachallenges_dailychallenge_multiplier%
-        if (identifier.contains("dailychallenge_multiplier")) {
+        // %vanillachallenges_dailychallenge_boost_multiplier%
+        if (identifier.equalsIgnoreCase("dailychallenge_boost_multiplier")) {
             if (Main.dailyChallenge.isActive()) {
                 return Main.dailyChallenge.getMultiplier() + "";
             } else {
                 return 1 + "";
             }
         }
-        // %vanillachallenges_dailychallenge_pointsremain%
-        if (identifier.contains("dailychallenge_pointsremain")) {
-            if (Main.dailyChallenge.isActive()) {
+        // %vanillachallenges_dailychallenge_boost_points_remain%
+        if (identifier.equalsIgnoreCase("dailychallenge_boost_points_remain")) {
+            if (!Main.dailyChallenge.isActive()) {
                 long pointsRemain = Main.dailyChallenge.getPointsBoost() - Main.dailyChallenge.getCountPointsChallenge();
                 return pointsRemain + "";
             } else {
-                return "disabled";
+                return Main.dailyChallenge.getPointsBoost() + "";
+            }
+        }
+        // %vanillachallenges_dailychallenge_boost_multiplier_single_player%
+        if (identifier.contains("dailychallenge_boost_multiplier_single_player")) {
+            if (Main.dailyChallenge.isActiveSingleBoost(p.getName())) {
+                return Main.dailyChallenge.getMultiplierSinglePlayer() + "";
+            } else {
+                return 1 + "";
+            }
+        }
+        // %vanillachallenges_dailychallenge_boost_points_remain_single_player%
+        if (identifier.contains("dailychallenge_boost_points_remain_single_player")) {
+            if (!Main.dailyChallenge.isActiveSingleBoost(p.getName())) {
+                if(Main.dailyChallenge.getBoostSinglePlayers().containsKey(p.getName())) {
+                    long pointsRemain = Main.dailyChallenge.getBoostSinglePlayers().get(p.getName());
+                    return pointsRemain + "";
+                } else {
+                    return Main.dailyChallenge.getPointsBoostSinglePlayer() + "";
+                }
+            } else {
+                return Main.dailyChallenge.getPointsBoostSinglePlayer() + "";
             }
         }
         return "Placeholder Not Found";

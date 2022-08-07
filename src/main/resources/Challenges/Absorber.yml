@@ -1,0 +1,38 @@
+Absorber:
+  TypeChallenge: 'SpongeAbsorbChallenge'
+  # How many points you want give at water source absorbing?
+  Point: 1
+  # if you want a multiplier based on all players
+  Boost:
+    Enabled: false
+    #Number you want reached for give the multiplier
+    Points: 100000
+    # Multiplier you want give when reached the number
+    Multiplier: 2
+    # For how many minutes you want give the multiplier?
+    Minutes: 10
+  # if you want a multiplier based on a single player
+  BoostPlayer:
+    Enabled: false
+    # Number you want reached for give the multiplier
+    Points: 5000
+    # Multiplier you want give when reached the number
+    Multiplier: 4
+    # For how many minutes you want give the multiplier?
+    Minutes: 2
+  # Title challenge
+  Title:
+    - '&8'
+    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Sponge Absorb Challenge'
+    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉  &7Absorb fluids with Sponge for receive points'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉         &7(1 point for 1 water source)'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
+    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8'
+  # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
+  Rewards:
+    - 'TNT:32'

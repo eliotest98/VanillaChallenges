@@ -13,38 +13,63 @@ public class ShootArrowEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ShootArrowEvent");
     private double force = Main.dailyChallenge.getForce();
+    private String onGround = Main.dailyChallenge.getOnGround();
     private int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onShootEvent(org.bukkit.event.entity.EntityShootBowEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getEntity().getName();
+        final double forceShoot = e.getForce();
+        final boolean onGroundPlayer = e.getEntity().isOnGround();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if (force == 0.0) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (player.getName().equalsIgnoreCase(e.getEntity().getName())) {
-                            Main.dailyChallenge.increment(e.getEntity().getName(), point);
-                            break;
+                if (debugActive) {
+                    debugUtils.addLine("ShootArrowEvent PlayerShooting= " + playerName);
+                    debugUtils.addLine("ShootArrowEvent ForceShootByPlayer= " + forceShoot);
+                    debugUtils.addLine("ShootArrowEvent ForceShootConfig= " + force);
+                    debugUtils.addLine("ShootArrowEvent OnGroundConfig= " + onGround);
+                    debugUtils.addLine("ShootArrowEvent OnGroundPlayer= " + onGroundPlayer);
+                }
+                if (onGround.equalsIgnoreCase("NOBODY")) {
+                    if (force == 0.0) {
+                        Player p = Bukkit.getPlayer(playerName);
+                        if (p != null) {
+                            Main.dailyChallenge.increment(playerName, point);
+                        }
+                    } else {
+                        if (forceShoot >= force) {
+                            Player p = Bukkit.getPlayer(playerName);
+                            if (p != null) {
+                                Main.dailyChallenge.increment(playerName, point);
+                            }
                         }
                     }
                 } else {
-                    if (e.getForce() >= force) {
-                        for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (player.getName().equalsIgnoreCase(e.getEntity().getName())) {
-                                Main.dailyChallenge.increment(e.getEntity().getName(), point);
-                                break;
+                    if (onGroundPlayer == onGround.equalsIgnoreCase("true")) {
+                        if (force == 0.0) {
+                            Player p = Bukkit.getPlayer(playerName);
+                            if (p != null) {
+                                Main.dailyChallenge.increment(playerName, point);
+                            }
+                        } else {
+                            if (forceShoot >= force) {
+                                Player p = Bukkit.getPlayer(playerName);
+                                if (p != null) {
+                                    Main.dailyChallenge.increment(playerName, point);
+                                }
                             }
                         }
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("ShootArrowEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ShootArrowEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("ShootArrowEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("ShootArrowEvent");
-        }
-        return;
     }
 }

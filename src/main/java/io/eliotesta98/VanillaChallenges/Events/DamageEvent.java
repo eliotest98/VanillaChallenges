@@ -8,8 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.HashMap;
-
 public class DamageEvent implements Listener {
 
     private DebugUtils debugUtils = new DebugUtils();
@@ -20,28 +18,45 @@ public class DamageEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.entity.EntityDamageEvent e) {
         long tempo = System.currentTimeMillis();
+        final String causePlayer = e.getCause().toString();
+        final String playerName = e.getEntity().getName();
+        final double finalDamage = e.getFinalDamage();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
+                if (debugActive) {
+                    debugUtils.addLine("BlockBreakEvent PlayerDamaging= " + playerName);
+                }
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (e.getEntity().getName().equalsIgnoreCase(player.getName())) {
+                    if (playerName.equalsIgnoreCase(player.getName())) {
                         if (cause.equalsIgnoreCase("ALL")) {
-                            Main.dailyChallenge.increment(e.getEntity().getName(), (long) e.getFinalDamage() * point);
+                            if (debugActive) {
+                                debugUtils.addLine("DamageEvent Conditions= 0");
+                            }
+                            Main.dailyChallenge.increment(playerName, (long) finalDamage * point);
                         } else {
-                            if (cause.equalsIgnoreCase(e.getCause().toString())) {
-                                Main.dailyChallenge.increment(e.getEntity().getName(), (long) e.getFinalDamage() * point);
+                            if (debugActive) {
+                                debugUtils.addLine("DamageEvent CausePlayer= " + causePlayer);
+                                debugUtils.addLine("DamageEvent CauseConfig= " + cause);
+                            }
+                            if (cause.equalsIgnoreCase(causePlayer)) {
+                                if (debugActive) {
+                                    debugUtils.addLine("DamageEvent Conditions= 1");
+                                }
+                                Main.dailyChallenge.increment(playerName, (long) finalDamage * point);
                             }
                         }
+                        break;
                     }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("DamageEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("DamageEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("DamageEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("DamageEvent");
-        }
-        return;
     }
 }
 

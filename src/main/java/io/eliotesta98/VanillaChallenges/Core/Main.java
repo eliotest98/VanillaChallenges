@@ -7,7 +7,9 @@ import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Utils.*;
+
 import java.io.*;
+
 import org.bukkit.*;
 import org.bukkit.command.*;
 
@@ -93,7 +95,7 @@ public class Main extends JavaPlugin {
             configname = "config.yml";
 
             //esempio
-            String splits = "Configuration.Challenges:bho";
+            String splits = "bho";
             String[] strings = splits.split(":");
             cfg.syncWithConfig(configFile, this.getResource(configname), strings);
         } catch (IOException e) {
@@ -176,6 +178,14 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new ChatEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("ItemCollectionChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new ItemCollector(), this);
+        } else if (typeChallenge.equalsIgnoreCase("InventoryConditionChallenge")) {
+            new InventoryCheck();
+        } else if (typeChallenge.equalsIgnoreCase("VehicleMoveChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new VehicleMoveEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("JumpChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new JumpEvent(), this);
+        } else if(typeChallenge.equalsIgnoreCase("DyerChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new DyeEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }
@@ -214,7 +224,10 @@ public class Main extends JavaPlugin {
         if (typeChallenge.equalsIgnoreCase("ChatChallenge")) {
             ChatEvent.stop();
         }
-        if(typeChallenge.equalsIgnoreCase("")) {
+        if (typeChallenge.equalsIgnoreCase("InventoryConditionChallenge")) {
+            InventoryCheck.stop();
+        }
+        if (typeChallenge.equalsIgnoreCase("")) {
             ItemCollector.stop();
         }
         if (getConfigGestion().getHooks().get("PlaceholderAPI")) {

@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class DailyGiveWinners implements Listener {
@@ -52,7 +53,9 @@ public class DailyGiveWinners implements Listener {
                                 }
                             });
                         }
-                        if (e.getPlayer().getInventory().firstEmpty() != -1 && give) {
+                        if (e.getPlayer().getInventory().firstEmpty() != -1
+                                && give
+                                && !reward[0].equalsIgnoreCase("[command]")) {
                             ItemStack item = new ItemStack(Material.getMaterial(reward[0]));
                             item.setAmount(Integer.parseInt(reward[1]));
                             e.getPlayer().sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0])));
@@ -60,6 +63,34 @@ public class DailyGiveWinners implements Listener {
                                 @Override
                                 public void run() {
                                     e.getPlayer().getInventory().addItem(item);
+                                    Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
+                                    winners.remove(number);
+                                }
+                            });
+                        } else {
+                            String[] listCommand = reward[1].split("\\s+");
+                            int amount = 0;
+                            Material material = Material.AIR;
+                            for (int j = 0; j < listCommand.length; j++) {
+                                try {
+                                    amount = Integer.parseInt(listCommand[j]);
+                                } catch (NumberFormatException ex) {
+                                    try {
+                                        material = Material.getMaterial(listCommand[j]);
+                                    } catch (NullPointerException e) {
+
+                                    }
+                                }
+                            }
+                            if (material == Material.AIR || material == null) {
+                                e.getPlayer().sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", amount + "").replace("{item}", "")));
+                            } else {
+                                e.getPlayer().sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", amount + "").replace("{item}", material.toString())));
+                            }
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), reward[1].replace("%player%", e.getPlayer().getName()));
                                     Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
                                     winners.remove(number);
                                 }

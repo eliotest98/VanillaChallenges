@@ -2,50 +2,59 @@ package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
-import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 public class Challenge {
 
     private HashMap<String, Long> players = new HashMap<String, Long>();
     private HashMap<String, Long> min10PlayersPoints = new HashMap<String, Long>();
+    private HashMap<String, Long> boostSinglePlayers = new HashMap<String, Long>();
+    private HashMap<String, Boolean> startBoostSinglePlayers = new HashMap<String, Boolean>();
+    private HashMap<String, BukkitTask> tasksSinglePlayers = new HashMap<String, BukkitTask>();
     private String block = "ALL";
     private String blockOnPlace = "ALL";
     private String typeChallenge = "nessuna";
-    private String reward = "nessuno";
+    private ArrayList<String> rewards = new ArrayList<>();
     private ArrayList<String> title = new ArrayList<>();
     private String item = "ALL";
     private String itemInHand = "ALL";
     private String mob = "ALL";
     private String color = "ALL";
     private String cause = "ALL";
+    private String vehicle = "ALL";
     private double force = 0.0;
     private double power = 0.0;
+    private int number = 0;
+    private int time = 1;
+    private String onGround = "NOBODY";
     // timer del salvataggio punti
-    int number = 20 * 60;
+    int timeNumber = 20 * 60;
     private BukkitTask task, boostingTask;
     int point = 1;
     private int pointsBoost = 0;
     private int multiplier = 1;
     private int minutes = 0;
-    long countPointsChallenge = 0;
-    boolean startBoost = false;
+    private int pointsBoostSinglePlayer = 0;
+    private int multiplierSinglePlayer = 1;
+    private int minutesSinglePlayer = 0;
+    private long countPointsChallenge = 0;
+    private boolean startBoost = false;
+    private String sneaking = "NOBODY";
 
     public Challenge() {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, String reward, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, ArrayList<String> rewards, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes, int number, int time, String vehicle, String sneaking, String onGround, int pointsBoostSinglePlayer, int multiplierSinglePlayer, int minutesSinglePlayer) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
-        this.reward = reward;
+        this.rewards = rewards;
         this.title = title;
         this.item = item;
         this.itemInHand = itemInHand;
@@ -58,6 +67,46 @@ public class Challenge {
         this.pointsBoost = pointsBoost;
         this.multiplier = multiplier;
         this.minutes = minutes;
+        this.number = number;
+        this.time = time;
+        this.vehicle = vehicle;
+        this.sneaking = sneaking;
+        this.onGround = onGround;
+        this.pointsBoostSinglePlayer = pointsBoostSinglePlayer;
+        this.minutesSinglePlayer = minutesSinglePlayer;
+        this.multiplierSinglePlayer = multiplierSinglePlayer;
+    }
+
+    public HashMap<String, Long> getBoostSinglePlayers() {
+        return boostSinglePlayers;
+    }
+
+    public void setBoostSinglePlayers(HashMap<String, Long> boostSinglePlayers) {
+        this.boostSinglePlayers = boostSinglePlayers;
+    }
+
+    public int getPointsBoostSinglePlayer() {
+        return pointsBoostSinglePlayer;
+    }
+
+    public void setPointsBoostSinglePlayer(int pointsBoostSinglePlayer) {
+        this.pointsBoostSinglePlayer = pointsBoostSinglePlayer;
+    }
+
+    public int getMultiplierSinglePlayer() {
+        return multiplierSinglePlayer;
+    }
+
+    public void setMultiplierSinglePlayer(int multiplierSinglePlayer) {
+        this.multiplierSinglePlayer = multiplierSinglePlayer;
+    }
+
+    public int getMinutesSinglePlayer() {
+        return minutesSinglePlayer;
+    }
+
+    public void setMinutesSinglePlayer(int minutesSinglePlayer) {
+        this.minutesSinglePlayer = minutesSinglePlayer;
     }
 
     public HashMap<String, Long> getMin10PlayersPoints() {
@@ -143,17 +192,42 @@ public class Challenge {
         this.point = point;
     }
 
+    public void incrementCommands(String playerName, long amount) {
+        if (!players.containsKey(playerName)) {
+            players.put(playerName, amount);
+        } else {
+            players.replace(playerName, players.get(playerName) + amount);
+        }
+    }
+
     public void increment(String playerName, long amount) {
-        if (startBoost) {
-            if (!players.containsKey(playerName)) {
-                players.put(playerName, amount * multiplier);
-            } else {
-                players.replace(playerName, players.get(playerName) + (amount * multiplier));
+        if (!startBoostSinglePlayers.containsKey(playerName)) {
+            startBoostSinglePlayers.put(playerName, false);
+        }
+        if (startBoost || startBoostSinglePlayers.get(playerName)) {
+            if (startBoost) {
+                if (!players.containsKey(playerName)) {
+                    players.put(playerName, amount * multiplier);
+                } else {
+                    players.replace(playerName, players.get(playerName) + (amount * multiplier));
+                }
+                if (!min10PlayersPoints.containsKey(playerName)) {
+                    min10PlayersPoints.put(playerName, amount * multiplier);
+                } else {
+                    min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + (amount * multiplier));
+                }
             }
-            if (!min10PlayersPoints.containsKey(playerName)) {
-                min10PlayersPoints.put(playerName, amount * multiplier);
-            } else {
-                min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + (amount * multiplier));
+            if (startBoostSinglePlayers.get(playerName)) {
+                if (!players.containsKey(playerName)) {
+                    players.put(playerName, amount * multiplierSinglePlayer);
+                } else {
+                    players.replace(playerName, players.get(playerName) + (amount * multiplierSinglePlayer));
+                }
+                if (!min10PlayersPoints.containsKey(playerName)) {
+                    min10PlayersPoints.put(playerName, amount * multiplierSinglePlayer);
+                } else {
+                    min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + (amount * multiplierSinglePlayer));
+                }
             }
         } else {
             countPointsChallenge = countPointsChallenge + amount;
@@ -167,7 +241,13 @@ public class Challenge {
             } else {
                 min10PlayersPoints.replace(playerName, min10PlayersPoints.get(playerName) + amount);
             }
+            if (!boostSinglePlayers.containsKey(playerName)) {
+                boostSinglePlayers.put(playerName, amount);
+            } else {
+                boostSinglePlayers.replace(playerName, boostSinglePlayers.get(playerName) + amount);
+            }
             checkPointsMultiplier();
+            checkPointsMultiplierSinglePlayer(playerName);
         }
     }
 
@@ -178,6 +258,11 @@ public class Challenge {
         }
         players.clear();
         min10PlayersPoints.clear();
+        boostSinglePlayers.clear();
+        startBoostSinglePlayers.clear();
+        for (Map.Entry<String, BukkitTask> task : tasksSinglePlayers.entrySet()) {
+            task.getValue().cancel();
+        }
     }
 
     public void stampaNumero(String playerName) {
@@ -190,7 +275,8 @@ public class Challenge {
             @Override
             public void run() {
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
-                for (Map.Entry<String, Long> player : players.entrySet()) {
+                HashMap<String, Long> copyMap = new HashMap<String, Long>(players);
+                for (Map.Entry<String, Long> player : copyMap.entrySet()) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {
@@ -201,26 +287,18 @@ public class Challenge {
                                     Main.db.insertChallenger(player.getKey(), player.getValue());
                                 }
                             } catch (Exception ex) {
-                                Bukkit.getServer().getConsoleSender().sendMessage(ex.getMessage());
+                                Bukkit.getServer().getConsoleSender().sendMessage("Save Points Runtime: " + ex.getMessage());
                                 return;
                             }
                         }
                     });
-                }
-                ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
-                while (!topPlayers.isEmpty()) {
-                    DailyWinner dailyWinner = new DailyWinner();
-                    dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
-                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
-                    dailyWinner.setReward(Main.dailyChallenge.getReward());
-                    topPlayers.remove(0);
                 }
                 if (startBoost && (boostingTask == null || boostingTask.isCancelled())) {
                     startBoosting();
                 }
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
             }
-        }, 0, number);
+        }, 0, timeNumber);
     }
 
     public void stopTask() {
@@ -239,39 +317,44 @@ public class Challenge {
         }
     }
 
-    public String getReward() {
-        return reward;
+    public ArrayList<String> getRewards() {
+        return rewards;
     }
 
-    public void setReward(String reward) {
-        this.reward = reward;
+    public void setRewards(ArrayList<String> rewards) {
+        this.rewards = rewards;
     }
 
     public ArrayList<Challenger> getTopPlayers(int numberOfTops) {
         ArrayList<Challenger> topList = new ArrayList<>();
-        for (int i = 0; i < numberOfTops; i++) {
-            Challenger challenger = new Challenger();
-            for (Map.Entry<String, Long> player : players.entrySet()) {
-                if (player.getValue() > challenger.getPoints()) {
-                    boolean trovato = false;
-                    for (int x = 0; x < topList.size(); x++) {
-                        if (topList.get(x).getNomePlayer().equalsIgnoreCase(player.getKey())) {
-                            trovato = true;
-                            break;
+        try {
+            for (int i = 0; i < numberOfTops; i++) {
+                Challenger challenger = new Challenger();
+                for (Map.Entry<String, Long> player : players.entrySet()) {
+                    if (player.getValue() > challenger.getPoints()) {
+                        boolean trovato = false;
+                        for (int x = 0; x < topList.size(); x++) {
+                            if (topList.get(x).getNomePlayer().equalsIgnoreCase(player.getKey())) {
+                                trovato = true;
+                                break;
+                            }
+                        }
+                        if (!trovato) {
+                            challenger = new Challenger(player.getKey(), player.getValue());
                         }
                     }
-                    if (!trovato) {
-                        challenger = new Challenger(player.getKey(), player.getValue());
-                    }
+                }
+                if (!challenger.getNomePlayer().equalsIgnoreCase("Notch")) {
+                    topList.add(challenger);
+                } else {
+                    break;
                 }
             }
-            if (!challenger.getNomePlayer().equalsIgnoreCase("Notch")) {
-                topList.add(challenger);
-            } else {
-                break;
-            }
+            return topList;
+        } catch (Exception ex) {
+            Bukkit.getServer().getConsoleSender().sendMessage("Top Players: " + ex.getMessage());
+            return topList;
         }
-        return topList;
     }
 
     public ArrayList<String> getTitle() {
@@ -334,6 +417,14 @@ public class Challenge {
         return startBoost || minutes == 0 || multiplier == 1 || pointsBoost == 0;
     }
 
+    public boolean isActiveSingleBoost(String playerName) {
+        if (startBoostSinglePlayers.containsKey(playerName)) {
+            return startBoostSinglePlayers.get(playerName);
+        } else {
+            return minutesSinglePlayer == 0 || multiplierSinglePlayer == 1 || pointsBoostSinglePlayer == 0;
+        }
+    }
+
     public void setStartBoost(boolean startBoost) {
         this.startBoost = startBoost;
     }
@@ -342,8 +433,56 @@ public class Challenge {
         return countPointsChallenge;
     }
 
+    public long getCountPointsChallengeSinglePlayer(String playerName) {
+        if (boostSinglePlayers.containsKey(playerName)) {
+            return boostSinglePlayers.get(playerName);
+        } else {
+            return 0;
+        }
+    }
+
     public void setCountPointsChallenge(long countPointsChallenge) {
         this.countPointsChallenge = countPointsChallenge;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public String getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public String getSneaking() {
+        return sneaking;
+    }
+
+    public void setSneaking(String sneaking) {
+        this.sneaking = sneaking;
+    }
+
+    public String getOnGround() {
+        return onGround;
+    }
+
+    public void setOnGround(String onGround) {
+        this.onGround = onGround;
     }
 
     @Override
@@ -354,7 +493,7 @@ public class Challenge {
                 ", block='" + block + '\'' +
                 ", blockOnPlace='" + blockOnPlace + '\'' +
                 ", typeChallenge='" + typeChallenge + '\'' +
-                ", reward='" + reward + '\'' +
+                ", reward='" + rewards + '\'' +
                 ", title=" + title +
                 ", item='" + item + '\'' +
                 ", itemInHand='" + itemInHand + '\'' +
@@ -363,7 +502,7 @@ public class Challenge {
                 ", cause='" + cause + '\'' +
                 ", force=" + force +
                 ", power=" + power +
-                ", number=" + number +
+                ", timeNumber=" + timeNumber +
                 ", task=" + task +
                 ", boostingTask=" + boostingTask +
                 ", point=" + point +
@@ -375,11 +514,43 @@ public class Challenge {
                 '}';
     }
 
+    private void checkPointsMultiplierSinglePlayer(String playerName) {
+        if (minutesSinglePlayer == 0 && multiplierSinglePlayer == 1 && pointsBoostSinglePlayer == 0) {
+            return;
+        }
+        if (boostSinglePlayers.get(playerName) >= pointsBoostSinglePlayer) {
+            boostSinglePlayers.remove(playerName);
+            startBoostSinglePlayers.replace(playerName, startBoostSinglePlayers.get(playerName), !startBoostSinglePlayers.get(playerName));
+            startBoostingSinglePlayer(playerName);
+        }
+    }
+
+    private void startBoostingSinglePlayer(String playerName) {
+        BukkitTask boostSingleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
+            int number = minutesSinglePlayer;
+
+            @Override
+            public void run() {
+                number--;
+                if (number == 0) {
+                    startBoostSinglePlayers.remove(playerName);
+                    tasksSinglePlayers.get(playerName).cancel();
+                    tasksSinglePlayers.remove(playerName);
+                }
+                Player p = Bukkit.getPlayer(playerName);
+                if(p != null) {
+                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("boostMessageSinglePlayer").replace("{number}", multiplierSinglePlayer + "").replace("{minutes}", number + "")));
+                }
+            }
+        }, 0, timeNumber);
+        tasksSinglePlayers.put(playerName, boostSingleTask);
+    }
+
     private void checkPointsMultiplier() {
         if (minutes == 0 && multiplier == 1 && pointsBoost == 0) {
             return;
         }
-        if (countPointsChallenge > pointsBoost && !startBoost) {
+        if (countPointsChallenge >= pointsBoost && !startBoost) {
             countPointsChallenge = countPointsChallenge - pointsBoost;
             startBoost = true;
         }
@@ -400,6 +571,6 @@ public class Challenge {
                     p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("boostMessage").replace("{number}", multiplier + "").replace("{minutes}", number + "")));
                 }
             }
-        }, 0, number);
+        }, 0, timeNumber);
     }
 }

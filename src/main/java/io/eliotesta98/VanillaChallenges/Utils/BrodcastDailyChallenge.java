@@ -18,6 +18,7 @@ public class BrodcastDailyChallenge {
     private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("actuallyInTop");
     private final String pointsEveryMinutes = Main.instance.getConfigGestion().getMessages().get("pointsEveryMinutes");
     private final String pointsRemainForBoosting = Main.instance.getConfigGestion().getMessages().get("pointsRemainForBoosting");
+    private final String pointsRemainForBoostingSinglePlayer = Main.instance.getConfigGestion().getMessages().get("pointsRemainForBoostingSinglePlayer");
 
     public void start(long time) {
         execute(time);
@@ -38,7 +39,7 @@ public class BrodcastDailyChallenge {
                         p.sendMessage(ColorUtils.applyColor(brodcastMessageTitle.get(i).replace("{hours}", timeResume + "")));
                     }
                     ArrayList<Challenger> top;
-                    if(!Main.instance.getConfigGestion().isYesterdayTop()) {
+                    if (!Main.instance.getConfigGestion().isYesterdayTop()) {
                         top = Main.dailyChallenge.getTopPlayers(3);
                     } else {
                         top = Main.db.getAllChallengersTopYesterday();
@@ -59,6 +60,10 @@ public class BrodcastDailyChallenge {
                     if (!Main.dailyChallenge.isActive()) {
                         long pointsRemain = Main.dailyChallenge.getPointsBoost() - Main.dailyChallenge.getCountPointsChallenge();
                         p.sendMessage(ColorUtils.applyColor(pointsRemainForBoosting.replace("{points}", pointsRemain + "")));
+                    }
+                    if (!Main.dailyChallenge.isActiveSingleBoost(p.getName())) {
+                        long pointsRemain = Main.dailyChallenge.getPointsBoostSinglePlayer() - Main.dailyChallenge.getCountPointsChallengeSinglePlayer(p.getName());
+                        p.sendMessage(ColorUtils.applyColor(pointsRemainForBoostingSinglePlayer.replace("{points}", pointsRemain + "")));
                     }
                 }
                 Main.dailyChallenge.getMin10PlayersPoints().clear();

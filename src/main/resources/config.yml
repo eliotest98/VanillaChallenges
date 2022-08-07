@@ -6,757 +6,11 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #   
 
 Configuration:
-  # Example Challenge 1.8:
-  #     Shooter:
-  #      TypeChallenge: 'ShootChallenge'
-  #      # Force you want to apply for shoot arrow in challenge, if you want to disable use 0.0
-  #      Force: 1.0
-  #      # How many points you want give at shoot?
-  #      Point: 1
-  #      # if you want a multiplier based on all players
-  #      Boost:
-  #        Enabled: false
-  #        #Number you want reached for give the multiplier
-  #        Points: 10000
-  #        # Multiplier you want give when reached the number
-  #        Multiplier: 2
-  #        # For how many minutes you want give the multiplier?
-  #        Minutes: 10
-  #      # Title challenge
-  #      Title:
-  #      - '&8'
-  #      - "&8\u2589\u2589&b\u2589\u2589\u2589&8\u2589\u2589\u2589&b\u2589\u2589"
-  #      - "&8\u2589&b\u2589\u2589&8\u2589\u2589\u2589\u2589&b\u2589\u2589\u2589    \
-  #        \          &7Shoot Challenge"
-  #      - "&b\u2589\u2589&6\u2589&8\u2589\u2589\u2589&b\u2589\u2589\u2589&8\u2589"
-  #      - "&b\u2589&8\u2589\u2589&6\u2589&8\u2589&b\u2589\u2589\u2589&8\u2589\u2589\
-  #        &7Shoot a arrow at max power for receive 1 point"
-  #      - "&b\u2589&8\u2589\u2589\u2589&6\u2589\u2589&b\u2589&8\u2589\u2589\u2589  \
-  #        \  &7{hours} hours to the end of the challenge"
-  #      - "&8\u2589\u2589\u2589\u2589&6\u2589\u2589&8\u2589\u2589\u2589\u2589"
-  #      - "&8\u2589\u2589\u2589&6\u2589&8\u2589\u2589&6\u2589&8\u2589\u2589\u2589"
-  #      - "&8\u2589\u2589&6\u2589&8\u2589\u2589\u2589\u2589&6\u2589&8\u2589\u2589"
-  #      - '&8'
-  #      # Reward in blocks EX: GLASS;10 for block type 1.8 and :number for number of block give NOBODY for no reward
-  #      Reward: GLASS;10:1'
-  # List of Challenges
-  Challenges:
-    # BlockPlaceChallenge
-    BlockPlace:
-      TypeChallenge: 'BlockPlaceChallenge'
-      # Block you want placed for challenge, if you want all blocks write ALL
-      Block: ALL
-      # Block you want place the block, if you want all write ALL
-      BlockOnPlaced: GRASS_BLOCK
-      # How many points you want give at place?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Block Place Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉&7Place block on Grass Block for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TURTLE_HELMET:1'
-    BlockBreaker:
-      TypeChallenge: 'BlockBreakChallenge'
-      # Block you want break for challenge, if you want all blocks write ALL
-      Block: ALL
-      # Type of item in main hand for break this blocks, if you want all items write ALL
-      ItemInHand: ALL
-      # How many points you want give at break?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Block Break Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Break all type of block for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TOTEM_OF_UNDYING:1'
-    Crafter:
-      TypeChallenge: 'CraftingChallenge'
-      # Item you want crafting for challenge, if you want all items write ALL
-      Item: ALL
-      # How many points you want give at craft?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                &7Crafting Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉      &7Craft any item for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'GHAST_TEAR:2'
-    Cooker:
-      TypeChallenge: 'CookerChallenge'
-      # Item you want cook for challenge, if you want all items write ALL
-      Item: ALL
-      # How many points you want give at cook?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Cooker Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉       &7Cook any item for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'DRAGON_HEAD:1'
-    Consumer:
-      TypeChallenge: 'ConsumeChallenge'
-      # Item you want to consume for challenge, if you want all items write ALL
-      Item: ALL
-      # How many points you want give at consume?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Consume Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Consume any item for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'WITHER_SKELETON_SKULL:1'
-    ExpCollector:
-      TypeChallenge: 'CollectorExpChallenge'
-      # How many points you want give at exp point?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 50000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Collect Exp Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉     &7Collect experience for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7(1 point for 1 experience not level)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'DRAGON_HEAD:1'
-    Killer:
-      TypeChallenge: 'KillChallenge'
-      # Mob you want to kill for challenge, if you want all mobs write ALL
-      Mob: ALL
-      # How many points you want give at kill?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                  &7Kill Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Kill any mob for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'WITHER_SKELETON_SKULL:1'
-    Breeder:
-      TypeChallenge: 'BreedChallenge'
-      # Mob you want to breed for challenge, if you want all mobs write ALL
-      Mob: ALL
-      # How many points you want give at breed?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                   &7Breed Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉          &7Breed mob for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉             &7(1 point when spawn child)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NAME_TAG:2'
-    Feeder:
-      TypeChallenge: 'FeedChallenge'
-      # Item you want to feed for challenge, if you want all items write ALL
-      Item: ALL
-      # How many points you want give at feed?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                  &7Feed Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉     &7Eat item or starve for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉              &7(1 point for half leg)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'ENDER_PEARL:4'
-    Shooter:
-      TypeChallenge: 'ShootChallenge'
-      # Force you want to apply for shoot arrow in challenge, if you want to disable use 0.0
-      Force: 1.0
-      # How many points you want give at shoot?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                  &7Shoot Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Shoot arrow at max power for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'HEART_OF_THE_SEA:1'
-    JumperHorse:
-      TypeChallenge: 'JumpWithHorseChallenge'
-      # Power you want to apply for jump with horse in challenge, if you want to disable use 0.0
-      Power: 0.3
-      # How many points you want give at jump?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 5000
-        # Multiplier you want give when reached the number
-        Multiplier: 3
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉             &7Jump Horse Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉     &7Jump with Horse for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'SCUTE:2'
-    Dyer:
-      TypeChallenge: 'ColorSheepChallenge'
-      # Color you want to use for challenge, if you want all colors write ALL
-      Color: ALL
-      # How many points you want give at coloring?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 5000
-        # Multiplier you want give when reached the number
-        Multiplier: 3
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Color Sheep Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Color a Sheep with dye for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TOTEM_OF_UNDYING:1'
-    Raider:
-      TypeChallenge: 'RaidChallenge'
-      # How many points you want give at wave raid?
-      Point: 100
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 5000
-        # Multiplier you want give when reached the number
-        Multiplier: 5
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Raid Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉           &7Win raid for receive points'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7(100 points for waves if you win all)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'IRON_INGOT:64'
-    Fisher:
-      TypeChallenge: 'FishingChallenge'
-      # Item you want to fish for challenge, if you want all items write ALL
-      Item: ALL
-      # How many points you want give at wave raid?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 5000
-        # Multiplier you want give when reached the number
-        Multiplier: 3
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                &7Fishing Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉           &7Fishing for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'GOLD_INGOT:32'
-    Sprinter:
-      TypeChallenge: 'SprintChallenge'
-      # How many points you want give at sprinting?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 5000
-        # Multiplier you want give when reached the number
-        Multiplier: 3
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Sprint Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉  &7Sprint and move for receive 1 point at block'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'DIAMOND:16'
-    Mover:
-      TypeChallenge: 'MoveChallenge'
-      # How many points you want give at move?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 50000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Move Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉             &7Move for recive points'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'EMERALD:16'
-    Damager:
-      TypeChallenge: 'DamageChallenge'
-      # Cause you want to damage for challenge, if you want all causes write ALL
-      Cause: ALL
-      # How many points you want give at damage?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 4
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Damage Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Take damage for receive points'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉            &7(1 point for half heart)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉        &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TOTEM_OF_UNDYING:1'
-    Sneaker:
-      TypeChallenge: 'SneakChallenge'
-      # How many points you want give at sneaking?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 5000
-        # Multiplier you want give when reached the number
-        Multiplier: 4
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Sneak Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉           &7Sneak for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
-    ItemBreaker:
-      TypeChallenge: 'ItemBreakChallenge'
-      # Item you want to break for challenge, if you want all items write ALL
-      Item: ALL
-      # How many points you want give at item break?
-      Point: 100
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 4
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Item Break Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉      &7Break an item for receive 1 point'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'ZOMBIE_VILLAGER_SPAWN_EGG:1'
-    Absorber:
-      TypeChallenge: 'SpongeAbsorbChallenge'
-      # How many points you want give at water source absorbing?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 100000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Sponge Absorb Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉  &7Absorb fluids with Sponge for receive points'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉         &7(1 point for 1 water source)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TNT:32'
-    Harvester:
-      TypeChallenge: 'HarvestChallenge'
-      # How many points you want give at item dropped?
-      Point: 1
-      # Item you want to harvest for challenge, if you want all items write ALL
-      Item: ALL
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Harvest Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Harvest blocks for receive points'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point for 1 item dropped)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'NAME_TAG:2'
-    EggThrower:
-      TypeChallenge: 'EggThrowerChallenge'
-      # How many points you want give at egg throw?
-      Point: 1
-      # if you want count spawn chicken write CHICKEN, if you not want count chicken write ALL
-      Mob: CHICKEN
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 2
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉           &7Egg Thrower Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Throw eggs for receive points'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point for 1 chicken spawned)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'TNT:16'
-    Enchanter:
-      TypeChallenge: 'EnchantChallenge'
-      # How many points you want give at enchant?
-      Point: 3
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 5
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉           &7Enchant Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Enchant for receive points'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point for 1 enchant applied at item)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'IRON_INGOT:64'
-    Chatter:
-      TypeChallenge: 'ChatChallenge'
-      # How many points you want give at character?
-      Point: 1
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 10000
-        # Multiplier you want give when reached the number
-        Multiplier: 5
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉           &7Chat Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Write a word for receive points'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point at letter for word extract)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'GOLD_INGOT:32'
-    ItemCollector:
-      TypeChallenge: 'ItemCollectionChallenge'
-      # How many points you want give at character?
-      Point: 1
-      # Item you want to harvest for challenge, if you want all items write ALL
-      Item: ALL
-      # if you want a multiplier based on all players
-      Boost:
-        Enabled: false
-        #Number you want reached for give the multiplier
-        Points: 50000
-        # Multiplier you want give when reached the number
-        Multiplier: 5
-        # For how many minutes you want give the multiplier?
-        Minutes: 10
-      # Title challenge
-      Title:
-        - '&8'
-        - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-        - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉        &7Item Collection Challenge'
-        - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-        - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉  &7Collect items in a chest for receive points'
-        - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉               &7(1 point at item)'
-        - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &cAttention!&7 you lose all items in the chest'
-        - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉     &7{hours} hours to the end of the challenge'
-        - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
-        - '&8'
-      # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY for no reward
-      Reward: 'DIAMOND:8'
+  #If you want random generation of Challenges
+  RandomChallengeGeneration: false
   # If you want reset the player points at the end of every challenge
   ResetPointsAtNewChallenge: false
+  # Chest for ItemCollectionChallenge
   CollectionChallengeItem:
     Type: CHEST
     Name: "&7Chest Collector"
@@ -796,6 +50,7 @@ Message:
   commandVcClear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
   commandVcChallenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
   commandVcEconomyChallenge: '   &e/vc &6<add|remove> <playername> <points> &7for add or remove points of a player'
+  commandVcReward: '   &e/vc &6<reward> &7for receive reward of win'
 
   errorYouAreNotAPlayer: '&cYou are not a player'
   errorCommandNotFound: '&cCommand not found'
@@ -811,68 +66,80 @@ Message:
   pointsEveryMinutes: '&7You collect &b{points}&7 points in &e{minutes}&7 minutes'
   challengeReward: '&7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
   boostMessage: '&5Start boosting!&7 You have &bx{number}&7 points for &e{minutes}&7 minutes'
+  boostMessageSinglePlayer: '&5Start personal boosting!&7Only you have &bx{number}&7 points for &e{minutes}&7 minutes'
   pointsRemainForBoosting: '&7Remain &b{points}&7 points for start next boost!'
+  pointsRemainForBoostingSinglePlayer: '&7Remain &b{points}&7 points for start next personal boost!'
   chatWord: '&7Write this word for receive &b{points}&7 points: &5{word}'
   correctAnswer: '&e{player} &7write the correct answer!'
+  pointsadd: '&b{points} &7points added at &e{player}'
+  pointsremove: '&b{points} &7points removed at &e{player}'
 
 Debug:
-  # Commands time execution
+  # Commands debug
   Commands: false
-  # Block Place Event time execution
+  # Block Place Event debug
   BlockPlaceEvent: false
-  # Block Break Event time execution
+  # Block Break Event debug
   BlockBreakEvent: false
-  # Daily Give Reward Event time execution
+  # Daily Give Reward Event debug
   DailyGiveRewardEvent: false
-  # Craft Item Event time execution
+  # Craft Item Event debug
   CraftItemEvent: false
-  # Furnace Cook Event time execution
+  # Furnace Cook Event debug
   FurnaceCookEvent: false
-  # Item Consume Event time execution
+  # Item Consume Event debug
   ItemConsumeEvent: false
-  # Exp Collector Event time execution
+  # Exp Collector Event debug
   ExpCollectorEvent: false
-  # Kill Event time execution
+  # Kill Event debug
   KillEvent: false
-  # Breed Event time execution
+  # Breed Event debug
   BreedEvent: false
-  # Feed Event time execution
+  # Feed Event debug
   FeedEvent: false
-  # Shoot Arrow Event time execution
+  # Shoot Arrow Event debug
   ShootArrowEvent: false
-  # Jump Horse Event time execution
+  # Jump Horse Event debug
   JumpHorseEvent: false
-  # Color Sheep Event time execution
+  # Color Sheep Event debug
   ColorSheepEvent: false
-  # Raid Event time execution
+  # Raid Event debug
   RaidEvent: false
-  # Fish Event time execution
+  # Fish Event debug
   FishEvent: false
-  # Eat Event time execution
+  # Eat Event debug
   EatEvent: false
-  # Sprint Event time execution
+  # Sprint Event debug
   SprintEvent: false
-  # Move Event time execution
+  # Move Event debug
   MoveEvent: false
-  # Damage Event time execution
+  # Damage Event debug
   DamageEvent: false
-  # Sneak Event time execution
+  # Sneak Event debug
   SneakEvent: false
-  # Item Break Event time execution
+  # Item Break Event debug
   ItemBreakEvent: false
-  # Sponge Absorb Event time execution
+  # Sponge Absorb Event debug
   SpongeAbsorbEvent: false
-  # Harvest Event time execution
+  # Harvest Event debug
   HarvestEvent: false
-  # Egg Event time execution
+  # Egg Event debug
   EggThrowEvent: false
-  # Enchant Item Event time execution
+  # Enchant Item Event debug
   EnchantItemEvent: false
-  # Chat Event time execution
+  # Chat Event debug
   ChatEvent: false
-  # Item Collector Event time execution
+  # Item Collector Event debug
   ItemCollector: false
-  # Enabled time execution
+  # Inventory Challenge Event debug
+  Inventory: false
+  # Vehicle Move Challenge Event debug
+  VehicleMoveEvent: false
+  # Jump Challenge Event debug
+  JumpEvent: false
+  # Dye Challenge Event debug
+  DyeEvent: false
+  # Enabled debug
   Enabled: false
-  # Disabled time execution
+  # Disabled debug
   Disabled: false

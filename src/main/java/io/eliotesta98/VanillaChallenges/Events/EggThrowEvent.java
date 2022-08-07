@@ -13,30 +13,72 @@ public class EggThrowEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EggThrowEvent");
     private String mob = Main.dailyChallenge.getMob();
     private int point = Main.dailyChallenge.getPoint();
+    private String sneaking = Main.dailyChallenge.getSneaking();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEvent(org.bukkit.event.player.PlayerEggThrowEvent e) {
         long tempo = System.currentTimeMillis();
+        final String playerName = e.getPlayer().getName();
+        final boolean hatching = e.isHatching();
+        final byte numberHatches = e.getNumHatches();
+        final boolean sneakingPlayer = e.getPlayer().isSneaking();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                if (mob.equalsIgnoreCase("CHICKEN")) {
-                    if (e.isHatching()) {
-                        byte number = e.getNumHatches();
-                        Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point * number);
+                if (debugActive) {
+                    debugUtils.addLine("EggThrowEvent PlayerThrowing= " + playerName);
+                    debugUtils.addLine("EggThrowEvent MobConfig= " + mob);
+                    debugUtils.addLine("EggThrowEvent PlayerSneaking= " + sneakingPlayer);
+                    debugUtils.addLine("EggThrowEvent ConfigSneaking= " + sneaking);
+                }
+                if (sneaking.equalsIgnoreCase("NOBODY")) {
+                    if (mob.equalsIgnoreCase("CHICKEN")) {
+                        if (debugActive) {
+                            debugUtils.addLine("EggThrowEvent Hatching= " + hatching);
+                        }
+                        if (hatching) {
+                            Main.dailyChallenge.increment(playerName, (long) point * numberHatches);
+                        } else {
+                            Main.dailyChallenge.increment(playerName, (long) point);
+                        }
+                        if (debugActive) {
+                            debugUtils.addLine("EggThrowEvent Conditions= 1");
+                        }
                     } else {
-                        Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point);
+                        if (debugActive) {
+                            debugUtils.addLine("EggThrowEvent Conditions= 0");
+                        }
+                        Main.dailyChallenge.increment(playerName, point);
                     }
                 } else {
-                    Main.dailyChallenge.increment(e.getPlayer().getName(), point);
+                    if (Boolean.parseBoolean(sneaking) == sneakingPlayer) {
+                        if (mob.equalsIgnoreCase("CHICKEN")) {
+                            if (debugActive) {
+                                debugUtils.addLine("EggThrowEvent Hatching= " + hatching);
+                            }
+                            if (hatching) {
+                                Main.dailyChallenge.increment(playerName, (long) point * numberHatches);
+                            } else {
+                                Main.dailyChallenge.increment(playerName, (long) point);
+                            }
+                            if (debugActive) {
+                                debugUtils.addLine("EggThrowEvent Conditions= 1");
+                            }
+                        } else {
+                            if (debugActive) {
+                                debugUtils.addLine("EggThrowEvent Conditions= 0");
+                            }
+                            Main.dailyChallenge.increment(playerName, point);
+                        }
+                    }
                 }
+                if (debugActive) {
+                    debugUtils.addLine("EggThrowEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("EggThrowEvent");
+                }
+                return;
             }
         });
         //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
-        if (debugActive) {
-            debugUtils.addLine("EggThrowEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("EggThrowEvent");
-        }
-        return;
     }
 }
