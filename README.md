@@ -1,5 +1,4 @@
 # VanillaChallenges
-
 #TODO:
     - List of items/blocks/... for all challenges
     - Interfaccia infinita dove contenere tutte le challenges con le informazioni
@@ -7,3 +6,4 @@
     - Challenge della morte con un determinato item
     - Challenge della morte con n item nell'inventario
     - Challenge della morte con tipo di morte
+    - Possibilità di settare per ogni challenge quanto tempo dura
