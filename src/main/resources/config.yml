@@ -32,47 +32,45 @@ Configuration:
     YesterdayTop: false
   Hooks:
     PlaceholderAPI: false
-  # If you want use H2 or .yml file for data storage
-  Database:
-    H2: true
-    Yaml: false
+  # If you want use H2 or .yml file for data storage (write H2 or Yaml)
+  Database: 'H2'
   Backup:
     Enabled: true
     NumberOfFilesInFolder: 4
 # Messages
-Message:
-  commandFooter: '&7(&7&l(&c&l!&7&l)&7) &9[] optional value, <> required'
-  commandVcReloadHelp: '   &e/vc &6<reload> &7command reload Plugin'
-  commandVcHelpHelp: '   &e/vc &6<help> &7command help for VanillaChallenge Plugin'
-  commandVcNextHelp: '   &e/vc &6<next> &7go to the next challenge'
-  commandVcTopHelp: '   &e/vc &6<top> &7for see the top 3'
-  commandVcPointsHelp: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
-  commandVcClear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
-  commandVcChallenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
-  commandVcEconomyChallenge: '   &e/vc &6<add|remove> <playername> <points> &7for add or remove points of a player'
-  commandVcReward: '   &e/vc &6<reward> &7for receive reward of win'
-
-  errorYouAreNotAPlayer: '&cYou are not a player'
-  errorCommandNotFound: '&cCommand not found'
-  errorNoPerms: '&cInsufficient permission'
-  errorAlreadyPlacedChest: '&cHEY! &7You already placed a chest for Collection Item Challenge'
-
-  pointsInfo: '&e{player} &7have &b{number}&7 points'
-  actuallyInTop: '&7Actually in top there are:'
-  topPlayers:
+Messages:
+  Prefix: '&eVanillaChallenges  &r'
+  Commands:
+    Footer: '&7(&7&l(&c&l!&7&l)&7) &9[] optional value, <> required'
+    Reload: '   &e/vc &6<reload> &7command reload Plugin'
+    Next: '   &e/vc &6<next> &7go to the next challenge'
+    Top: '   &e/vc &6<top> &7for see the top 3'
+    Points: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
+    Clear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
+    Challenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
+    Economy: '   &e/vc &6<add|remove> <playername> <points> &7for add or remove points of a player'
+    Reward: '   &e/vc &6<reward> &7for receive reward of win'
+  Errors:
+    YouAreNotAPlayer: '{prefix}&cYou are not a player'
+    CommandNotFound: '{prefix}&cCommand not found'
+    NoPerms: '{prefix}&cInsufficient permission'
+    AlreadyPlacedChest: '{prefix}&7You already placed a chest for Collection Item Challenge'
+  PointsInfo: '{prefix}&e{player} &7have &b{number}&7 points'
+  ActuallyInTop: '{prefix}&7Actually in top there are:'
+  TopPlayers:
     - '&6{number}° &e{player}&7 with &b{points}&7 points'
     - '&7{number}° &e{player}&7 with &b{points}&7 points'
     - '&8{number}° &e{player}&7 with &b{points}&7 points'
-  pointsEveryMinutes: '&7You collect &b{points}&7 points in &e{minutes}&7 minutes'
-  challengeReward: '&7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
-  boostMessage: '&5Start boosting!&7 You have &bx{number}&7 points for &e{minutes}&7 minutes'
-  boostMessageSinglePlayer: '&5Start personal boosting!&7Only you have &bx{number}&7 points for &e{minutes}&7 minutes'
-  pointsRemainForBoosting: '&7Remain &b{points}&7 points for start next boost!'
-  pointsRemainForBoostingSinglePlayer: '&7Remain &b{points}&7 points for start next personal boost!'
-  chatWord: '&7Write this word for receive &b{points}&7 points: &5{word}'
-  correctAnswer: '&e{player} &7write the correct answer!'
-  pointsadd: '&b{points} &7points added at &e{player}'
-  pointsremove: '&b{points} &7points removed at &e{player}'
+  PointsEveryMinutes: '{prefix}&7You collect &b{points}&7 points in &e{minutes}&7 minutes'
+  ChallengeReward: '{prefix}&7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
+  BoostMessage: '{prefix}&5Start boosting!&7 You have &bx{number}&7 points for &e{minutes}&7 minutes'
+  BoostMessageSinglePlayer: '{prefix}&5Start personal boosting!&7Only you have &bx{number}&7 points for &e{minutes}&7 minutes'
+  PointsRemainForBoosting: '{prefix}&7Remain &b{points}&7 points for start next boost!'
+  PointsRemainForBoostingSinglePlayer: '{prefix}&7Remain &b{points}&7 points for start next personal boost!'
+  ChatWord: '{prefix}&7Write this word for receive &b{points}&7 points: &5{word}'
+  CorrectAnswer: '{prefix}&e{player} &7write the correct answer!'
+  PointsAdd: '{prefix}&b{points} &7points added at &e{player}'
+  PointsRemove: '{prefix}&b{points} &7points removed at &e{player}'
 
 Debug:
   # Commands debug
@@ -139,6 +137,8 @@ Debug:
   JumpEvent: false
   # Dye Challenge Event debug
   DyeEvent: false
+  # Online Point give debug
+  OnlinePoint: false
   # Enabled debug
   Enabled: false
   # Disabled debug

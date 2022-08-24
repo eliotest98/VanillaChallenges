@@ -60,12 +60,11 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
         // %vanillachallenges_dailychallenge_name%
         if (identifier.contains("dailychallenge_name")) {
-            return Main.currentlyChallengeDB.getNomeChallenge();
+            return Main.dailyChallenge.getChallengeName();
         }
         // %vanillachallenges_dailychallenge_time%
         if (identifier.contains("dailychallenge_time")) {
-            int timeResume = (Main.currentlyChallengeDB.getTimeResume() / 60) / 60;
-            return timeResume + "";
+            return Main.dailyChallenge.getTimeChallenge() + "";
         }
         // %vanillachallenges_dailychallenge_top_name_#% # = number
         if (identifier.contains("dailychallenge_top_name_")) {

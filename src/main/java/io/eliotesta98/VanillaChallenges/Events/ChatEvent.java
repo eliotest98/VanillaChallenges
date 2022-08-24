@@ -18,12 +18,12 @@ public class ChatEvent implements Listener {
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ChatEvent");
     private int point = Main.dailyChallenge.getPoint();
+    private final String alphabet = Main.dailyChallenge.getStringFormatter();
     private BukkitScheduler scheduler = Bukkit.getScheduler();
     private static BukkitTask task;
     private String word = "";
-    private final String message = Main.instance.getConfigGestion().getMessages().get("chatWord");
-    private final String alphabet = "abcdefghijklmnopqrstuvywxz0123456789";
-    private final String correctAnswer = Main.instance.getConfigGestion().getMessages().get("correctAnswer");
+    private final String message = Main.instance.getConfigGestion().getMessages().get("ChatWord");
+    private final String correctAnswer = Main.instance.getConfigGestion().getMessages().get("CorrectAnswer");
 
     public ChatEvent() {
         //ogni 2 minuti

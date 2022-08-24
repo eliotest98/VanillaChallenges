@@ -16,6 +16,7 @@ public class Challenge {
     private HashMap<String, Long> boostSinglePlayers = new HashMap<String, Long>();
     private HashMap<String, Boolean> startBoostSinglePlayers = new HashMap<String, Boolean>();
     private HashMap<String, BukkitTask> tasksSinglePlayers = new HashMap<String, BukkitTask>();
+    private String challengeName = "nessuna";
     private String block = "ALL";
     private String blockOnPlace = "ALL";
     private String typeChallenge = "nessuna";
@@ -42,15 +43,17 @@ public class Challenge {
     private int pointsBoostSinglePlayer = 0;
     private int multiplierSinglePlayer = 1;
     private int minutesSinglePlayer = 0;
+    private int timeChallenge = 24;
     private long countPointsChallenge = 0;
     private boolean startBoost = false;
     private String sneaking = "NOBODY";
+    private String stringFormatter = "abcdefghijklmnopqrstuvz";
 
     public Challenge() {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, ArrayList<String> rewards, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes, int number, int time, String vehicle, String sneaking, String onGround, int pointsBoostSinglePlayer, int multiplierSinglePlayer, int minutesSinglePlayer) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, ArrayList<String> rewards, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int minutes, int number, int time, String vehicle, String sneaking, String onGround, int pointsBoostSinglePlayer, int multiplierSinglePlayer, int minutesSinglePlayer, int timeChallenge, String challengeName, String stringFormatter) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
@@ -75,6 +78,9 @@ public class Challenge {
         this.pointsBoostSinglePlayer = pointsBoostSinglePlayer;
         this.minutesSinglePlayer = minutesSinglePlayer;
         this.multiplierSinglePlayer = multiplierSinglePlayer;
+        this.timeChallenge = timeChallenge;
+        this.challengeName = challengeName;
+        this.stringFormatter = stringFormatter;
     }
 
     public HashMap<String, Long> getBoostSinglePlayers() {
@@ -165,6 +171,14 @@ public class Challenge {
         this.blockOnPlace = blockOnPlace;
     }
 
+    public String getChallengeName() {
+        return challengeName;
+    }
+
+    public void setChallengeName(String challengeName) {
+        this.challengeName = challengeName;
+    }
+
     public HashMap<String, Long> getPlayers() {
         return players;
     }
@@ -174,6 +188,14 @@ public class Challenge {
             players.put(challengers.get(0).getNomePlayer(), challengers.get(0).getPoints());
             challengers.remove(0);
         }
+    }
+
+    public String getStringFormatter() {
+        return stringFormatter;
+    }
+
+    public void setStringFormatter(String stringFormatter) {
+        this.stringFormatter = stringFormatter;
     }
 
     public String getTypeChallenge() {
@@ -190,6 +212,14 @@ public class Challenge {
 
     public void setPoint(int point) {
         this.point = point;
+    }
+
+    public int getTimeChallenge() {
+        return timeChallenge;
+    }
+
+    public void setTimeChallenge(int timeChallenge) {
+        this.timeChallenge = timeChallenge;
     }
 
     public void incrementCommands(String playerName, long amount) {

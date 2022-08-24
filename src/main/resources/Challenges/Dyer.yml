@@ -1,5 +1,11 @@
 Dyer:
   TypeChallenge: 'DyerChallenge'
+  # How long do you want the challenge to last in hours ?
+  Time: 24
+  # Cause you want to damage for challenge, if you want all causes write ALL
+  Cause: ALL
+  # Able or disable Sneak when place Es. true or false or NOBODY
+  Sneaking: 'NOBODY'
   # How many points you want give at death?
   Point: 1
   # if you want a multiplier based on all players

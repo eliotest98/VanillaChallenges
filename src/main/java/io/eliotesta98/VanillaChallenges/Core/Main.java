@@ -18,7 +18,6 @@ public class Main extends JavaPlugin {
     public SoundManager SoundManager;
     private ConfigGestion config;
     public static Challenge dailyChallenge;
-    public static ChallengeDB currentlyChallengeDB;
     private CheckDay checkDay;
     private BrodcastDailyChallenge brodcastDailyChallenge;
     private OnlinePointsGive onlinePointsEvent;

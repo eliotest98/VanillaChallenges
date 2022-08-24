@@ -63,7 +63,7 @@ public class H2Database implements Database {
 
     @Override
     public String insertDailyChallenges() {
-        ArrayList<ChallengeDB> challenges = H2Database.instance.getAllChallenges();
+        ArrayList<Challenge> challenges = H2Database.instance.getAllChallenges();
         int count = 1;
         if (challenges.isEmpty()) {
             String nome = "nessuno";
@@ -76,20 +76,18 @@ public class H2Database implements Database {
                 if (count == 1) {
                     Main.dailyChallenge = challenge;
                     nome = challenge.getTypeChallenge();
-                    Main.currentlyChallengeDB = new ChallengeDB(key, 86400);
                 }
-                H2Database.instance.insertChallenge(key, 86400);
+                H2Database.instance.insertChallenge(challenge.getChallengeName(), challenge.getTimeChallenge());
                 count++;
             }
             return nome;
         } else {
             while (!challenges.isEmpty()) {
-                if (challenges.get(0).getTimeResume() <= 0) {
-                    H2Database.instance.deleteChallengeWithName(challenges.get(0).getNomeChallenge());
+                if (challenges.get(0).getTimeChallenge() <= 0) {
+                    H2Database.instance.deleteChallengeWithName(challenges.get(0).getChallengeName());
                     challenges.remove(0);
                 } else {
-                    Main.currentlyChallengeDB = challenges.get(0);
-                    Main.dailyChallenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(0).getNomeChallenge());
+                    Main.dailyChallenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(0).getChallengeName());
                     Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
                     return Main.dailyChallenge.getTypeChallenge();
                 }
@@ -264,16 +262,16 @@ public class H2Database implements Database {
         insertDailyWinner(dailyWinner);
     }
 
-    public ArrayList<ChallengeDB> getAllChallenges() {
-        ArrayList<ChallengeDB> challengeDBS = new ArrayList<ChallengeDB>();
+    public ArrayList<Challenge> getAllChallenges() {
+        ArrayList<Challenge> challengeDBS = new ArrayList<Challenge>();
         ResultSet resultSet = null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Challenge");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                final ChallengeDB challengeDB = new ChallengeDB();
-                challengeDB.setTimeResume(resultSet.getInt("TimeResume"));
-                challengeDB.setNomeChallenge(resultSet.getString("NomeChallenge"));
+                final Challenge challengeDB = new Challenge();
+                challengeDB.setTimeChallenge(resultSet.getInt("TimeResume"));
+                challengeDB.setChallengeName(resultSet.getString("NomeChallenge"));
                 challengeDBS.add(challengeDB);
             }
             preparedStatement.close();
@@ -472,8 +470,8 @@ public class H2Database implements Database {
                 for (Map.Entry<String, Long> players : Main.dailyChallenge.getPlayers().entrySet()) {
                     file.set("Points." + players.getKey(), players.getValue());
                 }
-                for (ChallengeDB challenge : getAllChallenges()) {
-                    file.set("Challenges." + challenge.getNomeChallenge(), challenge.getTimeResume());
+                for (Challenge challenge : getAllChallenges()) {
+                    file.set("Challenges." + challenge.getChallengeName(), challenge.getTimeChallenge());
                 }
                 for (DailyWinner dailyWinner : getAllDailyWinners()) {
                     file.set("DailyWinners." + dailyWinner.getId() + ".PlayerName", dailyWinner.getPlayerName());

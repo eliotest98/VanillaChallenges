@@ -1,5 +1,7 @@
 Enchanter:
   TypeChallenge: 'EnchantChallenge'
+  # How long do you want the challenge to last in hours ?
+  Time: 24
   # How many points you want give at enchant?
   Point: 3
   # if you want a multiplier based on all players
