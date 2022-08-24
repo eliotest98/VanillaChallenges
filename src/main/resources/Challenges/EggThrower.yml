@@ -1,5 +1,7 @@
 EggThrower:
   TypeChallenge: 'EggThrowerChallenge'
+  # How long do you want the challenge to last in hours ?
+  Time: 24
   # if you want count spawn chicken write CHICKEN, if you not want count chicken write ALL
   Mob: CHICKEN
   # Able or disable Sneak when place Es. true or false or NOBODY

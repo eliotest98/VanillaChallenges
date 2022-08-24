@@ -1,5 +1,7 @@
 BlockBreaker:
   TypeChallenge: 'BlockBreakChallenge'
+  # How long do you want the challenge to last in hours ?
+  Time: 24
   # Block you want break for challenge, if you want all blocks write ALL
   Block: ALL
   # Type of item in main hand for break this blocks, if you want all items write ALL

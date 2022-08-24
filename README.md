@@ -6,4 +6,4 @@
     - Challenge della morte con un determinato item
     - Challenge della morte con n item nell'inventario
     - Challenge della morte con tipo di morte
-    - Possibilità di settare per ogni challenge quanto tempo dura
+    - Guardare la DyeChallenge e cambiare tutte le Challenge basandosi su quel pattern

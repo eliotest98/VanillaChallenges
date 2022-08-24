@@ -15,10 +15,10 @@ public class BrodcastDailyChallenge {
     private final BukkitScheduler scheduler = Bukkit.getScheduler();
     private BukkitTask task;
     private final ArrayList<String> brodcastMessageTitle = Main.dailyChallenge.getTitle();
-    private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("actuallyInTop");
-    private final String pointsEveryMinutes = Main.instance.getConfigGestion().getMessages().get("pointsEveryMinutes");
-    private final String pointsRemainForBoosting = Main.instance.getConfigGestion().getMessages().get("pointsRemainForBoosting");
-    private final String pointsRemainForBoostingSinglePlayer = Main.instance.getConfigGestion().getMessages().get("pointsRemainForBoostingSinglePlayer");
+    private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("ActuallyInTop");
+    private final String pointsEveryMinutes = Main.instance.getConfigGestion().getMessages().get("PointsEveryMinutes");
+    private final String pointsRemainForBoosting = Main.instance.getConfigGestion().getMessages().get("PointsRemainForBoosting");
+    private final String pointsRemainForBoostingSinglePlayer = Main.instance.getConfigGestion().getMessages().get("PointsRemainForBoostingSinglePlayer");
 
     public void start(long time) {
         execute(time);
@@ -33,7 +33,7 @@ public class BrodcastDailyChallenge {
         task = scheduler.runTaskTimerAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
-                int timeResume = (Main.currentlyChallengeDB.getTimeResume() / 60) / 60;
+                int timeResume = Main.dailyChallenge.getTimeChallenge();
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     for (int i = 0; i < brodcastMessageTitle.size(); i++) {
                         p.sendMessage(ColorUtils.applyColor(brodcastMessageTitle.get(i).replace("{hours}", timeResume + "")));

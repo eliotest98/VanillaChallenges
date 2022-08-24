@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class OnlinePointsGive implements Listener {
 
     private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("RaidEvent");
+    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("OnlinePoint");
     private int point = Main.instance.getConfigGestion().getPointsOnlinePoints();
     private int minutes = Main.instance.getConfigGestion().getMinutesOnlinePoints();
     HashMap<String, Integer> times = new HashMap<String, Integer>();

@@ -4,15 +4,12 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.FileCreator;
 import io.eliotesta98.VanillaChallenges.Utils.ItemUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class ConfigGestion {
@@ -30,10 +27,16 @@ public class ConfigGestion {
         for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
             debug.put(event, file.getBoolean("Debug." + event));
         }
-        for (String message : file.getConfigurationSection("Message").getKeys(false)) {
-            if (message.equalsIgnoreCase("topPlayers")) {
+        for (String message : file.getConfigurationSection("Messages").getKeys(false)) {
+            if (message.equalsIgnoreCase("Commands") || message.equalsIgnoreCase("Errors")) {
+                for (String command : file.getConfigurationSection("Messages." + message).getKeys(false)) {
+                    messages.put(message + "." + command, file.getString("Messages." + message + "." + command).replace("{prefix}", messages.get("Prefix")));
+                }
+            } else if (message.equalsIgnoreCase("Prefix")) {
+                messages.put(message, file.getString("Messages." + message));
+            } else if (message.equalsIgnoreCase("TopPlayers")) {
                 ArrayList<String> mexs = new ArrayList<>();
-                file.getStringList("Message.topPlayers").forEach(value -> {
+                file.getStringList("Messages.TopPlayers").forEach(value -> {
                     mexs.add(value);
                 });
                 int i = 1;
@@ -43,7 +46,7 @@ public class ConfigGestion {
                     i++;
                 }
             } else {
-                messages.put(message, file.getString("Message." + message));
+                messages.put(message, file.getString("Messages." + message).replace("{prefix}", messages.get("Prefix")));
             }
         }
         File folder = new File(Main.instance.getDataFolder() +
@@ -88,6 +91,7 @@ public class ConfigGestion {
             String block = yamlChallenge.getString(challengeName + ".Block");
             String blockOnPlaced = yamlChallenge.getString(challengeName + ".BlockOnPlaced");
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
+            int timeChallenge = yamlChallenge.getInt(challengeName + ".Time");
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>();
             yamlChallenge.getStringList(challengeName + ".Title").forEach(value -> {
@@ -122,19 +126,15 @@ public class ConfigGestion {
             }
             String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
             String onGround = yamlChallenge.getString(challengeName + ".OnGround");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time, vehicle, sneaking,onGround,pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer);
+            String stringFormatter = yamlChallenge.getString(challengeName + ".StringFormatter");
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time, vehicle, sneaking, onGround, pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge, challengeName, stringFormatter);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         for (String hoock : file.getConfigurationSection("Configuration.Hooks").getKeys(false)) {
             hooks.put(hoock, file.getBoolean("Configuration.Hooks." + hoock));
         }
-        for (String db : file.getConfigurationSection("Configuration.Database").getKeys(false)) {
-            if (file.getBoolean("Configuration.Database." + db)) {
-                database = db;
-                break;
-            }
-        }
+        database = file.getString("Configuration.Database");
         resetPointsAtNewChallenge = file.getBoolean("Configuration.ResetPointsAtNewChallenge");
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");

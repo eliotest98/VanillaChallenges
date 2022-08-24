@@ -14,12 +14,10 @@ public class CheckDay {
 
     private BukkitScheduler scheduler = Bukkit.getScheduler();
     private BukkitTask task;
-    private int timeRemove = 0;
     private boolean resetPoints = Main.instance.getConfigGestion().isResetPointsAtNewChallenge();
 
     public void start(long time) {
         execute(time);
-        timeRemove = (int) (time / 20);
     }
 
     public void stop() {
@@ -32,18 +30,18 @@ public class CheckDay {
 
             @Override
             public void run() {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[VanillaChallenges] Backup challenge: " + Main.currentlyChallengeDB.toString());
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[VanillaChallenges] Backup challenge: " + Main.dailyChallenge.getTypeChallenge());
                 if (!firstTime) {
-                    Main.currentlyChallengeDB.setTimeResume(Main.currentlyChallengeDB.getTimeResume() - timeRemove);
+                    Main.dailyChallenge.setTimeChallenge(Main.dailyChallenge.getTimeChallenge() - 1);
                 } else {
                     firstTime = false;
                 }
-                if (Main.currentlyChallengeDB.getTimeResume() <= 0) {
+                if (Main.dailyChallenge.getTimeChallenge() <= 0) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {
                             ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
-                            Main.db.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                            Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
                             Main.db.removeTopYesterday();
                             Main.db.saveTopYesterday(topPlayers);
                             if (Main.instance.getConfigGestion().isBackupEnabled()) {
@@ -54,7 +52,7 @@ public class CheckDay {
                                 number++;
                                 DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
-                                dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                                dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
                                 for (int i = 0; i < Main.dailyChallenge.getRewards().size(); i++) {
                                     dailyWinner.setId(number);
                                     dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
@@ -74,7 +72,7 @@ public class CheckDay {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                         @Override
                         public void run() {
-                            Main.db.updateChallenge(Main.currentlyChallengeDB.getNomeChallenge(), Main.currentlyChallengeDB.getTimeResume());
+                            Main.db.updateChallenge(Main.dailyChallenge.getChallengeName(), Main.dailyChallenge.getTimeChallenge());
                         }
                     });
                 }

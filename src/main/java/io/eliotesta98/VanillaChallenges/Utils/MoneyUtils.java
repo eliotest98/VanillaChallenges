@@ -11,7 +11,6 @@ public class MoneyUtils {
         }
         //10000 - 99999
         if (size == 5) {
-            System.out.println();
             return transform.charAt(0) + "" + transform.charAt(1) + "K";
         }
         //100000 - 999999

@@ -19,30 +19,29 @@ import java.util.ArrayList;
 
 public class Commands implements CommandExecutor {
 
-    private final String errorYouAreNotAPlayer = Main.instance.getConfigGestion().getMessages().get("errorYouAreNotAPlayer");
-    private final String errorCommandNotFound = Main.instance.getConfigGestion().getMessages().get("errorCommandNotFound");
-    private final String errorNoPerms = Main.instance.getConfigGestion().getMessages().get("errorNoPerms");
+    private final String errorYouAreNotAPlayer = Main.instance.getConfigGestion().getMessages().get("Errors.YouAreNotAPlayer");
+    private final String errorCommandNotFound = Main.instance.getConfigGestion().getMessages().get("Errors.CommandNotFound");
+    private final String errorNoPerms = Main.instance.getConfigGestion().getMessages().get("Errors.NoPerms");
 
-    private final String commandVcHelpHelp = Main.instance.getConfigGestion().getMessages().get("commandVcHelpHelp");
-    private final String commandFooter = Main.instance.getConfigGestion().getMessages().get("commandFooter");
-    private final String commandVcReloadHelp = Main.instance.getConfigGestion().getMessages().get("commandVcReloadHelp");
-    private final String commandVcNextHelp = Main.instance.getConfigGestion().getMessages().get("commandVcNextHelp");
-    private final String commandVcPointsHelp = Main.instance.getConfigGestion().getMessages().get("commandVcPointsHelp");
-    private final String commandVcTopHelp = Main.instance.getConfigGestion().getMessages().get("commandVcTopHelp");
-    private final String commandVcClear = Main.instance.getConfigGestion().getMessages().get("commandVcClear");
-    private final String commandVcChallenge = Main.instance.getConfigGestion().getMessages().get("commandVcChallenge");
-    private final String commandVcEconomyChallenge = Main.instance.getConfigGestion().getMessages().get("commandVcEconomyChallenge");
-    private final String commandVcReward = Main.instance.getConfigGestion().getMessages().get("commandVcReward");
+    private final String commandFooter = Main.instance.getConfigGestion().getMessages().get("Commands.Footer");
+    private final String commandVcReloadHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Reload");
+    private final String commandVcNextHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Next");
+    private final String commandVcPointsHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Points");
+    private final String commandVcTopHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Top");
+    private final String commandVcClear = Main.instance.getConfigGestion().getMessages().get("Commands.Clear");
+    private final String commandVcChallenge = Main.instance.getConfigGestion().getMessages().get("Commands.Challenge");
+    private final String commandVcEconomyChallenge = Main.instance.getConfigGestion().getMessages().get("Commands.Economy");
+    private final String commandVcReward = Main.instance.getConfigGestion().getMessages().get("Commands.Reward");
 
-    private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("pointsInfo");
+    private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("PointsInfo");
     private final ArrayList<String> brodcastMessageTitle = Main.dailyChallenge.getTitle();
-    private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("actuallyInTop");
-    private final String pointsadd = Main.instance.getConfigGestion().getMessages().get("pointsadd");
-    private final String pointsremove = Main.instance.getConfigGestion().getMessages().get("pointsremove");
+    private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("ActuallyInTop");
+    private final String pointsadd = Main.instance.getConfigGestion().getMessages().get("PointsAdd");
+    private final String pointsremove = Main.instance.getConfigGestion().getMessages().get("PointsRemove");
 
     private final boolean debugCommand = Main.instance.getConfigGestion().getDebug().get("Commands");
     private final boolean resetPoints = Main.instance.getConfigGestion().isResetPointsAtNewChallenge();
-    private String challengeReward = Main.instance.getConfigGestion().getMessages().get("challengeReward");
+    private String challengeReward = Main.instance.getConfigGestion().getMessages().get("ChallengeReward");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -59,29 +58,25 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args.length == 0) {// se non ha scritto args
-                        String finale = "\n\n&e&lVanillaChallenges &7● Version " + Main.instance.getDescription().getVersion()
-                                + " created by eliotesta98" + "\n\n";
+                    } else if (args.length == 0) {// se non ha scritto args
+                        String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
+                                + " created by &a&leliotesta98" + "\n&r\n";
                         finale = finale + commandVcChallenge + "\n";
                         finale = finale + commandVcClear + "\n";
-                        finale = finale + commandVcHelpHelp + "\n";
                         finale = finale + commandVcNextHelp + "\n";
                         finale = finale + commandVcPointsHelp + "\n";
                         finale = finale + commandVcReloadHelp + "\n";
                         finale = finale + commandVcReward + "\n";
                         finale = finale + commandVcTopHelp + "\n";
-                        finale = finale + "\n";
+                        finale = finale + "&r\n";
                         finale = finale + commandFooter;
-                        finale = finale + "\n";
                         sender.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("add")) {
+                    } else if (args[0].equalsIgnoreCase("add")) {
                         if (args.length == 1 || args.length == 2) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
                             if (debugCommand) {
@@ -97,8 +92,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("remove")) {
+                    } else if (args[0].equalsIgnoreCase("remove")) {
                         if (args.length == 1 || args.length == 2) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
                             if (debugCommand) {
@@ -114,8 +108,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("challenge")) {
+                    } else if (args[0].equalsIgnoreCase("challenge")) {
                         if (args.length != 1) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcChallenge));
                             if (debugCommand) {
@@ -124,7 +117,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        int timeResume = (Main.currentlyChallengeDB.getTimeResume() / 60) / 60;
+                        int timeResume = Main.dailyChallenge.getTimeChallenge();
                         for (int i = 0; i < brodcastMessageTitle.size(); i++) {
                             sender.sendMessage(ColorUtils.applyColor(brodcastMessageTitle.get(i).replace("{hours}", timeResume + "")));
                         }
@@ -133,8 +126,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("clear")) {
+                    } else if (args[0].equalsIgnoreCase("clear")) {
                         if (args.length != 1) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcClear));
                             if (debugCommand) {
@@ -150,8 +142,7 @@ public class Commands implements CommandExecutor {
                                 ReloadUtil.reload();
                             }
                         });
-                    }
-                    else if (args[0].equalsIgnoreCase("next")) {
+                    } else if (args[0].equalsIgnoreCase("next")) {
                         if (args.length != 1) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcNextHelp));
                             if (debugCommand) {
@@ -164,7 +155,7 @@ public class Commands implements CommandExecutor {
                             @Override
                             public void run() {
                                 ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
-                                Main.db.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
                                 Main.db.removeTopYesterday();
                                 Main.db.saveTopYesterday(topPlayers);
                                 if (Main.instance.getConfigGestion().isBackupEnabled()) {
@@ -176,7 +167,7 @@ public class Commands implements CommandExecutor {
                                     DailyWinner dailyWinner = new DailyWinner();
                                     dailyWinner.setId(number);
                                     dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
-                                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                                    dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
                                     for (int i = 0; i < Main.dailyChallenge.getRewards().size(); i++) {
                                         dailyWinner.setId(number);
                                         dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
@@ -198,37 +189,25 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("help")) {
-                        if (args.length != 1) {
-                            sender.sendMessage(ColorUtils.applyColor(commandVcHelpHelp));
-                            if (debugCommand) {
-                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
-                            }
-                            return;
-                        }
-                        String finale = "\n\n&e&lVanillaChallenges &7● Version " + Main.instance.getDescription().getVersion()
-                                + " created by eliotesta98" + "\n\n";
+                    } else if (args[0].equalsIgnoreCase("help")) {
+                        String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
+                                + " created by &a&leliotesta98" + "\n&r\n";
                         finale = finale + commandVcChallenge + "\n";
                         finale = finale + commandVcClear + "\n";
-                        finale = finale + commandVcHelpHelp + "\n";
                         finale = finale + commandVcNextHelp + "\n";
                         finale = finale + commandVcPointsHelp + "\n";
                         finale = finale + commandVcReloadHelp + "\n";
                         finale = finale + commandVcReward + "\n";
                         finale = finale + commandVcTopHelp + "\n";
-                        finale = finale + "\n";
+                        finale = finale + "&r\n";
                         finale = finale + commandFooter;
-                        finale = finale + "\n";
                         sender.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("points")) {
+                    } else if (args[0].equalsIgnoreCase("points")) {
                         if (args.length > 2) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                             if (debugCommand) {
@@ -253,8 +232,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                    }
-                    else if (args[0].equalsIgnoreCase("reload")) {
+                    } else if (args[0].equalsIgnoreCase("reload")) {
                         if (args.length != 1) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                             if (debugCommand) {
@@ -277,16 +255,14 @@ public class Commands implements CommandExecutor {
                             }
                         });
                         return;
-                    }
-                    else if(args[0].equalsIgnoreCase("reward")) {
+                    } else if (args[0].equalsIgnoreCase("reward")) {
                         sender.sendMessage(ColorUtils.applyColor(errorYouAreNotAPlayer));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("top")) {
+                    } else if (args[0].equalsIgnoreCase("top")) {
                         if (args.length != 1) {
                             sender.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                             if (debugCommand) {
@@ -313,21 +289,18 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else {
-                        String finale = "\n\n&e&lVanillaChallenges &7● Version " + Main.instance.getDescription().getVersion()
-                                + " created by eliotesta98" + "\n\n";
+                    } else {
+                        String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
+                                + " created by &a&leliotesta98" + "\n&r\n";
                         finale = finale + commandVcChallenge + "\n";
                         finale = finale + commandVcClear + "\n";
-                        finale = finale + commandVcHelpHelp + "\n";
                         finale = finale + commandVcNextHelp + "\n";
                         finale = finale + commandVcPointsHelp + "\n";
                         finale = finale + commandVcReloadHelp + "\n";
                         finale = finale + commandVcReward + "\n";
                         finale = finale + commandVcTopHelp + "\n";
-                        finale = finale + "\n";
+                        finale = finale + "&r\n";
                         finale = finale + commandFooter;
-                        finale = finale + "\n";
                         sender.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -351,17 +324,15 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args.length == 0) {
-                        String finale = "\n\n&e&lVanillaChallenges &7● Version " + Main.instance.getDescription().getVersion()
-                                + " created by eliotesta98" + "\n\n";
+                    } else if (args.length == 0) {
+                        String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
+                                + " created by &a&leliotesta98" + "\n&r\n";
                         if (p.hasPermission("vc.challenge.command")) {
                             finale = finale + commandVcChallenge + "\n";
                         }
                         if (p.hasPermission("vc.clear.command")) {
                             finale = finale + commandVcClear + "\n";
                         }
-                        finale = finale + commandVcHelpHelp + "\n";
                         if (p.hasPermission("vc.next.command")) {
                             finale = finale + commandVcNextHelp + "\n";
                         }
@@ -371,23 +342,21 @@ public class Commands implements CommandExecutor {
                         if (p.hasPermission("vc.reload.command")) {
                             finale = finale + commandVcReloadHelp + "\n";
                         }
-                        if(p.hasPermission("vc.reward.command")) {
+                        if (p.hasPermission("vc.reward.command")) {
                             finale = finale + commandVcReward + "\n";
                         }
                         if (p.hasPermission("vc.top.command")) {
                             finale = finale + commandVcTopHelp + "\n";
                         }
-                        finale = finale + "\n";
+                        finale = finale + "&r\n";
                         finale = finale + commandFooter;
-                        finale = finale + "\n";
                         p.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("challenge")) {
+                    } else if (args[0].equalsIgnoreCase("challenge")) {
                         if (!p.hasPermission("vc.challenge.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
@@ -404,7 +373,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        int timeResume = (Main.currentlyChallengeDB.getTimeResume() / 60) / 60;
+                        int timeResume = Main.dailyChallenge.getTimeChallenge();
                         for (int i = 0; i < brodcastMessageTitle.size(); i++) {
                             p.sendMessage(ColorUtils.applyColor(brodcastMessageTitle.get(i).replace("{hours}", timeResume + "")));
                         }
@@ -413,8 +382,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("clear")) {
+                    } else if (args[0].equalsIgnoreCase("clear")) {
                         if (!p.hasPermission("vc.clear.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
@@ -438,8 +406,7 @@ public class Commands implements CommandExecutor {
                                 ReloadUtil.reload();
                             }
                         });
-                    }
-                    else if (args[0].equalsIgnoreCase("next")) {
+                    } else if (args[0].equalsIgnoreCase("next")) {
                         if (!p.hasPermission("vc.next.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
@@ -460,7 +427,7 @@ public class Commands implements CommandExecutor {
                             @Override
                             public void run() {
                                 ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
-                                Main.db.deleteChallengeWithName(Main.currentlyChallengeDB.getNomeChallenge());
+                                Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
                                 Main.db.removeTopYesterday();
                                 Main.db.saveTopYesterday(topPlayers);
                                 if (Main.instance.getConfigGestion().isBackupEnabled()) {
@@ -472,7 +439,7 @@ public class Commands implements CommandExecutor {
                                     DailyWinner dailyWinner = new DailyWinner();
                                     dailyWinner.setId(number);
                                     dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
-                                    dailyWinner.setNomeChallenge(Main.currentlyChallengeDB.getNomeChallenge());
+                                    dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
                                     for (int i = 0; i < Main.dailyChallenge.getRewards().size(); i++) {
                                         dailyWinner.setId(number);
                                         dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
@@ -494,8 +461,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("help")) {
+                    } else if (args[0].equalsIgnoreCase("help")) {
                         if (!p.hasPermission("vc.help.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
@@ -504,50 +470,38 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        if (args.length != 1) {
-                            sender.sendMessage(ColorUtils.applyColor(commandVcHelpHelp));
-                            if (debugCommand) {
-                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
-                            }
-                            return;
-                        } else {
-                            String finale = "\n\n&e&lVanillaChallenges &7● Version " + Main.instance.getDescription().getVersion()
-                                    + " created by eliotesta98" + "\n\n";
-                            if (p.hasPermission("vc.challenge.command")) {
-                                finale = finale + commandVcChallenge + "\n";
-                            }
-                            if (p.hasPermission("vc.clear.command")) {
-                                finale = finale + commandVcClear + "\n";
-                            }
-                            finale = finale + commandVcHelpHelp + "\n";
-                            if (p.hasPermission("vc.next.command")) {
-                                finale = finale + commandVcNextHelp + "\n";
-                            }
-                            if (p.hasPermission("vc.points.command")) {
-                                finale = finale + commandVcPointsHelp + "\n";
-                            }
-                            if (p.hasPermission("vc.reload.command")) {
-                                finale = finale + commandVcReloadHelp + "\n";
-                            }
-                            if(p.hasPermission("vc.reward.command")) {
-                                finale = finale + commandVcReward + "\n";
-                            }
-                            if (p.hasPermission("vc.top.command")) {
-                                finale = finale + commandVcTopHelp + "\n";
-                            }
-                            finale = finale + "\n";
-                            finale = finale + commandFooter;
-                            finale = finale + "\n";
-                            p.sendMessage(ColorUtils.applyColor(finale));
-                            if (debugCommand) {
-                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
-                            }
-                            return;
+                        String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
+                                + " created by &a&leliotesta98" + "\n&r\n";
+                        if (p.hasPermission("vc.challenge.command")) {
+                            finale = finale + commandVcChallenge + "\n";
                         }
-                    }
-                    else if (args[0].equalsIgnoreCase("points")) {
+                        if (p.hasPermission("vc.clear.command")) {
+                            finale = finale + commandVcClear + "\n";
+                        }
+                        if (p.hasPermission("vc.next.command")) {
+                            finale = finale + commandVcNextHelp + "\n";
+                        }
+                        if (p.hasPermission("vc.points.command")) {
+                            finale = finale + commandVcPointsHelp + "\n";
+                        }
+                        if (p.hasPermission("vc.reload.command")) {
+                            finale = finale + commandVcReloadHelp + "\n";
+                        }
+                        if (p.hasPermission("vc.reward.command")) {
+                            finale = finale + commandVcReward + "\n";
+                        }
+                        if (p.hasPermission("vc.top.command")) {
+                            finale = finale + commandVcTopHelp + "\n";
+                        }
+                        finale = finale + "&r\n";
+                        finale = finale + commandFooter;
+                        p.sendMessage(ColorUtils.applyColor(finale));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                        return;
+                    } else if (args[0].equalsIgnoreCase("points")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.points.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -567,12 +521,7 @@ public class Commands implements CommandExecutor {
                         }
                         if (args.length == 1) {
                             long points = Main.instance.getDailyChallenge().getPointFromPLayerName(p.getName());
-                            p.sendMessage(ColorUtils.applyColor(pointsInfo.replace("{player}", "Your").replace("{number}", "" + points)));
-                            if (debugCommand) {
-                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
-                            }
-                            return;
+                            p.sendMessage(ColorUtils.applyColor(pointsInfo.replace("{player}", "You").replace("{number}", "" + points)));
                         } else {
                             if (!p.hasPermission("vc.points.admin.command")) {
                                 p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -584,14 +533,13 @@ public class Commands implements CommandExecutor {
                             }
                             long points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
                             p.sendMessage(ColorUtils.applyColor(pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points)));
-                            if (debugCommand) {
-                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
-                            }
-                            return;
                         }
-                    }
-                    else if(args[0].equalsIgnoreCase("reward")) {
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                        return;
+                    } else if (args[0].equalsIgnoreCase("reward")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.reward.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -601,7 +549,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        if(args.length > 1) {
+                        if (args.length > 1) {
                             p.sendMessage(ColorUtils.applyColor(commandVcReward));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -610,7 +558,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         ArrayList<DailyWinner> winners = Main.db.getAllDailyWinners();
-                        if(winners.isEmpty()) {
+                        if (winners.isEmpty()) {
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                                 debug.debug("Commands");
@@ -678,8 +626,7 @@ public class Commands implements CommandExecutor {
                                 }
                             }
                         }
-                    }
-                    else if (args[0].equalsIgnoreCase("top")) {
+                    } else if (args[0].equalsIgnoreCase("top")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.top.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -715,8 +662,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    else if (args[0].equalsIgnoreCase("reload")) {
+                    } else if (args[0].equalsIgnoreCase("reload")) {
                         // controllo se ha il permesso
                         if (!p.hasPermission("vc.reload.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -748,17 +694,15 @@ public class Commands implements CommandExecutor {
                             }
                         });
                         return;
-                    }
-                    else {
-                        String finale = "\n\n&e&lVanillaChallenges &7● Version " + Main.instance.getDescription().getVersion()
-                                + " created by eliotesta98" + "\n\n";
+                    } else {
+                        String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
+                                + " created by &a&leliotesta98" + "\n&r\n";
                         if (p.hasPermission("vc.challenge.command")) {
                             finale = finale + commandVcChallenge + "\n";
                         }
                         if (p.hasPermission("vc.clear.command")) {
                             finale = finale + commandVcClear + "\n";
                         }
-                        finale = finale + commandVcHelpHelp + "\n";
                         if (p.hasPermission("vc.next.command")) {
                             finale = finale + commandVcNextHelp + "\n";
                         }
@@ -768,15 +712,14 @@ public class Commands implements CommandExecutor {
                         if (p.hasPermission("vc.reload.command")) {
                             finale = finale + commandVcReloadHelp + "\n";
                         }
-                        if(p.hasPermission("vc.reward.command")) {
+                        if (p.hasPermission("vc.reward.command")) {
                             finale = finale + commandVcReward + "\n";
                         }
                         if (p.hasPermission("vc.top.command")) {
                             finale = finale + commandVcTopHelp + "\n";
                         }
-                        finale = finale + "\n";
+                        finale = finale + "&r\n";
                         finale = finale + commandFooter;
-                        finale = finale + "\n";
                         p.sendMessage(ColorUtils.applyColor(finale));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));

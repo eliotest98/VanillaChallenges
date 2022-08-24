@@ -21,7 +21,7 @@ public class YamlDB implements Database {
     private FileConfiguration file;
     private File configFile;
     private ArrayList<Challenger> playerPoints = new ArrayList<Challenger>();
-    private ArrayList<ChallengeDB> challenges = new ArrayList<ChallengeDB>();
+    private ArrayList<Challenge> challenges = new ArrayList<Challenge>();
     private ArrayList<DailyWinner> dailyWinners = new ArrayList<DailyWinner>();
     private ArrayList<Challenger> topYesterday = new ArrayList<Challenger>();
 
@@ -48,7 +48,9 @@ public class YamlDB implements Database {
                     playerPoints.add(challenger);
                 }
                 for (String challenge : file.getConfigurationSection("Challenges").getKeys(false)) {
-                    ChallengeDB challengeDB = new ChallengeDB(challenge, file.getInt("Challenges." + challenge));
+                    Challenge challengeDB = new Challenge();
+                    challengeDB.setChallengeName(challenge);
+                    challengeDB.setTimeChallenge(file.getInt("Challenges." + challenge));
                     challenges.add(challengeDB);
                 }
                 for (String number : file.getConfigurationSection("DailyWinners").getKeys(false)) {
@@ -70,7 +72,9 @@ public class YamlDB implements Database {
             }
             if (file.getConfigurationSection("Challenges") != null) {
                 for (String challenge : file.getConfigurationSection("Challenges").getKeys(false)) {
-                    ChallengeDB challengeDB = new ChallengeDB(challenge, file.getInt("Challenges." + challenge));
+                    Challenge challengeDB = new Challenge();
+                    challengeDB.setChallengeName(challenge);
+                    challengeDB.setTimeChallenge(file.getInt("Challenges." + challenge));
                     challenges.add(challengeDB);
                 }
             }
@@ -112,7 +116,7 @@ public class YamlDB implements Database {
                     file.set("Points." + playerPoints.get(i).getNomePlayer(), playerPoints.get(i).getPoints());
                 }
                 for (int i = 0; i < challenges.size(); i++) {
-                    file.set("Challenges." + challenges.get(i).getNomeChallenge(), challenges.get(i).getTimeResume());
+                    file.set("Challenges." + challenges.get(i).getChallengeName(), challenges.get(i).getTimeChallenge());
                 }
                 for (int i = 0; i < dailyWinners.size(); i++) {
                     file.set("DailyWinners." + dailyWinners.get(i).getId() + ".PlayerName", dailyWinners.get(i).getPlayerName());
@@ -173,7 +177,7 @@ public class YamlDB implements Database {
 
     public void saveChallenges() {
         for (int i = 0; i < challenges.size(); i++) {
-            file.set("Challenges." + challenges.get(i).getNomeChallenge(), challenges.get(i).getTimeResume());
+            file.set("Challenges." + challenges.get(i).getChallengeName(), challenges.get(i).getTimeChallenge());
         }
         try {
             saveFile();
@@ -197,21 +201,19 @@ public class YamlDB implements Database {
                 if (count == 1) {
                     Main.dailyChallenge = challenge;
                     nome = challenge.getTypeChallenge();
-                    Main.currentlyChallengeDB = new ChallengeDB(key, 86400);
                 }
-                challenges.add(new ChallengeDB(key, 86400));
+                challenges.add(challenge);
                 count++;
             }
             saveChallenges();
             return nome;
         } else {
             for (int i = 0; i < challenges.size(); i++) {
-                if (challenges.get(i).getTimeResume() <= 0) {
-                    deleteChallengeWithName(challenges.get(i).getNomeChallenge());
+                if (challenges.get(i).getTimeChallenge() <= 0) {
+                    deleteChallengeWithName(challenges.get(i).getChallengeName());
                     challenges.remove(i);
                 } else {
-                    Main.currentlyChallengeDB = challenges.get(i);
-                    Main.dailyChallenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(i).getNomeChallenge());
+                    Main.dailyChallenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(i).getChallengeName());
                     Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
                     return Main.dailyChallenge.getTypeChallenge();
                 }

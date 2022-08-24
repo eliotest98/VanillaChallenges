@@ -1,5 +1,7 @@
 Damager:
   TypeChallenge: 'DamageChallenge'
+  # How long do you want the challenge to last in hours ?
+  Time: 24
   # Cause you want to damage for challenge, if you want all causes write ALL
   Cause: ALL
   # How many points you want give at damage?

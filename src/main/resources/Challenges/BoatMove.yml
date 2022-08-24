@@ -1,5 +1,7 @@
 BoatMove:
   TypeChallenge: 'VehicleMoveChallenge'
+  # How long do you want the challenge to last in hours ?
+  Time: 24
   # How many points you want give for movement?
   Point: 1
   # What vehicle you want use the player? ALL for all Vehicle

@@ -26,7 +26,7 @@ public class ItemCollector implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemCollector");
     private String item = Main.dailyChallenge.getItem();
     private int point = Main.dailyChallenge.getPoint();
-    private String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("errorAlreadyPlacedChest");
+    private String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyPlacedChest");
 
     // timer del controllo punti
     int number = 20 * 60 * 2;

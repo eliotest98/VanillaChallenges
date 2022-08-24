@@ -19,7 +19,7 @@ public class DailyGiveWinners implements Listener {
     private ArrayList<DailyWinner> winners = new ArrayList<DailyWinner>();
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debug = Main.instance.getConfigGestion().getDebug().get("DailyGiveRewardEvent");
-    private String challengeReward = Main.instance.getConfigGestion().getMessages().get("challengeReward");
+    private String challengeReward = Main.instance.getConfigGestion().getMessages().get("ChallengeReward");
 
     public DailyGiveWinners() {
         winners = Main.db.getAllDailyWinners();

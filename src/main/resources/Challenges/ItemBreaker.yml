@@ -1,5 +1,7 @@
 ItemBreaker:
   TypeChallenge: 'ItemBreakChallenge'
+  # How long do you want the challenge to last in hours ?
+  Time: 24
   # Item you want to break for challenge, if you want all items write ALL
   Item: ALL
   # Able or disable Sneak when place Es. true or false or NOBODY
