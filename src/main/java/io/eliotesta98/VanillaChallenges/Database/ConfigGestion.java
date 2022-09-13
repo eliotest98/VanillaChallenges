@@ -4,6 +4,7 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.FileCreator;
 import io.eliotesta98.VanillaChallenges.Utils.ItemUtils;
+import io.eliotesta98.VanillaChallenges.Utils.Tasks;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -18,10 +19,11 @@ public class ConfigGestion {
     private HashMap<String, String> messages = new HashMap<String, String>();
     private HashMap<String, Challenge> challenges = new HashMap<String, Challenge>();
     private HashMap<String, Boolean> hooks = new HashMap<String, Boolean>();
-    private boolean activeOnlinePoints, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration;
+    private boolean activeOnlinePoints, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration, pointsResume;
     private String database;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number, time;
     private ItemStack chestCollection;
+    private Tasks tasks = new Tasks();
 
     public ConfigGestion(FileConfiguration file) {
         for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
@@ -48,6 +50,9 @@ public class ConfigGestion {
             } else {
                 messages.put(message, file.getString("Messages." + message).replace("{prefix}", messages.get("Prefix")));
             }
+        }
+        for (String hoock : file.getConfigurationSection("Configuration.Hooks").getKeys(false)) {
+            hooks.put(hoock, file.getBoolean("Configuration.Hooks." + hoock));
         }
         File folder = new File(Main.instance.getDataFolder() +
                 File.separator + "Challenges");
@@ -83,6 +88,9 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "InventoryControl.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "BoatMove.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dyer.yml"));
+            if(hooks.get("CubeGenerator")) {
+                files.add(new File(Main.instance.getDataFolder() + "Challenges", "CubeGenerator.yml"));
+            }
             FileCreator.createAllFiles(files);
         }
         for (File fileChallenge : folder.listFiles()) {
@@ -93,10 +101,7 @@ public class ConfigGestion {
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             int timeChallenge = yamlChallenge.getInt(challengeName + ".Time");
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
-            ArrayList<String> title = new ArrayList<>();
-            yamlChallenge.getStringList(challengeName + ".Title").forEach(value -> {
-                title.add(value);
-            });
+            ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
             String item = yamlChallenge.getString(challengeName + ".Item");
             String mob = yamlChallenge.getString(challengeName + ".Mob");
             String itemInHand = yamlChallenge.getString(challengeName + ".ItemInHand");
@@ -108,13 +113,14 @@ public class ConfigGestion {
             int point = yamlChallenge.getInt(challengeName + ".Point");
             int number = yamlChallenge.getInt(challengeName + ".Number");
             int time = yamlChallenge.getInt(challengeName + ".Time");
+            int minutes = yamlChallenge.getInt(challengeName+".Minutes");
             int pointsBoost = 0;
             int multiplier = 1;
-            int minutes = 0;
+            int boostMinutes = 0;
             if (yamlChallenge.getBoolean(challengeName + ".Boost.Enabled")) {
                 pointsBoost = yamlChallenge.getInt(challengeName + ".Boost.Points");
                 multiplier = yamlChallenge.getInt(challengeName + ".Boost.Multiplier");
-                minutes = yamlChallenge.getInt(challengeName + ".Boost.Minutes");
+                boostMinutes = yamlChallenge.getInt(challengeName + ".Boost.Minutes");
             }
             int pointsBoostSinglePlayer = 0;
             int multiplierSinglePlayer = 1;
@@ -127,13 +133,10 @@ public class ConfigGestion {
             String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
             String onGround = yamlChallenge.getString(challengeName + ".OnGround");
             String stringFormatter = yamlChallenge.getString(challengeName + ".StringFormatter");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, minutes, number, time, vehicle, sneaking, onGround, pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge, challengeName, stringFormatter);
+            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards, title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost, multiplier, boostMinutes, number, time, vehicle, sneaking, onGround, pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge, challengeName, stringFormatter,minutes);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
-        for (String hoock : file.getConfigurationSection("Configuration.Hooks").getKeys(false)) {
-            hooks.put(hoock, file.getBoolean("Configuration.Hooks." + hoock));
-        }
         database = file.getString("Configuration.Database");
         resetPointsAtNewChallenge = file.getBoolean("Configuration.ResetPointsAtNewChallenge");
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
@@ -143,11 +146,9 @@ public class ConfigGestion {
         numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
         pointsOnlinePoints = file.getInt("Configuration.OnlinePoints.Point");
         minutesOnlinePoints = file.getInt("Configuration.OnlinePoints.Minutes");
-        ArrayList<String> lore = new ArrayList<>();
-        file.getStringList("Configuration.CollectionChallengeItem.Lore").forEach(value -> {
-            lore.add(value);
-        });
+        ArrayList<String> lore = new ArrayList<>(file.getStringList("Configuration.CollectionChallengeItem.Lore"));
         chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
+        pointsResume = file.getBoolean("Configuration.PointsResume");
     }
 
     public HashMap<String, Boolean> getDebug() {
@@ -284,5 +285,21 @@ public class ConfigGestion {
 
     public void setRandomChallengeGeneration(boolean randomChallengeGeneration) {
         this.randomChallengeGeneration = randomChallengeGeneration;
+    }
+
+    public Tasks getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Tasks tasks) {
+        this.tasks = tasks;
+    }
+
+    public boolean isPointsResume() {
+        return pointsResume;
+    }
+
+    public void setPointsResume(boolean pointsResume) {
+        this.pointsResume = pointsResume;
     }
 }

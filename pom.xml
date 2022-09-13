@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>VanillaChallenges</groupId>
     <artifactId>VanillaChallenges</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.14</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -196,6 +196,14 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.11.1</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- CubeGenerator -->
+        <dependency>
+            <groupId>io.eliotesta98</groupId>
+            <artifactId>CubeGenerator</artifactId>
+            <version>4.2.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/CubeGenerator 4.2.2.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

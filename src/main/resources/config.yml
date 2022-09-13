@@ -8,14 +8,24 @@
 Configuration:
   #If you want random generation of Challenges
   RandomChallengeGeneration: false
+
+
   # If you want reset the player points at the end of every challenge
   ResetPointsAtNewChallenge: false
+
+
+  # If you want resume points without zero (Ex 1.000 = 1k)
+  PointsResume: true
+
+
   # Chest for ItemCollectionChallenge
   CollectionChallengeItem:
     Type: CHEST
     Name: "&7Chest Collector"
     Lore:
       - "&7Place this chest and use it for collect items"
+
+
   # Points if remain online for x minutes
   OnlinePoints:
     # If You want this feature
@@ -24,19 +34,32 @@ Configuration:
     Point: 10
     # Every time you want player remain online for give points
     Minutes: 10
+
+
   BroadcastMessage:
     # time in minutes 0 to disabled
     TimeTitleChallenges: 10
+
+
   Top:
     # if you want yesterday top with broadcast and commands
     YesterdayTop: false
+
+
   Hooks:
     PlaceholderAPI: false
+    CubeGenerator: false
+    
+
   # If you want use H2 or .yml file for data storage (write H2 or Yaml)
   Database: 'H2'
+
+
   Backup:
     Enabled: true
     NumberOfFilesInFolder: 4
+
+
 # Messages
 Messages:
   Prefix: '&eVanillaChallenges  &r'

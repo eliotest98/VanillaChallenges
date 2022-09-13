@@ -6,3 +6,4 @@ bin/
 *.iml
 dependency-reduced-pom.xml
 .idea
+lib/

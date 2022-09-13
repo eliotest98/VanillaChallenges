@@ -2,8 +2,8 @@ EggThrower:
   TypeChallenge: 'EggThrowerChallenge'
   # How long do you want the challenge to last in hours ?
   Time: 24
-  # if you want count spawn chicken write CHICKEN, if you not want count chicken write ALL
-  Mob: CHICKEN
+  # if you want count spawn chicken write CHICKEN, if you not want count chicken write ALL (1 point at throw)
+  Mob: ALL
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # How many points you want give at egg throw?
@@ -33,11 +33,12 @@ EggThrower:
     - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉           &7Egg Thrower Challenge'
     - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
     - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉    &7Throw eggs for receive points'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point for 1 chicken spawned)'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉       &7(1 point for 1 throw)'
     - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
     - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
   Rewards:
     - 'TNT:16'

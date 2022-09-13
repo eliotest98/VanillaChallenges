@@ -39,5 +39,6 @@ Sprinter:
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
   Rewards:
     - 'DIAMOND:16'

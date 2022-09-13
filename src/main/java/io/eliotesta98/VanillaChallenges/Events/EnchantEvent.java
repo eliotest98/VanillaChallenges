@@ -32,6 +32,5 @@ public class EnchantEvent implements Listener {
                 return;
             }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
     }
 }

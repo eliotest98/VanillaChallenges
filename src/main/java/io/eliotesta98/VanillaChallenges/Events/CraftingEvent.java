@@ -24,35 +24,18 @@ public class CraftingEvent implements Listener {
             @Override
             public void run() {
                 if (debugActive) {
-                    debugUtils.addLine("BlockBreakEvent PlayerCrafting= " + playerName);
+                    debugUtils.addLine("CraftItemEvent PlayerCrafting= " + playerName);
                 }
-                if (itemCrafting.equalsIgnoreCase("ALL")) {
+                if(!itemCrafting.equalsIgnoreCase("ALL") && !itemCrafting.equalsIgnoreCase(recipePlayer)) {
                     if (debugActive) {
-                        debugUtils.addLine("CraftItemEvent Conditions= 0");
-                    }
-                    Main.dailyChallenge.increment(playerName, point);
-                    if (debugActive) {
+                        debugUtils.addLine("CraftItemEvent RecipePlayer= " + recipePlayer);
+                        debugUtils.addLine("CraftItemEvent RecipeConfig= " + itemCrafting);
                         debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
                         debugUtils.debug("CraftItemEvent");
                     }
                     return;
-                } else {
-                    if (debugActive) {
-                        debugUtils.addLine("CraftItemEvent RecipePlayer= " + recipePlayer);
-                        debugUtils.addLine("CraftItemEvent RecipeConfig= " + itemCrafting);
-                    }
-                    if (recipePlayer.equalsIgnoreCase(itemCrafting)) {
-                        if (debugActive) {
-                            debugUtils.addLine("CraftItemEvent Conditions= 1");
-                        }
-                        Main.dailyChallenge.increment(playerName, point);
-                        if (debugActive) {
-                            debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
-                            debugUtils.debug("CraftItemEvent");
-                        }
-                        return;
-                    }
                 }
+                Main.dailyChallenge.increment(playerName, point);
                 if (debugActive) {
                     debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("CraftItemEvent");
@@ -60,6 +43,5 @@ public class CraftingEvent implements Listener {
                 return;
             }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getWhoClicked().getName());
     }
 }

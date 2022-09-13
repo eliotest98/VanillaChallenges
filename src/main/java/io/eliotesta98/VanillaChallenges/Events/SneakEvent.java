@@ -26,38 +26,36 @@ public class SneakEvent implements Listener {
             public void run() {
                 if (debugActive) {
                     debugUtils.addLine("SneakEvent PlayerSkeaking= " + playerName);
-                    debugUtils.addLine("SneakEvent BlockStepOnPlayer= " + blockWalk);
-                    debugUtils.addLine("SneakEvent BlockStepOnConfig= " + block);
-                    debugUtils.addLine("SneakEvent ItemInHandConfig= " + item);
-                    debugUtils.addLine("SneakEvent ItemInHandPlayer= " + itemInHand);
                 }
-                if (item.equalsIgnoreCase("ALL")) {
-                    if (block.equalsIgnoreCase("ALL")) {
-                        Main.dailyChallenge.increment(playerName, point);
-                    } else {
-                        if (block.equalsIgnoreCase(blockWalk)) {
-                            Main.dailyChallenge.increment(playerName, point);
-                        }
+
+                if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(itemInHand)) {
+                    if (debugActive) {
+                        debugUtils.addLine("SneakEvent ItemInHandConfig= " + item);
+                        debugUtils.addLine("SneakEvent ItemInHandPlayer= " + itemInHand);
+                        debugUtils.addLine("SneakEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("SneakEvent");
                     }
-                } else {
-                    if (item.equalsIgnoreCase(itemInHand)) {
-                        if (block.equalsIgnoreCase("ALL")) {
-                            Main.dailyChallenge.increment(playerName, point);
-                        } else {
-                            if (block.equalsIgnoreCase(blockWalk)) {
-                                Main.dailyChallenge.increment(playerName, point);
-                            }
-                        }
-                    }
+                    return;
                 }
+
+                if(!block.equalsIgnoreCase("ALL") && !block.equalsIgnoreCase(blockWalk)) {
+                    if (debugActive) {
+                        debugUtils.addLine("SneakEvent BlockStepOnPlayer= " + blockWalk);
+                        debugUtils.addLine("SneakEvent BlockStepOnConfig= " + block);
+                        debugUtils.addLine("SneakEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("SneakEvent");
+                    }
+                    return;
+                }
+
+                Main.dailyChallenge.increment(playerName, point);
+
                 if (debugActive) {
                     debugUtils.addLine("SneakEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("SneakEvent");
                 }
-                return;
             }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
     }
 }
 

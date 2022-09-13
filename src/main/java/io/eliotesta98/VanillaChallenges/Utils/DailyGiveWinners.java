@@ -96,6 +96,7 @@ public class DailyGiveWinners implements Listener {
                                 }
                             });
                         }
+                        break;
                     }
                 }
             }

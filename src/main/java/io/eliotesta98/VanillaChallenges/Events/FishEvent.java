@@ -34,48 +34,26 @@ public class FishEvent implements Listener {
             public void run() {
                 if (debugActive) {
                     debugUtils.addLine("FishEvent PlayerFishing= " + playerName);
-                    debugUtils.addLine("FishEvent PlayerSneaking= " + playerSneaking);
-                    debugUtils.addLine("FishEvent ConfigSneaking= " + sneaking);
                 }
-                if (sneaking.equalsIgnoreCase("NOBODY")) {
-                    if (fish.equalsIgnoreCase("ALL")) {
-                        if (debugActive) {
-                            debugUtils.addLine("FishEvent Conditions= 0");
-                        }
-                        Main.dailyChallenge.increment(playerName, point);
-                    } else {
-                        if (debugActive) {
-                            debugUtils.addLine("FishEvent FishCaughByPlayer= " + fishCaugh);
-                            debugUtils.addLine("FishEvent FishCaughConfig= " + fish);
-                        }
-                        if (fish.equalsIgnoreCase(fishCaugh)) {
-                            if (debugActive) {
-                                debugUtils.addLine("FishEvent Conditions= 1");
-                            }
-                            Main.dailyChallenge.increment(playerName, point);
-                        }
+                if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != playerSneaking) {
+                    if (debugActive) {
+                        debugUtils.addLine("FishEvent ConfigSneaking= " + sneaking);
+                        debugUtils.addLine("FishEvent PlayerSneaking= " + playerSneaking);
+                        debugUtils.addLine("FishEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("FishEvent");
                     }
-                } else {
-                    if (Boolean.parseBoolean(sneaking) == playerSneaking) {
-                        if (fish.equalsIgnoreCase("ALL")) {
-                            if (debugActive) {
-                                debugUtils.addLine("FishEvent Conditions= 0");
-                            }
-                            Main.dailyChallenge.increment(playerName, point);
-                        } else {
-                            if (debugActive) {
-                                debugUtils.addLine("FishEvent FishCaughByPlayer= " + fishCaugh);
-                                debugUtils.addLine("FishEvent FishCaughConfig= " + fish);
-                            }
-                            if (fish.equalsIgnoreCase(fishCaugh)) {
-                                if (debugActive) {
-                                    debugUtils.addLine("FishEvent Conditions= 1");
-                                }
-                                Main.dailyChallenge.increment(playerName, point);
-                            }
-                        }
-                    }
+                    return;
                 }
+                if(!fish.equalsIgnoreCase("ALL") && !fish.equalsIgnoreCase(fishCaugh)) {
+                    if (debugActive) {
+                        debugUtils.addLine("FishEvent FishCaughByPlayer= " + fishCaugh);
+                        debugUtils.addLine("FishEvent FishCaughConfig= " + fish);
+                        debugUtils.addLine("FishEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("FishEvent");
+                    }
+                    return;
+                }
+                Main.dailyChallenge.increment(playerName, point);
                 if (debugActive) {
                     debugUtils.addLine("FishEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("FishEvent");
@@ -83,6 +61,5 @@ public class FishEvent implements Listener {
                 return;
             }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
     }
 }

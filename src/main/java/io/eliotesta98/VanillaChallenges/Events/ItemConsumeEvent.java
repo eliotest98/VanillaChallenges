@@ -9,11 +9,11 @@ import org.bukkit.event.Listener;
 
 public class ItemConsumeEvent implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemConsumeEvent");
-    private String itemConsume = Main.instance.getDailyChallenge().getItem();
-    private int point = Main.dailyChallenge.getPoint();
-    private String sneaking = Main.dailyChallenge.getSneaking();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemConsumeEvent");
+    private final String itemConsume = Main.instance.getDailyChallenge().getItem();
+    private final int point = Main.dailyChallenge.getPoint();
+    private final String sneaking = Main.dailyChallenge.getSneaking();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onItemConsume(org.bukkit.event.player.PlayerItemDamageEvent e) {
@@ -21,60 +21,37 @@ public class ItemConsumeEvent implements Listener {
         final String playerName = e.getPlayer().getName();
         final String itemConsumingByPlayer = e.getItem().getType().toString();
         final boolean sneakingPlayer = e.getPlayer().isSneaking();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if (debugActive) {
+                debugUtils.addLine("ItemConsumeEvent PlayerConsuming= " + playerName);
+            }
+
+            if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
                 if (debugActive) {
-                    debugUtils.addLine("ItemConsumeEvent PlayerConsuming= " + playerName);
-                    debugUtils.addLine("ItemConsumeEvent PlayerSneaking= " + sneakingPlayer);
-                    debugUtils.addLine("ItemConsumeEvent ConfigSneaking= " + sneaking);
-                }
-                if (sneaking.equalsIgnoreCase("NOBODY")) {
-                    if (itemConsume.equalsIgnoreCase("ALL")) {
-                        if (debugActive) {
-                            debugUtils.addLine("ItemConsumeEvent Conditions= 0");
-                        }
-                        Main.dailyChallenge.increment(playerName, point);
-                    } else {
-                        if (debugActive) {
-                            debugUtils.addLine("ItemConsumeEvent ItemConsumeByPlayer= " + itemConsumingByPlayer);
-                            debugUtils.addLine("ItemConsumeEvent ItemConsumeConfig= " + itemConsume);
-                        }
-                        if (itemConsumingByPlayer.equalsIgnoreCase(itemConsume)) {
-                            if (debugActive) {
-                                debugUtils.addLine("ItemConsumeEvent Conditions= 1");
-                            }
-                            Main.dailyChallenge.increment(playerName, point);
-                        }
-                    }
-                } else {
-                    if (sneakingPlayer == Boolean.parseBoolean(sneaking)) {
-                        if (itemConsume.equalsIgnoreCase("ALL")) {
-                            if (debugActive) {
-                                debugUtils.addLine("ItemConsumeEvent Conditions= 0");
-                            }
-                            Main.dailyChallenge.increment(playerName, point);
-                        } else {
-                            if (debugActive) {
-                                debugUtils.addLine("ItemConsumeEvent ItemConsumeByPlayer= " + itemConsumingByPlayer);
-                                debugUtils.addLine("ItemConsumeEvent ItemConsumeConfig= " + itemConsume);
-                            }
-                            if (itemConsumingByPlayer.equalsIgnoreCase(itemConsume)) {
-                                if (debugActive) {
-                                    debugUtils.addLine("ItemConsumeEvent Conditions= 1");
-                                }
-                                Main.dailyChallenge.increment(playerName, point);
-                            }
-                        }
-                    }
-                }
-                if (debugActive) {
+                    debugUtils.addLine("ItemConsumeEvent SneakingPlayer= " + sneakingPlayer);
+                    debugUtils.addLine("ItemConsumeEvent SneakingConfig= " + sneaking);
                     debugUtils.addLine("ItemConsumeEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("ItemConsumeEvent");
                 }
                 return;
             }
+
+            if(!itemConsume.equalsIgnoreCase("NOBODY") && itemConsume.equalsIgnoreCase(itemConsumingByPlayer)) {
+                if (debugActive) {
+                    debugUtils.addLine("ItemConsumeEvent ItemConsumeByPlayer= " + itemConsumingByPlayer);
+                    debugUtils.addLine("ItemConsumeEvent itemConsumeConfig= " + itemConsume);
+                    debugUtils.addLine("ItemConsumeEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ItemConsumeEvent");
+                }
+                return;
+            }
+
+            Main.dailyChallenge.increment(playerName, point);
+
+            if (debugActive) {
+                debugUtils.addLine("ItemConsumeEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("ItemConsumeEvent");
+            }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
     }
 }

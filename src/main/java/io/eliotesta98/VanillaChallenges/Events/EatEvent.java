@@ -28,7 +28,7 @@ public class EatEvent implements Listener {
             @Override
             public void run() {
                 if (debugActive) {
-                    debugUtils.addLine("BlockBreakEvent PlayerEating= " + playerName);
+                    debugUtils.addLine("EatEvent PlayerEating= " + playerName);
                 }
                 if (foodLevels.get(playerName) == null) {
                     if (foodLevel <= 20) {
@@ -46,30 +46,22 @@ public class EatEvent implements Listener {
                         } else {
                             foodLevels.put(playerName, 20);
                         }
-                        if (item.equalsIgnoreCase("ALL")) {
-                            if (debugActive) {
-                                debugUtils.addLine("EatEvent Conditions= 0");
-                            }
-                            Main.dailyChallenge.increment(playerName, (long) number * point);
-                        } else {
+                        if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(itemUsedByPlayer.getType().toString())) {
                             if (debugActive) {
                                 debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + itemUsedByPlayer);
                                 debugUtils.addLine("EatEvent ItemConsumedConfig= " + item);
+                                debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
+                                debugUtils.debug("EatEvent");
                             }
-                            if (itemUsedByPlayer.getType().toString().equalsIgnoreCase(item)) {
-                                if (debugActive) {
-                                    debugUtils.addLine("EatEvent Conditions= 1");
-                                }
-                                Main.dailyChallenge.increment(playerName, (long) number * point);
-                            }
+                            return;
                         }
+                        Main.dailyChallenge.increment(playerName, (long) number * point);
                     } else {
                         foodLevels.remove(playerName);
                         foodLevels.put(playerName, foodLevel);
                         Main.dailyChallenge.increment(playerName, point);
                     }
                 }
-                //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
                 if (debugActive) {
                     debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("EatEvent");

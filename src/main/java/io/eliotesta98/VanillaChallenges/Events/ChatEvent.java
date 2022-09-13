@@ -19,8 +19,6 @@ public class ChatEvent implements Listener {
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ChatEvent");
     private int point = Main.dailyChallenge.getPoint();
     private final String alphabet = Main.dailyChallenge.getStringFormatter();
-    private BukkitScheduler scheduler = Bukkit.getScheduler();
-    private static BukkitTask task;
     private String word = "";
     private final String message = Main.instance.getConfigGestion().getMessages().get("ChatWord");
     private final String correctAnswer = Main.instance.getConfigGestion().getMessages().get("CorrectAnswer");
@@ -46,7 +44,6 @@ public class ChatEvent implements Listener {
             }
             word = "";
         }
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
         if (debugActive) {
             debugUtils.addLine("ChatEvent execution time= " + (System.currentTimeMillis() - tempo));
             debugUtils.debug("ChatEvent");
@@ -58,12 +55,8 @@ public class ChatEvent implements Listener {
         execute(time);
     }
 
-    public static void stop() {
-        task.cancel();
-    }
-
     public void execute(long time) {
-        task = scheduler.runTaskTimerAsynchronously(Main.instance, new Runnable() {
+        BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 if (debugActive) {
@@ -76,6 +69,7 @@ public class ChatEvent implements Listener {
                 }
             }
         }, 0, time);
+        Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "ChatEvent", false);
     }
 
     public void generateWord() {

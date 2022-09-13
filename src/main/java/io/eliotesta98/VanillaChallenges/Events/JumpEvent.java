@@ -46,10 +46,8 @@ public class JumpEvent implements Listener {
                     debugUtils.addLine("JumpEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("JumpEvent");
                 }
-                return;
             }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
     }
 }
 
