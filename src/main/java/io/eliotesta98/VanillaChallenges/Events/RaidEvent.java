@@ -10,9 +10,9 @@ import org.bukkit.event.Listener;
 
 public class RaidEvent implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("RaidEvent");
-    private int point = Main.dailyChallenge.getPoint();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("RaidEvent");
+    private final int point = Main.dailyChallenge.getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onRaidFinishEvent(org.bukkit.event.raid.RaidFinishEvent e) {
@@ -26,22 +26,17 @@ public class RaidEvent implements Listener {
             return;
         }
         final int totalWaves = e.getRaid().getTotalWaves();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
-                for (Player winner : e.getWinners()) {
-                    if (debugActive) {
-                        debugUtils.addLine("RaidEvent RaidWinner= " + winner.getName());
-                    }
-                    Main.dailyChallenge.increment(winner.getName(), (long) totalWaves * point);
-                }
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            for (Player winner : e.getWinners()) {
                 if (debugActive) {
-                    debugUtils.addLine("RaidEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("RaidEvent");
+                    debugUtils.addLine("RaidEvent RaidWinner= " + winner.getName());
                 }
-                return;
+                Main.dailyChallenge.increment(winner.getName(), (long) totalWaves * point);
+            }
+            if (debugActive) {
+                debugUtils.addLine("RaidEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("RaidEvent");
             }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
     }
 }

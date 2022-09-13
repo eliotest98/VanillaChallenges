@@ -9,13 +9,10 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class InventoryCheck {
 
-    private final BukkitScheduler scheduler = Bukkit.getScheduler();
-    private static BukkitTask task;
-
     private DebugUtils debugUtils = new DebugUtils();
     private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("Inventory");
     private int numberSlot = Main.instance.getDailyChallenge().getNumber();
-    private int timeTaskInMinute = Main.instance.getDailyChallenge().getTime();
+    private int timeTaskInMinute = Main.instance.getDailyChallenge().getMinutes();
     private int point = Main.dailyChallenge.getPoint();
     private String item = Main.dailyChallenge.getItem();
 
@@ -27,21 +24,14 @@ public class InventoryCheck {
         execute();
     }
 
-    public static void stop() {
-        task.cancel();
-    }
-
     public void execute() {
-        task = scheduler.runTaskTimerAsynchronously(Main.instance, new Runnable() {
+        BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 long tempo = System.currentTimeMillis();
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     int sizeInventory = 0;
-                    boolean itemCheck = false;
-                    if(item.equalsIgnoreCase("ALL")) {
-                        itemCheck = true;
-                    }
+                    boolean itemCheck = item.equalsIgnoreCase("ALL");
                     for (int i = 0; i < p.getInventory().getStorageContents().length; i++) {
                         if (p.getInventory().getItem(i) != null) {
                             sizeInventory++;
@@ -73,5 +63,6 @@ public class InventoryCheck {
                 }
             }
         }, 0, (long) timeTaskInMinute * 60 * 20);
+        Main.instance.getConfigGestion().getTasks().addExternalTasks(task,"InventoryEvent",false);
     }
 }

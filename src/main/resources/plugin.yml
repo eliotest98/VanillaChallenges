@@ -3,7 +3,7 @@ version: maven-version-number
 main: io.eliotesta98.VanillaChallenges.Core.Main
 api-version: 1.13
 authors: [ eliotesta98 ]
-softdepend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI, CubeGenerator]
 depend: [ ]
 commands:
   vc:

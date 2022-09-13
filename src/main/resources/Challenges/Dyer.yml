@@ -4,6 +4,10 @@ Dyer:
   Time: 24
   # Cause you want to damage for challenge, if you want all causes write ALL
   Cause: ALL
+  # Type of item in main hand for death, if you want all items write ALL
+  ItemInHand: ALL
+  # Type of item in inventory for death, if you want all items write ALL
+  Item: ALL
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # How many points you want give at death?

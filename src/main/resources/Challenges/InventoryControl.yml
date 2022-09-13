@@ -7,7 +7,7 @@ InventoryControl:
   # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)
   Number: 10
   # Every x minutes you want check condition
-  Time: 2
+  Minutes: 2
   # Item you want checked (ALL for all items)
   Item: ALL
   # if you want a multiplier based on all players
@@ -41,5 +41,6 @@ InventoryControl:
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
   Rewards:
     - 'SHULKER_BOX:1'

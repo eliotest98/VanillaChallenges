@@ -30,7 +30,6 @@ public class ItemCollector implements Listener {
 
     // timer del controllo punti
     int number = 20 * 60 * 2;
-    private static BukkitTask task;
 
     private HashMap<String, Location> chestLocation = new HashMap<>();
 
@@ -56,7 +55,6 @@ public class ItemCollector implements Listener {
                 if (debugActive) {
                     debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("ItemCollector");
-                    return;
                 }
             }
         });
@@ -91,7 +89,6 @@ public class ItemCollector implements Listener {
             debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
             debugUtils.debug("ItemCollector");
         }
-        return;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -124,11 +121,10 @@ public class ItemCollector implements Listener {
             debugUtils.addLine("ItemCollector Player Name = " + e.getPlayer().getName());
             debugUtils.debug("ItemCollector");
         }
-        return;
     }
 
     public void controlChest() {
-        task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
+        BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             @Override
             public void run() {
                 long tempo = System.currentTimeMillis();
@@ -178,10 +174,7 @@ public class ItemCollector implements Listener {
                 }
             }
         }, 0, number);
-    }
-
-    public static void stop() {
-        task.cancel();
+        Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "ItemCollector", false);
     }
 
 }

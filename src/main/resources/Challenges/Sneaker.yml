@@ -38,6 +38,7 @@ Sneaker:
     - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
-  # Reward in blocks EX: IRON_INGOT:16 Type:Quantity NOBODY
+  # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
   Rewards:
     - 'ZOMBIE_VILLAGER_SPAWN_EGG:1'

@@ -18,9 +18,6 @@ public class Main extends JavaPlugin {
     public SoundManager SoundManager;
     private ConfigGestion config;
     public static Challenge dailyChallenge;
-    private CheckDay checkDay;
-    private BrodcastDailyChallenge brodcastDailyChallenge;
-    private OnlinePointsGive onlinePointsEvent;
     public static ExpansionPlaceholderAPI EPAPI;
     private String typeChallenge = "";
     public static Database db;
@@ -113,6 +110,12 @@ public class Main extends JavaPlugin {
                                 ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fPlaceholderApi&a!"));
                     }
                 }
+                if (Bukkit.getServer().getPluginManager().isPluginEnabled("CubeGenerator")) {
+                    if (getConfigGestion().getHooks().get("CubeGenerator")) {
+                        Bukkit.getServer().getConsoleSender().sendMessage(
+                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fCubeGenerator&a!"));
+                    }
+                }
             }
         });
         getServer().getConsoleSender().sendMessage("§aConfiguration Loaded!");
@@ -183,22 +186,25 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new VehicleMoveEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("JumpChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new JumpEvent(), this);
-        } else if(typeChallenge.equalsIgnoreCase("DyerChallenge")) {
+        } else if (typeChallenge.equalsIgnoreCase("DyerChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new DyeEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("CubeGeneratorChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new CubeGeneratorEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }
         Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
         db.loadPlayersPoints();
-        checkDay = new CheckDay();
-        // ogni 60 minuti
-        checkDay.start(20 * 60 * 60);
-        brodcastDailyChallenge = new BrodcastDailyChallenge();
+        config.getTasks().checkDay(20 * 60 * 60, config.isResetPointsAtNewChallenge());
         if (config.getTimeBrodcastMessageTitle() != 0) {
-            brodcastDailyChallenge.start((long) config.getTimeBrodcastMessageTitle() * 60 * 20);
+            config.getTasks().broadcast(((long) config.getTimeBrodcastMessageTitle() * 60 * 20)
+                    , dailyChallenge.getTitle(), config.getMessages().get("ActuallyInTop")
+                    , config.getMessages().get("PointsEveryMinutes")
+                    , config.getMessages().get("PointsRemainForBoosting")
+                    , config.getMessages().get("PointsRemainForBoostingSinglePlayer"));
         }
         if (config.isActiveOnlinePoints()) {
-            onlinePointsEvent = new OnlinePointsGive();
+            config.getTasks().onlinePoints(config.getMinutesOnlinePoints(),config.getPointsOnlinePoints());
         }
         getCommand("vc").setExecutor((CommandExecutor) new Commands());
         if (config.getDebug().get("Enabled")) {
@@ -211,24 +217,7 @@ public class Main extends JavaPlugin {
         DebugUtils debugsistem = new DebugUtils();
         long tempo = System.currentTimeMillis();
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "VanillaChallenges has been disabled, §cBye bye! §e:(");
-        if (checkDay != null) {
-            checkDay.stop();
-        }
-        if (config.getTimeBrodcastMessageTitle() != 0) {
-            brodcastDailyChallenge.stop();
-        }
-        if (config.isActiveOnlinePoints()) {
-            onlinePointsEvent.stop();
-        }
-        if (typeChallenge.equalsIgnoreCase("ChatChallenge")) {
-            ChatEvent.stop();
-        }
-        if (typeChallenge.equalsIgnoreCase("InventoryConditionChallenge")) {
-            InventoryCheck.stop();
-        }
-        if (typeChallenge.equalsIgnoreCase("")) {
-            ItemCollector.stop();
-        }
+        config.getTasks().stopAllTasks();
         if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
             try {
                 Main.EPAPI.getInstance().unregister();

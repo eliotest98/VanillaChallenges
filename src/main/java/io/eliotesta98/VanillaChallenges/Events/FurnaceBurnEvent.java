@@ -26,23 +26,16 @@ public class FurnaceBurnEvent implements Listener {
                 if (debugActive) {
                     debugUtils.addLine("FurnaceCookEvent PlayerCooking= " + playerName);
                 }
-                if (itemBurn.equalsIgnoreCase("ALL")) {
-                    if (debugActive) {
-                        debugUtils.addLine("FurnaceCookEvent Conditions= 0");
-                    }
-                    Main.dailyChallenge.increment(playerName, (long) amount * point);
-                } else {
+                if(!itemBurn.equalsIgnoreCase("ALL") && !itemBurn.equalsIgnoreCase(itemBurnByPlayer)) {
                     if (debugActive) {
                         debugUtils.addLine("FurnaceCookEvent ItemBurnByPlayer= " + itemBurnByPlayer);
                         debugUtils.addLine("FurnaceCookEvent ItemBurnConfig= " + itemBurn);
+                        debugUtils.addLine("FurnaceCookEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("FurnaceCookEvent");
                     }
-                    if (itemBurnByPlayer.equalsIgnoreCase(itemBurn)) {
-                        if (debugActive) {
-                            debugUtils.addLine("FurnaceCookEvent Conditions= 1");
-                        }
-                        Main.dailyChallenge.increment(playerName, (long) amount * point);
-                    }
+                    return;
                 }
+                Main.dailyChallenge.increment(playerName, (long) amount * point);
                 if (debugActive) {
                     debugUtils.addLine("FurnaceCookEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("FurnaceCookEvent");
@@ -50,6 +43,5 @@ public class FurnaceBurnEvent implements Listener {
                 return;
             }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
     }
 }

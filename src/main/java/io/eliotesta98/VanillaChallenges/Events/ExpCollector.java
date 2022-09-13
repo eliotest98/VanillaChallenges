@@ -28,13 +28,16 @@ public class ExpCollector implements Listener {
                     debugUtils.addLine("ExpCollectorEvent PlayerSneaking= " + sneakingPlayer);
                     debugUtils.addLine("ExpCollectorEvent ConfigSneaking= " + sneaking);
                 }
-                if (sneaking.equalsIgnoreCase("NOBODY")) {
-                    Main.dailyChallenge.increment(playerName, (long) amount * point);
-                } else {
-                    if (Boolean.parseBoolean(sneaking) == sneakingPlayer) {
-                        Main.dailyChallenge.increment(playerName, (long) amount * point);
+                if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
+                    if (debugActive) {
+                        debugUtils.addLine("ExpCollectorEvent ConfigSneaking= " + sneaking);
+                        debugUtils.addLine("ExpCollectorEvent PlayerSneaking= " + sneakingPlayer);
+                        debugUtils.addLine("ExpCollectorEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("ExpCollectorEvent");
                     }
+                    return;
                 }
+                Main.dailyChallenge.increment(playerName, (long) amount * point);
                 if (debugActive) {
                     debugUtils.addLine("ExpCollectorEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("ExpCollectorEvent");
@@ -42,7 +45,6 @@ public class ExpCollector implements Listener {
                 return;
             }
         });
-        //Main.instance.getDailyChallenge().stampaNumero(e.getPlayer().getName());
     }
 }
 

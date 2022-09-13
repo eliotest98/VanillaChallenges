@@ -1,10 +1,14 @@
-Cooker:
-  TypeChallenge: 'CookerChallenge'
+CubeGenerator:
+  TypeChallenge: 'CubeGeneratorChallenge'
   # How long do you want the challenge to last in hours ?
   Time: 24
-  # Item you want cook for challenge, if you want all items write ALL
-  Item: ALL
-  # How many points you want give at cook?
+  # Block you want break for challenge, if you want all blocks write ALL
+  Block: ALL
+  # Type of item in main hand for break this blocks, if you want all items write ALL
+  ItemInHand: ALL
+  # Able or disable Sneak when place Es. true or false or NOBODY
+  Sneaking: 'NOBODY'
+  # How many points you want give at break?
   Point: 1
   # if you want a multiplier based on all players
   Boost:
@@ -28,15 +32,15 @@ Cooker:
   Title:
     - '&8'
     - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Cooker Challenge'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉      &7Block Break CubeGenerator Challenge'
     - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉       &7Cook any item for receive 1 point'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Break all type of block of CubeGenerator'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7for receive 1 point'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &7{hours} hours to the end of the challenge'
     - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
-  # Reward with command EX: [command]:give %player% TNT 1
+  # Reward with command EX: [command]:give %player% TOTEM_OF_UNDYING 1
   Rewards:
-    - 'DRAGON_HEAD:1'
+    - 'TOTEM_OF_UNDYING:1'
