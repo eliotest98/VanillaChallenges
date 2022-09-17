@@ -1,7 +1,13 @@
 InventoryControl:
   TypeChallenge: 'InventoryConditionChallenge'
-  # How long do you want the challenge to last in hours ?
-  Time: 24
+  # if you want to enable or disable challenge
+  Enabled: true
+  # Time settings
+  TimeSettings:
+    # What time do you want the challenge to start?
+    Start: '5:00'
+    # How long do you want the challenge to last in hours ?
+    Time: 24
   # How many points you want give if respect condition?
   Point: 10
   # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)

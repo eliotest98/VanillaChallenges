@@ -73,6 +73,7 @@ public class H2Database implements Database {
             }
             for (String key : keys) {
                 Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key);
+
                 if (count == 1) {
                     Main.dailyChallenge = challenge;
                     nome = challenge.getTypeChallenge();
@@ -87,8 +88,9 @@ public class H2Database implements Database {
                     H2Database.instance.deleteChallengeWithName(challenges.get(0).getChallengeName());
                     challenges.remove(0);
                 } else {
-                    Main.dailyChallenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(0).getChallengeName());
-                    Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
+                    Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(0).getChallengeName());
+                    challenge.setTimeChallenge(challenges.get(0).getTimeChallenge());
+                    Main.dailyChallenge = challenge;
                     return Main.dailyChallenge.getTypeChallenge();
                 }
             }
@@ -485,6 +487,18 @@ public class H2Database implements Database {
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
+            }
+        }
+    }
+
+    @Override
+    public void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist) {
+        for(String challengeName: controlIfChallengeExist) {
+            for(Challenge challenge: getAllChallenges()) {
+                if(challenge.getChallengeName().equalsIgnoreCase(challengeName)) {
+                    deleteChallengeWithName(challengeName);
+                    break;
+                }
             }
         }
     }

@@ -1,7 +1,13 @@
 ExpCollector:
   TypeChallenge: 'CollectorExpChallenge'
-  # How long do you want the challenge to last in hours ?
-  Time: 24
+  # if you want to enable or disable challenge
+  Enabled: true
+  # Time settings
+  TimeSettings:
+    # What time do you want the challenge to start?
+    Start: '5:00'
+    # How long do you want the challenge to last in hours ?
+    Time: 24
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # How many points you want give at exp point?
