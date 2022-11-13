@@ -18,6 +18,10 @@ Dyer:
   Sneaking: 'NOBODY'
   # How many points you want give at death?
   Point: 1
+  # If you want keepInventory for this challenge
+  KeepInventory: false
+  # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)
+  Number: -1
   # if you want a multiplier based on all players
   Boost:
     Enabled: false

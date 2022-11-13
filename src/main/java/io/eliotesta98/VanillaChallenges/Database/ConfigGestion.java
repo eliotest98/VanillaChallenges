@@ -139,11 +139,12 @@ public class ConfigGestion {
             String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
             String onGround = yamlChallenge.getString(challengeName + ".OnGround");
             String stringFormatter = yamlChallenge.getString(challengeName + ".StringFormatter");
+            boolean keepInventory = yamlChallenge.getBoolean(challengeName+".KeepInventory");
             Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards,
                     title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicle, sneaking, onGround,
                     pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
-                    challengeName, stringFormatter, minutes, startTimeChallenge);
+                    challengeName, stringFormatter, minutes, startTimeChallenge,keepInventory);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");

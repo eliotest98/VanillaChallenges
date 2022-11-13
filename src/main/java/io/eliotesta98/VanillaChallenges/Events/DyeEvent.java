@@ -23,6 +23,8 @@ public class DyeEvent implements Listener {
     private final String item = Main.dailyChallenge.getItem();
     private final String cause = Main.dailyChallenge.getCause();
     private final String sneaking = Main.dailyChallenge.getSneaking();
+    private final boolean keepInventory = Main.dailyChallenge.isKeepInventory();
+    private final int numberOfSlots = Main.dailyChallenge.getNumber();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDeath(org.bukkit.event.entity.PlayerDeathEvent e) {
@@ -32,10 +34,12 @@ public class DyeEvent implements Listener {
         boolean sneakingPlayer = e.getEntity().isSneaking();
         final PlayerInventory inventory = e.getEntity().getInventory();
         String itemInHandPlayer = e.getEntity().getInventory().getItemInMainHand().getType().toString();
-
-        if(!item.equalsIgnoreCase("ALL")) {
+        if (keepInventory) {
+            e.setKeepInventory(true);
+        }
+        if (!item.equalsIgnoreCase("ALL")) {
             ItemStack itemStack = new ItemStack(Material.getMaterial(item));
-            if(!inventory.contains(itemStack)) {
+            if (!inventory.contains(itemStack)) {
                 if (debugActive) {
                     debugUtils.addLine("DyeEvent ItemsListPlayer= " + Arrays.toString(inventory.getContents()));
                     debugUtils.addLine("DyeEvent ItemConfig= " + item);
@@ -45,6 +49,15 @@ public class DyeEvent implements Listener {
                 return;
             }
         }
+        int sizeInventory = 0;
+        if(numberOfSlots != -1) {
+            for (int i = 0; i < inventory.getStorageContents().length; i++) {
+                if (inventory.getItem(i) != null) {
+                    sizeInventory++;
+                }
+            }
+        }
+        final int inventorySize = sizeInventory;
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("DyeEvent PlayerDye= " + playerName);
@@ -59,6 +72,7 @@ public class DyeEvent implements Listener {
                 }
                 return;
             }
+
             if (!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
                 if (debugActive) {
                     debugUtils.addLine("DyeEvent SneakingPlayer= " + sneakingPlayer);
@@ -69,10 +83,20 @@ public class DyeEvent implements Listener {
                 return;
             }
 
-            if(!itemInHand.equalsIgnoreCase("ALL") && !itemInHand.equalsIgnoreCase(itemInHandPlayer)) {
+            if (!itemInHand.equalsIgnoreCase("ALL") && !itemInHand.equalsIgnoreCase(itemInHandPlayer)) {
                 if (debugActive) {
                     debugUtils.addLine("DyeEvent ItemInHandPlayer= " + itemInHandPlayer);
                     debugUtils.addLine("DyeEvent ItemInHandConfig= " + itemInHand);
+                    debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("DyeEvent");
+                }
+                return;
+            }
+
+            if (numberOfSlots != -1 && inventorySize != numberOfSlots) {
+                if (debugActive) {
+                    debugUtils.addLine("DyeEvent NumberOfSlot= " + inventorySize);
+                    debugUtils.addLine("DyeEvent NumberOfSlotConfig= " + numberOfSlots);
                     debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("DyeEvent");
                 }

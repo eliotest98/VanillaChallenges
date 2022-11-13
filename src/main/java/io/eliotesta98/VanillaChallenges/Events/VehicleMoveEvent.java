@@ -49,7 +49,9 @@ public class VehicleMoveEvent implements Listener {
                     }
                     return;
                 }
-
+                if (distances.get(playerName) == null) {
+                    distances.put(playerName, from.distance(to));
+                }
                 double old = distances.get(playerName);
                 double newDouble = old + from.distance(to);
                 if (newDouble > 1.0) {

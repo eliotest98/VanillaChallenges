@@ -34,6 +34,7 @@ public class Challenge {
     private int time = 1;
     private String startTimeChallenge = "5:00";
     private String onGround = "NOBODY";
+    private boolean keepInventory = false;
     // timer del salvataggio punti
     int timeNumber = 20 * 60;
     private BukkitTask task, boostingTask;
@@ -57,7 +58,12 @@ public class Challenge {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, ArrayList<String> rewards, ArrayList<String> title, String item, String itemInHand, String mob, double force, double power, String color, String cause, int point, int pointsBoost, int multiplier, int boostMinutes, int number, int time, String vehicle, String sneaking, String onGround, int pointsBoostSinglePlayer, int multiplierSinglePlayer, int minutesSinglePlayer, int timeChallenge, String challengeName, String stringFormatter, int minutes, String startTimeChallenge) {
+    public Challenge(String block, String blockOnPlace, String typeChallenge, ArrayList<String> rewards,
+                     ArrayList<String> title, String item, String itemInHand, String mob, double force, double power,
+                     String color, String cause, int point, int pointsBoost, int multiplier, int boostMinutes,
+                     int number, int time, String vehicle, String sneaking, String onGround, int pointsBoostSinglePlayer,
+                     int multiplierSinglePlayer, int minutesSinglePlayer, int timeChallenge, String challengeName,
+                     String stringFormatter, int minutes, String startTimeChallenge, boolean keepInventory) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
@@ -87,6 +93,7 @@ public class Challenge {
         this.stringFormatter = stringFormatter;
         this.minutes = minutes;
         this.startTimeChallenge = startTimeChallenge;
+        this.keepInventory = keepInventory;
     }
 
     public HashMap<String, Long> getBoostSinglePlayers() {
@@ -631,6 +638,14 @@ public class Challenge {
 
     public void setStartTimeChallenge(String startTimeChallenge) {
         this.startTimeChallenge = startTimeChallenge;
+    }
+
+    public boolean isKeepInventory() {
+        return keepInventory;
+    }
+
+    public void setKeepInventory(boolean keepInventory) {
+        this.keepInventory = keepInventory;
     }
 
     @Override
