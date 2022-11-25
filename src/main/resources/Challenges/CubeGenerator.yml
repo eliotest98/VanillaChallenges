@@ -1,7 +1,13 @@
 CubeGenerator:
   TypeChallenge: 'CubeGeneratorChallenge'
-  # How long do you want the challenge to last in hours ?
-  Time: 24
+  # if you want to enable or disable challenge
+  Enabled: true
+  # Time settings
+  TimeSettings:
+    # What time do you want the challenge to start?
+    Start: '5:00'
+    # How long do you want the challenge to last in hours ?
+    Time: 24
   # Block you want break for challenge, if you want all blocks write ALL
   Block: ALL
   # Type of item in main hand for break this blocks, if you want all items write ALL

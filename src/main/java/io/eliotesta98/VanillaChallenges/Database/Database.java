@@ -43,4 +43,6 @@ public interface Database {
     void deleteDailyWinnerWithId(int id);
 
     void clearAll();
+
+    void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist);
 }

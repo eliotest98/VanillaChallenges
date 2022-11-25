@@ -19,7 +19,6 @@ public class Main extends JavaPlugin {
     private ConfigGestion config;
     public static Challenge dailyChallenge;
     public static ExpansionPlaceholderAPI EPAPI;
-    private String typeChallenge = "";
     public static Database db;
 
     public void onEnable() {
@@ -99,6 +98,8 @@ public class Main extends JavaPlugin {
         }
 
         config = new ConfigGestion(YamlConfiguration.loadConfiguration(configFile));
+        //loads challenges files
+        config.loadCommentedConfiguration();
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
         getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             public void run() {
@@ -128,8 +129,10 @@ public class Main extends JavaPlugin {
             db = new YamlDB();
         }
         getServer().getConsoleSender().sendMessage("§aDatabase connected!");
-
-        typeChallenge = db.insertDailyChallenges();
+        // control if challenges is on db but is disabled on config
+        db.controlIfChallengeExist(config.getControlIfChallengeExist());
+        // select challenge
+        String typeChallenge = db.insertDailyChallenges();
         if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new BlockPlaceEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("BlockBreakChallenge")) {
@@ -195,7 +198,7 @@ public class Main extends JavaPlugin {
         }
         Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
         db.loadPlayersPoints();
-        config.getTasks().checkDay(20 * 60 * 60, config.isResetPointsAtNewChallenge());
+        config.getTasks().checkStartDay();
         if (config.getTimeBrodcastMessageTitle() != 0) {
             config.getTasks().broadcast(((long) config.getTimeBrodcastMessageTitle() * 60 * 20)
                     , dailyChallenge.getTitle(), config.getMessages().get("ActuallyInTop")
@@ -204,7 +207,7 @@ public class Main extends JavaPlugin {
                     , config.getMessages().get("PointsRemainForBoostingSinglePlayer"));
         }
         if (config.isActiveOnlinePoints()) {
-            config.getTasks().onlinePoints(config.getMinutesOnlinePoints(),config.getPointsOnlinePoints());
+            config.getTasks().onlinePoints(config.getMinutesOnlinePoints(), config.getPointsOnlinePoints());
         }
         getCommand("vc").setExecutor((CommandExecutor) new Commands());
         if (config.getDebug().get("Enabled")) {

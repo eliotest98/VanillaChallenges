@@ -213,7 +213,9 @@ public class YamlDB implements Database {
                     deleteChallengeWithName(challenges.get(i).getChallengeName());
                     challenges.remove(i);
                 } else {
-                    Main.dailyChallenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(i).getChallengeName());
+                    Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(i).getChallengeName());
+                    challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
+                    Main.dailyChallenge = challenge;
                     Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
                     return Main.dailyChallenge.getTypeChallenge();
                 }
@@ -354,6 +356,19 @@ public class YamlDB implements Database {
     @Override
     public void clearAll() {
         configFile.delete();
+    }
+
+    @Override
+    public void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist) {
+        for(String challengeName: controlIfChallengeExist) {
+            for(Challenge challenge: challenges) {
+                if(challenge.getChallengeName().equalsIgnoreCase(challengeName)) {
+                    challenges.remove(challenge);
+                    deleteChallengeWithName(challengeName);
+                    break;
+                }
+            }
+        }
     }
 
     public void saveFile() throws IOException {

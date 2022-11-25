@@ -8,12 +8,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Tasks {
 
     private ArrayList<BukkitTask> tasks = new ArrayList<>();
     private HashMap<String, Boolean> saving = new HashMap<>();
+    private BukkitTask checkStart = null;
+    private boolean challengeStart = false;
 
     public void stopAllTasks() {
         for (BukkitTask task : tasks) {
@@ -23,12 +28,19 @@ public class Tasks {
         }
     }
 
+    public boolean isChallengeStart(){
+        return challengeStart;
+    }
+
     public void broadcast(long time, ArrayList<String> brodcastMessageTitle, String actuallyInTop, String pointsEveryMinutes, String pointsRemainForBoosting, String pointsRemainForBoostingSinglePlayer) {
         saving.put("Broadcast", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
             saving.replace("Broadcast", true);
             int timeResume = Main.dailyChallenge.getTimeChallenge();
             for (Player p : Bukkit.getOnlinePlayers()) {
+                if(!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
+                    break;
+                }
                 for (String s : brodcastMessageTitle) {
                     p.sendMessage(ColorUtils.applyColor(s.replace("{hours}", timeResume + "")));
                 }
@@ -70,6 +82,54 @@ public class Tasks {
         tasks.add(task);
     }
 
+    public void checkStartDay() {
+        saving.put("CheckStartDay", false);
+        this.checkStart = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
+            String startChallenge = Main.dailyChallenge.getStartTimeChallenge();
+            String[] startSplit = startChallenge.split(":");
+            int startHour = Integer.parseInt(startSplit[0]);
+            int startMinutes = Integer.parseInt(startSplit[1]);
+            int time = Main.dailyChallenge.getTimeChallenge();
+
+            @Override
+            public void run() {
+                saving.replace("CheckStartDay", true);
+                SimpleDateFormat sdf = new SimpleDateFormat("ss.mm.HH.dd.MM.yyyy");
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                String data = sdf.format(timestamp);
+                String[] dataSplit = data.split(Pattern.quote("."));
+                int hour = Integer.parseInt(dataSplit[2]);
+                int minutes = Integer.parseInt(dataSplit[1]);
+                if (hour > startHour) {
+                    Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
+                            Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
+                    challengeStart = true;
+                } else if (hour == startHour && minutes >= startMinutes) {
+                    Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
+                            Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
+                    challengeStart = true;
+                } else {
+                    if (time < Main.instance.getConfigGestion().getChallenges().get(
+                            Main.dailyChallenge.getChallengeName()).getTimeChallenge()) {
+                        if(hour < startHour) {
+                            Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
+                                    Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
+                            challengeStart = true;
+                        } else if(hour == startHour && minutes <= startMinutes) {
+                            Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
+                                    Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
+                            challengeStart = true;
+                        }
+                    } else {
+                        challengeStart = false;
+                    }
+                }
+                saving.replace("CheckStartDay", false);
+            }
+        }, 0, (long) 60 * 20);
+        tasks.add(checkStart);
+    }
+
     public void checkDay(long time, boolean resetPoints) {
         saving.put("CheckDay", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
@@ -83,6 +143,7 @@ public class Tasks {
                     Main.dailyChallenge.setTimeChallenge(Main.dailyChallenge.getTimeChallenge() - 1);
                 } else {
                     firstTime = false;
+                    checkStart.cancel();
                 }
                 if (Main.dailyChallenge.getTimeChallenge() <= 0) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
