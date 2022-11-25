@@ -2,7 +2,7 @@
 #TODO:
     - List of items/blocks/... for all challenges
     - Interfaccia infinita dove contenere tutte le challenges con le informazioni
-    - HeartRegen Challenge
+    - HeartRegen Challeng
     - Cambiare il reload del plugin da ogni ora ad una volta al giorno
     - Vedere se è possibile stabilire un orario per le challenge
 
