@@ -32,6 +32,8 @@ Mover:
     Multiplier: 4
     # For how many minutes you want give the multiplier?
     Minutes: 2
+  # Name of Challenge
+  NameChallenge: "&7Move Challenge"
   # Title challenge
   Title:
     - '&8'

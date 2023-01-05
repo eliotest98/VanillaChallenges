@@ -46,6 +46,8 @@ public class Challenge {
     private int multiplierSinglePlayer = 1;
     private int minutesSinglePlayer = 0;
     private int timeChallenge = 24;
+    private String nameChallenge = "NOBODY";
+    private boolean deathInLand = false;
     private long countPointsChallenge = 0;
     private boolean startBoost = false;
     private String sneaking = "NOBODY";
@@ -58,12 +60,12 @@ public class Challenge {
 
     }
 
-    public Challenge(String block, String blockOnPlace, String typeChallenge, ArrayList<String> rewards,
+    public Challenge(String nameChallenge, String block, String blockOnPlace, String typeChallenge, ArrayList<String> rewards,
                      ArrayList<String> title, String item, String itemInHand, String mob, double force, double power,
                      String color, String cause, int point, int pointsBoost, int multiplier, int boostMinutes,
                      int number, int time, String vehicle, String sneaking, String onGround, int pointsBoostSinglePlayer,
                      int multiplierSinglePlayer, int minutesSinglePlayer, int timeChallenge, String challengeName,
-                     String stringFormatter, int minutes, String startTimeChallenge, boolean keepInventory) {
+                     String stringFormatter, int minutes, String startTimeChallenge, boolean keepInventory, boolean deathInLand) {
         this.block = block;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
@@ -94,6 +96,8 @@ public class Challenge {
         this.minutes = minutes;
         this.startTimeChallenge = startTimeChallenge;
         this.keepInventory = keepInventory;
+        this.nameChallenge = nameChallenge;
+        this.deathInLand = deathInLand;
     }
 
     public HashMap<String, Long> getBoostSinglePlayers() {
@@ -203,6 +207,14 @@ public class Challenge {
         }
     }
 
+    public boolean isDeathInLand() {
+        return deathInLand;
+    }
+
+    public void setDeathInLand(boolean deathInLand) {
+        this.deathInLand = deathInLand;
+    }
+
     public String getStringFormatter() {
         return stringFormatter;
     }
@@ -233,6 +245,14 @@ public class Challenge {
 
     public void setTimeChallenge(int timeChallenge) {
         this.timeChallenge = timeChallenge;
+    }
+
+    public String getNameChallenge() {
+        return nameChallenge;
+    }
+
+    public void setNameChallenge(String nameChallenge) {
+        this.nameChallenge = nameChallenge;
     }
 
     public void incrementCommands(String playerName, long amount) {

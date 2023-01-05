@@ -12,6 +12,8 @@ ExpCollector:
   Sneaking: 'NOBODY'
   # How many points you want give at exp point?
   Point: 1
+  # If you want keepInventory for this challenge (ATTENTION! There is a prevention for exp refill from death)
+  KeepInventory: false
   # if you want a multiplier based on all players
   Boost:
     Enabled: false
@@ -30,6 +32,8 @@ ExpCollector:
     Multiplier: 4
     # For how many minutes you want give the multiplier?
     Minutes: 2
+  # Name of Challenge
+  NameChallenge: "&7Collect Exp Challenge"
   # Title challenge
   Title:
     - '&8'

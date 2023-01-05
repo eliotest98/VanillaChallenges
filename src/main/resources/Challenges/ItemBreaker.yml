@@ -32,6 +32,8 @@ ItemBreaker:
     Multiplier: 4
     # For how many minutes you want give the multiplier?
     Minutes: 2
+  # Name of Challenge
+  NameChallenge: "&7Item Break Challenge"
   # Title challenge
   Title:
     - '&8'

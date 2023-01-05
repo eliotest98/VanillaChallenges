@@ -62,6 +62,10 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         if (identifier.contains("dailychallenge_name")) {
             return Main.dailyChallenge.getChallengeName();
         }
+        // %vanillachallenges_dailychallenge_displayName%
+        if (identifier.contains("dailychallenge_displayName")) {
+            return Main.dailyChallenge.getNameChallenge();
+        }
         // %vanillachallenges_dailychallenge_time%
         if (identifier.contains("dailychallenge_time")) {
             return Main.dailyChallenge.getTimeChallenge() + "";
@@ -82,7 +86,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
             if (top.size() >= numberTop) {
                 return top.get(numberTop - 1).getNomePlayer();
             } else {
-                return top.get(top.size() - 1).getNomePlayer();
+                return "Nobody";
             }
         }
         // %vanillachallenges_dailychallenge_top_points_#% # = number
@@ -101,7 +105,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
             if (top.size() >= numberTop) {
                 return MoneyUtils.transform(top.get(numberTop - 1).getPoints());
             } else {
-                return MoneyUtils.transform(top.get(top.size() - 1).getPoints());
+                return 0 + "";
             }
         }
         // %vanillachallenges_dailychallenge_boost_multiplier%
@@ -132,7 +136,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_dailychallenge_boost_points_remain_single_player%
         if (identifier.contains("dailychallenge_boost_points_remain_single_player")) {
             if (!Main.dailyChallenge.isActiveSingleBoost(p.getName())) {
-                if(Main.dailyChallenge.getBoostSinglePlayers().containsKey(p.getName())) {
+                if (Main.dailyChallenge.getBoostSinglePlayers().containsKey(p.getName())) {
                     long pointsRemain = Main.dailyChallenge.getBoostSinglePlayers().get(p.getName());
                     return pointsRemain + "";
                 } else {

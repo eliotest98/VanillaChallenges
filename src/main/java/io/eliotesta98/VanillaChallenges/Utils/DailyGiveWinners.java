@@ -53,6 +53,7 @@ public class DailyGiveWinners implements Listener {
                                 }
                             });
                         }
+                        //item
                         if (e.getPlayer().getInventory().firstEmpty() != -1
                                 && give
                                 && !reward[0].equalsIgnoreCase("[command]")) {
@@ -67,7 +68,9 @@ public class DailyGiveWinners implements Listener {
                                     winners.remove(number);
                                 }
                             });
-                        } else {
+                        }
+                        //command
+                        else {
                             String[] listCommand = reward[1].split("\\s+");
                             int amount = 0;
                             Material material = Material.AIR;
@@ -87,13 +90,10 @@ public class DailyGiveWinners implements Listener {
                             } else {
                                 e.getPlayer().sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", amount + "").replace("{item}", material.toString())));
                             }
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
-                                @Override
-                                public void run() {
-                                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), reward[1].replace("%player%", e.getPlayer().getName()));
-                                    Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
-                                    winners.remove(number);
-                                }
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), reward[1].replace("%player%", e.getPlayer().getName()));
+                                Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
+                                winners.remove(number);
                             });
                         }
                         break;
