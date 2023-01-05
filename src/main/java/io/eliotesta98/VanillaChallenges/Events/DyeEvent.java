@@ -1,9 +1,13 @@
 package io.eliotesta98.VanillaChallenges.Events;
 
+import io.eliotesta98.Tombs.Interfaces.TombsInterfaceHolder;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
+import me.angeschossen.lands.api.land.Land;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -13,6 +17,7 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class DyeEvent implements Listener {
 
@@ -24,6 +29,8 @@ public class DyeEvent implements Listener {
     private final String cause = Main.dailyChallenge.getCause();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean keepInventory = Main.dailyChallenge.isKeepInventory();
+    private final boolean deathInLand = Main.dailyChallenge.isDeathInLand();
+    private boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final int numberOfSlots = Main.dailyChallenge.getNumber();
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -31,6 +38,7 @@ public class DyeEvent implements Listener {
         long tempo = System.currentTimeMillis();
         String playerName = e.getEntity().getName();
         String causePlayer = e.getEntity().getLastDamageCause().getCause().toString();
+        Location playerLocation = e.getEntity().getLocation();
         boolean sneakingPlayer = e.getEntity().isSneaking();
         final PlayerInventory inventory = e.getEntity().getInventory();
         String itemInHandPlayer = e.getEntity().getInventory().getItemInMainHand().getType().toString();
@@ -50,7 +58,7 @@ public class DyeEvent implements Listener {
             }
         }
         int sizeInventory = 0;
-        if(numberOfSlots != -1) {
+        if (numberOfSlots != -1) {
             for (int i = 0; i < inventory.getStorageContents().length; i++) {
                 if (inventory.getItem(i) != null) {
                     sizeInventory++;
@@ -61,6 +69,27 @@ public class DyeEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("DyeEvent PlayerDye= " + playerName);
+            }
+
+            if (deathInLand && landsEnabled) {
+                Land land = Main.landsIntegration.getLand(playerLocation);
+                if (land != null) {
+                    for (UUID p : land.getTrustedPlayers()) {// scorro la lista dei player membri
+                        OfflinePlayer player = Bukkit.getOfflinePlayer(p);// prendo il player
+                        if (player.getName().equalsIgnoreCase(playerName)) {// controllo il nome
+                            if (debugActive) {
+                                debugUtils.addLine("BlockBreakEvent Player is trusted at Land");
+                            }
+                        } else {
+                            if (debugActive) {
+                                debugUtils.addLine("BlockBreakEvent Player is not trusted at Land");
+                                debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
+                                debugUtils.debug("BlockBreakEvent");
+                            }
+                            return;
+                        }
+                    }
+                }
             }
 
             if (!cause.equalsIgnoreCase("ALL") && !cause.equalsIgnoreCase(causePlayer)) {

@@ -104,6 +104,7 @@ public class ConfigGestion {
             String block = yamlChallenge.getString(challengeName + ".Block");
             String blockOnPlaced = yamlChallenge.getString(challengeName + ".BlockOnPlaced");
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
+            String nameChallenge = yamlChallenge.getString(challengeName+".NameChallenge");
             int timeChallenge = yamlChallenge.getInt(challengeName + ".TimeSettings.Time");
             String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
@@ -140,11 +141,12 @@ public class ConfigGestion {
             String onGround = yamlChallenge.getString(challengeName + ".OnGround");
             String stringFormatter = yamlChallenge.getString(challengeName + ".StringFormatter");
             boolean keepInventory = yamlChallenge.getBoolean(challengeName+".KeepInventory");
-            Challenge challenge = new Challenge(block, blockOnPlaced, typeChallenge, rewards,
+            boolean deathInLand = yamlChallenge.getBoolean(challengeName+".DeathInLand");
+            Challenge challenge = new Challenge(nameChallenge,block, blockOnPlaced, typeChallenge, rewards,
                     title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicle, sneaking, onGround,
                     pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
-                    challengeName, stringFormatter, minutes, startTimeChallenge,keepInventory);
+                    challengeName, stringFormatter, minutes, startTimeChallenge,keepInventory,deathInLand);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");

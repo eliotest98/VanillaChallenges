@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Core;
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
 import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
+import me.angeschossen.lands.api.integration.LandsIntegration;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
@@ -20,6 +21,7 @@ public class Main extends JavaPlugin {
     public static Challenge dailyChallenge;
     public static ExpansionPlaceholderAPI EPAPI;
     public static Database db;
+    public static LandsIntegration landsIntegration;
 
     public void onEnable() {
         DebugUtils debugsistem = new DebugUtils();
@@ -110,12 +112,41 @@ public class Main extends JavaPlugin {
                         Bukkit.getServer().getConsoleSender().sendMessage(
                                 ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fPlaceholderApi&a!"));
                     }
+                } else {
+                    getConfigGestion().getHooks().replace("PlaceholderAPI", false);
                 }
                 if (Bukkit.getServer().getPluginManager().isPluginEnabled("CubeGenerator")) {
                     if (getConfigGestion().getHooks().get("CubeGenerator")) {
                         Bukkit.getServer().getConsoleSender().sendMessage(
                                 ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fCubeGenerator&a!"));
                     }
+                } else {
+                    getConfigGestion().getHooks().replace("CubeGenerator", false);
+                }
+                /*if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
+                    if (getConfigGestion().getHooks().get("Tombs")) {
+                        Bukkit.getServer().getConsoleSender().sendMessage(
+                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fTombs&a!"));
+                    }
+                } else {
+                    getConfigGestion().getHooks().replace("Tombs", false);
+                }*/
+                if (Bukkit.getServer().getPluginManager().isPluginEnabled("Lands")) {
+                    if (getConfigGestion().getHooks().get("Lands")) {
+                        Bukkit.getServer().getConsoleSender().sendMessage(
+                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
+                        landsIntegration = new LandsIntegration(instance);
+                    }
+                } else {
+                    getConfigGestion().getHooks().replace("Lands", false);
+                }
+                if (Bukkit.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+                    if (getConfigGestion().getHooks().get("WorldGuard")) {
+                        Bukkit.getServer().getConsoleSender().sendMessage(
+                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fWorldGuard&a!"));
+                    }
+                } else {
+                    getConfigGestion().getHooks().replace("WorldGuard", false);
                 }
             }
         });

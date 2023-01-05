@@ -49,6 +49,8 @@ Configuration:
   Hooks:
     PlaceholderAPI: false
     CubeGenerator: false
+    WorldGuard: false
+    Lands: false
     
 
   # If you want use H2 or .yml file for data storage (write H2 or Yaml)

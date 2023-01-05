@@ -30,6 +30,8 @@ Feeder:
     Multiplier: 4
     # For how many minutes you want give the multiplier?
     Minutes: 2
+  # Name of Challenge
+  NameChallenge: "&7Feed Challenge"
   # Title challenge
   Title:
     - '&8'
