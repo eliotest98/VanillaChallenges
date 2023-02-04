@@ -13,7 +13,7 @@ public class ItemConsumeEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemConsumeEvent");
-    private final String itemConsume = Main.instance.getDailyChallenge().getItem();
+    private final ArrayList<String> itemsConsume = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
@@ -50,10 +50,10 @@ public class ItemConsumeEvent implements Listener {
                 return;
             }
 
-            if(!itemConsume.equalsIgnoreCase("NOBODY") && itemConsume.equalsIgnoreCase(itemConsumingByPlayer)) {
+            if(!itemsConsume.isEmpty() && itemsConsume.contains(itemConsumingByPlayer)) {
                 if (debugActive) {
                     debugUtils.addLine("ItemConsumeEvent ItemConsumeByPlayer= " + itemConsumingByPlayer);
-                    debugUtils.addLine("ItemConsumeEvent itemConsumeConfig= " + itemConsume);
+                    debugUtils.addLine("ItemConsumeEvent itemConsumeConfig= " + itemsConsume);
                     debugUtils.addLine("ItemConsumeEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("ItemConsumeEvent");
                 }

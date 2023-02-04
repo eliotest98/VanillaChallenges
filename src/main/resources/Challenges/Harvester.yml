@@ -14,8 +14,8 @@ Harvester:
   Point: 1
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # Item you want to harvest for challenge, if you want all items write ALL
-  Item: ALL
+  # Items you want to harvest for challenge, if you want all items set []
+  Items: []
   # if you want a multiplier based on all players
   Boost:
     Enabled: false

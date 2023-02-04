@@ -14,7 +14,7 @@ public class InventoryCheck {
     private final int numberSlot = Main.instance.getDailyChallenge().getNumber();
     private final int timeTaskInMinute = Main.instance.getDailyChallenge().getMinutes();
     private final int point = Main.dailyChallenge.getPoint();
-    private final String item = Main.dailyChallenge.getItem();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     public InventoryCheck() {
@@ -43,12 +43,15 @@ public class InventoryCheck {
                 }
 
                 int sizeInventory = 0;
-                boolean itemCheck = item.equalsIgnoreCase("ALL");
-                for (int i = 0; i < p.getInventory().getStorageContents().length; i++) {
+                boolean itemCheck = items.isEmpty();
+                Label: for (int i = 0; i < p.getInventory().getStorageContents().length; i++) {
                     if (p.getInventory().getItem(i) != null) {
                         sizeInventory++;
-                        if(p.getInventory().getItem(i).getType().toString().equalsIgnoreCase(item) && !itemCheck) {
-                            itemCheck = true;
+                        for(String item: items) {
+                            if(p.getInventory().getItem(i).getType().toString().equalsIgnoreCase(item) && !itemCheck) {
+                                itemCheck = true;
+                                break Label;
+                            }
                         }
                     }
                 }
@@ -56,7 +59,7 @@ public class InventoryCheck {
                     debugUtils.addLine("InventoryChallenge Player= " + p.getName());
                     debugUtils.addLine("InventoryChallenge InventorySizePlayer= " + sizeInventory);
                     debugUtils.addLine("InventoryChallenge InventorySizeConfig= " + numberSlot);
-                    debugUtils.addLine("InventoryChallenge InventoryItemConfig= " + item);
+                    debugUtils.addLine("InventoryChallenge InventoryItemConfig= " + items);
                     debugUtils.addLine("InventoryChallenge InventoryItemCheck= " + itemCheck);
                 }
                 if(numberSlot != -1) {

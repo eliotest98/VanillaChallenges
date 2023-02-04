@@ -15,7 +15,7 @@ public class DamageEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DamageEvent");
-    private final String cause = Main.dailyChallenge.getCause();
+    private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
@@ -41,10 +41,10 @@ public class DamageEvent implements Listener {
                     }
                     return;
                 }
-                if(!cause.equalsIgnoreCase("ALL") && !cause.equalsIgnoreCase(causePlayer)) {
+                if(!causes.isEmpty() && !causes.contains(causePlayer)) {
                     if (debugActive) {
                         debugUtils.addLine("DamageEvent CausePlayer= " + causePlayer);
-                        debugUtils.addLine("DamageEvent CauseConfig= " + cause);
+                        debugUtils.addLine("DamageEvent CauseConfig= " + causes);
                         debugUtils.addLine("DamageEvent execution time= " + (System.currentTimeMillis() - tempo));
                         debugUtils.debug("DamageEvent");
                     }

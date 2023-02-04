@@ -10,8 +10,8 @@ Consumer:
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Item you want to consume for challenge, if you want all items write ALL
-  Item: ALL
+  # Items you want to consume for challenge, if you want all items set []
+  Items: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # How many points you want give at consume?

@@ -12,8 +12,8 @@ ItemCollector:
   Worlds: []
   # How many points you want give at character?
   Point: 1
-  # Item you want to harvest for challenge, if you want all items write ALL
-  Item: ALL
+  # Items you want to harvest for challenge, if you want all items set []
+  Items: []
   # if you want a multiplier based on all players
   Boost:
     Enabled: false

@@ -16,8 +16,8 @@ InventoryControl:
   Number: 10
   # Every x minutes you want check condition
   Minutes: 2
-  # Item you want checked (ALL for all items)
-  Item: ALL
+  # Items you want checked (P.S. if the player have one in list is ok) ([] for all items)
+  Items: []
   # if you want a multiplier based on all players
   Boost:
     Enabled: false

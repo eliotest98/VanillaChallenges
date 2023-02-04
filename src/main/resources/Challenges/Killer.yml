@@ -10,8 +10,8 @@ Killer:
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Mob you want to kill for challenge, if you want all mobs write ALL
-  Mob: ALL
+  # Mobs you want to kill for challenge, if you want all mobs set []
+  Mobs: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # How many points you want give at kill?

@@ -10,8 +10,8 @@ Cooker:
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Item you want cook for challenge, if you want all items write ALL
-  Item: ALL
+  # Items you want cook for challenge, if you want all items set []
+  Items: []
   # How many points you want give at cook?
   Point: 1
   # if you want a multiplier based on all players

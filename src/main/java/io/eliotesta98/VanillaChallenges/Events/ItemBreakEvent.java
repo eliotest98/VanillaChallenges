@@ -13,7 +13,7 @@ public class ItemBreakEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemBreakEvent");
-    private final String item = Main.dailyChallenge.getItem();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
@@ -53,10 +53,10 @@ public class ItemBreakEvent implements Listener {
                 return;
             }
 
-            if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(brokenItemByPlayer)) {
+            if(!items.isEmpty() && !items.contains(brokenItemByPlayer)) {
                 if (debugActive) {
                     debugUtils.addLine("ItemBreakEvent BlockHarvestedByPlayer= " + brokenItemByPlayer);
-                    debugUtils.addLine("ItemBreakEvent BlockHarvestedConfig= " + item);
+                    debugUtils.addLine("ItemBreakEvent BlockHarvestedConfig= " + items);
                     debugUtils.addLine("ItemBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("ItemBreakEvent");
                 }

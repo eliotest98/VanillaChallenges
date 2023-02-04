@@ -14,7 +14,7 @@ public class SneakEvent implements Listener {
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SneakEvent");
     private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
-    private final String item = Main.dailyChallenge.getItem();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
@@ -40,9 +40,9 @@ public class SneakEvent implements Listener {
                 return;
             }
 
-            if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(itemInHand)) {
+            if(!items.isEmpty() && !items.contains(itemInHand)) {
                 if (debugActive) {
-                    debugUtils.addLine("SneakEvent ItemInHandConfig= " + item);
+                    debugUtils.addLine("SneakEvent ItemInHandConfig= " + items);
                     debugUtils.addLine("SneakEvent ItemInHandPlayer= " + itemInHand);
                     debugUtils.addLine("SneakEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("SneakEvent");

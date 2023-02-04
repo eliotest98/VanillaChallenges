@@ -15,7 +15,7 @@ public class HarvestEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("HarvestEvent");
-    private final String item = Main.dailyChallenge.getItem();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
@@ -56,10 +56,10 @@ public class HarvestEvent implements Listener {
                 return;
             }
 
-            if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(blockHarvested)) {
+            if(!items.isEmpty() && !items.contains(blockHarvested)) {
                 if (debugActive) {
                     debugUtils.addLine("HarvestEvent BlockHarvestedByPlayer= " + blockHarvested);
-                    debugUtils.addLine("HarvestEvent BlockHarvestedConfig= " + item);
+                    debugUtils.addLine("HarvestEvent BlockHarvestedConfig= " + items);
                     debugUtils.addLine("HarvestEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("HarvestEvent");
                 }

@@ -16,7 +16,7 @@ public class EatEvent implements Listener {
     private final HashMap<String, Integer> foodLevels = new HashMap<>();
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
-    private final String item = Main.dailyChallenge.getItem();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
@@ -32,21 +32,13 @@ public class EatEvent implements Listener {
                 debugUtils.addLine("EatEvent PlayerEating= " + playerName);
             }
             if (foodLevels.get(playerName) == null) {
-                if (foodLevel <= 20) {
-                    foodLevels.put(playerName, foodLevel);
-                } else {
-                    foodLevels.put(playerName, 20);
-                }
+                foodLevels.put(playerName, Math.min(foodLevel, 20));
                 Main.dailyChallenge.increment(playerName, point);
             } else {
                 if (itemUsedByPlayer != null) {
                     int number = foodLevel - foodLevels.get(playerName);
                     foodLevels.remove(playerName);
-                    if (foodLevel <= 20) {
-                        foodLevels.put(playerName, foodLevel);
-                    } else {
-                        foodLevels.put(playerName, 20);
-                    }
+                    foodLevels.put(playerName, Math.min(foodLevel, 20));
 
                     if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                         if (debugActive) {
@@ -58,10 +50,10 @@ public class EatEvent implements Listener {
                         return;
                     }
 
-                    if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(itemUsedByPlayer.getType().toString())) {
+                    if(!items.isEmpty() && !items.contains(itemUsedByPlayer.getType().toString())) {
                         if (debugActive) {
                             debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + itemUsedByPlayer);
-                            debugUtils.addLine("EatEvent ItemConsumedConfig= " + item);
+                            debugUtils.addLine("EatEvent ItemConsumedConfig= " + items);
                             debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
                             debugUtils.debug("EatEvent");
                         }

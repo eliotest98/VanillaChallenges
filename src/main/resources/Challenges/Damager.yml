@@ -10,8 +10,8 @@ Damager:
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Cause you want to damage for challenge, if you want all causes write ALL
-  Cause: ALL
+  # Causes you want to damage for challenge, if you want all causes set []
+  Causes: []
   # How many points you want give at damage?
   Point: 1
   # if you want a multiplier based on all players

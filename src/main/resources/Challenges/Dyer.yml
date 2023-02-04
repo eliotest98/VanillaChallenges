@@ -1,5 +1,5 @@
 Dyer:
-  TypeChallenge: 'DyerChallenge'
+  TypeChallenge: 'ColorSheepChallenge'
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
@@ -10,23 +10,12 @@ Dyer:
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Cause you want to damage for challenge, if you want all causes write ALL
-  Cause: ALL
-  # Type of item in main hand for death, if you want all items set []
-  ItemsInHand: []
-  # Type of item in inventory for death, if you want all items write ALL
-  Item: ALL
+  # Colors you want use for challenge, if you want all colors set []
+  Colors: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # Able or disable death with Lands. (If a true the player must die in his own land, otherwise he can die anywhere)
-  # ATTENTION! For activate this function you can use Lands Plugin and activate it in config.yml
-  DeathInLand: false
   # How many points you want give at death?
   Point: 1
-  # If you want keepInventory for this challenge
-  KeepInventory: false
-  # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)
-  Number: -1
   # if you want a multiplier based on all players
   Boost:
     Enabled: false
@@ -46,15 +35,15 @@ Dyer:
     # For how many minutes you want give the multiplier?
     Minutes: 2
   # Name of Challenge
-  NameChallenge: "&7Dye Challenge"
+  NameChallenge: "&7Dyer Challenge"
   # Title challenge
   Title:
     - '&8'
     - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Dye Challenge'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Dyer Challenge'
     - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Dye for receive points'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉             &7(1 point for 1 death)'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Color sheep with any color'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉             &7(1 point for 1 sheep)'
     - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
     - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'

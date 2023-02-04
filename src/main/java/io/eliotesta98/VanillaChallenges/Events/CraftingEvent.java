@@ -14,7 +14,7 @@ public class CraftingEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("CraftItemEvent");
-    private final String itemCrafting = Main.instance.getDailyChallenge().getItem();
+    private final ArrayList<String> itemsCrafting = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
@@ -38,10 +38,10 @@ public class CraftingEvent implements Listener {
                 }
                 return;
             }
-            if (!itemCrafting.equalsIgnoreCase("ALL") && !itemCrafting.equalsIgnoreCase(recipePlayer)) {
+            if (!itemsCrafting.isEmpty() && !itemsCrafting.contains(recipePlayer)) {
                 if (debugActive) {
                     debugUtils.addLine("CraftItemEvent RecipePlayer= " + recipePlayer);
-                    debugUtils.addLine("CraftItemEvent RecipeConfig= " + itemCrafting);
+                    debugUtils.addLine("CraftItemEvent RecipeConfig= " + itemsCrafting);
                     debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("CraftItemEvent");
                 }

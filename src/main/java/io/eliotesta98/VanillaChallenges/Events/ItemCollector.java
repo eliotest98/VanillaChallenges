@@ -23,7 +23,7 @@ public class ItemCollector implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemCollector");
-    private final String item = Main.dailyChallenge.getItem();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyPlacedChest");
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
@@ -155,11 +155,11 @@ public class ItemCollector implements Listener {
                                             return;
                                         }
 
-                                        if (item.equalsIgnoreCase("ALL")) {
+                                        if (items.isEmpty()) {
                                             Main.dailyChallenge.increment(player.getName(), (long) point * amount);
                                             itemInv.setAmount(0);
                                         } else {
-                                            if (item.equalsIgnoreCase(itemInv.getType().toString())) {
+                                            if (items.contains(itemInv.getType().toString())) {
                                                 Main.dailyChallenge.increment(player.getName(), (long) point * amount);
                                                 itemInv.setAmount(0);
                                             }

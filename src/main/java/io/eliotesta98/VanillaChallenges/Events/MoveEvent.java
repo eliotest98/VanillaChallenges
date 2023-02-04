@@ -16,7 +16,7 @@ public class MoveEvent implements Listener {
     private final HashMap<String, Double> distances = new HashMap<>();
     private final DebugUtils debugUtils = new DebugUtils();
     private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
-    private final String item = Main.dailyChallenge.getItem();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("MoveEvent");
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
@@ -55,10 +55,10 @@ public class MoveEvent implements Listener {
                 return;
             }
 
-            if (!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(playerMaterialInHand)) {
+            if (!items.isEmpty() && !items.contains(playerMaterialInHand)) {
                 if (debugActive) {
                     debugUtils.addLine("MoveEvent PlayerMaterialInHand= " + playerMaterialInHand);
-                    debugUtils.addLine("MoveEvent ConfigMaterialInHand= " + item);
+                    debugUtils.addLine("MoveEvent ConfigMaterialInHand= " + items);
                     debugUtils.addLine("MoveEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("MoveEvent");
                 }

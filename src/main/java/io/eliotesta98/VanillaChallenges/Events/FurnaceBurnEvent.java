@@ -13,7 +13,7 @@ public class FurnaceBurnEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("FurnaceCookEvent");
-    private final String itemBurn = Main.instance.getDailyChallenge().getItem();
+    private final ArrayList<String> itemsBurn = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
@@ -39,10 +39,10 @@ public class FurnaceBurnEvent implements Listener {
                 return;
             }
 
-            if(!itemBurn.equalsIgnoreCase("ALL") && !itemBurn.equalsIgnoreCase(itemBurnByPlayer)) {
+            if(!itemsBurn.isEmpty() && !itemsBurn.contains(itemBurnByPlayer)) {
                 if (debugActive) {
                     debugUtils.addLine("FurnaceCookEvent ItemBurnByPlayer= " + itemBurnByPlayer);
-                    debugUtils.addLine("FurnaceCookEvent ItemBurnConfig= " + itemBurn);
+                    debugUtils.addLine("FurnaceCookEvent ItemBurnConfig= " + itemsBurn);
                     debugUtils.addLine("FurnaceCookEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("FurnaceCookEvent");
                 }

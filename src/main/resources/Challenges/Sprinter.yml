@@ -14,8 +14,8 @@ Sprinter:
   Point: 1
   # Blocks you want break for challenge, if you want all blocks set []
   Blocks: []
-  # Item you want checked in hand (ALL for all items)
-  Item: ALL
+  # Items you want checked in hand ([] for all items)
+  Item: []
   # if you want a multiplier based on all players
   Boost:
     Enabled: false

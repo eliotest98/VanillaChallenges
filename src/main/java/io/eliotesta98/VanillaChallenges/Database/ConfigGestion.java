@@ -87,7 +87,7 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "ItemCollector.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "InventoryControl.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "BoatMove.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dyer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dier.yml"));
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges", "CubeGenerator.yml"));
             }
@@ -110,13 +110,13 @@ public class ConfigGestion {
             String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
-            String item = yamlChallenge.getString(challengeName + ".Item");
+            ArrayList<String> items = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Items");
             ArrayList<String> mobs = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Mobs");
             ArrayList<String> itemsInHand = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".ItemsInHand");
             double force = yamlChallenge.getDouble(challengeName + ".Force");
             double power = yamlChallenge.getDouble(challengeName + ".Power");
-            String color = yamlChallenge.getString(challengeName + ".Color");
-            String cause = yamlChallenge.getString(challengeName + ".Cause");
+            ArrayList<String> colors = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Colors");
+            ArrayList<String> causes = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Causes");
             ArrayList<String> vehicles = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Vehicles");
             int point = yamlChallenge.getInt(challengeName + ".Point");
             int number = yamlChallenge.getInt(challengeName + ".Number");
@@ -150,7 +150,7 @@ public class ConfigGestion {
             boolean keepInventory = yamlChallenge.getBoolean(challengeName + ".KeepInventory");
             boolean deathInLand = yamlChallenge.getBoolean(challengeName + ".DeathInLand");
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
-                    title, item, itemsInHand, mobs, force, power, color, cause, point, pointsBoost,
+                    title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
                     pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
                     challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds);

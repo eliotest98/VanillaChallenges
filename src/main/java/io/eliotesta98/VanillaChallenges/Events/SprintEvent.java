@@ -18,7 +18,7 @@ public class SprintEvent implements Listener {
     private HashMap<String, Boolean> players = new HashMap<>();
     private HashMap<String, Double> distances = new HashMap<>();
     private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
-    private final String item = Main.dailyChallenge.getItem();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
@@ -33,7 +33,7 @@ public class SprintEvent implements Listener {
                 debugUtils.addLine("SprintEvent ToggledSprintPlayer= " + e.getPlayer().getName());
                 debugUtils.addLine("SprintEvent BlockStepOnPlayer= " + blockWalk);
                 debugUtils.addLine("SprintEvent BlockStepOnConfig= " + blocks);
-                debugUtils.addLine("SprintEvent ItemInHandConfig= " + item);
+                debugUtils.addLine("SprintEvent ItemInHandConfig= " + items);
                 debugUtils.addLine("SprintEvent ItemInHandPlayer= " + itemInHand);
             }
 
@@ -47,9 +47,9 @@ public class SprintEvent implements Listener {
                 return;
             }
 
-            if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(itemInHand)) {
+            if(!items.isEmpty() && !items.contains(itemInHand)) {
                 if (debugActive) {
-                    debugUtils.addLine("SprintEvent ItemInHandConfig= " + item);
+                    debugUtils.addLine("SprintEvent ItemInHandConfig= " + items);
                     debugUtils.addLine("SprintEvent ItemInHandPlayer= " + itemInHand);
                     debugUtils.addLine("SprintEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("SprintEvent");

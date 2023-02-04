@@ -23,11 +23,11 @@ public class Challenge {
     private String typeChallenge = "nessuna";
     private ArrayList<String> rewards = new ArrayList<>();
     private ArrayList<String> title = new ArrayList<>();
-    private String item = "ALL";
+    private ArrayList<String> items = new ArrayList<>();
     private ArrayList<String> itemsInHand = new ArrayList<>();
     private ArrayList<String> mobs = new ArrayList<>();
-    private String color = "ALL";
-    private String cause = "ALL";
+    private ArrayList<String> colors = new ArrayList<>();
+    private ArrayList<String> causes = new ArrayList<>();
     private ArrayList<String> vehicles = new ArrayList<>();
     private double force = 0.0;
     private double power = 0.0;
@@ -62,25 +62,26 @@ public class Challenge {
     }
 
     public Challenge(String nameChallenge, ArrayList<String> blocks, ArrayList<String> blocksOnPlaced, String typeChallenge,
-                     ArrayList<String> rewards, ArrayList<String> title, String item, ArrayList<String> itemsInHand,
-                     ArrayList<String> mobs, double force, double power, String color, String cause, int point, int pointsBoost,
-                     int multiplier, int boostMinutes, int number, int time, ArrayList<String> vehicles, String sneaking,
-                     String onGround, int pointsBoostSinglePlayer, int multiplierSinglePlayer, int minutesSinglePlayer,
-                     int timeChallenge, String challengeName, ArrayList<String> quests, int minutes, String startTimeChallenge,
-                     boolean keepInventory, boolean deathInLand, ArrayList<String> worlds) {
+                     ArrayList<String> rewards, ArrayList<String> title, ArrayList<String> items, ArrayList<String> itemsInHand,
+                     ArrayList<String> mobs, double force, double power, ArrayList<String> colors, ArrayList<String> causes,
+                     int point, int pointsBoost, int multiplier, int boostMinutes, int number, int time,
+                     ArrayList<String> vehicles, String sneaking, String onGround, int pointsBoostSinglePlayer,
+                     int multiplierSinglePlayer, int minutesSinglePlayer, int timeChallenge, String challengeName,
+                     ArrayList<String> quests, int minutes, String startTimeChallenge, boolean keepInventory,
+                     boolean deathInLand, ArrayList<String> worlds) {
         this.blocks = blocks;
         this.worlds = worlds;
         this.blocksOnPlaced = blocksOnPlaced;
         this.typeChallenge = typeChallenge;
         this.rewards = rewards;
         this.title = title;
-        this.item = item;
+        this.items = items;
         this.itemsInHand = itemsInHand;
         this.mobs = mobs;
         this.force = force;
         this.power = power;
-        this.color = color;
-        this.cause = cause;
+        this.colors = colors;
+        this.causes = causes;
         this.point = point;
         this.pointsBoost = pointsBoost;
         this.multiplier = multiplier;
@@ -143,20 +144,20 @@ public class Challenge {
         this.min10PlayersPoints = min10PlayersPoints;
     }
 
-    public String getCause() {
-        return cause;
+    public ArrayList<String> getCauses() {
+        return causes;
     }
 
-    public void setCause(String cause) {
-        this.cause = cause;
+    public void setCauses(ArrayList<String> causes) {
+        this.causes = causes;
     }
 
-    public String getColor() {
-        return color;
+    public ArrayList<String> getColors() {
+        return colors;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setColors(ArrayList<String> color) {
+        this.colors = colors;
     }
 
     public double getPower() {
@@ -531,12 +532,12 @@ public class Challenge {
         this.title = title;
     }
 
-    public String getItem() {
-        return item;
+    public ArrayList<String> getItems() {
+        return items;
     }
 
-    public void setItem(String item) {
-        this.item = item;
+    public void setItems(ArrayList<String> items) {
+        this.items = items;
     }
 
     public ArrayList<String> getItemsInHand() {
@@ -689,11 +690,11 @@ public class Challenge {
                 ", typeChallenge='" + typeChallenge + '\'' +
                 ", rewards='" + rewards + '\'' +
                 ", title=" + title +
-                ", item='" + item + '\'' +
+                ", items='" + items + '\'' +
                 ", itemsInHand='" + itemsInHand + '\'' +
                 ", mobs='" + mobs + '\'' +
-                ", color='" + color + '\'' +
-                ", cause='" + cause + '\'' +
+                ", colors='" + colors + '\'' +
+                ", causes='" + causes + '\'' +
                 ", force=" + force +
                 ", power=" + power +
                 ", timeNumber=" + timeNumber +

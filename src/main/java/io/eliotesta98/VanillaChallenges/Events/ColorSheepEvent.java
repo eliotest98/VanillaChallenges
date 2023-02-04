@@ -13,7 +13,7 @@ public class ColorSheepEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ColorSheepEvent");
-    private final String color = Main.dailyChallenge.getColor();
+    private final ArrayList<String> colors = Main.dailyChallenge.getColors();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
@@ -57,9 +57,9 @@ public class ColorSheepEvent implements Listener {
                 }
                 return;
             }
-            if(!color.equalsIgnoreCase("ALL") && !color.equalsIgnoreCase(colorPlayer)) {
+            if(!colors.isEmpty() && !colors.contains(colorPlayer)) {
                 if (debugActive) {
-                    debugUtils.addLine("ColorSheepEvent ConfigColor= " + color);
+                    debugUtils.addLine("ColorSheepEvent ConfigColor= " + colors);
                     debugUtils.addLine("ColorSheepEvent PlayerColorg= " + colorPlayer);
                     debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("ColorSheepEvent");
@@ -68,7 +68,7 @@ public class ColorSheepEvent implements Listener {
             }
             Main.dailyChallenge.increment(playerName, point);
             if (debugActive) {
-                debugUtils.addLine("ColorSheepEvent ConfigColor= " + color);
+                debugUtils.addLine("ColorSheepEvent ConfigColor= " + colors);
                 debugUtils.addLine("ColorSheepEvent PlayerColorg= " + colorPlayer);
                 debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug("ColorSheepEvent");
