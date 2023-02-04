@@ -12,8 +12,9 @@ BlockPlacer:
   Worlds: []
   # Blocks you want placed for challenge, if you want all blocks set []
   Blocks: []
-  # Block you want place the block, if you want all write ALL
-  BlockOnPlaced: GRASS_BLOCK
+  # Block you want place the block, if you want all block set []
+  BlocksOnPlaced:
+    - GRASS_BLOCK
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # How many points you want give at place?

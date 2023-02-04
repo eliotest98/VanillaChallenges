@@ -24,7 +24,7 @@ public class DyeEvent implements Listener {
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DyeEvent");
     private final int point = Main.dailyChallenge.getPoint();
-    private final String itemInHand = Main.dailyChallenge.getItemInHand();
+    private final ArrayList<String> itemsInHand = Main.dailyChallenge.getItemsInHand();
     private final String item = Main.dailyChallenge.getItem();
     private final String cause = Main.dailyChallenge.getCause();
     private final String sneaking = Main.dailyChallenge.getSneaking();
@@ -124,12 +124,12 @@ public class DyeEvent implements Listener {
                 return;
             }
 
-            if (!itemInHand.equalsIgnoreCase("ALL") && !itemInHand.equalsIgnoreCase(itemInHandPlayer)) {
+            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInHandPlayer)) {
                 if (debugActive) {
-                    debugUtils.addLine("DyeEvent ItemInHandPlayer= " + itemInHandPlayer);
-                    debugUtils.addLine("DyeEvent ItemInHandConfig= " + itemInHand);
-                    debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("DyeEvent");
+                    debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemsInHand);
+                    debugUtils.addLine("BlockBreakEvent ItemInHandPlayer= " + itemInHandPlayer);
+                    debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("BlockBreakEvent");
                 }
                 return;
             }

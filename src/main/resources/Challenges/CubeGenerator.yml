@@ -12,8 +12,8 @@ CubeGenerator:
   Worlds: []
   # Blocks you want placed for challenge, if you want all blocks set []
   Blocks: []
-  # Type of item in main hand for break this blocks, if you want all items write ALL
-  ItemInHand: ALL
+  # Type of item in main hand for break this blocks, if you want all items set []
+  ItemsInHand: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # How many points you want give at break?

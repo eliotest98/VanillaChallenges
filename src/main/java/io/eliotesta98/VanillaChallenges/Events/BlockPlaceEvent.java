@@ -26,7 +26,7 @@ public class BlockPlaceEvent implements Listener {
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockPlaceEvent");
     private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
-    private final String blockOnPlaced = Main.instance.getDailyChallenge().getBlockOnPlace();
+    private final ArrayList<String> blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
@@ -116,9 +116,9 @@ public class BlockPlaceEvent implements Listener {
                 }
                 return;
             }
-            if (!blockOnPlaced.equalsIgnoreCase("ALL") && !blockOnPlaced.equalsIgnoreCase(materialBlockOnPlaced)) {
+            if (!blocksOnPlaced.isEmpty() && !blocksOnPlaced.contains(materialBlockOnPlaced)) {
                 if (debugActive) {
-                    debugUtils.addLine("BlockPlaceEvent BlockOnPlacedConfig= " + blockOnPlaced);
+                    debugUtils.addLine("BlockPlaceEvent BlockOnPlacedConfig= " + blocksOnPlaced);
                     debugUtils.addLine("BlockPlaceEvent BlockOnPlaced= " + materialBlockOnPlaced);
                     debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("BlockPlaceEvent");

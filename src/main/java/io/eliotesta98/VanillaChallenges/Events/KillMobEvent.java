@@ -13,7 +13,7 @@ public class KillMobEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("KillEvent");
-    private final String mobKill = Main.dailyChallenge.getMob();
+    private final ArrayList<String> mobsKill = Main.dailyChallenge.getMobs();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
@@ -23,7 +23,7 @@ public class KillMobEvent implements Listener {
         long tempo = System.currentTimeMillis();
         String pName;
         boolean sneakingPlayer;
-        String world = "";
+        String world;
         if (e.getEntity().getKiller() != null) {
             pName = e.getEntity().getKiller().getName();
             sneakingPlayer = e.getEntity().getKiller().isSneaking();
@@ -65,10 +65,10 @@ public class KillMobEvent implements Listener {
                 return;
             }
 
-            if(!mobKill.equalsIgnoreCase("ALL") && !mobKill.equalsIgnoreCase(mobKilled)) {
+            if(!mobsKill.isEmpty() && !mobsKill.contains(mobKilled)) {
                 if (debugActive) {
                     debugUtils.addLine("KillEvent MobKilled= " + mobKilled);
-                    debugUtils.addLine("KillEvent MobKilledConfig= " + mobKill);
+                    debugUtils.addLine("KillEvent MobKilledConfig= " + mobsKill);
                     debugUtils.addLine("KillEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("KillEvent");
                 }

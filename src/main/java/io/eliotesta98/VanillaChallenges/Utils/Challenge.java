@@ -19,16 +19,16 @@ public class Challenge {
     private ArrayList<String> worlds = new ArrayList<>();
     private String challengeName = "nessuna";
     private ArrayList<String> blocks = new ArrayList<>();
-    private String blockOnPlace = "ALL";
+    private ArrayList<String> blocksOnPlaced = new ArrayList<>();
     private String typeChallenge = "nessuna";
     private ArrayList<String> rewards = new ArrayList<>();
     private ArrayList<String> title = new ArrayList<>();
     private String item = "ALL";
-    private String itemInHand = "ALL";
-    private String mob = "ALL";
+    private ArrayList<String> itemsInHand = new ArrayList<>();
+    private ArrayList<String> mobs = new ArrayList<>();
     private String color = "ALL";
     private String cause = "ALL";
-    private String vehicle = "ALL";
+    private ArrayList<String> vehicles = new ArrayList<>();
     private double force = 0.0;
     private double power = 0.0;
     private int number = 0;
@@ -52,7 +52,7 @@ public class Challenge {
     private long countPointsChallenge = 0;
     private boolean startBoost = false;
     private String sneaking = "NOBODY";
-    private String stringFormatter = "abcdefghijklmnopqrstuvz";
+    private ArrayList<String> quests = new ArrayList<>();
     int minutes = 1;
 
     private HashMap<String, Long> tempPoints = new HashMap<>();
@@ -61,22 +61,22 @@ public class Challenge {
 
     }
 
-    public Challenge(String nameChallenge, ArrayList<String> blocks, String blockOnPlace, String typeChallenge, ArrayList<String> rewards,
-                     ArrayList<String> title, String item, String itemInHand, String mob, double force, double power,
-                     String color, String cause, int point, int pointsBoost, int multiplier, int boostMinutes,
-                     int number, int time, String vehicle, String sneaking, String onGround, int pointsBoostSinglePlayer,
-                     int multiplierSinglePlayer, int minutesSinglePlayer, int timeChallenge, String challengeName,
-                     String stringFormatter, int minutes, String startTimeChallenge, boolean keepInventory, boolean deathInLand,
-                     ArrayList<String> worlds) {
+    public Challenge(String nameChallenge, ArrayList<String> blocks, ArrayList<String> blocksOnPlaced, String typeChallenge,
+                     ArrayList<String> rewards, ArrayList<String> title, String item, ArrayList<String> itemsInHand,
+                     ArrayList<String> mobs, double force, double power, String color, String cause, int point, int pointsBoost,
+                     int multiplier, int boostMinutes, int number, int time, ArrayList<String> vehicles, String sneaking,
+                     String onGround, int pointsBoostSinglePlayer, int multiplierSinglePlayer, int minutesSinglePlayer,
+                     int timeChallenge, String challengeName, ArrayList<String> quests, int minutes, String startTimeChallenge,
+                     boolean keepInventory, boolean deathInLand, ArrayList<String> worlds) {
         this.blocks = blocks;
         this.worlds = worlds;
-        this.blockOnPlace = blockOnPlace;
+        this.blocksOnPlaced = blocksOnPlaced;
         this.typeChallenge = typeChallenge;
         this.rewards = rewards;
         this.title = title;
         this.item = item;
-        this.itemInHand = itemInHand;
-        this.mob = mob;
+        this.itemsInHand = itemsInHand;
+        this.mobs = mobs;
         this.force = force;
         this.power = power;
         this.color = color;
@@ -87,7 +87,7 @@ public class Challenge {
         this.boostMinutes = boostMinutes;
         this.number = number;
         this.time = time;
-        this.vehicle = vehicle;
+        this.vehicles = vehicles;
         this.sneaking = sneaking;
         this.onGround = onGround;
         this.pointsBoostSinglePlayer = pointsBoostSinglePlayer;
@@ -95,7 +95,7 @@ public class Challenge {
         this.multiplierSinglePlayer = multiplierSinglePlayer;
         this.timeChallenge = timeChallenge;
         this.challengeName = challengeName;
-        this.stringFormatter = stringFormatter;
+        this.quests = quests;
         this.minutes = minutes;
         this.startTimeChallenge = startTimeChallenge;
         this.keepInventory = keepInventory;
@@ -183,12 +183,12 @@ public class Challenge {
         this.blocks = blocks;
     }
 
-    public String getBlockOnPlace() {
-        return blockOnPlace;
+    public ArrayList<String> getBlocksOnPlace() {
+        return blocksOnPlaced;
     }
 
-    public void setBlockOnPlace(String blockOnPlace) {
-        this.blockOnPlace = blockOnPlace;
+    public void setBlocksOnPlace(ArrayList<String> blocksOnPlaced) {
+        this.blocksOnPlaced = blocksOnPlaced;
     }
 
     public String getChallengeName() {
@@ -218,12 +218,12 @@ public class Challenge {
         this.deathInLand = deathInLand;
     }
 
-    public String getStringFormatter() {
-        return stringFormatter;
+    public ArrayList<String> getQuests() {
+        return quests;
     }
 
-    public void setStringFormatter(String stringFormatter) {
-        this.stringFormatter = stringFormatter;
+    public void setQuests(ArrayList<String> stringFormatter) {
+        this.quests = quests;
     }
 
     public String getTypeChallenge() {
@@ -259,7 +259,7 @@ public class Challenge {
     }
 
     public void incrementCommands(String playerName, long amount) {
-        if(!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
+        if (!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
             return;
         }
         if (Main.instance.getConfigGestion().getTasks().getIfTaskSaving("SavePoints")
@@ -294,7 +294,7 @@ public class Challenge {
     }
 
     public void increment(String playerName, long amount) {
-        if(!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
+        if (!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
             return;
         }
         if (Main.instance.getConfigGestion().getTasks().getIfTaskSaving("SavePoints")
@@ -539,20 +539,20 @@ public class Challenge {
         this.item = item;
     }
 
-    public String getItemInHand() {
-        return itemInHand;
+    public ArrayList<String> getItemsInHand() {
+        return itemsInHand;
     }
 
-    public void setItemInHand(String itemInHand) {
-        this.itemInHand = itemInHand;
+    public void setItemsInHand(ArrayList<String> itemsInHand) {
+        this.itemsInHand = itemsInHand;
     }
 
-    public String getMob() {
-        return mob;
+    public ArrayList<String> getMobs() {
+        return mobs;
     }
 
-    public void setMob(String mob) {
-        this.mob = mob;
+    public void setMobs(ArrayList<String> mobs) {
+        this.mobs = mobs;
     }
 
     public int getPointsBoost() {
@@ -631,12 +631,12 @@ public class Challenge {
         this.time = time;
     }
 
-    public String getVehicle() {
-        return vehicle;
+    public ArrayList<String> getVehicle() {
+        return vehicles;
     }
 
-    public void setVehicle(String vehicle) {
-        this.vehicle = vehicle;
+    public void setVehicle(ArrayList<String> vehicles) {
+        this.vehicles = vehicles;
     }
 
     public String getSneaking() {
@@ -685,13 +685,13 @@ public class Challenge {
                 "players=" + players +
                 ", min10PlayersPoints=" + min10PlayersPoints +
                 ", blocks='" + blocks + '\'' +
-                ", blockOnPlace='" + blockOnPlace + '\'' +
+                ", blocksOnPlace='" + blocksOnPlaced + '\'' +
                 ", typeChallenge='" + typeChallenge + '\'' +
-                ", reward='" + rewards + '\'' +
+                ", rewards='" + rewards + '\'' +
                 ", title=" + title +
                 ", item='" + item + '\'' +
-                ", itemInHand='" + itemInHand + '\'' +
-                ", mob='" + mob + '\'' +
+                ", itemsInHand='" + itemsInHand + '\'' +
+                ", mobs='" + mobs + '\'' +
                 ", color='" + color + '\'' +
                 ", cause='" + cause + '\'' +
                 ", force=" + force +

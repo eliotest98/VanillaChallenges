@@ -10,8 +10,8 @@ Breeder:
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Mob you want to breed for challenge, if you want all mobs write ALL
-  Mob: ALL
+  # Mobs you want to breed for challenge, if you want all mobs set []
+  Mobs: []
   # How many points you want give at breed?
   Point: 1
   # if you want a multiplier based on all players

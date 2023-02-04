@@ -13,15 +13,15 @@ public class BreedEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BreedEvent");
-    private final String mobBreed = Main.dailyChallenge.getMob();
+    private final ArrayList<String> mobsBreed = Main.dailyChallenge.getMobs();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBreedAnimals(org.bukkit.event.entity.EntityBreedEvent e) {
         long tempo = System.currentTimeMillis();
-        String playerName = "";
-        String worldName = "";
+        String playerName;
+        String worldName;
         if (e.getBreeder() != null) {
             playerName = e.getBreeder().getName();
             worldName = e.getBreeder().getWorld().getName();
@@ -49,10 +49,10 @@ public class BreedEvent implements Listener {
                 }
                 return;
             }
-            if(!mobBreed.equalsIgnoreCase("ALL") && !mobBreed.equalsIgnoreCase(mobBreded)) {
+            if(!mobsBreed.isEmpty() && !mobsBreed.contains(mobBreded)) {
                 if (debugActive) {
-                    debugUtils.addLine("BreedEvent MobBreedConfig= " + mobBreed);
-                    debugUtils.addLine("BreedEvent MobBreded= " + mobBreed);
+                    debugUtils.addLine("BreedEvent MobBreedConfig= " + mobsBreed);
+                    debugUtils.addLine("BreedEvent MobBreded= " + mobBreded);
                     debugUtils.addLine("BreedEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("BreedEvent");
                 }

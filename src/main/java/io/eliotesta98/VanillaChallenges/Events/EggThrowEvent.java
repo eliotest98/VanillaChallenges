@@ -13,7 +13,7 @@ public class EggThrowEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EggThrowEvent");
-    private final String mob = Main.dailyChallenge.getMob();
+    private final ArrayList<String> mobs = Main.dailyChallenge.getMobs();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
@@ -29,7 +29,7 @@ public class EggThrowEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("EggThrowEvent PlayerThrowing= " + playerName);
-                debugUtils.addLine("EggThrowEvent MobConfig= " + mob);
+                debugUtils.addLine("EggThrowEvent MobsConfig= " + mobs);
             }
 
             if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
@@ -51,11 +51,12 @@ public class EggThrowEvent implements Listener {
                 }
                 return;
             }
-            if(mob.equalsIgnoreCase("CHICKEN")) {
+
+            if(mobs.contains("CHICKEN")) {
                 if (hatching) {
                     Main.dailyChallenge.increment(playerName, (long) point * numberHatches);
                 } else {
-                    Main.dailyChallenge.increment(playerName, (long) point);
+                    Main.dailyChallenge.increment(playerName, point);
                 }
             } else {
                 Main.dailyChallenge.increment(playerName, point);
@@ -64,7 +65,6 @@ public class EggThrowEvent implements Listener {
                 debugUtils.addLine("EggThrowEvent execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug("EggThrowEvent");
             }
-            return;
         });
     }
 }

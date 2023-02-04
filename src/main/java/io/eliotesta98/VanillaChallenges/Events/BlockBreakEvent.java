@@ -26,7 +26,7 @@ public class BlockBreakEvent implements Listener {
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockBreakEvent");
     private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
-    private final String itemInHand = Main.instance.getDailyChallenge().getItemInHand();
+    private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
@@ -119,16 +119,17 @@ public class BlockBreakEvent implements Listener {
                 }
                 return;
             }
-            if (!itemInHand.equalsIgnoreCase("ALL") &&
-                    !itemInMainHand.getType().toString().equalsIgnoreCase(itemInHand)) {
+
+            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInMainHand.getType().toString())) {
                 if (debugActive) {
-                    debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemInHand);
+                    debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemsInHand);
                     debugUtils.addLine("BlockBreakEvent ItemInHandPlayer= " + itemInMainHand.getType());
                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("BlockBreakEvent");
                 }
                 return;
             }
+
             Main.instance.getDailyChallenge().increment(playerName, point);
             if (debugActive) {
                 debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
