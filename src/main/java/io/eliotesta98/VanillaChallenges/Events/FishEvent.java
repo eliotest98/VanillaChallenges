@@ -7,13 +7,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
+
 public class FishEvent implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("FishEvent");
-    private String fish = Main.dailyChallenge.getItem();
-    private int point = Main.dailyChallenge.getPoint();
-    private String sneaking = Main.dailyChallenge.getSneaking();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("FishEvent");
+    private final String fish = Main.dailyChallenge.getItem();
+    private final int point = Main.dailyChallenge.getPoint();
+    private final String sneaking = Main.dailyChallenge.getSneaking();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerFishEvent(org.bukkit.event.player.PlayerFishEvent e) {
@@ -28,6 +31,7 @@ public class FishEvent implements Listener {
         }
         final String playerName = e.getPlayer().getName();
         final String fishCaugh = e.getCaught().getName();
+        final String worldName = e.getPlayer().getWorld().getName();
         final boolean playerSneaking = e.getPlayer().isSneaking();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
             @Override
@@ -35,6 +39,17 @@ public class FishEvent implements Listener {
                 if (debugActive) {
                     debugUtils.addLine("FishEvent PlayerFishing= " + playerName);
                 }
+
+                if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                    if (debugActive) {
+                        debugUtils.addLine("FishEvent WorldsConfig= " + worldsEnabled);
+                        debugUtils.addLine("FishEvent PlayerWorld= " + worldName);
+                        debugUtils.addLine("FishEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("FishEvent");
+                    }
+                    return;
+                }
+
                 if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != playerSneaking) {
                     if (debugActive) {
                         debugUtils.addLine("FishEvent ConfigSneaking= " + sneaking);

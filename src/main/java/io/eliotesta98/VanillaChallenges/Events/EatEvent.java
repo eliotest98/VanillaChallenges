@@ -8,65 +8,75 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EatEvent implements Listener {
 
-    private HashMap<String, Integer> foodLevels = new HashMap<>();
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
-    private String item = Main.dailyChallenge.getItem();
-    private int point = Main.dailyChallenge.getPoint();
+    private final HashMap<String, Integer> foodLevels = new HashMap<>();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
+    private final String item = Main.dailyChallenge.getItem();
+    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onFoodLevelChange(org.bukkit.event.entity.FoodLevelChangeEvent e) {
         long tempo = System.currentTimeMillis();
         final String playerName = e.getEntity().getName();
+        final String worldName = e.getEntity().getWorld().getName();
         final int foodLevel = e.getFoodLevel();
         final ItemStack itemUsedByPlayer = e.getItem();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
-                if (debugActive) {
-                    debugUtils.addLine("EatEvent PlayerEating= " + playerName);
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if (debugActive) {
+                debugUtils.addLine("EatEvent PlayerEating= " + playerName);
+            }
+            if (foodLevels.get(playerName) == null) {
+                if (foodLevel <= 20) {
+                    foodLevels.put(playerName, foodLevel);
+                } else {
+                    foodLevels.put(playerName, 20);
                 }
-                if (foodLevels.get(playerName) == null) {
+                Main.dailyChallenge.increment(playerName, point);
+            } else {
+                if (itemUsedByPlayer != null) {
+                    int number = foodLevel - foodLevels.get(playerName);
+                    foodLevels.remove(playerName);
                     if (foodLevel <= 20) {
                         foodLevels.put(playerName, foodLevel);
                     } else {
                         foodLevels.put(playerName, 20);
                     }
-                    Main.dailyChallenge.increment(playerName, point);
-                } else {
-                    if (itemUsedByPlayer != null) {
-                        int number = foodLevel - foodLevels.get(playerName);
-                        foodLevels.remove(playerName);
-                        if (foodLevel <= 20) {
-                            foodLevels.put(playerName, foodLevel);
-                        } else {
-                            foodLevels.put(playerName, 20);
+
+                    if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                        if (debugActive) {
+                            debugUtils.addLine("EatEvent WorldsConfig= " + worldsEnabled);
+                            debugUtils.addLine("EatEvent PlayerWorld= " + worldName);
+                            debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
+                            debugUtils.debug("EatEvent");
                         }
-                        if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(itemUsedByPlayer.getType().toString())) {
-                            if (debugActive) {
-                                debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + itemUsedByPlayer);
-                                debugUtils.addLine("EatEvent ItemConsumedConfig= " + item);
-                                debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
-                                debugUtils.debug("EatEvent");
-                            }
-                            return;
-                        }
-                        Main.dailyChallenge.increment(playerName, (long) number * point);
-                    } else {
-                        foodLevels.remove(playerName);
-                        foodLevels.put(playerName, foodLevel);
-                        Main.dailyChallenge.increment(playerName, point);
+                        return;
                     }
+
+                    if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(itemUsedByPlayer.getType().toString())) {
+                        if (debugActive) {
+                            debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + itemUsedByPlayer);
+                            debugUtils.addLine("EatEvent ItemConsumedConfig= " + item);
+                            debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
+                            debugUtils.debug("EatEvent");
+                        }
+                        return;
+                    }
+                    Main.dailyChallenge.increment(playerName, (long) number * point);
+                } else {
+                    foodLevels.remove(playerName);
+                    foodLevels.put(playerName, foodLevel);
+                    Main.dailyChallenge.increment(playerName, point);
                 }
-                if (debugActive) {
-                    debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("EatEvent");
-                }
-                return;
+            }
+            if (debugActive) {
+                debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("EatEvent");
             }
         });
     }

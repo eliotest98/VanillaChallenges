@@ -8,6 +8,8 @@ Shooter:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
   # Force you want to apply for shoot arrow in challenge, if you want to disable use 0.0
   Force: 1.0
   # How many points you want give at shoot?

@@ -7,16 +7,19 @@ import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MoveEvent implements Listener {
 
     private final HashMap<String, Double> distances = new HashMap<>();
     private final DebugUtils debugUtils = new DebugUtils();
-    private final String block = Main.dailyChallenge.getBlock();
+    private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
     private final String item = Main.dailyChallenge.getItem();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("MoveEvent");
     private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
@@ -31,6 +34,7 @@ public class MoveEvent implements Listener {
         }
 
         final String playerName = e.getPlayer().getName();
+        final String worldName = e.getPlayer().getWorld().getName();
         final Location from = e.getFrom();
         final Location to = e.getTo();
         final String materialFrom = from.getBlock().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
@@ -39,6 +43,16 @@ public class MoveEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("MoveEvent PlayerMoving= " + playerName);
+            }
+
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                if (debugActive) {
+                    debugUtils.addLine("MoveEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("MoveEvent PlayerWorld= " + worldName);
+                    debugUtils.addLine("MoveEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("MoveEvent");
+                }
+                return;
             }
 
             if (!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(playerMaterialInHand)) {
@@ -51,11 +65,11 @@ public class MoveEvent implements Listener {
                 return;
             }
 
-            if (!block.equalsIgnoreCase("ALL") && !block.equalsIgnoreCase(materialFrom) && !block.equalsIgnoreCase(materialTo)) {
+            if (!blocks.isEmpty() && !blocks.contains(materialFrom) && !blocks.contains(materialTo)) {
                 if (debugActive) {
                     debugUtils.addLine("MoveEvent BlockToStepOn= " + materialTo);
                     debugUtils.addLine("MoveEvent BlockFromStepOn= " + materialFrom);
-                    debugUtils.addLine("MoveEvent BlockStepOnConfig= " + block);
+                    debugUtils.addLine("MoveEvent BlockStepOnConfig= " + blocks);
                     debugUtils.debug("MoveEvent");
                 }
                 return;

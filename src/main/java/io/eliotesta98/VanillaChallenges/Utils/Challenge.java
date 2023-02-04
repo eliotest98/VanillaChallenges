@@ -16,8 +16,9 @@ public class Challenge {
     private HashMap<String, Long> boostSinglePlayers = new HashMap<String, Long>();
     private HashMap<String, Boolean> startBoostSinglePlayers = new HashMap<String, Boolean>();
     private HashMap<String, BukkitTask> tasksSinglePlayers = new HashMap<String, BukkitTask>();
+    private ArrayList<String> worlds = new ArrayList<>();
     private String challengeName = "nessuna";
-    private String block = "ALL";
+    private ArrayList<String> blocks = new ArrayList<>();
     private String blockOnPlace = "ALL";
     private String typeChallenge = "nessuna";
     private ArrayList<String> rewards = new ArrayList<>();
@@ -60,13 +61,15 @@ public class Challenge {
 
     }
 
-    public Challenge(String nameChallenge, String block, String blockOnPlace, String typeChallenge, ArrayList<String> rewards,
+    public Challenge(String nameChallenge, ArrayList<String> blocks, String blockOnPlace, String typeChallenge, ArrayList<String> rewards,
                      ArrayList<String> title, String item, String itemInHand, String mob, double force, double power,
                      String color, String cause, int point, int pointsBoost, int multiplier, int boostMinutes,
                      int number, int time, String vehicle, String sneaking, String onGround, int pointsBoostSinglePlayer,
                      int multiplierSinglePlayer, int minutesSinglePlayer, int timeChallenge, String challengeName,
-                     String stringFormatter, int minutes, String startTimeChallenge, boolean keepInventory, boolean deathInLand) {
-        this.block = block;
+                     String stringFormatter, int minutes, String startTimeChallenge, boolean keepInventory, boolean deathInLand,
+                     ArrayList<String> worlds) {
+        this.blocks = blocks;
+        this.worlds = worlds;
         this.blockOnPlace = blockOnPlace;
         this.typeChallenge = typeChallenge;
         this.rewards = rewards;
@@ -172,12 +175,12 @@ public class Challenge {
         this.force = force;
     }
 
-    public String getBlock() {
-        return block;
+    public ArrayList<String> getBlocks() {
+        return blocks;
     }
 
-    public void setBlock(String block) {
-        this.block = block;
+    public void setBlocks(ArrayList<String> blocks) {
+        this.blocks = blocks;
     }
 
     public String getBlockOnPlace() {
@@ -668,12 +671,20 @@ public class Challenge {
         this.keepInventory = keepInventory;
     }
 
+    public ArrayList<String> getWorlds() {
+        return worlds;
+    }
+
+    public void setWorlds(ArrayList<String> worlds) {
+        this.worlds = worlds;
+    }
+
     @Override
     public String toString() {
         return "Challenge{" +
                 "players=" + players +
                 ", min10PlayersPoints=" + min10PlayersPoints +
-                ", block='" + block + '\'' +
+                ", blocks='" + blocks + '\'' +
                 ", blockOnPlace='" + blockOnPlace + '\'' +
                 ", typeChallenge='" + typeChallenge + '\'' +
                 ", reward='" + rewards + '\'' +

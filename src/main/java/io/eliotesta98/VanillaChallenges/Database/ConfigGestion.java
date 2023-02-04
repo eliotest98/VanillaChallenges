@@ -101,7 +101,8 @@ public class ConfigGestion {
                 controlIfChallengeExist.add(challengeName);
                 continue;
             }
-            String block = yamlChallenge.getString(challengeName + ".Block");
+            ArrayList<String> worlds = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Worlds");
+            ArrayList<String> blocks = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Blocks");
             String blockOnPlaced = yamlChallenge.getString(challengeName + ".BlockOnPlaced");
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName+".NameChallenge");
@@ -142,11 +143,11 @@ public class ConfigGestion {
             String stringFormatter = yamlChallenge.getString(challengeName + ".StringFormatter");
             boolean keepInventory = yamlChallenge.getBoolean(challengeName+".KeepInventory");
             boolean deathInLand = yamlChallenge.getBoolean(challengeName+".DeathInLand");
-            Challenge challenge = new Challenge(nameChallenge,block, blockOnPlaced, typeChallenge, rewards,
+            Challenge challenge = new Challenge(nameChallenge,blocks, blockOnPlaced, typeChallenge, rewards,
                     title, item, itemInHand, mob, force, power, color, cause, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicle, sneaking, onGround,
                     pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
-                    challengeName, stringFormatter, minutes, startTimeChallenge,keepInventory,deathInLand);
+                    challengeName, stringFormatter, minutes, startTimeChallenge,keepInventory,deathInLand,worlds);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");

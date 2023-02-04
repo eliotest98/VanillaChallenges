@@ -9,15 +9,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class VehicleMoveEvent implements Listener {
 
-    private HashMap<String, Double> distances = new HashMap<String, Double>();
+    private final HashMap<String, Double> distances = new HashMap<String, Double>();
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("VehicleMoveEvent");
     private final int point = Main.dailyChallenge.getPoint();
     private final String vehicle = Main.dailyChallenge.getVehicle();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
@@ -34,12 +36,24 @@ public class VehicleMoveEvent implements Listener {
         final Location from = e.getFrom();
         final Location to = e.getTo();
         final Entity playerVehicle = e.getPlayer().getVehicle();
+        final String worldName = e.getPlayer().getWorld().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("VehicleMoveEvent PlayerMoving= " + playerName);
             }
 
             if (playerVehicle != null) {
+
+                if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                    if (debugActive) {
+                        debugUtils.addLine("ColorSheepEvent WorldsConfig= " + worldsEnabled);
+                        debugUtils.addLine("ColorSheepEvent PlayerWorld= " + worldName);
+                        debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("ColorSheepEvent");
+                    }
+                    return;
+                }
+
                 if(!vehicle.equalsIgnoreCase("ALL") && !vehicle.equalsIgnoreCase(playerVehicle.getType().toString())) {
                     if (debugActive) {
                         debugUtils.addLine("VehicleMoveEvent VehicleConfig= " + vehicle);
@@ -49,6 +63,7 @@ public class VehicleMoveEvent implements Listener {
                     }
                     return;
                 }
+
                 if (distances.get(playerName) == null) {
                     distances.put(playerName, from.distance(to));
                 }

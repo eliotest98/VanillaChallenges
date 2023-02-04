@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
+
 public class ShootArrowEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
@@ -15,16 +17,28 @@ public class ShootArrowEvent implements Listener {
     private final double force = Main.dailyChallenge.getForce();
     private final String onGround = Main.dailyChallenge.getOnGround();
     private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onShootEvent(org.bukkit.event.entity.EntityShootBowEvent e) {
         long tempo = System.currentTimeMillis();
         final String playerName = e.getEntity().getName();
+        final String worldName = e.getEntity().getWorld().getName();
         final double forceShoot = e.getForce();
         final boolean onGroundPlayer = e.getEntity().isOnGround();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("ShootArrowEvent PlayerShooting= " + playerName);
+            }
+
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                if (debugActive) {
+                    debugUtils.addLine("ShootArrowEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("ShootArrowEvent PlayerWorld= " + worldName);
+                    debugUtils.addLine("ShootArrowEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ShootArrowEvent");
+                }
+                return;
             }
 
             if (!onGround.equalsIgnoreCase("NOBODY") && Boolean.getBoolean(onGround) != onGroundPlayer) {

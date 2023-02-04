@@ -7,29 +7,40 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
+
 public class EnchantEvent implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EnchantItemEvent");
-    private int point = Main.dailyChallenge.getPoint();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EnchantItemEvent");
+    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEnchant(org.bukkit.event.enchantment.EnchantItemEvent e) {
         long tempo = System.currentTimeMillis();
         final String playerName = e.getEnchanter().getName();
         final int numberOfEnchants = e.getEnchantsToAdd().size();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
+        final String worldName = e.getEnchanter().getWorld().getName();
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if (debugActive) {
+                debugUtils.addLine("EnchantItemEvent PlayerEnchanting= " + playerName);
+            }
+
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                 if (debugActive) {
-                    debugUtils.addLine("EnchantItemEvent PlayerEnchanting= " + playerName);
-                }
-                Main.dailyChallenge.increment(playerName, (long) point * numberOfEnchants);
-                if (debugActive) {
+                    debugUtils.addLine("EnchantItemEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("EnchantItemEvent PlayerWorld= " + worldName);
                     debugUtils.addLine("EnchantItemEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("EnchantItemEvent");
                 }
                 return;
+            }
+
+            Main.dailyChallenge.increment(playerName, (long) point * numberOfEnchants);
+            if (debugActive) {
+                debugUtils.addLine("EnchantItemEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("EnchantItemEvent");
             }
         });
     }

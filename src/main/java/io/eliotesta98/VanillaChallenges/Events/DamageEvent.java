@@ -9,12 +9,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
+
 public class DamageEvent implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DamageEvent");
-    private String cause = Main.dailyChallenge.getCause();
-    private int point = Main.dailyChallenge.getPoint();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DamageEvent");
+    private final String cause = Main.dailyChallenge.getCause();
+    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.entity.EntityDamageEvent e) {
@@ -22,30 +25,36 @@ public class DamageEvent implements Listener {
         final String causePlayer = e.getCause().toString();
         final Entity entity = e.getEntity();
         final double finalDamage = e.getFinalDamage();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
-                if(entity instanceof Player) {
-                    String playerName = ((Player) entity).getPlayer().getName();
-                    if (debugActive) {
-                        debugUtils.addLine("DamageEvent PlayerDamaging= " + playerName);
-                    }
-                    if(!cause.equalsIgnoreCase("ALL") && !cause.equalsIgnoreCase(causePlayer)) {
-                        if (debugActive) {
-                            debugUtils.addLine("DamageEvent CausePlayer= " + causePlayer);
-                            debugUtils.addLine("DamageEvent CauseConfig= " + cause);
-                            debugUtils.addLine("DamageEvent execution time= " + (System.currentTimeMillis() - tempo));
-                            debugUtils.debug("DamageEvent");
-                        }
-                        return;
-                    }
-                    Main.dailyChallenge.increment(playerName, (long) finalDamage * point);
-                }
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if(entity instanceof Player) {
+                String playerName = ((Player) entity).getPlayer().getName();
+                String worldName = entity.getWorld().getName();
                 if (debugActive) {
-                    debugUtils.addLine("DamageEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("DamageEvent");
+                    debugUtils.addLine("DamageEvent PlayerDamaging= " + playerName);
                 }
-                return;
+                if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                    if (debugActive) {
+                        debugUtils.addLine("DamageEvent WorldsConfig= " + worldsEnabled);
+                        debugUtils.addLine("DamageEvent PlayerWorld= " + worldName);
+                        debugUtils.addLine("DamageEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("DamageEvent");
+                    }
+                    return;
+                }
+                if(!cause.equalsIgnoreCase("ALL") && !cause.equalsIgnoreCase(causePlayer)) {
+                    if (debugActive) {
+                        debugUtils.addLine("DamageEvent CausePlayer= " + causePlayer);
+                        debugUtils.addLine("DamageEvent CauseConfig= " + cause);
+                        debugUtils.addLine("DamageEvent execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug("DamageEvent");
+                    }
+                    return;
+                }
+                Main.dailyChallenge.increment(playerName, (long) finalDamage * point);
+            }
+            if (debugActive) {
+                debugUtils.addLine("DamageEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("DamageEvent");
             }
         });
     }

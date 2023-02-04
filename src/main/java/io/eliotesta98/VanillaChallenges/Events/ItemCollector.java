@@ -6,7 +6,6 @@ import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -17,21 +16,22 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ItemCollector implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemCollector");
-    private String item = Main.dailyChallenge.getItem();
-    private int point = Main.dailyChallenge.getPoint();
-    private String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyPlacedChest");
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemCollector");
+    private final String item = Main.dailyChallenge.getItem();
+    private final int point = Main.dailyChallenge.getPoint();
+    private final String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyPlacedChest");
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     // timer del controllo punti
     int number = 20 * 60 * 2;
 
-    private HashMap<String, Location> chestLocation = new HashMap<>();
+    private final HashMap<String, Location> chestLocation = new HashMap<>();
 
     public ItemCollector() {
         controlChest();
@@ -42,20 +42,17 @@ public class ItemCollector implements Listener {
         long tempo = System.currentTimeMillis();
         final Inventory playerInventory = e.getPlayer().getInventory();
         final String playerName = e.getPlayer().getName();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
-                if (chestLocation.get(playerName) == null && playerInventory.firstEmpty() != -1) {
-                    if (debugActive) {
-                        debugUtils.addLine("ItemCollector PlayerJoinName = " + playerName);
-                    }
-                    chestLocation.put(playerName, new Location(Bukkit.getWorld("world"), 0, -100, 0));
-                    playerInventory.addItem(Main.instance.getConfigGestion().getChestCollection());
-                }
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if (chestLocation.get(playerName) == null && playerInventory.firstEmpty() != -1) {
                 if (debugActive) {
-                    debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("ItemCollector");
+                    debugUtils.addLine("ItemCollector PlayerJoinName = " + playerName);
                 }
+                chestLocation.put(playerName, new Location(Bukkit.getWorld("world"), 0, -100, 0));
+                playerInventory.addItem(Main.instance.getConfigGestion().getChestCollection());
+            }
+            if (debugActive) {
+                debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("ItemCollector");
             }
         });
     }
@@ -124,54 +121,60 @@ public class ItemCollector implements Listener {
     }
 
     public void controlChest() {
-        BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
-                long tempo = System.currentTimeMillis();
-                if (!chestLocation.isEmpty()) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (debugActive) {
-                            debugUtils.addLine("ItemCollector Player Name = " + player.getName());
-                        }
-                        if (chestLocation.get(player.getName()) != null) {
-                            Location location = chestLocation.get(player.getName());
-                            if (location.getBlock().getType() == Main.instance.getConfigGestion().getChestCollection().getType()) {
-                                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Chest chest = (Chest) location.getBlock().getState();
+        BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
+            long tempo = System.currentTimeMillis();
+            if (!chestLocation.isEmpty()) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (debugActive) {
+                        debugUtils.addLine("ItemCollector Player Name = " + player.getName());
+                    }
+                    if (chestLocation.get(player.getName()) != null) {
+                        Location location = chestLocation.get(player.getName());
+                        if (location.getBlock().getType() == Main.instance.getConfigGestion().getChestCollection().getType()) {
+                            final String worldName = player.getWorld().getName();
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                                Chest chest = (Chest) location.getBlock().getState();
+                                if (debugActive) {
+                                    debugUtils.addLine("ItemCollector Chest Location = " + location);
+                                }
+                                for (int i = 0; i < chest.getInventory().getSize(); i++) {
+                                    ItemStack itemInv = chest.getInventory().getItem(i);
+                                    if (itemInv != null) {
+                                        int amount = itemInv.getAmount();
                                         if (debugActive) {
-                                            debugUtils.addLine("ItemCollector Chest Location = " + location);
+                                            debugUtils.addLine("ItemCollector Amount Item = " + amount);
                                         }
-                                        for (int i = 0; i < chest.getInventory().getSize(); i++) {
-                                            ItemStack itemInv = chest.getInventory().getItem(i);
-                                            if (itemInv != null) {
-                                                int amount = itemInv.getAmount();
-                                                if (debugActive) {
-                                                    debugUtils.addLine("ItemCollector Amount Item = " + amount);
-                                                }
-                                                if (item.equalsIgnoreCase("ALL")) {
-                                                    Main.dailyChallenge.increment(player.getName(), (long) point * amount);
-                                                    itemInv.setAmount(0);
-                                                } else {
-                                                    if (item.equalsIgnoreCase(itemInv.getType().toString())) {
-                                                        Main.dailyChallenge.increment(player.getName(), (long) point * amount);
-                                                        itemInv.setAmount(0);
-                                                    }
-                                                }
+
+                                        if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                                            if (debugActive) {
+                                                debugUtils.addLine("ItemCollector WorldsConfig= " + worldsEnabled);
+                                                debugUtils.addLine("ItemCollector PlayerWorld= " + worldName);
+                                                debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
+                                                debugUtils.debug("ItemCollector");
+                                            }
+                                            return;
+                                        }
+
+                                        if (item.equalsIgnoreCase("ALL")) {
+                                            Main.dailyChallenge.increment(player.getName(), (long) point * amount);
+                                            itemInv.setAmount(0);
+                                        } else {
+                                            if (item.equalsIgnoreCase(itemInv.getType().toString())) {
+                                                Main.dailyChallenge.increment(player.getName(), (long) point * amount);
+                                                itemInv.setAmount(0);
                                             }
                                         }
                                     }
-                                });
-                            }
+                                }
+                            });
                         }
                     }
                 }
-                if (debugActive) {
-                    debugUtils.addLine("ItemCollector Item in chest destroyed");
-                    debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("ItemCollector");
-                }
+            }
+            if (debugActive) {
+                debugUtils.addLine("ItemCollector Item in chest destroyed");
+                debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("ItemCollector");
             }
         }, 0, number);
         Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "ItemCollector", false);

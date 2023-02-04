@@ -8,39 +8,49 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 
+import java.util.ArrayList;
+
 public class CraftingEvent implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("CraftItemEvent");
-    private String itemCrafting = Main.instance.getDailyChallenge().getItem();
-    private int point = Main.dailyChallenge.getPoint();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("CraftItemEvent");
+    private final String itemCrafting = Main.instance.getDailyChallenge().getItem();
+    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCraftingItem(CraftItemEvent e) {
         long tempo = System.currentTimeMillis();
         final String playerName = e.getWhoClicked().getName();
+        final String worldName = e.getWhoClicked().getWorld().getName();
         final String recipePlayer = e.getRecipe().getResult().getType().toString();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
+        final int amount = e.getRecipe().getResult().getAmount();
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if (debugActive) {
+                debugUtils.addLine("CraftItemEvent PlayerCrafting= " + playerName);
+            }
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                 if (debugActive) {
-                    debugUtils.addLine("CraftItemEvent PlayerCrafting= " + playerName);
-                }
-                if(!itemCrafting.equalsIgnoreCase("ALL") && !itemCrafting.equalsIgnoreCase(recipePlayer)) {
-                    if (debugActive) {
-                        debugUtils.addLine("CraftItemEvent RecipePlayer= " + recipePlayer);
-                        debugUtils.addLine("CraftItemEvent RecipeConfig= " + itemCrafting);
-                        debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug("CraftItemEvent");
-                    }
-                    return;
-                }
-                Main.dailyChallenge.increment(playerName, point);
-                if (debugActive) {
+                    debugUtils.addLine("CraftItemEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("CraftItemEvent PlayerWorld= " + worldName);
                     debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("CraftItemEvent");
                 }
                 return;
+            }
+            if (!itemCrafting.equalsIgnoreCase("ALL") && !itemCrafting.equalsIgnoreCase(recipePlayer)) {
+                if (debugActive) {
+                    debugUtils.addLine("CraftItemEvent RecipePlayer= " + recipePlayer);
+                    debugUtils.addLine("CraftItemEvent RecipeConfig= " + itemCrafting);
+                    debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("CraftItemEvent");
+                }
+                return;
+            }
+            Main.dailyChallenge.increment(playerName, (long) point * amount);
+            if (debugActive) {
+                debugUtils.addLine("CraftItemEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("CraftItemEvent");
             }
         });
     }

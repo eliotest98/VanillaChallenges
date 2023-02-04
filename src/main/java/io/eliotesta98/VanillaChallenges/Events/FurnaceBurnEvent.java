@@ -7,12 +7,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
+
 public class FurnaceBurnEvent implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("FurnaceCookEvent");
-    private String itemBurn = Main.instance.getDailyChallenge().getItem();
-    private int point = Main.dailyChallenge.getPoint();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("FurnaceCookEvent");
+    private final String itemBurn = Main.instance.getDailyChallenge().getItem();
+    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCookItem(org.bukkit.event.inventory.FurnaceExtractEvent e) {
@@ -20,27 +23,35 @@ public class FurnaceBurnEvent implements Listener {
         final String playerName = e.getPlayer().getName();
         final String itemBurnByPlayer = e.getItemType().toString();
         final int amount = e.getItemAmount();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
+        final String worldName = e.getPlayer().getWorld().getName();
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if (debugActive) {
+                debugUtils.addLine("FurnaceCookEvent PlayerCooking= " + playerName);
+            }
+
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                 if (debugActive) {
-                    debugUtils.addLine("FurnaceCookEvent PlayerCooking= " + playerName);
-                }
-                if(!itemBurn.equalsIgnoreCase("ALL") && !itemBurn.equalsIgnoreCase(itemBurnByPlayer)) {
-                    if (debugActive) {
-                        debugUtils.addLine("FurnaceCookEvent ItemBurnByPlayer= " + itemBurnByPlayer);
-                        debugUtils.addLine("FurnaceCookEvent ItemBurnConfig= " + itemBurn);
-                        debugUtils.addLine("FurnaceCookEvent execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug("FurnaceCookEvent");
-                    }
-                    return;
-                }
-                Main.dailyChallenge.increment(playerName, (long) amount * point);
-                if (debugActive) {
+                    debugUtils.addLine("FurnaceCookEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("FurnaceCookEvent PlayerWorld= " + worldName);
                     debugUtils.addLine("FurnaceCookEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("FurnaceCookEvent");
                 }
                 return;
+            }
+
+            if(!itemBurn.equalsIgnoreCase("ALL") && !itemBurn.equalsIgnoreCase(itemBurnByPlayer)) {
+                if (debugActive) {
+                    debugUtils.addLine("FurnaceCookEvent ItemBurnByPlayer= " + itemBurnByPlayer);
+                    debugUtils.addLine("FurnaceCookEvent ItemBurnConfig= " + itemBurn);
+                    debugUtils.addLine("FurnaceCookEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("FurnaceCookEvent");
+                }
+                return;
+            }
+            Main.dailyChallenge.increment(playerName, (long) amount * point);
+            if (debugActive) {
+                debugUtils.addLine("FurnaceCookEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("FurnaceCookEvent");
             }
         });
     }

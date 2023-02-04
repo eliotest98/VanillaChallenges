@@ -8,8 +8,10 @@ BlockPlacer:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
-  # Block you want placed for challenge, if you want all blocks write ALL
-  Block: ALL
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Blocks you want placed for challenge, if you want all blocks set []
+  Blocks: []
   # Block you want place the block, if you want all write ALL
   BlockOnPlaced: GRASS_BLOCK
   # Able or disable Sneak when place Es. true or false or NOBODY

@@ -7,6 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SprintEvent implements Listener {
@@ -15,22 +17,34 @@ public class SprintEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SprintEvent");
     private HashMap<String, Boolean> players = new HashMap<>();
     private HashMap<String, Double> distances = new HashMap<>();
-    private final String block = Main.dailyChallenge.getBlock();
+    private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
     private final String item = Main.dailyChallenge.getItem();
     private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSprint(org.bukkit.event.player.PlayerToggleSprintEvent e) {
         long tempo = System.currentTimeMillis();
         final String blockWalk = e.getPlayer().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
         final String itemInHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
+        final String worldName = e.getPlayer().getWorld().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("SprintEvent ToggledSprintPlayer= " + e.getPlayer().getName());
                 debugUtils.addLine("SprintEvent BlockStepOnPlayer= " + blockWalk);
-                debugUtils.addLine("SprintEvent BlockStepOnConfig= " + block);
+                debugUtils.addLine("SprintEvent BlockStepOnConfig= " + blocks);
                 debugUtils.addLine("SprintEvent ItemInHandConfig= " + item);
                 debugUtils.addLine("SprintEvent ItemInHandPlayer= " + itemInHand);
+            }
+
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                if (debugActive) {
+                    debugUtils.addLine("SprintEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("SprintEvent PlayerWorld= " + worldName);
+                    debugUtils.addLine("SprintEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("SprintEvent");
+                }
+                return;
             }
 
             if(!item.equalsIgnoreCase("ALL") && !item.equalsIgnoreCase(itemInHand)) {
@@ -43,10 +57,10 @@ public class SprintEvent implements Listener {
                 return;
             }
 
-            if(!block.equalsIgnoreCase("ALL") && !block.equalsIgnoreCase(blockWalk)) {
+            if(!blocks.isEmpty() && !blocks.contains(blockWalk)) {
                 if (debugActive) {
                     debugUtils.addLine("SprintEvent BlockStepOnPlayer= " + blockWalk);
-                    debugUtils.addLine("SprintEvent BlockStepOnConfig= " + block);
+                    debugUtils.addLine("SprintEvent BlockStepOnConfig= " + blocks);
                     debugUtils.addLine("SprintEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("SprintEvent");
                 }

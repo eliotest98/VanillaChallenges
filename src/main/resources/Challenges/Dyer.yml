@@ -8,6 +8,8 @@ Dyer:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
   # Cause you want to damage for challenge, if you want all causes write ALL
   Cause: ALL
   # Type of item in main hand for death, if you want all items write ALL

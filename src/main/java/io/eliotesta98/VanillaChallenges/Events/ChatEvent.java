@@ -11,17 +11,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class ChatEvent implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ChatEvent");
-    private int point = Main.dailyChallenge.getPoint();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ChatEvent");
+    private final int point = Main.dailyChallenge.getPoint();
     private final String alphabet = Main.dailyChallenge.getStringFormatter();
     private String word = "";
     private final String message = Main.instance.getConfigGestion().getMessages().get("ChatWord");
     private final String correctAnswer = Main.instance.getConfigGestion().getMessages().get("CorrectAnswer");
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+
 
     public ChatEvent() {
         //ogni 2 minuti
@@ -31,8 +34,18 @@ public class ChatEvent implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerChat(org.bukkit.event.player.AsyncPlayerChatEvent e) {
         long tempo = System.currentTimeMillis();
+        String world = e.getPlayer().getWorld().getName();
         if (debugActive) {
             debugUtils.addLine("ChatEvent message: " + e.getMessage() + " word: " + word);
+        }
+        if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(world)) {
+            if (debugActive) {
+                debugUtils.addLine("ChatEvent WorldsConfig= " + worldsEnabled);
+                debugUtils.addLine("ChatEvent PlayerWorld= " + world);
+                debugUtils.addLine("ChatEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("ChatEvent");
+            }
+            return;
         }
         if (e.getMessage().equalsIgnoreCase(word)) {
             Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point * word.length());

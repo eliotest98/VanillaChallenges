@@ -8,10 +8,12 @@ Sprinter:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
   # How many points you want give at sprinting?
   Point: 1
-  # Block you want step on for challenge, if you want all blocks write ALL
-  Block: ALL
+  # Blocks you want break for challenge, if you want all blocks set []
+  Blocks: []
   # Item you want checked in hand (ALL for all items)
   Item: ALL
   # if you want a multiplier based on all players

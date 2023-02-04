@@ -7,6 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
+
 public class ItemConsumeEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
@@ -14,6 +16,7 @@ public class ItemConsumeEvent implements Listener {
     private final String itemConsume = Main.instance.getDailyChallenge().getItem();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onItemConsume(org.bukkit.event.player.PlayerItemDamageEvent e) {
@@ -21,9 +24,20 @@ public class ItemConsumeEvent implements Listener {
         final String playerName = e.getPlayer().getName();
         final String itemConsumingByPlayer = e.getItem().getType().toString();
         final boolean sneakingPlayer = e.getPlayer().isSneaking();
+        final String worldName = e.getPlayer().getWorld().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("ItemConsumeEvent PlayerConsuming= " + playerName);
+            }
+
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                if (debugActive) {
+                    debugUtils.addLine("ItemConsumeEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("ItemConsumeEvent PlayerWorld= " + worldName);
+                    debugUtils.addLine("ItemConsumeEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ItemConsumeEvent");
+                }
+                return;
             }
 
             if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {

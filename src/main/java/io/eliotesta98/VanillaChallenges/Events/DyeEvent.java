@@ -32,11 +32,13 @@ public class DyeEvent implements Listener {
     private final boolean deathInLand = Main.dailyChallenge.isDeathInLand();
     private boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final int numberOfSlots = Main.dailyChallenge.getNumber();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDeath(org.bukkit.event.entity.PlayerDeathEvent e) {
         long tempo = System.currentTimeMillis();
         String playerName = e.getEntity().getName();
+        String worldName = e.getEntity().getWorld().getName();
         String causePlayer = e.getEntity().getLastDamageCause().getCause().toString();
         Location playerLocation = e.getEntity().getLocation();
         boolean sneakingPlayer = e.getEntity().isSneaking();
@@ -78,18 +80,28 @@ public class DyeEvent implements Listener {
                         OfflinePlayer player = Bukkit.getOfflinePlayer(p);// prendo il player
                         if (player.getName().equalsIgnoreCase(playerName)) {// controllo il nome
                             if (debugActive) {
-                                debugUtils.addLine("BlockBreakEvent Player is trusted at Land");
+                                debugUtils.addLine("DyeEvent Player is trusted at Land");
                             }
                         } else {
                             if (debugActive) {
-                                debugUtils.addLine("BlockBreakEvent Player is not trusted at Land");
-                                debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                                debugUtils.debug("BlockBreakEvent");
+                                debugUtils.addLine("DyeEvent Player is not trusted at Land");
+                                debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
+                                debugUtils.debug("DyeEvent");
                             }
                             return;
                         }
                     }
                 }
+            }
+
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                if (debugActive) {
+                    debugUtils.addLine("DyeEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("DyeEvent PlayerWorld= " + worldName);
+                    debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("DyeEvent");
+                }
+                return;
             }
 
             if (!cause.equalsIgnoreCase("ALL") && !cause.equalsIgnoreCase(causePlayer)) {
