@@ -88,6 +88,7 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "InventoryControl.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "BoatMove.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dier.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dropper.yml"));
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges", "CubeGenerator.yml"));
             }

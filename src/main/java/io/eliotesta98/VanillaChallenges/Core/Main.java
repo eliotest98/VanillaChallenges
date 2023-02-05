@@ -4,6 +4,7 @@ import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
 import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
 import me.angeschossen.lands.api.integration.LandsIntegration;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
@@ -123,6 +124,14 @@ public class Main extends JavaPlugin {
                 } else {
                     getConfigGestion().getHooks().replace("CubeGenerator", false);
                 }
+                if (Bukkit.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
+                    if (getConfigGestion().getHooks().get("GriefPrevention")) {
+                        Bukkit.getServer().getConsoleSender().sendMessage(
+                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fGriefPrevention&a!"));
+                    }
+                } else {
+                    getConfigGestion().getHooks().replace("GriefPrevention", false);
+                }
                 /*if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
                     if (getConfigGestion().getHooks().get("Tombs")) {
                         Bukkit.getServer().getConsoleSender().sendMessage(
@@ -224,6 +233,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new DyeEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("CubeGeneratorChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new CubeGeneratorEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("DropperChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new DropperEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
         }

@@ -9,10 +9,12 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import me.angeschossen.lands.api.land.Land;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,27 +34,47 @@ public class BlockPlaceEvent implements Listener {
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
+    private boolean ok = false;
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockPlaceEvent e) {
         long tempo = System.currentTimeMillis();
-        final String playerName = e.getPlayer().getName();
+        final Player player = e.getPlayer();
         final String materialBlockOnPlaced = e.getBlockAgainst().getType().toString();
         final String materialBlockPlaced = e.getBlockPlaced().getType().toString();
+        final Location blockLocation = e.getBlockPlaced().getLocation();
         final boolean sneakingPlayer = e.getPlayer().isSneaking();
         final Location location = e.getPlayer().getLocation();
         final World world = e.getPlayer().getWorld();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
-                debugUtils.addLine("BlockPlaceEvent PlayerPlacing= " + playerName);
+                debugUtils.addLine("BlockPlaceEvent PlayerPlacing= " + player.getName());
+            }
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                if (griefPreventionEnabled) {
+                    String reason = GriefPrevention.instance.allowBuild(player, blockLocation);
+                    if (reason != null) {
+                        this.ok = true;
+                    }
+                }
+            });
+            if(ok) {
+                ok = false;
+                if (debugActive) {
+                    debugUtils.addLine("BlockPlaceEvent Player is not trusted at Claim");
+                    debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("BlockPlaceEvent");
+                }
+                return;
             }
             if (landsEnabled) {
                 boolean playerTrusted = false;
                 Land land = Main.landsIntegration.getLand(location);
                 if (land != null) {
                     for (UUID p : land.getTrustedPlayers()) {// scorro la lista dei player membri
-                        OfflinePlayer player = Bukkit.getOfflinePlayer(p);// prendo il player
-                        if (player.getName().equalsIgnoreCase(playerName)) {// controllo il nome
+                        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(p);// prendo il player
+                        if (offlinePlayer.getName().equalsIgnoreCase(player.getName())) {// controllo il nome
                             if (debugActive) {
                                 debugUtils.addLine("BlockPlaceEvent Player is trusted at Land");
                             }
@@ -125,7 +147,7 @@ public class BlockPlaceEvent implements Listener {
                 }
                 return;
             }
-            Main.instance.getDailyChallenge().increment(playerName, point);
+            Main.instance.getDailyChallenge().increment(player.getName(), point);
             if (debugActive) {
                 debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug("BlockPlaceEvent");
