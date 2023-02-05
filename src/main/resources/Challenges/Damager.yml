@@ -8,8 +8,10 @@ Damager:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
-  # Cause you want to damage for challenge, if you want all causes write ALL
-  Cause: ALL
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Causes you want to damage for challenge, if you want all causes set []
+  Causes: []
   # How many points you want give at damage?
   Point: 1
   # if you want a multiplier based on all players

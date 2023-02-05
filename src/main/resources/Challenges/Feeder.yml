@@ -8,8 +8,10 @@ Feeder:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
-  # Item you want to feed for challenge, if you want all items write ALL
-  Item: ALL
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Items you want to feed for challenge, if you want all items set []
+  Items: []
   # How many points you want give at feed?
   Point: 1
   # if you want a multiplier based on all players

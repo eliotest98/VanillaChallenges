@@ -1,5 +1,5 @@
-Crafter:
-  TypeChallenge: 'CraftingChallenge'
+Dier:
+  TypeChallenge: 'DyerChallenge'
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
@@ -10,15 +10,28 @@ Crafter:
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Items you want crafting for challenge, if you want all items set []
+  # Causes you want to damage for challenge, if you want all causes write []
+  Causes: []
+  # Type of item in main hand for death, if you want all items set []
+  ItemsInHand: []
+  # Type of items in inventory for death (P.S. if the player have one in list is ok), if you want all items write []
   Items: []
-  # How many points you want give at craft?
+  # Able or disable Sneak when place Es. true or false or NOBODY
+  Sneaking: 'NOBODY'
+  # Able or disable death with Lands. (If a true the player must die in his own land, otherwise he can die anywhere)
+  # ATTENTION! For activate this function you can use Lands Plugin and activate it in config.yml
+  DeathInLand: false
+  # How many points you want give at death?
   Point: 1
+  # If you want keepInventory for this challenge
+  KeepInventory: false
+  # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)
+  Number: -1
   # if you want a multiplier based on all players
   Boost:
     Enabled: false
     #Number you want reached for give the multiplier
-    Points: 10000
+    Points: 1000
     # Multiplier you want give when reached the number
     Multiplier: 2
     # For how many minutes you want give the multiplier?
@@ -27,26 +40,26 @@ Crafter:
   BoostPlayer:
     Enabled: false
     # Number you want reached for give the multiplier
-    Points: 5000
+    Points: 20
     # Multiplier you want give when reached the number
     Multiplier: 4
     # For how many minutes you want give the multiplier?
     Minutes: 2
   # Name of Challenge
-  NameChallenge: "&7Crafting Challenge"
+  NameChallenge: "&7Dyer Challenge"
   # Title challenge
   Title:
     - '&8'
     - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                &7Crafting Challenge'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Dye Challenge'
     - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉      &7Craft any item for receive 1 point'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Dye for receive points'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉             &7(1 point for 1 death)'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
     - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1
   Rewards:
-    - 'GHAST_TEAR:2'
+    - 'TNT:32'

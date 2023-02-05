@@ -8,14 +8,16 @@ InventoryControl:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
   # How many points you want give if respect condition?
   Point: 10
   # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)
   Number: 10
   # Every x minutes you want check condition
   Minutes: 2
-  # Item you want checked (ALL for all items)
-  Item: ALL
+  # Items you want checked (P.S. if the player have one in list is ok) ([] for all items)
+  Items: []
   # if you want a multiplier based on all players
   Boost:
     Enabled: false

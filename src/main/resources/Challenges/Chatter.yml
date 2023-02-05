@@ -8,8 +8,14 @@ Chatter:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
-  # What letters do you want the word to consist of?
-  StringFormatter: 'abcdefghijklmnopqrstuvywxz0123456789'
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Words you want for the challenge, PS. if Quests is empty ([]) the challenge use StringFormatter also use Quests
+  Strings:
+    # What quests and response do you want? # Format of quests: Quest:Answer Ex. Where is the name of plugin?:VanillaChallenge
+    Quests: []
+    # What letters do you want the word to consist of?
+    StringFormatter: 'abcdefghijklmnopqrstuvywxz0123456789'
   # How many points you want give at character?
   Point: 1
   # if you want a multiplier based on all players

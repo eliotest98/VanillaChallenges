@@ -8,8 +8,10 @@ Breeder:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
-  # Mob you want to breed for challenge, if you want all mobs write ALL
-  Mob: ALL
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Mobs you want to breed for challenge, if you want all mobs set []
+  Mobs: []
   # How many points you want give at breed?
   Point: 1
   # if you want a multiplier based on all players

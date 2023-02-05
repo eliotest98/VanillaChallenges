@@ -7,13 +7,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
+
 public class ColorSheepEvent implements Listener {
 
-    private DebugUtils debugUtils = new DebugUtils();
-    private boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ColorSheepEvent");
-    private String color = Main.dailyChallenge.getColor();
-    private int point = Main.dailyChallenge.getPoint();
-    private String sneaking = Main.dailyChallenge.getSneaking();
+    private final DebugUtils debugUtils = new DebugUtils();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ColorSheepEvent");
+    private final ArrayList<String> colors = Main.dailyChallenge.getColors();
+    private final int point = Main.dailyChallenge.getPoint();
+    private final String sneaking = Main.dailyChallenge.getSneaking();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onColorSheep(org.bukkit.event.entity.SheepDyeWoolEvent e) {
@@ -29,38 +32,46 @@ public class ColorSheepEvent implements Listener {
         final String playerName = e.getPlayer().getName();
         final String colorPlayer = e.getColor().toString();
         final boolean playerSneaking = e.getPlayer().isSneaking();
-        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
+        final String worldName = e.getPlayer().getWorld().getName();
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if (debugActive) {
+                debugUtils.addLine("ColorSheepEvent PlayerColoring= " + playerName);
+            }
+
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                 if (debugActive) {
-                    debugUtils.addLine("ColorSheepEvent PlayerColoring= " + playerName);
+                    debugUtils.addLine("ColorSheepEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("ColorSheepEvent PlayerWorld= " + worldName);
+                    debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ColorSheepEvent");
                 }
-                if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != playerSneaking) {
-                    if (debugActive) {
-                        debugUtils.addLine("ColorSheepEvent ConfigSneaking= " + sneaking);
-                        debugUtils.addLine("ColorSheepEvent PlayerSneaking= " + playerSneaking);
-                        debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug("ColorSheepEvent");
-                    }
-                    return;
-                }
-                if(!color.equalsIgnoreCase("ALL") && !color.equalsIgnoreCase(colorPlayer)) {
-                    if (debugActive) {
-                        debugUtils.addLine("ColorSheepEvent ConfigColor= " + color);
-                        debugUtils.addLine("ColorSheepEvent PlayerColorg= " + colorPlayer);
-                        debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug("ColorSheepEvent");
-                    }
-                    return;
-                }
-                Main.dailyChallenge.increment(playerName, point);
+                return;
+            }
+
+            if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != playerSneaking) {
                 if (debugActive) {
-                    debugUtils.addLine("ColorSheepEvent ConfigColor= " + color);
+                    debugUtils.addLine("ColorSheepEvent ConfigSneaking= " + sneaking);
+                    debugUtils.addLine("ColorSheepEvent PlayerSneaking= " + playerSneaking);
+                    debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("ColorSheepEvent");
+                }
+                return;
+            }
+            if(!colors.isEmpty() && !colors.contains(colorPlayer)) {
+                if (debugActive) {
+                    debugUtils.addLine("ColorSheepEvent ConfigColor= " + colors);
                     debugUtils.addLine("ColorSheepEvent PlayerColorg= " + colorPlayer);
                     debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("ColorSheepEvent");
                 }
                 return;
+            }
+            Main.dailyChallenge.increment(playerName, point);
+            if (debugActive) {
+                debugUtils.addLine("ColorSheepEvent ConfigColor= " + colors);
+                debugUtils.addLine("ColorSheepEvent PlayerColorg= " + colorPlayer);
+                debugUtils.addLine("ColorSheepEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("ColorSheepEvent");
             }
         });
     }

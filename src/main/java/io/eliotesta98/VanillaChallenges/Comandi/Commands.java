@@ -6,6 +6,7 @@ import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
 import io.eliotesta98.VanillaChallenges.Utils.ReloadUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -34,7 +35,6 @@ public class Commands implements CommandExecutor {
     private final String commandVcReward = Main.instance.getConfigGestion().getMessages().get("Commands.Reward");
 
     private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("PointsInfo");
-    private final ArrayList<String> brodcastMessageTitle = Main.dailyChallenge.getTitle();
     private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("ActuallyInTop");
     private final String pointsadd = Main.instance.getConfigGestion().getMessages().get("PointsAdd");
     private final String pointsremove = Main.instance.getConfigGestion().getMessages().get("PointsRemove");
@@ -51,6 +51,14 @@ public class Commands implements CommandExecutor {
                 public void run() {
                     DebugUtils debug = new DebugUtils();
                     long tempo = System.currentTimeMillis();
+                    if(!Main.challengeSelected) {
+                        sender.sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                        return;
+                    }
                     if (!command.getName().equalsIgnoreCase("vc")) {// comando se esiste
                         sender.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                         if (debugCommand) {
@@ -118,8 +126,8 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         int timeResume = Main.dailyChallenge.getTimeChallenge();
-                        for (int i = 0; i < brodcastMessageTitle.size(); i++) {
-                            sender.sendMessage(ColorUtils.applyColor(brodcastMessageTitle.get(i).replace("{hours}", timeResume + "")));
+                        for (int i = 0; i < Main.dailyChallenge.getTitle().size(); i++) {
+                            sender.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i).replace("{hours}", timeResume + "")));
                         }
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -310,13 +318,22 @@ public class Commands implements CommandExecutor {
                     }
                 }
             });
-        } else {
+        }
+        else {
             Bukkit.getScheduler().runTaskAsynchronously(Main.instance, new Runnable() {
                 @Override
                 public void run() {
                     final Player p = (Player) sender;
                     DebugUtils debug = new DebugUtils();
                     long tempo = System.currentTimeMillis();
+                    if(!Main.challengeSelected) {
+                        p.sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                        return;
+                    }
                     if (!command.getName().equalsIgnoreCase("vc")) {// comando se esiste
                         p.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                         if (debugCommand) {
@@ -374,8 +391,8 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         int timeResume = Main.dailyChallenge.getTimeChallenge();
-                        for (int i = 0; i < brodcastMessageTitle.size(); i++) {
-                            p.sendMessage(ColorUtils.applyColor(brodcastMessageTitle.get(i).replace("{hours}", timeResume + "")));
+                        for (int i = 0; i < Main.dailyChallenge.getTitle().size(); i++) {
+                            p.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i).replace("{hours}", timeResume + "")));
                         }
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));

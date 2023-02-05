@@ -4,6 +4,7 @@ import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
 import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
 import me.angeschossen.lands.api.integration.LandsIntegration;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
@@ -22,6 +23,7 @@ public class Main extends JavaPlugin {
     public static ExpansionPlaceholderAPI EPAPI;
     public static Database db;
     public static LandsIntegration landsIntegration;
+    public static boolean challengeSelected = true;
 
     public void onEnable() {
         DebugUtils debugsistem = new DebugUtils();
@@ -122,6 +124,14 @@ public class Main extends JavaPlugin {
                     }
                 } else {
                     getConfigGestion().getHooks().replace("CubeGenerator", false);
+                }
+                if (Bukkit.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
+                    if (getConfigGestion().getHooks().get("GriefPrevention")) {
+                        Bukkit.getServer().getConsoleSender().sendMessage(
+                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fGriefPrevention&a!"));
+                    }
+                } else {
+                    getConfigGestion().getHooks().replace("GriefPrevention", false);
                 }
                 /*if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
                     if (getConfigGestion().getHooks().get("Tombs")) {
@@ -224,22 +234,31 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new DyeEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("CubeGeneratorChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new CubeGeneratorEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("DropperChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new DropperEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("HealthChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new HealthRegenEvent(),this);
         } else {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control config.yml!");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
+            challengeSelected = false;
         }
-        Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
-        db.loadPlayersPoints();
-        config.getTasks().checkStartDay();
-        if (config.getTimeBrodcastMessageTitle() != 0) {
-            config.getTasks().broadcast(((long) config.getTimeBrodcastMessageTitle() * 60 * 20)
-                    , dailyChallenge.getTitle(), config.getMessages().get("ActuallyInTop")
-                    , config.getMessages().get("PointsEveryMinutes")
-                    , config.getMessages().get("PointsRemainForBoosting")
-                    , config.getMessages().get("PointsRemainForBoostingSinglePlayer"));
+
+        if(challengeSelected) {
+            Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
+            db.loadPlayersPoints();
+            config.getTasks().checkStartDay();
+            if (config.getTimeBrodcastMessageTitle() != 0) {
+                config.getTasks().broadcast(((long) config.getTimeBrodcastMessageTitle() * 60 * 20)
+                        , dailyChallenge.getTitle(), config.getMessages().get("ActuallyInTop")
+                        , config.getMessages().get("PointsEveryMinutes")
+                        , config.getMessages().get("PointsRemainForBoosting")
+                        , config.getMessages().get("PointsRemainForBoostingSinglePlayer"));
+            }
+            if (config.isActiveOnlinePoints()) {
+                config.getTasks().onlinePoints(config.getMinutesOnlinePoints(), config.getPointsOnlinePoints());
+            }
         }
-        if (config.isActiveOnlinePoints()) {
-            config.getTasks().onlinePoints(config.getMinutesOnlinePoints(), config.getPointsOnlinePoints());
-        }
+
         getCommand("vc").setExecutor((CommandExecutor) new Commands());
         if (config.getDebug().get("Enabled")) {
             debugsistem.addLine("Enabled execution time= " + (System.currentTimeMillis() - tempo));
@@ -258,7 +277,9 @@ public class Main extends JavaPlugin {
             } catch (Exception e) {
             }
         }
-        dailyChallenge.clearPlayers();
+        if(challengeSelected){
+            dailyChallenge.clearPlayers();
+        }
         db.disconnect();
         if (config.getDebug().get("Disabled")) {
             debugsistem.addLine("Disabled execution time= " + (System.currentTimeMillis() - tempo));

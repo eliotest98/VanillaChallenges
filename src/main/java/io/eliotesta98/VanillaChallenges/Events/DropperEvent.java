@@ -7,13 +7,12 @@ import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
 import java.util.ArrayList;
 
-public class JumpEvent implements Listener {
+public class DropperEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils();
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("JumpEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DropperEvent");
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
@@ -22,9 +21,9 @@ public class JumpEvent implements Listener {
         long tempo = System.currentTimeMillis();
         if (e.getTo() == null) {
             if (debugActive) {
-                debugUtils.addLine("JumpEvent EndLocation= null");
-                debugUtils.addLine("JumpEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("JumpEvent");
+                debugUtils.addLine("DropperEvent EndLocation= null");
+                debugUtils.addLine("DropperEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("DropperEvent");
             }
             return;
         }
@@ -35,29 +34,28 @@ public class JumpEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             int number = to.getBlockY() - from.getBlockY();
             if (debugActive) {
-                debugUtils.addLine("JumpEvent PlayerMoving= " + playerName);
-                debugUtils.addLine("JumpEvent JumpHeight= " + number);
-                debugUtils.addLine("JumpEvent CalculationHeight= " + to.getBlockY() + " " + from.getBlockY());
+                debugUtils.addLine("DropperEvent PlayerMoving= " + playerName);
+                debugUtils.addLine("DropperEvent JumpHeight= " + number);
+                debugUtils.addLine("DropperEvent CalculationHeight= " + to.getBlockY() + " " + from.getBlockY());
             }
 
-            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+            if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                 if (debugActive) {
-                    debugUtils.addLine("JumpEvent WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("JumpEvent PlayerWorld= " + worldName);
-                    debugUtils.addLine("JumpEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("JumpEvent");
+                    debugUtils.addLine("DropperEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("DropperEvent PlayerWorld= " + worldName);
+                    debugUtils.addLine("DropperEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("DropperEvent");
                 }
                 return;
             }
 
-            if (number > 0) {
-                Main.dailyChallenge.increment(playerName, (long) point * number);
+            if (number < 0) {
+                Main.dailyChallenge.increment(playerName, (long) Math.negateExact(point) * number);
             }
             if (debugActive) {
-                debugUtils.addLine("JumpEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("JumpEvent");
+                debugUtils.addLine("DropperEvent execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug("DropperEvent");
             }
         });
     }
 }
-

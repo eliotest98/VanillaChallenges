@@ -8,10 +8,12 @@ BlockBreaker:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
-  # Block you want break for challenge, if you want all blocks write ALL
-  Block: ALL
-  # Type of item in main hand for break this blocks, if you want all items write ALL
-  ItemInHand: ALL
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Blocks you want break for challenge, if you want all blocks set []
+  Blocks: []
+  # Type of item in main hand for break this blocks, if you want all items set []
+  ItemsInHand: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # How many points you want give at break?

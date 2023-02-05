@@ -8,8 +8,10 @@ ItemBreaker:
     Start: '5:00'
     # How long do you want the challenge to last in hours ?
     Time: 24
-  # Item you want to break for challenge, if you want all items write ALL
-  Item: ALL
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Items you want to break for challenge, if you want all items set []
+  Items: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # How many points you want give at item break?

@@ -1,6 +1,5 @@
 package io.eliotesta98.VanillaChallenges.Events;
 
-import io.eliotesta98.Tombs.Interfaces.TombsInterfaceHolder;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import me.angeschossen.lands.api.land.Land;
@@ -13,10 +12,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 public class DyeEvent implements Listener {
@@ -24,19 +21,21 @@ public class DyeEvent implements Listener {
     private final DebugUtils debugUtils = new DebugUtils();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DyeEvent");
     private final int point = Main.dailyChallenge.getPoint();
-    private final String itemInHand = Main.dailyChallenge.getItemInHand();
-    private final String item = Main.dailyChallenge.getItem();
-    private final String cause = Main.dailyChallenge.getCause();
+    private final ArrayList<String> itemsInHand = Main.dailyChallenge.getItemsInHand();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
+    private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean keepInventory = Main.dailyChallenge.isKeepInventory();
     private final boolean deathInLand = Main.dailyChallenge.isDeathInLand();
-    private boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
+    private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final int numberOfSlots = Main.dailyChallenge.getNumber();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDeath(org.bukkit.event.entity.PlayerDeathEvent e) {
         long tempo = System.currentTimeMillis();
         String playerName = e.getEntity().getName();
+        String worldName = e.getEntity().getWorld().getName();
         String causePlayer = e.getEntity().getLastDamageCause().getCause().toString();
         Location playerLocation = e.getEntity().getLocation();
         boolean sneakingPlayer = e.getEntity().isSneaking();
@@ -45,12 +44,19 @@ public class DyeEvent implements Listener {
         if (keepInventory) {
             e.setKeepInventory(true);
         }
-        if (!item.equalsIgnoreCase("ALL")) {
-            ItemStack itemStack = new ItemStack(Material.getMaterial(item));
-            if (!inventory.contains(itemStack)) {
+        if (!items.isEmpty()) {
+            boolean itemok = false;
+            for(String itemName: items) {
+                ItemStack itemStack = new ItemStack(Material.getMaterial(itemName));
+                if (inventory.contains(itemStack)) {
+                    itemok = true;
+                    break;
+                }
+            }
+            if (!itemok) {
                 if (debugActive) {
                     debugUtils.addLine("DyeEvent ItemsListPlayer= " + Arrays.toString(inventory.getContents()));
-                    debugUtils.addLine("DyeEvent ItemConfig= " + item);
+                    debugUtils.addLine("DyeEvent ItemConfig= " + items);
                     debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("DyeEvent");
                 }
@@ -78,13 +84,13 @@ public class DyeEvent implements Listener {
                         OfflinePlayer player = Bukkit.getOfflinePlayer(p);// prendo il player
                         if (player.getName().equalsIgnoreCase(playerName)) {// controllo il nome
                             if (debugActive) {
-                                debugUtils.addLine("BlockBreakEvent Player is trusted at Land");
+                                debugUtils.addLine("DyeEvent Player is trusted at Land");
                             }
                         } else {
                             if (debugActive) {
-                                debugUtils.addLine("BlockBreakEvent Player is not trusted at Land");
-                                debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                                debugUtils.debug("BlockBreakEvent");
+                                debugUtils.addLine("DyeEvent Player is not trusted at Land");
+                                debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
+                                debugUtils.debug("DyeEvent");
                             }
                             return;
                         }
@@ -92,10 +98,20 @@ public class DyeEvent implements Listener {
                 }
             }
 
-            if (!cause.equalsIgnoreCase("ALL") && !cause.equalsIgnoreCase(causePlayer)) {
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                if (debugActive) {
+                    debugUtils.addLine("DyeEvent WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("DyeEvent PlayerWorld= " + worldName);
+                    debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("DyeEvent");
+                }
+                return;
+            }
+
+            if (!causes.isEmpty() && !causes.contains(causePlayer)) {
                 if (debugActive) {
                     debugUtils.addLine("DyeEvent CausePlayer= " + causePlayer);
-                    debugUtils.addLine("DyeEvent CauseConfig= " + cause);
+                    debugUtils.addLine("DyeEvent CauseConfig= " + causes);
                     debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("DyeEvent");
                 }
@@ -112,12 +128,12 @@ public class DyeEvent implements Listener {
                 return;
             }
 
-            if (!itemInHand.equalsIgnoreCase("ALL") && !itemInHand.equalsIgnoreCase(itemInHandPlayer)) {
+            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInHandPlayer)) {
                 if (debugActive) {
-                    debugUtils.addLine("DyeEvent ItemInHandPlayer= " + itemInHandPlayer);
-                    debugUtils.addLine("DyeEvent ItemInHandConfig= " + itemInHand);
-                    debugUtils.addLine("DyeEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("DyeEvent");
+                    debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemsInHand);
+                    debugUtils.addLine("BlockBreakEvent ItemInHandPlayer= " + itemInHandPlayer);
+                    debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug("BlockBreakEvent");
                 }
                 return;
             }

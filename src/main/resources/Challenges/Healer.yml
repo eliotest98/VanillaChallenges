@@ -1,5 +1,5 @@
-Crafter:
-  TypeChallenge: 'CraftingChallenge'
+Healer:
+  TypeChallenge: 'HealthChallenge'
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
@@ -10,9 +10,9 @@ Crafter:
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Items you want crafting for challenge, if you want all items set []
-  Items: []
-  # How many points you want give at craft?
+  # Causes you want to damage for challenge, if you want all causes set []
+  Causes: []
+  # How many points you want give at damage?
   Point: 1
   # if you want a multiplier based on all players
   Boost:
@@ -20,7 +20,7 @@ Crafter:
     #Number you want reached for give the multiplier
     Points: 10000
     # Multiplier you want give when reached the number
-    Multiplier: 2
+    Multiplier: 4
     # For how many minutes you want give the multiplier?
     Minutes: 10
   # if you want a multiplier based on a single player
@@ -33,20 +33,20 @@ Crafter:
     # For how many minutes you want give the multiplier?
     Minutes: 2
   # Name of Challenge
-  NameChallenge: "&7Crafting Challenge"
+  NameChallenge: "&7Healer Challenge"
   # Title challenge
   Title:
     - '&8'
     - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                &7Crafting Challenge'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Healer Challenge'
     - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉      &7Craft any item for receive 1 point'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Take health for receive points'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉            &7(1 point for half heart)'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉        &7{hours} hours to the end of the challenge'
     - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1
   Rewards:
-    - 'GHAST_TEAR:2'
+    - 'TOTEM_OF_UNDYING:1'

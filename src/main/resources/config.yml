@@ -51,6 +51,7 @@ Configuration:
     CubeGenerator: false
     WorldGuard: false
     Lands: false
+    GriefPrevention: false
     
 
   # If you want use H2 or .yml file for data storage (write H2 or Yaml)
@@ -160,8 +161,12 @@ Debug:
   VehicleMoveEvent: false
   # Jump Challenge Event debug
   JumpEvent: false
+  # Dropper Challenge Event debug
+  DropperEvent: false
   # Dye Challenge Event debug
   DyeEvent: false
+  # Healt Regen Event debug
+  HealthRegenEvent: false
   # Online Point give debug
   OnlinePoint: false
   # Enabled debug

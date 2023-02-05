@@ -19,6 +19,7 @@ public class Tasks {
     private HashMap<String, Boolean> saving = new HashMap<>();
     private BukkitTask checkStart = null;
     private boolean challengeStart = false;
+    private HashMap<String, Integer> minutesOnlinePlayer = new HashMap<>();
 
     public void stopAllTasks() {
         for (BukkitTask task : tasks) {
@@ -28,7 +29,7 @@ public class Tasks {
         }
     }
 
-    public boolean isChallengeStart(){
+    public boolean isChallengeStart() {
         return challengeStart;
     }
 
@@ -38,7 +39,7 @@ public class Tasks {
             saving.replace("Broadcast", true);
             int timeResume = Main.dailyChallenge.getTimeChallenge();
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if(!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
+                if (!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
                     break;
                 }
                 for (String s : brodcastMessageTitle) {
@@ -111,11 +112,11 @@ public class Tasks {
                 } else {
                     if (time < Main.instance.getConfigGestion().getChallenges().get(
                             Main.dailyChallenge.getChallengeName()).getTimeChallenge()) {
-                        if(hour < startHour) {
+                        if (hour < startHour) {
                             Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                                     Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
                             challengeStart = true;
-                        } else if(hour == startHour && minutes <= startMinutes) {
+                        } else if (hour == startHour && minutes <= startMinutes) {
                             Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                                     Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
                             challengeStart = true;
@@ -190,11 +191,20 @@ public class Tasks {
             public void run() {
                 saving.replace("OnlinePoints", true);
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    Main.dailyChallenge.increment(p.getName(), point);
+                    if (minutesOnlinePlayer.get(p.getName()) == null) {
+                        minutesOnlinePlayer.put(p.getName(), 0);
+                    } else {
+                        if(minutesOnlinePlayer.get(p.getName()) == minutes) {
+                            Main.dailyChallenge.increment(p.getName(), point);
+                            minutesOnlinePlayer.replace(p.getName(), 0);
+                        } else {
+                            minutesOnlinePlayer.replace(p.getName(), minutesOnlinePlayer.get(p.getName()) + 1);
+                        }
+                    }
                 }
                 saving.replace("OnlinePoints", false);
             }
-        }, 0, (long) minutes * 60 * 20);
+        }, 0, (long) 60 * 20);
         tasks.add(task);
     }
 
