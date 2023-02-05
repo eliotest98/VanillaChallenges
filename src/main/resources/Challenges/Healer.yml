@@ -1,5 +1,5 @@
-Dyer:
-  TypeChallenge: 'ColorSheepChallenge'
+Healer:
+  TypeChallenge: 'HealthChallenge'
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
@@ -10,45 +10,43 @@ Dyer:
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Colors you want use for challenge, if you want all colors set []
-  Colors: []
-  # Able or disable Sneak when place Es. true or false or NOBODY
-  Sneaking: 'NOBODY'
-  # How many points you want give at death?
+  # Causes you want to damage for challenge, if you want all causes set []
+  Causes: []
+  # How many points you want give at damage?
   Point: 1
   # if you want a multiplier based on all players
   Boost:
     Enabled: false
     #Number you want reached for give the multiplier
-    Points: 1000
+    Points: 10000
     # Multiplier you want give when reached the number
-    Multiplier: 2
+    Multiplier: 4
     # For how many minutes you want give the multiplier?
     Minutes: 10
   # if you want a multiplier based on a single player
   BoostPlayer:
     Enabled: false
     # Number you want reached for give the multiplier
-    Points: 20
+    Points: 5000
     # Multiplier you want give when reached the number
     Multiplier: 4
     # For how many minutes you want give the multiplier?
     Minutes: 2
   # Name of Challenge
-  NameChallenge: "&7Color Sheep Challenge"
+  NameChallenge: "&7Healer Challenge"
   # Title challenge
   Title:
     - '&8'
     - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉         &7Color Sheep Challenge'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Healer Challenge'
     - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Color sheep with any color'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉             &7(1 point for 1 sheep)'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Take health for receive points'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉            &7(1 point for half heart)'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉        &7{hours} hours to the end of the challenge'
     - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
     - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1
   Rewards:
-    - 'TNT:32'
+    - 'TOTEM_OF_UNDYING:1'

@@ -165,6 +165,8 @@ Debug:
   DropperEvent: false
   # Dye Challenge Event debug
   DyeEvent: false
+  # Healt Regen Event debug
+  HealthRegenEvent: false
   # Online Point give debug
   OnlinePoint: false
   # Enabled debug

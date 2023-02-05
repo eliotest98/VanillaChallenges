@@ -20,7 +20,7 @@ public class DamageEvent implements Listener {
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onMove(org.bukkit.event.entity.EntityDamageEvent e) {
+    public void onDamage(org.bukkit.event.entity.EntityDamageEvent e) {
         long tempo = System.currentTimeMillis();
         final String causePlayer = e.getCause().toString();
         final Entity entity = e.getEntity();
