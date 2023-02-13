@@ -3,24 +3,31 @@ package io.eliotesta98.VanillaChallenges.Utils;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+
 import java.io.*;
 import java.util.List;
 
 public class FileCreator {
 
-    public static void createAllFiles(List<File> files) {
+    public static void createAllFilesGlobal(List<File> files) {
         for (File file : files) {
-            createFileChallenges(file);
+            createFileChallenges("/Global", file);
         }
     }
 
-    public static void createFileChallenges(File newFile) {
+    public  static void createAllFilesEvent(List<File> files) {
+        for (File file : files) {
+            createFileChallenges("/Event", file);
+        }
+    }
+
+    public static void createFileChallenges(String folder, File newFile) {
         if (!newFile.exists()) {
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {
 
-                Main.instance.saveResource("Challenges" + File.separator + newFile.getName(), false);
+                Main.instance.saveResource("Challenges" + folder + File.separator + newFile.getName(), false);
                 inputStream = Main.instance.getResource(newFile.getName());
 
                 // write the inputStream to a FileOutputStream
@@ -55,4 +62,5 @@ public class FileCreator {
             }
         }
     }
+
 }
