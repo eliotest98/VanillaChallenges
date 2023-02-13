@@ -2,6 +2,8 @@ package io.eliotesta98.VanillaChallenges.Core;
 
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
+import io.eliotesta98.VanillaChallenges.Interfaces.GuiEvent;
+import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
 import me.angeschossen.lands.api.integration.LandsIntegration;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -11,6 +13,7 @@ import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 
 import java.io.*;
+import java.util.Map;
 
 import org.bukkit.*;
 import org.bukkit.command.*;
@@ -29,6 +32,12 @@ public class Main extends JavaPlugin {
         DebugUtils debugsistem = new DebugUtils();
         long tempo = System.currentTimeMillis();
         Main.instance = this;
+
+        // All you have to do is adding the following two lines in your onEnable method.
+        // You can find the plugin ids of your plugins on the page https://bstats.org/what-is-my-plugin-id
+        int pluginId = 17661; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
+        System.out.println(metrics.toString());
 
         getServer().getConsoleSender()
                 .sendMessage("\n\n\n§a ___ ___                __  __  __          ______  __            __  __                                    \n" +
@@ -245,6 +254,7 @@ public class Main extends JavaPlugin {
 
         if(challengeSelected) {
             Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
+            Bukkit.getServer().getPluginManager().registerEvents(new GuiEvent(), this);
             db.loadPlayersPoints();
             config.getTasks().checkStartDay();
             if (config.getTimeBrodcastMessageTitle() != 0) {
@@ -279,6 +289,10 @@ public class Main extends JavaPlugin {
         }
         if(challengeSelected){
             dailyChallenge.clearPlayers();
+            //close interfaces of interfaces
+            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
+                interfaces.getValue().closeAllInventories();
+            }
         }
         db.disconnect();
         if (config.getDebug().get("Disabled")) {

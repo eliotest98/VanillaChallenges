@@ -36,6 +36,8 @@ Consumer:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Consume Challenge"
+  # item representing challenge
+  ItemChallenge: 'DIAMOND_BOOTS'
   # Title challenge
   Title:
     - '&8'

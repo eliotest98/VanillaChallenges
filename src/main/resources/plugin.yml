@@ -36,3 +36,6 @@ permissions:
   vc.reward.command:
     description: for /vc reward
     default: op
+  vc.list.command:
+    description: for /vc list
+    default: op

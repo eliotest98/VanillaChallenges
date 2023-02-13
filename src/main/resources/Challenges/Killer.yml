@@ -36,6 +36,8 @@ Killer:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Kill Challenge"
+  # item representing challenge
+  ItemChallenge: 'GOLDEN_SWORD'
   # Title challenge
   Title:
     - '&8'

@@ -32,6 +32,8 @@ Dropper:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Jump Challenge"
+  # item representing challenge
+  ItemChallenge: 'DROPPER'
   # Title challenge
   Title:
     - '&8'

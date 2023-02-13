@@ -36,6 +36,8 @@ Fisher:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Fishing Challenge"
+  # item representing challenge
+  ItemChallenge: 'FISHING_ROD'
   # Title challenge
   Title:
     - '&8'

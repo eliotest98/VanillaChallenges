@@ -36,6 +36,8 @@ Sneaker:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Sneak Challenge"
+  # item representing challenge
+  ItemChallenge: 'SCULK_SENSOR'
   # Title challenge
   Title:
     - '&8'

@@ -36,6 +36,8 @@ ItemBreaker:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Item Break Challenge"
+  # item representing challenge
+  ItemChallenge: 'WOODEN_HOE'
   # Title challenge
   Title:
     - '&8'

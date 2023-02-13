@@ -38,6 +38,8 @@ CubeGenerator:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Block Break CubeGenerator Challenge"
+  # item representing challenge
+  ItemChallenge: 'DIAMOND_ORE'
   # Title challenge
   Title:
     - '&8'

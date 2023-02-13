@@ -39,6 +39,8 @@ BlockPlacer:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Block Place Challenge"
+  # item representing challenge
+  ItemChallenge: 'DIRT'
   # Title challenge
   Title:
     - '&8'

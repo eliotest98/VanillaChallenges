@@ -36,6 +36,8 @@ Mover:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Move Challenge"
+  # item representing challenge
+  ItemChallenge: 'LEATHER_BOOTS'
   # Title challenge
   Title:
     - '&8'

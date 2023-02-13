@@ -371,6 +371,11 @@ public class YamlDB implements Database {
         }
     }
 
+    @Override
+    public ArrayList<Challenge> getAllChallenges() {
+        return challenges;
+    }
+
     public void saveFile() throws IOException {
         file.save(configFile);
     }

@@ -32,6 +32,8 @@ Raider:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Raid Challenge"
+  # item representing challenge
+  ItemChallenge: 'BOW'
   # Title challenge
   Title:
     - '&8'

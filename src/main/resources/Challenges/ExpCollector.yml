@@ -36,6 +36,8 @@ ExpCollector:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Collect Exp Challenge"
+  # item representing challenge
+  ItemChallenge: 'EXPERIENCE_BOTTLE'
   # Title challenge
   Title:
     - '&8'

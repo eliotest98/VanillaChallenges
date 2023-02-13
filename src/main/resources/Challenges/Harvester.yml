@@ -36,6 +36,8 @@ Harvester:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Harvest Challenge"
+  # item representing challenge
+  ItemChallenge: 'SWEET_BERRIES'
   # Title challenge
   Title:
     - '&8'

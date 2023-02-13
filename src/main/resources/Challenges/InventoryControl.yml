@@ -38,6 +38,8 @@ InventoryControl:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Inventory Control Challenge"
+  # item representing challenge
+  ItemChallenge: 'NAME_TAG'
   # Title challenge
   Title:
     - '&8'

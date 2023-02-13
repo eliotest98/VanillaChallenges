@@ -32,6 +32,8 @@ Absorber:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Sponge Absorb Challenge"
+  # item representing challenge
+  ItemChallenge: 'SPONGE'
   # Title challenge
   Title:
     - '&8'

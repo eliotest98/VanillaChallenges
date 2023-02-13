@@ -32,6 +32,8 @@ Jumper:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Jump Challenge"
+  # item representing challenge
+  ItemChallenge: 'SLIME_BLOCK'
   # Title challenge
   Title:
     - '&8'

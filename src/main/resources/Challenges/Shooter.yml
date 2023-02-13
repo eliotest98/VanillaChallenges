@@ -36,6 +36,8 @@ Shooter:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Shoot Challenge"
+  # item representing challenge
+  ItemChallenge: 'ARROW'
   # Title challenge
   Title:
     - '&8'

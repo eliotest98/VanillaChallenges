@@ -34,6 +34,8 @@ Feeder:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Feed Challenge"
+  # item representing challenge
+  ItemChallenge: 'APPLE'
   # Title challenge
   Title:
     - '&8'

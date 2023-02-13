@@ -36,6 +36,8 @@ Sprinter:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Sprint Challenge"
+  # item representing challenge
+  ItemChallenge: 'ELYTRA'
   # Title challenge
   Title:
     - '&8'

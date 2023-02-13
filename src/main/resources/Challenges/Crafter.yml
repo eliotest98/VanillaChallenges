@@ -34,6 +34,8 @@ Crafter:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Crafting Challenge"
+  # item representing challenge
+  ItemChallenge: 'CRAFTING_TABLE'
   # Title challenge
   Title:
     - '&8'

@@ -34,6 +34,8 @@ Cooker:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Cooker Challenge"
+  # item representing challenge
+  ItemChallenge: 'COOKED_BEEF'
   # Title challenge
   Title:
     - '&8'

@@ -38,6 +38,8 @@ Chatter:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Chat Challenge"
+  # item representing challenge
+  ItemChallenge: 'MUSIC_DISC_CAT'
   # Title challenge
   Title:
     - '&8'

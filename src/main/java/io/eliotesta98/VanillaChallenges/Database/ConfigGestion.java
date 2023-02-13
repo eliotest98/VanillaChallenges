@@ -1,11 +1,12 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
+import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import sun.awt.shell.ShellFolder;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class ConfigGestion {
     private HashMap<String, String> messages = new HashMap<String, String>();
     private HashMap<String, Challenge> challenges = new HashMap<String, Challenge>();
     private HashMap<String, Boolean> hooks = new HashMap<String, Boolean>();
+    private HashMap<String,Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration, pointsResume;
     private String database;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number, time;
@@ -151,11 +153,12 @@ public class ConfigGestion {
             }
             boolean keepInventory = yamlChallenge.getBoolean(challengeName + ".KeepInventory");
             boolean deathInLand = yamlChallenge.getBoolean(challengeName + ".DeathInLand");
+            String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge");
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
                     pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
-                    challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds);
+                    challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds, itemChallenge);
             challenges.put(challengeName, challenge);
         }
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
@@ -171,6 +174,46 @@ public class ConfigGestion {
         ArrayList<String> lore = new ArrayList<>(file.getStringList("Configuration.CollectionChallengeItem.Lore"));
         chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
         pointsResume = file.getBoolean("Configuration.PointsResume");
+
+        for (String nameInterface : file.getConfigurationSection("Interfaces").getKeys(false)) {
+            String title = file.getString("Interfaces." + nameInterface + ".Title");
+            String openSound = file.getString("Interfaces." + nameInterface + ".OpenSound");
+            ArrayList<String> slots = new ArrayList<String>();
+            ArrayList<String> contaSlots = new ArrayList<String>();
+
+            HashMap<String, ItemConfig> itemsConfig = new HashMap<String, ItemConfig>();
+            for (String nameItem : file.getConfigurationSection("Interfaces." + nameInterface + ".Items").getKeys(false)) {
+                String letter = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Letter");
+                String type = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                String name = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Name");
+                String texture = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Texture");
+                String soundClick = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".SoundClick");
+                ArrayList<String> loreItem = new ArrayList<String>(file.getStringList("Interfaces." + nameInterface + ".Items." + nameItem + ".Lore"));
+                ItemConfig item = new ItemConfig(nameItem, name, type, texture, loreItem, soundClick);
+                itemsConfig.put(letter, item);
+            }
+
+            file.getStringList("Interfaces." + nameInterface + ".Slots").forEach(value -> {
+                for (int i = 0; i < value.length(); i++) {
+                    for (Map.Entry<String, ItemConfig> itemConfig : itemsConfig.entrySet()) {
+                        if (itemConfig.getKey().equalsIgnoreCase(value.charAt(i) + "") && itemConfig.getValue().getNameItemConfig().equalsIgnoreCase("Challenge")) {
+                            contaSlots.add("" + value.charAt(i));
+                        }
+                    }
+                    slots.add("" + value.charAt(i));
+                }
+            });
+            Interface customInterface;
+            /*if (nameInterface.equalsIgnoreCase("CustomUpgradeCategories")) {
+                customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
+                        contaSlots.size(), nameInterface, "", "Generator");
+            } else {*/
+                customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
+                        contaSlots.size(), nameInterface, "", "");
+            //}
+            interfaces.put(nameInterface, customInterface);
+        }
+
     }
 
     public void loadCommentedConfiguration() {
@@ -354,5 +397,13 @@ public class ConfigGestion {
 
     public void setControlIfChallengeExist(ArrayList<String> controlIfChallengeExist) {
         this.controlIfChallengeExist = controlIfChallengeExist;
+    }
+
+    public HashMap<String, Interface> getInterfaces() {
+        return interfaces;
+    }
+
+    public void setInterfaces(HashMap<String, Interface> interfaces) {
+        this.interfaces = interfaces;
     }
 }

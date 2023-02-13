@@ -34,6 +34,8 @@ ItemCollector:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Item Collection Challenge"
+  # item representing challenge
+  ItemChallenge: 'CHEST'
   # Title challenge
   Title:
     - '&8'

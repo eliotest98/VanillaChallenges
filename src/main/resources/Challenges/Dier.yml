@@ -47,6 +47,8 @@ Dier:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Dyer Challenge"
+  # item representing challenge
+  ItemChallenge: 'RECOVERY_COMPASS'
   # Title challenge
   Title:
     - '&8'

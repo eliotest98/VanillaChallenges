@@ -18,6 +18,7 @@ public class Challenge {
     private HashMap<String, BukkitTask> tasksSinglePlayers = new HashMap<String, BukkitTask>();
     private ArrayList<String> worlds = new ArrayList<>();
     private String challengeName = "nessuna";
+    private String itemChallenge = "BEDROCK";
     private ArrayList<String> blocks = new ArrayList<>();
     private ArrayList<String> blocksOnPlaced = new ArrayList<>();
     private String typeChallenge = "nessuna";
@@ -68,7 +69,7 @@ public class Challenge {
                      ArrayList<String> vehicles, String sneaking, String onGround, int pointsBoostSinglePlayer,
                      int multiplierSinglePlayer, int minutesSinglePlayer, int timeChallenge, String challengeName,
                      ArrayList<String> quests, int minutes, String startTimeChallenge, boolean keepInventory,
-                     boolean deathInLand, ArrayList<String> worlds) {
+                     boolean deathInLand, ArrayList<String> worlds, String itemChallenge) {
         this.blocks = blocks;
         this.worlds = worlds;
         this.blocksOnPlaced = blocksOnPlaced;
@@ -102,6 +103,7 @@ public class Challenge {
         this.keepInventory = keepInventory;
         this.nameChallenge = nameChallenge;
         this.deathInLand = deathInLand;
+        this.itemChallenge = itemChallenge;
     }
 
     public HashMap<String, Long> getBoostSinglePlayers() {
@@ -257,6 +259,30 @@ public class Challenge {
 
     public void setNameChallenge(String nameChallenge) {
         this.nameChallenge = nameChallenge;
+    }
+
+    public String getItemChallenge() {
+        return itemChallenge;
+    }
+
+    public void setItemChallenge(String itemChallenge) {
+        this.itemChallenge = itemChallenge;
+    }
+
+    public ArrayList<String> getBlocksOnPlaced() {
+        return blocksOnPlaced;
+    }
+
+    public void setBlocksOnPlaced(ArrayList<String> blocksOnPlaced) {
+        this.blocksOnPlaced = blocksOnPlaced;
+    }
+
+    public ArrayList<String> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(ArrayList<String> vehicles) {
+        this.vehicles = vehicles;
     }
 
     public void incrementCommands(String playerName, long amount) {
@@ -685,27 +711,48 @@ public class Challenge {
         return "Challenge{" +
                 "players=" + players +
                 ", min10PlayersPoints=" + min10PlayersPoints +
-                ", blocks='" + blocks + '\'' +
-                ", blocksOnPlace='" + blocksOnPlaced + '\'' +
+                ", boostSinglePlayers=" + boostSinglePlayers +
+                ", startBoostSinglePlayers=" + startBoostSinglePlayers +
+                ", tasksSinglePlayers=" + tasksSinglePlayers +
+                ", worlds=" + worlds +
+                ", challengeName='" + challengeName + '\'' +
+                ", blocks=" + blocks +
+                ", blocksOnPlaced=" + blocksOnPlaced +
                 ", typeChallenge='" + typeChallenge + '\'' +
-                ", rewards='" + rewards + '\'' +
+                ", rewards=" + rewards +
                 ", title=" + title +
-                ", items='" + items + '\'' +
-                ", itemsInHand='" + itemsInHand + '\'' +
-                ", mobs='" + mobs + '\'' +
-                ", colors='" + colors + '\'' +
-                ", causes='" + causes + '\'' +
+                ", items=" + items +
+                ", itemsInHand=" + itemsInHand +
+                ", mobs=" + mobs +
+                ", colors=" + colors +
+                ", causes=" + causes +
+                ", vehicles=" + vehicles +
                 ", force=" + force +
                 ", power=" + power +
+                ", number=" + number +
+                ", time=" + time +
+                ", startTimeChallenge='" + startTimeChallenge + '\'' +
+                ", onGround='" + onGround + '\'' +
+                ", keepInventory=" + keepInventory +
                 ", timeNumber=" + timeNumber +
                 ", task=" + task +
                 ", boostingTask=" + boostingTask +
                 ", point=" + point +
                 ", pointsBoost=" + pointsBoost +
                 ", multiplier=" + multiplier +
-                ", minutes=" + boostMinutes +
+                ", boostMinutes=" + boostMinutes +
+                ", pointsBoostSinglePlayer=" + pointsBoostSinglePlayer +
+                ", multiplierSinglePlayer=" + multiplierSinglePlayer +
+                ", minutesSinglePlayer=" + minutesSinglePlayer +
+                ", timeChallenge=" + timeChallenge +
+                ", nameChallenge='" + nameChallenge + '\'' +
+                ", deathInLand=" + deathInLand +
                 ", countPointsChallenge=" + countPointsChallenge +
                 ", startBoost=" + startBoost +
+                ", sneaking='" + sneaking + '\'' +
+                ", quests=" + quests +
+                ", minutes=" + minutes +
+                ", tempPoints=" + tempPoints +
                 '}';
     }
 

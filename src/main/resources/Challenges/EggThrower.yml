@@ -36,6 +36,8 @@ EggThrower:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Egg Thrower Challenge"
+  # item representing challenge
+  ItemChallenge: 'EGG'
   # Title challenge
   Title:
     - '&8'

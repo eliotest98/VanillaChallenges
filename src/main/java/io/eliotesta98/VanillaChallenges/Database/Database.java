@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import java.util.ArrayList;
 
 public interface Database {
@@ -45,4 +46,6 @@ public interface Database {
     void clearAll();
 
     void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist);
+
+    ArrayList<Challenge> getAllChallenges();
 }

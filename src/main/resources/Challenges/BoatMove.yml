@@ -35,6 +35,8 @@ BoatMove:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Boat Move Challenge"
+  # item representing challenge
+  ItemChallenge: 'OAK_BOAT'
   # Title challenge
   Title:
     - '&8'

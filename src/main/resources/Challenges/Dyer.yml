@@ -36,6 +36,8 @@ Dyer:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Color Sheep Challenge"
+  # item representing challenge
+  ItemChallenge: 'GREEN_DYE'
   # Title challenge
   Title:
     - '&8'

@@ -38,6 +38,8 @@ BlockBreaker:
     Minutes: 2
   # Name of Challenge
   NameChallenge: "&7Block Break Challenge"
+  # item representing challenge
+  ItemChallenge: 'DIAMOND_PICKAXE'
   # Title challenge
   Title:
     - '&8'
