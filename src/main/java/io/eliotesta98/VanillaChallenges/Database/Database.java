@@ -9,6 +9,8 @@ public interface Database {
 
     String insertDailyChallenges();
 
+    void insertChallengeEvent(String challengeName);
+
     void deleteChallengeWithName(String challengeName);
 
     void loadPlayersPoints();
@@ -48,4 +50,14 @@ public interface Database {
     void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist);
 
     ArrayList<Challenge> getAllChallenges();
+
+    void clearChallengesFromFile();
+
+    void insertChallenge(String challengeName, int time);
+
+    void saveOldPointsForChallengeEvents();
+
+    void resumeOldPoints();
+
+    ArrayList<Challenger> getAllOldChallengers();
 }

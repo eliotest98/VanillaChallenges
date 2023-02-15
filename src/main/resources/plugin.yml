@@ -39,3 +39,9 @@ permissions:
   vc.list.command:
     description: for /vc list
     default: op
+  vc.event.start.command:
+    description: for /vc event challenge
+    default: op
+  vc.event.stop.command:
+    description: for /vc event stop
+    default: op

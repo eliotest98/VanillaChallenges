@@ -37,7 +37,6 @@ public class Main extends JavaPlugin {
         // You can find the plugin ids of your plugins on the page https://bstats.org/what-is-my-plugin-id
         int pluginId = 17661; // <-- Replace with the id of your plugin!
         Metrics metrics = new Metrics(this, pluginId);
-        System.out.println(metrics.toString());
 
         getServer().getConsoleSender()
                 .sendMessage("\n\n\n§a ___ ___                __  __  __          ______  __            __  __                                    \n" +

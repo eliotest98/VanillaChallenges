@@ -138,6 +138,9 @@ public class Interface {
                         if (items.get(countItems) instanceof Challenge) {
                             Challenge challenge = (Challenge) items.get(countItems);
                             Challenge challengeComplete = Main.instance.getConfigGestion().getChallenges().get(challenge.getChallengeName());
+                            if (challenge.getChallengeName().contains("Event_")) {
+                                challengeComplete = Main.instance.getConfigGestion().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
+                            }
                             inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, numberOfPage,
                                     "vc.numberPage:" + (numberOfPage) +
                                             ";vc.challengeName:" + challenge.getChallengeName() +

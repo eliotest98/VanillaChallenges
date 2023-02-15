@@ -16,12 +16,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Commands implements CommandExecutor {
 
     private final String errorYouAreNotAPlayer = Main.instance.getConfigGestion().getMessages().get("Errors.YouAreNotAPlayer");
     private final String errorCommandNotFound = Main.instance.getConfigGestion().getMessages().get("Errors.CommandNotFound");
     private final String errorNoPerms = Main.instance.getConfigGestion().getMessages().get("Errors.NoPerms");
+    private final String alreadyStartEvent = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyStartEvent");
+    private final String alreadyStopEvent = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyStopEvent");
 
     private final String commandFooter = Main.instance.getConfigGestion().getMessages().get("Commands.Footer");
     private final String commandVcReloadHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Reload");
@@ -33,11 +36,15 @@ public class Commands implements CommandExecutor {
     private final String commandVcEconomyChallenge = Main.instance.getConfigGestion().getMessages().get("Commands.Economy");
     private final String commandVcReward = Main.instance.getConfigGestion().getMessages().get("Commands.Reward");
     private final String commandVcList = Main.instance.getConfigGestion().getMessages().get("Commands.List");
+    private final String commandVcEvent = Main.instance.getConfigGestion().getMessages().get("Commands.Event");
 
     private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("PointsInfo");
     private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("ActuallyInTop");
     private final String pointsadd = Main.instance.getConfigGestion().getMessages().get("PointsAdd");
     private final String pointsremove = Main.instance.getConfigGestion().getMessages().get("PointsRemove");
+
+    private final String challengeList = Main.instance.getConfigGestion().getMessages().get("ChallengeList");
+    private final String challengeOfList = Main.instance.getConfigGestion().getMessages().get("ChallengeofList");
 
     private final boolean debugCommand = Main.instance.getConfigGestion().getDebug().get("Commands");
     private final boolean resetPoints = Main.instance.getConfigGestion().isResetPointsAtNewChallenge();
@@ -68,6 +75,7 @@ public class Commands implements CommandExecutor {
                             + " created by &a&leliotesta98" + "\n&r\n";
                     finale = finale + commandVcChallenge + "\n";
                     finale = finale + commandVcClear + "\n";
+                    finale = finale + commandVcEvent + "\n";
                     finale = finale + commandVcList + "\n";
                     finale = finale + commandVcNextHelp + "\n";
                     finale = finale + commandVcPointsHelp + "\n";
@@ -96,7 +104,65 @@ public class Commands implements CommandExecutor {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                         debug.debug("Commands");
                     }
-                } else if (args[0].equalsIgnoreCase("remove")) {
+                }
+                else if (args[0].equalsIgnoreCase("event")) {
+                    if (args.length != 2) {
+                        sender.sendMessage(ColorUtils.applyColor(commandVcEvent));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                        return;
+                    }
+                    if (args[1].equalsIgnoreCase("stop")) {
+                        if(!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                            sender.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                            Main.db.deleteChallengeWithName(Main.db.getAllChallenges().get(0).getChallengeName());
+                            Main.db.resumeOldPoints();
+                            ReloadUtil.reload();
+                        });
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                    } else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
+                        if(Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                            sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                            Main.db.insertChallengeEvent(args[1]);
+                            Main.db.saveOldPointsForChallengeEvents();
+                            ReloadUtil.reload();
+                        });
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                    } else {
+                        StringBuilder send = new StringBuilder("\n");
+                        for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
+                            send.append(challengeOfList.replace("{challenge}", challenge.getKey())).append("\n");
+                        }
+                        sender.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                    }
+                }
+                else if (args[0].equalsIgnoreCase("remove")) {
                     if (args.length == 1 || args.length == 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
                         if (debugCommand) {
@@ -150,6 +216,14 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
+                    if(Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                        return;
+                    }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                         ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
                         Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
@@ -189,6 +263,7 @@ public class Commands implements CommandExecutor {
                             + " created by &a&leliotesta98" + "\n&r\n";
                     finale = finale + commandVcChallenge + "\n";
                     finale = finale + commandVcClear + "\n";
+                    finale = finale + commandVcEvent + "\n";
                     finale = finale + commandVcNextHelp + "\n";
                     finale = finale + commandVcPointsHelp + "\n";
                     finale = finale + commandVcReloadHelp + "\n";
@@ -281,6 +356,7 @@ public class Commands implements CommandExecutor {
                             + " created by &a&leliotesta98" + "\n&r\n";
                     finale = finale + commandVcChallenge + "\n";
                     finale = finale + commandVcClear + "\n";
+                    finale = finale + commandVcEvent + "\n";
                     finale = finale + commandVcList + "\n";
                     finale = finale + commandVcNextHelp + "\n";
                     finale = finale + commandVcPointsHelp + "\n";
@@ -323,6 +399,9 @@ public class Commands implements CommandExecutor {
                     }
                     if (p.hasPermission("vc.clear.command")) {
                         finale = finale + commandVcClear + "\n";
+                    }
+                    if (p.hasPermission("vc.event.start.command") || p.hasPermission("vc.event.stop.command")) {
+                        finale = finale + commandVcEvent + "\n";
                     }
                     if (p.hasPermission("vc.list.command")) {
                         finale = finale + commandVcList + "\n";
@@ -440,6 +519,14 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
+                    if(Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                        return;
+                    }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                         ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
                         Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
@@ -490,6 +577,9 @@ public class Commands implements CommandExecutor {
                     }
                     if (p.hasPermission("vc.clear.command")) {
                         finale = finale + commandVcClear + "\n";
+                    }
+                    if (p.hasPermission("vc.event.start.command") || p.hasPermission("vc.event.stop.command")) {
+                        finale = finale + commandVcEvent + "\n";
                     }
                     if (p.hasPermission("vc.list.command")) {
                         finale = finale + commandVcList + "\n";
@@ -553,7 +643,89 @@ public class Commands implements CommandExecutor {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                         debug.debug("Commands");
                     }
-                } else if (args[0].equalsIgnoreCase("reward")) {
+                }
+                else if (args[0].equalsIgnoreCase("event")) {
+                    if (args.length != 2) {
+                        p.sendMessage(ColorUtils.applyColor(commandVcEvent));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                        return;
+                    }
+                    if (args[1].equalsIgnoreCase("stop")) {
+                        if(!p.hasPermission("vc.event.stop.command")) {
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        if(!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                            p.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                            Main.db.deleteChallengeWithName(Main.db.getAllChallenges().get(0).getChallengeName());
+                            Main.db.resumeOldPoints();
+                            ReloadUtil.reload();
+                        });
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                    } else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
+                        if(!p.hasPermission("vc.event.start.command")) {
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        if(Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                            p.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                            Main.db.insertChallengeEvent(args[1]);
+                            Main.db.saveOldPointsForChallengeEvents();
+                            ReloadUtil.reload();
+                        });
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                    } else {
+                        if(!p.hasPermission("vc.event.start.command") || !p.hasPermission("vc.event.stop.command")) {
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        StringBuilder send = new StringBuilder("\n");
+                        for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
+                            send.append(challengeOfList.replace("{challenge}", challenge.getKey())).append("\n");
+                        }
+                        p.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
+                    }
+                }
+                else if (args[0].equalsIgnoreCase("reward")) {
                     // controllo se ha il permesso
                     if (!p.hasPermission("vc.reward.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -631,7 +803,8 @@ public class Commands implements CommandExecutor {
                             }
                         }
                     }
-                } else if (args[0].equalsIgnoreCase("top")) {
+                }
+                else if (args[0].equalsIgnoreCase("top")) {
                     // controllo se ha il permesso
                     if (!p.hasPermission("vc.top.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -701,6 +874,9 @@ public class Commands implements CommandExecutor {
                     }
                     if (p.hasPermission("vc.clear.command")) {
                         finale = finale + commandVcClear + "\n";
+                    }
+                    if (p.hasPermission("vc.event.start.command") || p.hasPermission("vc.event.stop.command")) {
+                        finale = finale + commandVcEvent + "\n";
                     }
                     if (p.hasPermission("vc.list.command")) {
                         finale = finale + commandVcList + "\n";

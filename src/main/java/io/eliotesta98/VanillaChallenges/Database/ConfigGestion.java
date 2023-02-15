@@ -105,7 +105,6 @@ public class ConfigGestion {
         for (File fileChallenge : folder.listFiles()) {
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
-            System.out.println(challengeName);
             boolean enabled = yamlChallenge.getBoolean(challengeName + ".Enabled");
             if (!enabled) {
                 controlIfChallengeExist.add(challengeName);
@@ -514,5 +513,13 @@ public class ConfigGestion {
 
     public void setInterfaces(HashMap<String, Interface> interfaces) {
         this.interfaces = interfaces;
+    }
+
+    public HashMap<String, Challenge> getChallengesEvent() {
+        return challengesEvent;
+    }
+
+    public void setChallengesEvent(HashMap<String, Challenge> challengesEvent) {
+        this.challengesEvent = challengesEvent;
     }
 }

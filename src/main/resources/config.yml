@@ -131,11 +131,14 @@ Messages:
     Economy: '   &e/vc &6<add|remove> <playername> <points> &7for add or remove points of a player'
     Reward: '   &e/vc &6<reward> &7for receive reward of win'
     List: '   &e/vc &6<list> &7for see the list of Challenges'
+    Event: '   &e/vc &6<event> <stop|challenge> &7for start a challenge event'
   Errors:
     YouAreNotAPlayer: '{prefix}&cYou are not a player'
     CommandNotFound: '{prefix}&cCommand not found'
     NoPerms: '{prefix}&cInsufficient permission'
     AlreadyPlacedChest: '{prefix}&7You already placed a chest for Collection Item Challenge'
+    AlreadyStartEvent: '{prefix}&cYou already start a Challenge Event! If you want stop it write vc <event> <stop>'
+    AlreadyStopEvent: '{prefix}&cYou already stopped the Challenge Event! If you want start a new Challenge write vc <event> <challenge>'
   PointsInfo: '{prefix}&e{player} &7have &b{number}&7 points'
   ActuallyInTop: '{prefix}&7Actually in top there are:'
   TopPlayers:
@@ -152,6 +155,8 @@ Messages:
   CorrectAnswer: '{prefix}&e{player} &7write the correct answer!'
   PointsAdd: '{prefix}&b{points} &7points added at &e{player}'
   PointsRemove: '{prefix}&b{points} &7points removed at &e{player}'
+  ChallengeList: '{prefix}&bList of Challenges:{challengeList}'
+  ChallengeofList: '&b{challenge}'
 
 Debug:
   # Commands debug

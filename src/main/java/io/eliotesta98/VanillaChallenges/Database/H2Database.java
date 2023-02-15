@@ -6,6 +6,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -42,6 +43,10 @@ public class H2Database implements Database {
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS Challenger (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS ChallengerEvent (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
@@ -83,14 +88,22 @@ public class H2Database implements Database {
             }
             return nome;
         } else {
-            while (!challenges.isEmpty()) {
-                if (challenges.get(0).getTimeChallenge() <= 0) {
-                    H2Database.instance.deleteChallengeWithName(challenges.get(0).getChallengeName());
-                    challenges.remove(0);
+            for (int i = 0; i < challenges.size(); i++) {
+                if (challenges.get(i).getTimeChallenge() <= 0) {
+                    deleteChallengeWithName(challenges.get(i).getChallengeName());
+                    challenges.remove(i);
                 } else {
-                    Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(0).getChallengeName());
-                    challenge.setTimeChallenge(challenges.get(0).getTimeChallenge());
+                    if (challenges.get(i).getChallengeName().contains("Event_")) {
+                        Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challenges.get(i).getChallengeName().replace("Event_", ""));
+                        challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
+                        Main.dailyChallenge = challenge;
+                        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
+                        return Main.dailyChallenge.getTypeChallenge();
+                    }
+                    Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(i).getChallengeName());
+                    challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
                     Main.dailyChallenge = challenge;
+                    Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
                     return Main.dailyChallenge.getTypeChallenge();
                 }
             }
@@ -111,6 +124,17 @@ public class H2Database implements Database {
         }
     }
 
+    @Override
+    public void clearChallengesFromFile() {
+        ArrayList<Challenge> challenges = getAllChallenges();
+        challenges.add(0, challenges.get(challenges.size() - 1));
+        challenges.remove(challenges.size() - 1);
+        clearChallenges();
+        for (Challenge challenge : challenges) {
+            insertChallenge(challenge.getChallengeName(), challenge.getTimeChallenge());
+        }
+    }
+
     public void clearChallenges() {
         PreparedStatement preparedStatement = null;
         try {
@@ -120,6 +144,23 @@ public class H2Database implements Database {
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS Challenge (`NomeChallenge` VARCHAR(100) NOT NULL PRIMARY KEY, `TimeResume` INT(15) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
+    }
+
+    public void clearChallengersOld() {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "DROP TABLE ChallengerEvent");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS ChallengerEvent (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -192,6 +233,7 @@ public class H2Database implements Database {
     public void clearAll() {
         clearChallenges();
         clearChallengers();
+        clearChallengersOld();
         clearDailyWinners();
         removeTopYesterday();
     }
@@ -297,6 +339,27 @@ public class H2Database implements Database {
         }
     }
 
+    @Override
+    public void insertChallengeEvent(String challengeName) {
+        Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challengeName);
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO Challenge (NomeChallenge,TimeResume) VALUES ('"
+                            + "Event_" + challengeName + "','" + challenge.getTimeChallenge()
+                            + "')");
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Insert failed, no rows affected.");
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
+        clearChallengesFromFile();
+    }
+
+    @Override
     public void insertChallenge(String challengeName, int timeResume) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -312,6 +375,50 @@ public class H2Database implements Database {
             e.printStackTrace();
             ReloadUtil.reload();
         }
+    }
+
+    @Override
+    public void saveOldPointsForChallengeEvents() {
+        HashMap<String, Long> copyMap = new HashMap<>(Main.dailyChallenge.getPlayers());
+        for (Map.Entry<String, Long> player : copyMap.entrySet()) {
+            try {
+                if (player.getValue() > 0) {
+                    insertChallengerEvent(player.getKey(), player.getValue());
+                }
+            } catch (Exception ex) {
+                Bukkit.getServer().getConsoleSender().sendMessage("Save Points Event: " + ex.getMessage());
+            }
+        }
+        clearChallengers();
+    }
+
+    @Override
+    public void resumeOldPoints() {
+        ArrayList<Challenger> oldPoints = getAllOldChallengers();
+        clearChallengersOld();
+        for (Challenger challenger : oldPoints) {
+            insertChallenger(challenger.getNomePlayer(), challenger.getPoints());
+        }
+    }
+
+    @Override
+    public ArrayList<Challenger> getAllOldChallengers() {
+        ArrayList<Challenger> points = new ArrayList<Challenger>();
+        ResultSet resultSet = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM ChallengerEvent");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                final Challenger point = new Challenger();
+                point.setPoints(resultSet.getInt("Points"));
+                point.setNomePlayer(resultSet.getString("PlayerName"));
+                points.add(point);
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return points;
     }
 
     @Override
@@ -369,6 +476,23 @@ public class H2Database implements Database {
             PreparedStatement preparedStatement = connection
                     .prepareStatement("DELETE FROM Challenger WHERE `PlayerName`='" + nomePlayer + "'");
             preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtil.reload();
+        }
+    }
+
+    public void insertChallengerEvent(String playerName, long points) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO ChallengerEvent (PlayerName,Points) VALUES ('"
+                            + playerName + "','" + points
+                            + "')");
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Insert failed, no rows affected.");
+            }
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -493,9 +617,9 @@ public class H2Database implements Database {
 
     @Override
     public void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist) {
-        for(String challengeName: controlIfChallengeExist) {
-            for(Challenge challenge: getAllChallenges()) {
-                if(challenge.getChallengeName().equalsIgnoreCase(challengeName)) {
+        for (String challengeName : controlIfChallengeExist) {
+            for (Challenge challenge : getAllChallenges()) {
+                if (challenge.getChallengeName().equalsIgnoreCase(challengeName)) {
                     deleteChallengeWithName(challengeName);
                     break;
                 }

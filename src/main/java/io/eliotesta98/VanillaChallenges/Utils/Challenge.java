@@ -464,7 +464,6 @@ public class Challenge {
             @Override
             public void run() {
                 Main.instance.getConfigGestion().getTasks().changeStatusExternalTasks("SavePoints");
-                //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] Start Backup player points");
                 HashMap<String, Long> copyMap = new HashMap<String, Long>(players);
                 for (Map.Entry<String, Long> player : copyMap.entrySet()) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
@@ -488,7 +487,6 @@ public class Challenge {
                     startBoosting();
                 }
                 Main.instance.getConfigGestion().getTasks().changeStatusExternalTasks("SavePoints");
-                //Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Vanilla Challenges] End Backup player points");
             }
         }, 0, timeNumber);
         Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "SavePoints", false);
