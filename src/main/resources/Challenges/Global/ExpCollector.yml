@@ -1,0 +1,56 @@
+ExpCollector:
+  TypeChallenge: 'CollectorExpChallenge'
+  # if you want to enable or disable challenge
+  Enabled: true
+  # Time settings
+  TimeSettings:
+    # What time do you want the challenge to start?
+    Start: '5:00'
+    # How long do you want the challenge to last in hours ?
+    Time: 24
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Able or disable Sneak when place Es. true or false or NOBODY
+  Sneaking: 'NOBODY'
+  # How many points you want give at exp point?
+  Point: 1
+  # If you want keepInventory for this challenge (ATTENTION! There is a prevention for exp refill from death)
+  KeepInventory: false
+  # if you want a multiplier based on all players
+  Boost:
+    Enabled: false
+    #Number you want reached for give the multiplier
+    Points: 50000
+    # Multiplier you want give when reached the number
+    Multiplier: 2
+    # For how many minutes you want give the multiplier?
+    Minutes: 10
+  # if you want a multiplier based on a single player
+  BoostPlayer:
+    Enabled: false
+    # Number you want reached for give the multiplier
+    Points: 5000
+    # Multiplier you want give when reached the number
+    Multiplier: 4
+    # For how many minutes you want give the multiplier?
+    Minutes: 2
+  # Name of Challenge
+  NameChallenge: "&7Collect Exp Challenge"
+  # item representing challenge
+  ItemChallenge: 'EXPERIENCE_BOTTLE'
+  # Title challenge
+  Title:
+    - '&8'
+    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Collect Exp Challenge'
+    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉     &7Collect experience for receive 1 point'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7(1 point for 1 experience not level)'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
+    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8'
+  # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
+  Rewards:
+    - 'DRAGON_HEAD:1'

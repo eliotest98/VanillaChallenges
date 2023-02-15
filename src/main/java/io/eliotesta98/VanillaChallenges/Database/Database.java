@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import java.util.ArrayList;
 
 public interface Database {
@@ -7,6 +8,8 @@ public interface Database {
     void initialize(String AbsolutePath);
 
     String insertDailyChallenges();
+
+    void insertChallengeEvent(String challengeName);
 
     void deleteChallengeWithName(String challengeName);
 
@@ -45,4 +48,16 @@ public interface Database {
     void clearAll();
 
     void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist);
+
+    ArrayList<Challenge> getAllChallenges();
+
+    void clearChallengesFromFile();
+
+    void insertChallenge(String challengeName, int time);
+
+    void saveOldPointsForChallengeEvents();
+
+    void resumeOldPoints();
+
+    ArrayList<Challenger> getAllOldChallengers();
 }

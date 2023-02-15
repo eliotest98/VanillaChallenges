@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class YamlDB implements Database {
@@ -24,6 +25,7 @@ public class YamlDB implements Database {
     private ArrayList<Challenge> challenges = new ArrayList<Challenge>();
     private ArrayList<DailyWinner> dailyWinners = new ArrayList<DailyWinner>();
     private ArrayList<Challenger> topYesterday = new ArrayList<Challenger>();
+    private ArrayList<Challenger> oldPoints = new ArrayList<>();
 
     public YamlDB() {
         initialize("");
@@ -47,6 +49,10 @@ public class YamlDB implements Database {
                     Challenger challenger = new Challenger(playerName, file.getInt("Points." + playerName));
                     playerPoints.add(challenger);
                 }
+                for (String playerName : file.getConfigurationSection("PointsLastChallenge").getKeys(false)) {
+                    Challenger challenger = new Challenger(playerName, file.getInt("PointsLastChallenge." + playerName));
+                    oldPoints.add(challenger);
+                }
                 for (String challenge : file.getConfigurationSection("Challenges").getKeys(false)) {
                     Challenge challengeDB = new Challenge();
                     challengeDB.setChallengeName(challenge);
@@ -68,6 +74,12 @@ public class YamlDB implements Database {
                 for (String playerName : file.getConfigurationSection("Points").getKeys(false)) {
                     Challenger challenger = new Challenger(playerName, file.getInt("Points." + playerName));
                     playerPoints.add(challenger);
+                }
+            }
+            if (file.getConfigurationSection("PointsLastChallenge") != null) {
+                for (String playerName : file.getConfigurationSection("PointsLastChallenge").getKeys(false)) {
+                    Challenger challenger = new Challenger(playerName, file.getInt("PointsLastChallenge." + playerName));
+                    oldPoints.add(challenger);
                 }
             }
             if (file.getConfigurationSection("Challenges") != null) {
@@ -213,6 +225,13 @@ public class YamlDB implements Database {
                     deleteChallengeWithName(challenges.get(i).getChallengeName());
                     challenges.remove(i);
                 } else {
+                    if (challenges.get(i).getChallengeName().contains("Event_")) {
+                        Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challenges.get(i).getChallengeName().replace("Event_", ""));
+                        challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
+                        Main.dailyChallenge = challenge;
+                        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
+                        return Main.dailyChallenge.getTypeChallenge();
+                    }
                     Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(i).getChallengeName());
                     challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
                     Main.dailyChallenge = challenge;
@@ -275,10 +294,82 @@ public class YamlDB implements Database {
         }
     }
 
+    public void insertChallengerEvent(String playerName, long value) {
+        file.set("PointsLastChallenge." + playerName, (int) value);
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
     @Override
     public void insertChallenger(String playerName, long value) {
         playerPoints.add(new Challenger(playerName, (int) value));
         file.set("Points." + playerName, (int) value);
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    @Override
+    public void clearChallengesFromFile() {
+        file.set("Challenges", null);
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    @Override
+    public void insertChallenge(String challengeName, int time) {
+        file.set("Challenges." + challengeName, time);
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    @Override
+    public void saveOldPointsForChallengeEvents() {
+        HashMap<String, Long> copyMap = new HashMap<>(Main.dailyChallenge.getPlayers());
+        for (Map.Entry<String, Long> player : copyMap.entrySet()) {
+            try {
+                if (player.getValue() > 0) {
+                    insertChallengerEvent(player.getKey(), player.getValue());
+                }
+            } catch (Exception ex) {
+                Bukkit.getServer().getConsoleSender().sendMessage("Save Points Event: " + ex.getMessage());
+            }
+        }
+        clearChallengers();
+    }
+
+    @Override
+    public void resumeOldPoints() {
+        clearChallengers();
+        for(Challenger challenger: oldPoints) {
+            insertChallenger(challenger.getNomePlayer(),challenger.getPoints());
+        }
+        clearChallengersOldPoints();
+    }
+
+    @Override
+    public ArrayList<Challenger> getAllOldChallengers() {
+        return oldPoints;
+    }
+
+    public void clearChallengersOldPoints() {
+        file.set("PointsLastChallenge", null);
+        oldPoints.clear();
         try {
             saveFile();
         } catch (IOException e) {
@@ -324,6 +415,23 @@ public class YamlDB implements Database {
     }
 
     @Override
+    public void insertChallengeEvent(String challengeName) {
+        Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challengeName);
+        challenge.setChallengeName("Event_" + challengeName);
+        challenges.add(0, challenge);
+        clearChallengesFromFile();
+        for (Challenge challenge1 : challenges) {
+            insertChallenge(challenge1.getChallengeName(), challenge1.getTimeChallenge());
+        }
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    @Override
     public void updateDailyWinner(DailyWinner dailyWinner) {
         ArrayList<DailyWinner> winners = getAllDailyWinners();
         while (!winners.isEmpty()) {
@@ -360,15 +468,20 @@ public class YamlDB implements Database {
 
     @Override
     public void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist) {
-        for(String challengeName: controlIfChallengeExist) {
-            for(Challenge challenge: challenges) {
-                if(challenge.getChallengeName().equalsIgnoreCase(challengeName)) {
+        for (String challengeName : controlIfChallengeExist) {
+            for (Challenge challenge : challenges) {
+                if (challenge.getChallengeName().equalsIgnoreCase(challengeName)) {
                     challenges.remove(challenge);
                     deleteChallengeWithName(challengeName);
                     break;
                 }
             }
         }
+    }
+
+    @Override
+    public ArrayList<Challenge> getAllChallenges() {
+        return challenges;
     }
 
     public void saveFile() throws IOException {

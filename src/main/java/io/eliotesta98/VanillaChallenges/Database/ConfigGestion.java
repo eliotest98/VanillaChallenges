@@ -1,11 +1,12 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
+import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import sun.awt.shell.ShellFolder;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,10 +15,12 @@ import java.util.Map;
 
 public class ConfigGestion {
 
-    private HashMap<String, Boolean> debug = new HashMap<String, Boolean>();
-    private HashMap<String, String> messages = new HashMap<String, String>();
-    private HashMap<String, Challenge> challenges = new HashMap<String, Challenge>();
-    private HashMap<String, Boolean> hooks = new HashMap<String, Boolean>();
+    private HashMap<String, Boolean> debug = new HashMap<>();
+    private HashMap<String, String> messages = new HashMap<>();
+    private HashMap<String, Challenge> challenges = new HashMap<>();
+    private HashMap<String, Challenge> challengesEvent = new HashMap<>();
+    private HashMap<String, Boolean> hooks = new HashMap<>();
+    private HashMap<String,Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration, pointsResume;
     private String database;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number, time;
@@ -59,42 +62,46 @@ public class ConfigGestion {
         boolean folderCreate = folder.mkdir();
         if (folderCreate) {
             ArrayList<File> files = new ArrayList<>();
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "BlockBreaker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "BlockPlacer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Cooker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Crafter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Consumer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "ExpCollector.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Killer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Breeder.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Feeder.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Shooter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "JumperHorse.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Jumper.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dyer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Raider.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Fisher.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Sprinter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Mover.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Damager.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Sneaker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "ItemBreaker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Absorber.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Harvester.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "EggThrower.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Enchanter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Chatter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "ItemCollector.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "InventoryControl.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "BoatMove.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dier.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Dropper.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges", "Healer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "BlockBreaker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "BlockPlacer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Cooker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Crafter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Consumer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "ExpCollector.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Killer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Breeder.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Feeder.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Shooter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "JumperHorse.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Jumper.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dyer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Raider.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Fisher.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Sprinter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Mover.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Damager.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Sneaker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "ItemBreaker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Absorber.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Harvester.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "EggThrower.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Enchanter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Chatter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "ItemCollector.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "InventoryControl.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "BoatMove.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dier.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dropper.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Healer.yml"));
             if (hooks.get("CubeGenerator")) {
-                files.add(new File(Main.instance.getDataFolder() + "Challenges", "CubeGenerator.yml"));
+                files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "CubeGenerator.yml"));
             }
-            FileCreator.createAllFiles(files);
+            FileCreator.createAllFilesGlobal(files);
         }
+
+        folder = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges/Global");
+
         for (File fileChallenge : folder.listFiles()) {
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
@@ -151,13 +158,117 @@ public class ConfigGestion {
             }
             boolean keepInventory = yamlChallenge.getBoolean(challengeName + ".KeepInventory");
             boolean deathInLand = yamlChallenge.getBoolean(challengeName + ".DeathInLand");
+            String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge");
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
                     pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
-                    challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds);
+                    challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds, itemChallenge);
             challenges.put(challengeName, challenge);
         }
+
+        if (folderCreate) {
+            ArrayList<File> files = new ArrayList<>();
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "BlockBreaker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "BlockPlacer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Cooker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Crafter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Consumer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "ExpCollector.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Killer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Breeder.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Feeder.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Shooter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "JumperHorse.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Jumper.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dyer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Raider.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Fisher.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Sprinter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Mover.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Damager.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Sneaker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "ItemBreaker.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Absorber.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Harvester.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "EggThrower.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Enchanter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Chatter.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "ItemCollector.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "InventoryControl.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "BoatMove.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dier.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dropper.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Healer.yml"));
+            if (hooks.get("CubeGenerator")) {
+                files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "CubeGenerator.yml"));
+            }
+            FileCreator.createAllFilesEvent(files);
+        }
+
+        folder = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges/Event");
+
+        for (File fileChallenge : folder.listFiles()) {
+            YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
+            String challengeName = fileChallenge.getName().replace(".yml", "");
+            ArrayList<String> worlds = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Worlds");
+            ArrayList<String> blocks = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Blocks");
+            ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
+            String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
+            String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
+            int timeChallenge = yamlChallenge.getInt(challengeName + ".TimeSettings.Time");
+            String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
+            ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
+            ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
+            ArrayList<String> items = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Items");
+            ArrayList<String> mobs = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Mobs");
+            ArrayList<String> itemsInHand = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".ItemsInHand");
+            double force = yamlChallenge.getDouble(challengeName + ".Force");
+            double power = yamlChallenge.getDouble(challengeName + ".Power");
+            ArrayList<String> colors = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Colors");
+            ArrayList<String> causes = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Causes");
+            ArrayList<String> vehicles = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Vehicles");
+            int point = yamlChallenge.getInt(challengeName + ".Point");
+            int number = yamlChallenge.getInt(challengeName + ".Number");
+            int time = yamlChallenge.getInt(challengeName + ".Time");
+            int minutes = yamlChallenge.getInt(challengeName + ".Minutes");
+            int pointsBoost = 0;
+            int multiplier = 1;
+            int boostMinutes = 0;
+            if (yamlChallenge.getBoolean(challengeName + ".Boost.Enabled")) {
+                pointsBoost = yamlChallenge.getInt(challengeName + ".Boost.Points");
+                multiplier = yamlChallenge.getInt(challengeName + ".Boost.Multiplier");
+                boostMinutes = yamlChallenge.getInt(challengeName + ".Boost.Minutes");
+            }
+            int pointsBoostSinglePlayer = 0;
+            int multiplierSinglePlayer = 1;
+            int minutesSinglePlayer = 0;
+            if (yamlChallenge.getBoolean(challengeName + ".BoostPlayer.Enabled")) {
+                pointsBoostSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Points");
+                multiplierSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Multiplier");
+                minutesSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Minutes");
+            }
+            String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
+            String onGround = yamlChallenge.getString(challengeName + ".OnGround");
+            ArrayList<String> quests = new ArrayList<>();
+            for(String quest: yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
+                quests.add(quest.replace("{prefix}", messages.get("Prefix")));
+            }
+            if (quests.isEmpty()) {
+                quests.add("Formatter:" + yamlChallenge.getString(challengeName + ".Strings.StringFormatter"));
+            }
+            boolean keepInventory = yamlChallenge.getBoolean(challengeName + ".KeepInventory");
+            boolean deathInLand = yamlChallenge.getBoolean(challengeName + ".DeathInLand");
+            String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge");
+            Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
+                    title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
+                    multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
+                    pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
+                    challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds, itemChallenge);
+            challengesEvent.put(challengeName, challenge);
+        }
+
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         database = file.getString("Configuration.Database");
         resetPointsAtNewChallenge = file.getBoolean("Configuration.ResetPointsAtNewChallenge");
@@ -171,6 +282,46 @@ public class ConfigGestion {
         ArrayList<String> lore = new ArrayList<>(file.getStringList("Configuration.CollectionChallengeItem.Lore"));
         chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
         pointsResume = file.getBoolean("Configuration.PointsResume");
+
+        for (String nameInterface : file.getConfigurationSection("Interfaces").getKeys(false)) {
+            String title = file.getString("Interfaces." + nameInterface + ".Title");
+            String openSound = file.getString("Interfaces." + nameInterface + ".OpenSound");
+            ArrayList<String> slots = new ArrayList<String>();
+            ArrayList<String> contaSlots = new ArrayList<String>();
+
+            HashMap<String, ItemConfig> itemsConfig = new HashMap<String, ItemConfig>();
+            for (String nameItem : file.getConfigurationSection("Interfaces." + nameInterface + ".Items").getKeys(false)) {
+                String letter = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Letter");
+                String type = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                String name = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Name");
+                String texture = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Texture");
+                String soundClick = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".SoundClick");
+                ArrayList<String> loreItem = new ArrayList<String>(file.getStringList("Interfaces." + nameInterface + ".Items." + nameItem + ".Lore"));
+                ItemConfig item = new ItemConfig(nameItem, name, type, texture, loreItem, soundClick);
+                itemsConfig.put(letter, item);
+            }
+
+            file.getStringList("Interfaces." + nameInterface + ".Slots").forEach(value -> {
+                for (int i = 0; i < value.length(); i++) {
+                    for (Map.Entry<String, ItemConfig> itemConfig : itemsConfig.entrySet()) {
+                        if (itemConfig.getKey().equalsIgnoreCase(value.charAt(i) + "") && itemConfig.getValue().getNameItemConfig().equalsIgnoreCase("Challenge")) {
+                            contaSlots.add("" + value.charAt(i));
+                        }
+                    }
+                    slots.add("" + value.charAt(i));
+                }
+            });
+            Interface customInterface;
+            /*if (nameInterface.equalsIgnoreCase("CustomUpgradeCategories")) {
+                customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
+                        contaSlots.size(), nameInterface, "", "Generator");
+            } else {*/
+                customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
+                        contaSlots.size(), nameInterface, "", "");
+            //}
+            interfaces.put(nameInterface, customInterface);
+        }
+
     }
 
     public void loadCommentedConfiguration() {
@@ -354,5 +505,21 @@ public class ConfigGestion {
 
     public void setControlIfChallengeExist(ArrayList<String> controlIfChallengeExist) {
         this.controlIfChallengeExist = controlIfChallengeExist;
+    }
+
+    public HashMap<String, Interface> getInterfaces() {
+        return interfaces;
+    }
+
+    public void setInterfaces(HashMap<String, Interface> interfaces) {
+        this.interfaces = interfaces;
+    }
+
+    public HashMap<String, Challenge> getChallengesEvent() {
+        return challengesEvent;
+    }
+
+    public void setChallengesEvent(HashMap<String, Challenge> challengesEvent) {
+        this.challengesEvent = challengesEvent;
     }
 }

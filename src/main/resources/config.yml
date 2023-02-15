@@ -62,10 +62,64 @@ Configuration:
     Enabled: true
     NumberOfFilesInFolder: 4
 
+Interfaces:
+  Challenges:
+    Title: "&aChallenges"
+    OpenSound: ENTITY_ENDER_DRAGON_FLAP # ENDERDRAGON_WINGS <1.13
+    Slots:
+      - 'bbbbbbbbb'
+      - 'bhhhhhhhb'
+      - 'bhhhhhhhb'
+      - 'bhhhhhhhb'
+      - 'bhhhhhhhb'
+      - 'bbblbrbbb'
+    Items:
+      Challenge:
+        Letter: 'h'
+        Name: '&a{challengeName}'
+        Type: 'PLAYER_HEAD'
+        Texture: '' # set to '' to disable
+        Lore:
+          - '&7&oTime Duration: &f{time}'
+          - '&7&oDescription: &f{challengeDescription}'
+          - '&7&oPoints: &f{challengePoint}'
+          - '&7&oWords: {words}.&f * {word}'
+          - '&7&oRewards: {rewards}.&f * {reward} x {number}'
+          - '&7&oBlocks: {challengeBlocks}.&f * {block}'
+          - '&7&oItems in hand: {challengeItemsInHand}.&f * {item}'
+          - '&7&oSneaking: &f{challengeSneaking}'
+          - '&7&oBlocks On Place: {challengeBlocksOnPlane}.&f * {block}'
+          - '&7&oVehicles: {challengeVehicles}.&f * {vehicle}'
+          - '&7&oMobs: {challengeMobs}.&f * {mob}'
+          - '&7&oItems: {challengeItems}.&f * {item}'
+          - '&7&oCauses: {challengeCauses}.&f * {cause}'
+          - '&7&oColors: {challengeColors}.&f * {color}'
+        SoundClick: ''
+      Border:
+        Letter: 'b'
+        Name: " "
+        Type: GRAY_STAINED_GLASS_PANE # STAINED_GLASS_PANE;7 <1.13
+        Texture: '' # set to '' to disable
+        Lore: [ ]
+        SoundClick: ''
+      LeftPage:
+        Letter: 'l'
+        Type: 'PLAYER_HEAD'
+        Name: '&6&lPage {number}'
+        Texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWVkNzg4MjI1NzYzMTdiMDQ4ZWVhOTIyMjdjZDg1ZjdhZmNjNDQxNDhkY2I4MzI3MzNiYWNjYjhlYjU2ZmExIn19fQ=='
+        SoundClick: ''
+        Lore: [ ]
+      RightPage:
+        Letter: 'r'
+        Type: 'PLAYER_HEAD'
+        Name: '&6&lPage {number}'
+        Texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzE1NDQ1ZGExNmZhYjY3ZmNkODI3ZjcxYmFlOWMxZDJmOTBjNzNlYjJjMWJkMWVmOGQ4Mzk2Y2Q4ZTgifX19'
+        SoundClick: ''
+        Lore: [ ]
 
 # Messages
 Messages:
-  Prefix: '&eVanillaChallenges  &r'
+  Prefix: '&eVanillaChallenges &r'
   Commands:
     Footer: '&7(&7&l(&c&l!&7&l)&7) &9[] optional value, <> required'
     Reload: '   &e/vc &6<reload> &7command reload Plugin'
@@ -76,11 +130,15 @@ Messages:
     Challenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
     Economy: '   &e/vc &6<add|remove> <playername> <points> &7for add or remove points of a player'
     Reward: '   &e/vc &6<reward> &7for receive reward of win'
+    List: '   &e/vc &6<list> &7for see the list of Challenges'
+    Event: '   &e/vc &6<event> <stop|challenge> &7for start a challenge event'
   Errors:
     YouAreNotAPlayer: '{prefix}&cYou are not a player'
     CommandNotFound: '{prefix}&cCommand not found'
     NoPerms: '{prefix}&cInsufficient permission'
     AlreadyPlacedChest: '{prefix}&7You already placed a chest for Collection Item Challenge'
+    AlreadyStartEvent: '{prefix}&cYou already start a Challenge Event! If you want stop it write vc <event> <stop>'
+    AlreadyStopEvent: '{prefix}&cYou already stopped the Challenge Event! If you want start a new Challenge write vc <event> <challenge>'
   PointsInfo: '{prefix}&e{player} &7have &b{number}&7 points'
   ActuallyInTop: '{prefix}&7Actually in top there are:'
   TopPlayers:
@@ -97,10 +155,14 @@ Messages:
   CorrectAnswer: '{prefix}&e{player} &7write the correct answer!'
   PointsAdd: '{prefix}&b{points} &7points added at &e{player}'
   PointsRemove: '{prefix}&b{points} &7points removed at &e{player}'
+  ChallengeList: '{prefix}&bList of Challenges:{challengeList}'
+  ChallengeofList: '&b{challenge}'
 
 Debug:
   # Commands debug
   Commands: false
+  # Click Gui of Interfaces debug
+  ClickGui: false
   # Block Place Event debug
   BlockPlaceEvent: false
   # Block Break Event debug
