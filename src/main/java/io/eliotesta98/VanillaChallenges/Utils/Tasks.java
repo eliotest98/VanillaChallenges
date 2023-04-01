@@ -173,7 +173,7 @@ public class Tasks {
                             Main.db.clearChallengers();
                             Main.dailyChallenge.clearPlayers();
                         }
-                        ReloadUtil.reload();
+                        ReloadUtils.reload();
                     });
                 } else {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> Main.db.updateChallenge(Main.dailyChallenge.getChallengeName(), Main.dailyChallenge.getTimeChallenge()));

@@ -108,64 +108,61 @@ public class Main extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         config = new ConfigGestion(YamlConfiguration.loadConfiguration(configFile));
         //loads challenges files
         config.loadCommentedConfiguration();
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
-        getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-            public void run() {
-                if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                    if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
-                        Main.EPAPI = new ExpansionPlaceholderAPI().getInstance();
-                        Main.EPAPI.register();
-                        Bukkit.getServer().getConsoleSender().sendMessage(
-                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fPlaceholderApi&a!"));
-                    }
-                } else {
-                    getConfigGestion().getHooks().replace("PlaceholderAPI", false);
+        getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+            if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
+                    Main.EPAPI = new ExpansionPlaceholderAPI().getInstance();
+                    Main.EPAPI.register();
+                    Bukkit.getServer().getConsoleSender().sendMessage(
+                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fPlaceholderApi&a!"));
                 }
-                if (Bukkit.getServer().getPluginManager().isPluginEnabled("CubeGenerator")) {
-                    if (getConfigGestion().getHooks().get("CubeGenerator")) {
-                        Bukkit.getServer().getConsoleSender().sendMessage(
-                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fCubeGenerator&a!"));
-                    }
-                } else {
-                    getConfigGestion().getHooks().replace("CubeGenerator", false);
+            } else {
+                getConfigGestion().getHooks().replace("PlaceholderAPI", false);
+            }
+            if (Bukkit.getServer().getPluginManager().isPluginEnabled("CubeGenerator")) {
+                if (getConfigGestion().getHooks().get("CubeGenerator")) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(
+                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fCubeGenerator&a!"));
                 }
-                if (Bukkit.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
-                    if (getConfigGestion().getHooks().get("GriefPrevention")) {
-                        Bukkit.getServer().getConsoleSender().sendMessage(
-                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fGriefPrevention&a!"));
-                    }
-                } else {
-                    getConfigGestion().getHooks().replace("GriefPrevention", false);
+            } else {
+                getConfigGestion().getHooks().replace("CubeGenerator", false);
+            }
+            if (Bukkit.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
+                if (getConfigGestion().getHooks().get("GriefPrevention")) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(
+                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fGriefPrevention&a!"));
                 }
-                /*if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
-                    if (getConfigGestion().getHooks().get("Tombs")) {
-                        Bukkit.getServer().getConsoleSender().sendMessage(
-                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fTombs&a!"));
-                    }
-                } else {
-                    getConfigGestion().getHooks().replace("Tombs", false);
-                }*/
-                if (Bukkit.getServer().getPluginManager().isPluginEnabled("Lands")) {
-                    if (getConfigGestion().getHooks().get("Lands")) {
-                        Bukkit.getServer().getConsoleSender().sendMessage(
-                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
-                        landsIntegration = new LandsIntegration(instance);
-                    }
-                } else {
-                    getConfigGestion().getHooks().replace("Lands", false);
+            } else {
+                getConfigGestion().getHooks().replace("GriefPrevention", false);
+            }
+            /*if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
+                if (getConfigGestion().getHooks().get("Tombs")) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(
+                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fTombs&a!"));
                 }
-                if (Bukkit.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
-                    if (getConfigGestion().getHooks().get("WorldGuard")) {
-                        Bukkit.getServer().getConsoleSender().sendMessage(
-                                ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fWorldGuard&a!"));
-                    }
-                } else {
-                    getConfigGestion().getHooks().replace("WorldGuard", false);
+            } else {
+                getConfigGestion().getHooks().replace("Tombs", false);
+            }*/
+            if (Bukkit.getServer().getPluginManager().isPluginEnabled("Lands")) {
+                if (getConfigGestion().getHooks().get("Lands")) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(
+                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
+                    landsIntegration = new LandsIntegration(instance);
                 }
+            } else {
+                getConfigGestion().getHooks().replace("Lands", false);
+            }
+            if (Bukkit.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+                if (getConfigGestion().getHooks().get("WorldGuard")) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(
+                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fWorldGuard&a!"));
+                }
+            } else {
+                getConfigGestion().getHooks().replace("WorldGuard", false);
             }
         });
         getServer().getConsoleSender().sendMessage("§aConfiguration Loaded!");
