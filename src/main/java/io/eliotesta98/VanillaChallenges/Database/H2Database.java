@@ -15,7 +15,7 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
-import io.eliotesta98.VanillaChallenges.Utils.ReloadUtil;
+import io.eliotesta98.VanillaChallenges.Utils.ReloadUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -148,7 +148,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -165,7 +165,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -183,7 +183,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -200,7 +200,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -218,14 +218,14 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
     @Override
     public void saveTopYesterday(ArrayList<Challenger> newTopYesterday) {
         for (int i = 0; i < newTopYesterday.size(); i++) {
-            insertChallengerTopYesterday(newTopYesterday.get(0).getNomePlayer(), newTopYesterday.get(0).getPoints());
+            insertChallengerTopYesterday(newTopYesterday.get(i).getNomePlayer(), newTopYesterday.get(i).getPoints());
         }
     }
 
@@ -256,7 +256,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
         return dailyWinners;
     }
@@ -275,7 +275,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -288,7 +288,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -321,7 +321,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
         return challengeDBS;
     }
@@ -335,7 +335,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -354,7 +354,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
         clearChallengesFromFile();
     }
@@ -373,7 +373,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -430,7 +430,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -449,7 +449,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
         return points;
     }
@@ -466,7 +466,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
         return false;
     }
@@ -479,7 +479,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -496,7 +496,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -514,7 +514,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -527,7 +527,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 
@@ -547,7 +547,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
         return points;
     }
@@ -565,7 +565,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtil.reload();
+            ReloadUtils.reload();
         }
     }
 

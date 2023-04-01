@@ -14,7 +14,6 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -126,7 +125,7 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.deleteChallengeWithName(Main.db.getAllChallenges().get(0).getChallengeName());
                             Main.db.resumeOldPoints();
-                            ReloadUtil.reload();
+                            ReloadUtils.reload();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -144,7 +143,7 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(args[1]);
                             Main.db.saveOldPointsForChallengeEvents();
-                            ReloadUtil.reload();
+                            ReloadUtils.reload();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -205,7 +204,7 @@ public class Commands implements CommandExecutor {
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                         Main.db.clearAll();
-                        ReloadUtil.reload();
+                        ReloadUtils.reload();
                     });
                 } else if (args[0].equalsIgnoreCase("next")) {
                     if (args.length != 1) {
@@ -252,7 +251,7 @@ public class Commands implements CommandExecutor {
                             Main.db.clearChallengers();
                             Main.dailyChallenge.clearPlayers();
                         }
-                        ReloadUtil.reload();
+                        ReloadUtils.reload();
                     });
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -306,7 +305,7 @@ public class Commands implements CommandExecutor {
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                         sender.sendMessage(ColorUtils.applyColor("&6Reloading..."));
-                        ReloadUtil.reload();
+                        ReloadUtils.reload();
                         sender.sendMessage(ColorUtils.applyColor("&aReloaded!"));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -472,7 +471,7 @@ public class Commands implements CommandExecutor {
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                         Main.db.clearAll();
-                        ReloadUtil.reload();
+                        ReloadUtils.reload();
                     });
                 } else if (args[0].equalsIgnoreCase("list")) {
                     if (!p.hasPermission("vc.list.command")) {
@@ -555,7 +554,7 @@ public class Commands implements CommandExecutor {
                             Main.db.clearChallengers();
                             Main.dailyChallenge.clearPlayers();
                         }
-                        ReloadUtil.reload();
+                        ReloadUtils.reload();
                     });
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -673,7 +672,7 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.deleteChallengeWithName(Main.db.getAllChallenges().get(0).getChallengeName());
                             Main.db.resumeOldPoints();
-                            ReloadUtil.reload();
+                            ReloadUtils.reload();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -699,7 +698,7 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(args[1]);
                             Main.db.saveOldPointsForChallengeEvents();
-                            ReloadUtil.reload();
+                            ReloadUtils.reload();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -859,7 +858,7 @@ public class Commands implements CommandExecutor {
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                         sender.sendMessage(ColorUtils.applyColor("&6Reloading..."));
-                        ReloadUtil.reload();
+                        ReloadUtils.reload();
                         sender.sendMessage(ColorUtils.applyColor("&aReloaded!"));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
