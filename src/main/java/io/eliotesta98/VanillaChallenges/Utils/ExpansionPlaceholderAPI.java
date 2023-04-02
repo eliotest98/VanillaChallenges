@@ -120,9 +120,9 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         if (identifier.equalsIgnoreCase("dailychallenge_boost_points_remain")) {
             if (!Main.dailyChallenge.isActive()) {
                 long pointsRemain = Main.dailyChallenge.getPointsBoost() - Main.dailyChallenge.getCountPointsChallenge();
-                return pointsRemain + "";
+                return MoneyUtils.transform(pointsRemain) + "";
             } else {
-                return Main.dailyChallenge.getPointsBoost() + "";
+                return MoneyUtils.transform(Main.dailyChallenge.getPointsBoost()) + "";
             }
         }
         // %vanillachallenges_dailychallenge_boost_multiplier_single_player%
@@ -140,10 +140,10 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
                     long pointsRemain = Main.dailyChallenge.getBoostSinglePlayers().get(p.getName());
                     return pointsRemain + "";
                 } else {
-                    return Main.dailyChallenge.getPointsBoostSinglePlayer() + "";
+                    return MoneyUtils.transform(Main.dailyChallenge.getPointsBoostSinglePlayer()) + "";
                 }
             } else {
-                return Main.dailyChallenge.getPointsBoostSinglePlayer() + "";
+                return MoneyUtils.transform(Main.dailyChallenge.getPointsBoostSinglePlayer()) + "";
             }
         }
         return "Placeholder Not Found";

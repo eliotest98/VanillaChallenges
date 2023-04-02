@@ -43,7 +43,12 @@ public class BlockBreakEvent implements Listener {
     public void onBlockPlace(final org.bukkit.event.block.BlockBreakEvent e) {
         long tempo = System.currentTimeMillis();
         final String blockBreaking = e.getBlock().getType().toString();
-        final ItemStack itemInMainHand = e.getPlayer().getInventory().getItemInMainHand();
+        final ItemStack itemInMainHand;
+        if(Main.version113) {
+            itemInMainHand = e.getPlayer().getInventory().getItemInMainHand();
+        } else {
+            itemInMainHand = e.getPlayer().getInventory().getItemInHand();
+        }
         final Player player = e.getPlayer();
         final boolean sneakingPlayer = e.getPlayer().isSneaking();
         final Location location = e.getPlayer().getLocation();

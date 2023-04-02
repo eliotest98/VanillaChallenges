@@ -109,7 +109,26 @@ public class GuiEvent implements Listener {
                 String nameItemConfig = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getNameItemConfig();
                 String interfaceToOpen = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getNameInterfaceToOpen();
                 if (typeInterface.equalsIgnoreCase("Challenges")) {
-                    if (Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getType().equalsIgnoreCase(inventoryClickEvent.getCurrentItem().getType().toString())) {
+                    String currentItem = inventoryClickEvent.getCurrentItem().getType().toString();
+                    short durability = inventoryClickEvent.getCurrentItem().getDurability();
+                    String configItem = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getType();
+                    if (debugGui) {
+                        debug.addLine("Config Item=" + configItem);
+                        debug.addLine("Current Item=" + currentItem);
+                        if (durability != 0) {
+                            debug.addLine("Current Item Durability=" + durability);
+                        }
+                        debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
+                        debug.debug("Gui");
+                    }
+                    boolean isItem113 = false;
+                    if (!Main.version113) {
+                        if (configItem.equalsIgnoreCase(currentItem) ||
+                                configItem.equalsIgnoreCase(currentItem + "-" + durability)) {
+                            isItem113 = true;
+                        }
+                    }
+                    if (isItem113 || Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getType().equalsIgnoreCase(inventoryClickEvent.getCurrentItem().getType().toString())) {
                         if (nameItemConfig.equalsIgnoreCase("LeftPage")) {
                             player.closeInventory();
                             ArrayList<Challenge> challenges = new ArrayList<>();
@@ -136,6 +155,12 @@ public class GuiEvent implements Listener {
                             }
                             // apro l'interfaccia
                             Main.instance.getConfigGestion().getInterfaces().get(typeInterface).openInterface(challenges, player, pageNumber);
+                            if (debugGui) {
+                                debug.addLine("Left Page");
+                                debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Gui");
+                            }
+                            return;
                         } else if (nameItemConfig.equalsIgnoreCase("RightPage")) {
                             player.closeInventory();
                             ArrayList<Challenge> challenges = new ArrayList<>();
@@ -150,9 +175,25 @@ public class GuiEvent implements Listener {
                                 count++;
                             }
                             Main.instance.getConfigGestion().getInterfaces().get(typeInterface).openInterface(challenges, player, pageNumber);
+                            if (debugGui) {
+                                debug.addLine("Right Page");
+                                debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Gui");
+                            }
+                            return;
                         }
                     }
                 }
+                if (debugGui) {
+                    debug.addLine("Challenges List");
+                    debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
+                    debug.debug("Gui");
+                }
+                return;
+            }
+            if (debugGui) {
+                debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
+                debug.debug("Gui");
             }
         }
     }

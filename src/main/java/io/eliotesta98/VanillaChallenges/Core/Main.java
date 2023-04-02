@@ -27,6 +27,7 @@ public class Main extends JavaPlugin {
     public static Database db;
     public static LandsIntegration landsIntegration;
     public static boolean challengeSelected = true;
+    public static boolean version113 = true;
 
     public void onEnable() {
         DebugUtils debugsistem = new DebugUtils();
@@ -48,6 +49,15 @@ public class Main extends JavaPlugin {
                         + "§e© Developed by §feliotesta98 & xSavior_of_God §ewith §4<3 \r\n \r\n \r\n");
 
         SoundManager = new SoundManager();
+
+        if (getServer().getVersion().contains("1.8") || getServer().getVersion().contains("1.9") ||
+                getServer().getVersion().contains("1.10") || getServer().getVersion().contains("1.11") ||
+                getServer().getVersion().contains("1.12")) {
+            version113 = false;
+            this.getServer().getConsoleSender().sendMessage("§6Server version registered < 1.13");
+        } else {
+            this.getServer().getConsoleSender().sendMessage("§6Server version registered > 1.12");
+        }
 
         this.getServer().getConsoleSender().sendMessage("§6Loading config...");
 
@@ -242,13 +252,13 @@ public class Main extends JavaPlugin {
         } else if (typeChallenge.equalsIgnoreCase("DropperChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new DropperEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("HealthChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new HealthRegenEvent(),this);
+            Bukkit.getServer().getPluginManager().registerEvents(new HealthRegenEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
             challengeSelected = false;
         }
 
-        if(challengeSelected) {
+        if (challengeSelected) {
             Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
             Bukkit.getServer().getPluginManager().registerEvents(new GuiEvent(), this);
             db.loadPlayersPoints();
@@ -283,7 +293,7 @@ public class Main extends JavaPlugin {
             } catch (Exception e) {
             }
         }
-        if(challengeSelected){
+        if (challengeSelected) {
             dailyChallenge.clearPlayers();
             //close interfaces of interfaces
             for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {

@@ -6,6 +6,7 @@ import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -105,7 +107,13 @@ public class ItemCollector implements Listener {
                     if (debugActive) {
                         debugUtils.addLine("ItemCollector location block = " + block.getLocation());
                     }
-                    e.setDropItems(false);
+                    //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
+                    if(Main.version113) {
+                        e.setDropItems(false);
+                    } else {
+                        e.setCancelled(true);
+                        block.setType(Material.AIR);
+                    }
                     chestLocation.replace(e.getPlayer().getName(), loc, new Location(Bukkit.getWorld("world"), 0, -100, 0));
                     e.getPlayer().getInventory().addItem(Main.instance.getConfigGestion().getChestCollection());
                 }
@@ -145,7 +153,7 @@ public class ItemCollector implements Listener {
                                             debugUtils.addLine("ItemCollector Amount Item = " + amount);
                                         }
 
-                                        if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                                        if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                                             if (debugActive) {
                                                 debugUtils.addLine("ItemCollector WorldsConfig= " + worldsEnabled);
                                                 debugUtils.addLine("ItemCollector PlayerWorld= " + worldName);
@@ -157,11 +165,21 @@ public class ItemCollector implements Listener {
 
                                         if (items.isEmpty()) {
                                             Main.dailyChallenge.increment(player.getName(), (long) point * amount);
-                                            itemInv.setAmount(0);
+                                            //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
+                                            if (Main.version113) {
+                                                itemInv.setAmount(0);
+                                            } else {
+                                                chest.getInventory().removeItem(itemInv);
+                                            }
                                         } else {
                                             if (items.contains(itemInv.getType().toString())) {
                                                 Main.dailyChallenge.increment(player.getName(), (long) point * amount);
-                                                itemInv.setAmount(0);
+                                                //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
+                                                if (Main.version113) {
+                                                    itemInv.setAmount(0);
+                                                } else {
+                                                    chest.getInventory().removeItem(itemInv);
+                                                }
                                             }
                                         }
                                     }

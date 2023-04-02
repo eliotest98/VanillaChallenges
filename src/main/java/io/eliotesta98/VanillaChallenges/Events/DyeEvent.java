@@ -40,7 +40,12 @@ public class DyeEvent implements Listener {
         Location playerLocation = e.getEntity().getLocation();
         boolean sneakingPlayer = e.getEntity().isSneaking();
         final PlayerInventory inventory = e.getEntity().getInventory();
-        String itemInHandPlayer = e.getEntity().getInventory().getItemInMainHand().getType().toString();
+        String itemInHandPlayer;
+        if(Main.version113) {
+            itemInHandPlayer = e.getEntity().getInventory().getItemInMainHand().getType().toString();
+        } else {
+            itemInHandPlayer = e.getEntity().getInventory().getItemInHand().toString();
+        }
         if (keepInventory) {
             e.setKeepInventory(true);
         }

@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class Commands implements CommandExecutor {
@@ -103,8 +104,7 @@ public class Commands implements CommandExecutor {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                         debug.debug("Commands");
                     }
-                }
-                else if (args[0].equalsIgnoreCase("event")) {
+                } else if (args[0].equalsIgnoreCase("event")) {
                     if (args.length != 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEvent));
                         if (debugCommand) {
@@ -114,7 +114,7 @@ public class Commands implements CommandExecutor {
                         return;
                     }
                     if (args[1].equalsIgnoreCase("stop")) {
-                        if(!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -132,7 +132,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                     } else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
-                        if(Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -160,8 +160,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                     }
-                }
-                else if (args[0].equalsIgnoreCase("remove")) {
+                } else if (args[0].equalsIgnoreCase("remove")) {
                     if (args.length == 1 || args.length == 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
                         if (debugCommand) {
@@ -215,7 +214,7 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    if(Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                    if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                         sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -518,7 +517,7 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    if(Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                    if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                         sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -642,8 +641,7 @@ public class Commands implements CommandExecutor {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                         debug.debug("Commands");
                     }
-                }
-                else if (args[0].equalsIgnoreCase("event")) {
+                } else if (args[0].equalsIgnoreCase("event")) {
                     if (args.length != 2) {
                         p.sendMessage(ColorUtils.applyColor(commandVcEvent));
                         if (debugCommand) {
@@ -653,7 +651,7 @@ public class Commands implements CommandExecutor {
                         return;
                     }
                     if (args[1].equalsIgnoreCase("stop")) {
-                        if(!p.hasPermission("vc.event.stop.command")) {
+                        if (!p.hasPermission("vc.event.stop.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -661,7 +659,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        if(!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                             p.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -679,7 +677,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                     } else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
-                        if(!p.hasPermission("vc.event.start.command")) {
+                        if (!p.hasPermission("vc.event.start.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -687,7 +685,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        if(Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                             p.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -705,7 +703,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                     } else {
-                        if(!p.hasPermission("vc.event.start.command") || !p.hasPermission("vc.event.stop.command")) {
+                        if (!p.hasPermission("vc.event.start.command") || !p.hasPermission("vc.event.stop.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -723,8 +721,7 @@ public class Commands implements CommandExecutor {
                             debug.debug("Commands");
                         }
                     }
-                }
-                else if (args[0].equalsIgnoreCase("reward")) {
+                } else if (args[0].equalsIgnoreCase("reward")) {
                     // controllo se ha il permesso
                     if (!p.hasPermission("vc.reward.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -764,11 +761,19 @@ public class Commands implements CommandExecutor {
                                 if (p.getInventory().firstEmpty() != -1
                                         && give
                                         && !reward[0].equalsIgnoreCase("[command]")) {
-                                    ItemStack item = new ItemStack(Material.getMaterial(reward[0]));
+                                    ItemStack item = null;
+                                    if (reward[0].contains("-")) {
+                                        String[] splitItem = reward[0].split("-");
+                                        item = new ItemStack(Material.getMaterial(splitItem[0]), 1, Short.parseShort(splitItem[1]));
+                                        p.sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", reward[1]).replace("{item}", splitItem[0] + "-" + splitItem[1])));
+                                    } else {
+                                        item = new ItemStack(Material.getMaterial(reward[0]));
+                                        p.sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0])));
+                                    }
                                     item.setAmount(Integer.parseInt(reward[1]));
-                                    p.sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0])));
+                                    ItemStack finalItem = item;
                                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                                        p.getInventory().addItem(item);
+                                        p.getInventory().addItem(finalItem);
                                         Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
                                         winners.remove(number);
                                     });
@@ -802,8 +807,7 @@ public class Commands implements CommandExecutor {
                             }
                         }
                     }
-                }
-                else if (args[0].equalsIgnoreCase("top")) {
+                } else if (args[0].equalsIgnoreCase("top")) {
                     // controllo se ha il permesso
                     if (!p.hasPermission("vc.top.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
