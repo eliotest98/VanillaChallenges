@@ -1,0 +1,54 @@
+Cooker:
+  TypeChallenge: 'CookerChallenge'
+  # if you want to enable or disable challenge
+  Enabled: true
+  # Time settings
+  TimeSettings:
+    # What time do you want the challenge to start?
+    Start: '5:00'
+    # How long do you want the challenge to last in hours ?
+    Time: 24
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Items you want cook for challenge, if you want all items set []
+  Items: []
+  # How many points you want give at cook?
+  Point: 1
+  # if you want a multiplier based on all players
+  Boost:
+    Enabled: false
+    #Number you want reached for give the multiplier
+    Points: 10000
+    # Multiplier you want give when reached the number
+    Multiplier: 2
+    # For how many minutes you want give the multiplier?
+    Minutes: 10
+  # if you want a multiplier based on a single player
+  BoostPlayer:
+    Enabled: false
+    # Number you want reached for give the multiplier
+    Points: 5000
+    # Multiplier you want give when reached the number
+    Multiplier: 4
+    # For how many minutes you want give the multiplier?
+    Minutes: 2
+  # Name of Challenge
+  NameChallenge: "&7Cooker Challenge"
+  # item representing challenge
+  ItemChallenge: 'COOKED_BEEF'
+  # Title challenge
+  Title:
+    - '&8'
+    - '&8oo&booo&8oooo&bo'
+    - '&8o&boo&8oooo&booo               &7Cooker Challenge'
+    - '&boo&6o&8ooo&booo&8o'
+    - '&bo&8oo&6o&8o&booo&8oo       &7Cook any item for receive 1 point'
+    - '&bo&8ooo&6oo&bo&8ooo    &7{hours} hours to the end of the challenge'
+    - '&8oooo&6oo&8oooo'
+    - '&8ooo&6o&8oo&6o&8ooo'
+    - '&8oo&6o&8oooo&6o&8oo'
+    - '&8'
+  # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
+  Rewards:
+    - 'DRAGON_EGG:1'
