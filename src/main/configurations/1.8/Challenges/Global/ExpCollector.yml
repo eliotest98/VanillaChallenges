@@ -41,14 +41,14 @@ ExpCollector:
   # Title challenge
   Title:
     - '&8'
-    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Collect Exp Challenge'
-    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉     &7Collect experience for receive 1 point'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉      &7(1 point for 1 experience not level)'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
-    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8oo&booo&8oooo&bo'
+    - '&8o&boo&8oooo&booo               &7Collect Exp Challenge'
+    - '&boo&6o&8ooo&booo&8o'
+    - '&bo&8oo&6o&8o&booo&8oo     &7Collect experience for receive 1 point'
+    - '&bo&8ooo&6oo&bo&8ooo      &7(1 point for 1 experience not level)'
+    - '&8oooo&6oo&8oooo     &7{hours} hours to the end of the challenge'
+    - '&8ooo&6o&8oo&6o&8ooo'
+    - '&8oo&6o&8oooo&6o&8oo'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1

@@ -39,14 +39,14 @@ ItemCollector:
   # Title challenge
   Title:
     - '&8'
-    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉        &7Item Collection Challenge'
-    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉  &7Collect items in a chest for receive points'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉               &7(1 point at item)'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉   &cAttention!&7 you lose all items in the chest'
-    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉     &7{hours} hours to the end of the challenge'
-    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8oo&booo&8oooo&bo'
+    - '&8o&boo&8oooo&booo        &7Item Collection Challenge'
+    - '&boo&6o&8ooo&booo&8o'
+    - '&bo&8oo&6o&8o&booo&8oo  &7Collect items in a chest for receive points'
+    - '&bo&8ooo&6oo&bo&8ooo               &7(1 point at item)'
+    - '&8oooo&6oo&8oooo   &cAttention!&7 you lose all items in the chest'
+    - '&8ooo&6o&8oo&6o&8ooo     &7{hours} hours to the end of the challenge'
+    - '&8oo&6o&8oooo&6o&8oo'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1
