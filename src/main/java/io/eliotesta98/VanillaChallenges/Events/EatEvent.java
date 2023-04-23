@@ -26,16 +26,22 @@ public class EatEvent implements Listener {
         final String playerName = e.getEntity().getName();
         final String worldName = e.getEntity().getWorld().getName();
         final int foodLevel = e.getFoodLevel();
-        final ItemStack itemUsedByPlayer = e.getItem();
+        ItemStack itemUsedByPlayer;
+        if(Main.version113) {
+            itemUsedByPlayer = e.getItem();
+        } else {
+            itemUsedByPlayer = e.getEntity().getInventory().getItemInHand();
+        }
+        ItemStack finalItemUsedByPlayer = itemUsedByPlayer;
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("EatEvent PlayerEating= " + playerName);
             }
             if (foodLevels.get(playerName) == null) {
                 foodLevels.put(playerName, Math.min(foodLevel, 20));
-                Main.dailyChallenge.increment(playerName, point);
+                Main.dailyChallenge.increment(playerName, Math.abs(point));
             } else {
-                if (itemUsedByPlayer != null) {
+                if (finalItemUsedByPlayer != null) {
                     int number = foodLevel - foodLevels.get(playerName);
                     foodLevels.remove(playerName);
                     foodLevels.put(playerName, Math.min(foodLevel, 20));
@@ -50,20 +56,20 @@ public class EatEvent implements Listener {
                         return;
                     }
 
-                    if(!items.isEmpty() && !items.contains(itemUsedByPlayer.getType().toString())) {
+                    if(!items.isEmpty() && !items.contains(finalItemUsedByPlayer.getType().toString())) {
                         if (debugActive) {
-                            debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + itemUsedByPlayer);
+                            debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + finalItemUsedByPlayer);
                             debugUtils.addLine("EatEvent ItemConsumedConfig= " + items);
                             debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
                             debugUtils.debug("EatEvent");
                         }
                         return;
                     }
-                    Main.dailyChallenge.increment(playerName, (long) number * point);
+                    Main.dailyChallenge.increment(playerName, (long) number * Math.abs(point));
                 } else {
                     foodLevels.remove(playerName);
                     foodLevels.put(playerName, foodLevel);
-                    Main.dailyChallenge.increment(playerName, point);
+                    Main.dailyChallenge.increment(playerName, Math.abs(point));
                 }
             }
             if (debugActive) {

@@ -4,7 +4,6 @@ import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.*;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -22,9 +21,10 @@ public class ConfigGestion {
     private HashMap<String, Challenge> challengesEvent = new HashMap<>();
     private HashMap<String, Boolean> hooks = new HashMap<>();
     private HashMap<String,Interface> interfaces = new HashMap<>();
-    private boolean activeOnlinePoints, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration, pointsResume;
+    private boolean activeOnlinePoints, rankingReward, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration, pointsResume;
     private String database;
-    private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number, time;
+    private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
+            time, numberOfTop;
     private ItemStack chestCollection;
     private Tasks tasks = new Tasks();
     private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
@@ -41,10 +41,8 @@ public class ConfigGestion {
             } else if (message.equalsIgnoreCase("Prefix")) {
                 messages.put(message, file.getString("Messages." + message));
             } else if (message.equalsIgnoreCase("TopPlayers")) {
-                ArrayList<String> mexs = new ArrayList<>();
-                file.getStringList("Messages.TopPlayers").forEach(value -> {
-                    mexs.add(value);
-                });
+                ArrayList<String> mexs = new ArrayList<>(file.getStringList("Messages.TopPlayers"));
+                numberOfTop = mexs.size();
                 int i = 1;
                 while (!mexs.isEmpty()) {
                     messages.put("topPlayers" + i, mexs.get(0));
@@ -275,6 +273,7 @@ public class ConfigGestion {
         resetPointsAtNewChallenge = file.getBoolean("Configuration.ResetPointsAtNewChallenge");
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
+        rankingReward = file.getBoolean("Configuration.Top.RankingReward");
         backupEnabled = file.getBoolean("Configuration.Backup.Enabled");
         randomChallengeGeneration = file.getBoolean("Configuration.RandomChallengeGeneration");
         numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
@@ -522,5 +521,21 @@ public class ConfigGestion {
 
     public void setChallengesEvent(HashMap<String, Challenge> challengesEvent) {
         this.challengesEvent = challengesEvent;
+    }
+
+    public boolean isRankingReward() {
+        return rankingReward;
+    }
+
+    public void setRankingReward(boolean rankingReward) {
+        this.rankingReward = rankingReward;
+    }
+
+    public int getNumberOfTop() {
+        return numberOfTop;
+    }
+
+    public void setNumberOfTop(int numberOfTop) {
+        this.numberOfTop = numberOfTop;
     }
 }

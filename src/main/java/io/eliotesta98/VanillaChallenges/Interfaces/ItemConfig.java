@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -33,18 +34,18 @@ public class ItemConfig {
         ItemStack item;
         if (nbt.split(";").length >= 17) {
             String type = nbt.split(";")[16].split(":")[1];
-            if (!type.contains(";"))// controllo la versione per settare l'item
+            if (!type.contains("-"))// controllo la versione per settare l'item
                 item = new ItemStack(Material.getMaterial(type));
             else {
-                String[] x = type.split(";");
-                item = new ItemStack(Material.getMaterial((String) x[0]), 1, Short.parseShort(x[1]));
+                String[] x = type.split("-");
+                item = new ItemStack(Material.getMaterial(x[0]), 1, Short.parseShort(x[1]));
             }
         } else {
-            if (!type.contains(";"))// controllo la versione per settare l'item
+            if (!type.contains("-"))// controllo la versione per settare l'item
                 item = new ItemStack(Material.getMaterial(type));
             else {
-                String[] x = type.split(";");
-                item = new ItemStack(Material.getMaterial((String) x[0]), 1, Short.parseShort(x[1]));
+                String[] x = type.split("-");
+                item = new ItemStack(Material.getMaterial(x[0]), 1, Short.parseShort(x[1]));
             }
         }
         if (type.equalsIgnoreCase("PLAYER_HEAD") || type.contains("SKULL")) {
@@ -177,13 +178,13 @@ public class ItemConfig {
                                 }
                                 if (aDescription.contains("command")) {
                                     String[] commandPart = aNumber.split(" ");
-                                    Material reward = null;
+                                    Material reward = Material.AIR;
                                     int numberRew = 0;
                                     for (String part : commandPart) {
                                         try {
                                             numberRew = Integer.parseInt(part);
                                         } catch (Exception ex) {
-                                            if (reward == null) {
+                                            if (reward == Material.AIR) {
                                                 reward = Material.getMaterial(part);
                                             }
                                         }

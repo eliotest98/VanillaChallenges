@@ -1,0 +1,56 @@
+Mover:
+  TypeChallenge: 'MoveChallenge'
+  # if you want to enable or disable challenge
+  Enabled: true
+  # Time settings
+  TimeSettings:
+    # What time do you want the challenge to start?
+    Start: '5:00'
+    # How long do you want the challenge to last in hours ?
+    Time: 24
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # How many points you want give at move?
+  Point: 1
+  # Blocks you want break for challenge, if you want all blocks set []
+  Blocks: []
+  # Items you want checked in hand ([] for all items)
+  Items: []
+  # if you want a multiplier based on all players
+  Boost:
+    Enabled: false
+    #Number you want reached for give the multiplier
+    Points: 50000
+    # Multiplier you want give when reached the number
+    Multiplier: 2
+    # For how many minutes you want give the multiplier?
+    Minutes: 10
+  # if you want a multiplier based on a single player
+  BoostPlayer:
+    Enabled: false
+    # Number you want reached for give the multiplier
+    Points: 5000
+    # Multiplier you want give when reached the number
+    Multiplier: 4
+    # For how many minutes you want give the multiplier?
+    Minutes: 2
+  # Name of Challenge
+  NameChallenge: "&7Move Challenge"
+  # item representing challenge
+  ItemChallenge: 'LEATHER_BOOTS'
+  # Title challenge
+  Title:
+    - '&8'
+    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
+    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                 &7Move Challenge'
+    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
+    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉             &7Move for recive points'
+    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
+    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
+    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
+    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8'
+  # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
+  Rewards:
+    - 'EMERALD:16'

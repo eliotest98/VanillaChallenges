@@ -39,7 +39,13 @@ public class MoveEvent implements Listener {
         final Location to = e.getTo();
         final String materialFrom = from.getBlock().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
         final String materialTo = to.getBlock().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
-        final String playerMaterialInHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
+        String playerMaterialInHand;
+        if(Main.version113) {
+            playerMaterialInHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
+        } else {
+            playerMaterialInHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
+        }
+        String finalPlayerMaterialInHand = playerMaterialInHand;
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("MoveEvent PlayerMoving= " + playerName);
@@ -55,9 +61,9 @@ public class MoveEvent implements Listener {
                 return;
             }
 
-            if (!items.isEmpty() && !items.contains(playerMaterialInHand)) {
+            if (!items.isEmpty() && !items.contains(finalPlayerMaterialInHand)) {
                 if (debugActive) {
-                    debugUtils.addLine("MoveEvent PlayerMaterialInHand= " + playerMaterialInHand);
+                    debugUtils.addLine("MoveEvent PlayerMaterialInHand= " + finalPlayerMaterialInHand);
                     debugUtils.addLine("MoveEvent ConfigMaterialInHand= " + items);
                     debugUtils.addLine("MoveEvent execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug("MoveEvent");

@@ -26,7 +26,12 @@ public class SprintEvent implements Listener {
     public void onSprint(org.bukkit.event.player.PlayerToggleSprintEvent e) {
         long tempo = System.currentTimeMillis();
         final String blockWalk = e.getPlayer().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
-        final String itemInHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
+        String itemInHand;
+        if(Main.version113) {
+            itemInHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
+        } else {
+            itemInHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
+        }
         final String worldName = e.getPlayer().getWorld().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
