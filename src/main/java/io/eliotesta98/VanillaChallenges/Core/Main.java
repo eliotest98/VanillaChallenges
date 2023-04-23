@@ -265,10 +265,12 @@ public class Main extends JavaPlugin {
             config.getTasks().checkStartDay();
             if (config.getTimeBrodcastMessageTitle() != 0) {
                 config.getTasks().broadcast(((long) config.getTimeBrodcastMessageTitle() * 60 * 20)
-                        , dailyChallenge.getTitle(), config.getMessages().get("ActuallyInTop")
+                        , dailyChallenge.getTitle(),
+                        config.getMessages().get("ActuallyInTop")
                         , config.getMessages().get("PointsEveryMinutes")
                         , config.getMessages().get("PointsRemainForBoosting")
-                        , config.getMessages().get("PointsRemainForBoostingSinglePlayer"));
+                        , config.getMessages().get("PointsRemainForBoostingSinglePlayer")
+                        , config.getNumberOfTop());
             }
             if (config.isActiveOnlinePoints()) {
                 config.getTasks().onlinePoints(config.getMinutesOnlinePoints(), config.getPointsOnlinePoints());

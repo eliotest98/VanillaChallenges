@@ -33,7 +33,9 @@ public class Tasks {
         return challengeStart;
     }
 
-    public void broadcast(long time, ArrayList<String> brodcastMessageTitle, String actuallyInTop, String pointsEveryMinutes, String pointsRemainForBoosting, String pointsRemainForBoostingSinglePlayer) {
+    public void broadcast(long time, ArrayList<String> brodcastMessageTitle,
+                          String actuallyInTop, String pointsEveryMinutes, String pointsRemainForBoosting,
+                          String pointsRemainForBoostingSinglePlayer, int numberOfTop) {
         saving.put("Broadcast", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
             saving.replace("Broadcast", true);
@@ -47,7 +49,7 @@ public class Tasks {
                 }
                 ArrayList<Challenger> top;
                 if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                    top = Main.dailyChallenge.getTopPlayers(3);
+                    top = Main.dailyChallenge.getTopPlayers(numberOfTop);
                 } else {
                     top = Main.db.getAllChallengersTopYesterday();
                 }
@@ -104,12 +106,14 @@ public class Tasks {
                 if (hour > startHour) {
                     Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                             Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
-                            Main.instance.getConfigGestion().isRankingReward());
+                            Main.instance.getConfigGestion().isRankingReward(),
+                            Main.instance.getConfigGestion().getNumberOfTop());
                     challengeStart = true;
                 } else if (hour == startHour && minutes >= startMinutes) {
                     Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                             Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
-                            Main.instance.getConfigGestion().isRankingReward());
+                            Main.instance.getConfigGestion().isRankingReward(),
+                            Main.instance.getConfigGestion().getNumberOfTop());
                     challengeStart = true;
                 } else {
                     if (time < Main.instance.getConfigGestion().getChallenges().get(
@@ -117,12 +121,14 @@ public class Tasks {
                         if (hour < startHour) {
                             Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                                     Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
-                                    Main.instance.getConfigGestion().isRankingReward());
+                                    Main.instance.getConfigGestion().isRankingReward(),
+                                    Main.instance.getConfigGestion().getNumberOfTop());
                             challengeStart = true;
                         } else if (hour == startHour && minutes <= startMinutes) {
                             Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                                     Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
-                                    Main.instance.getConfigGestion().isRankingReward());
+                                    Main.instance.getConfigGestion().isRankingReward(),
+                                    Main.instance.getConfigGestion().getNumberOfTop());
                             challengeStart = true;
                         }
                     } else {
@@ -135,7 +141,7 @@ public class Tasks {
         tasks.add(checkStart);
     }
 
-    public void checkDay(long time, boolean resetPoints, boolean rankingReward) {
+    public void checkDay(long time, boolean resetPoints, boolean rankingReward, int numberOfTop) {
         saving.put("CheckDay", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             boolean firstTime = true;
@@ -152,7 +158,7 @@ public class Tasks {
                 }
                 if (Main.dailyChallenge.getTimeChallenge() <= 0) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                        ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
+                        ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(numberOfTop);
                         Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);

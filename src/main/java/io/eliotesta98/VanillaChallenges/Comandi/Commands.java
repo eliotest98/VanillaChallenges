@@ -223,7 +223,7 @@ public class Commands implements CommandExecutor {
                         return;
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                        ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
+                        ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
                         Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
@@ -343,7 +343,7 @@ public class Commands implements CommandExecutor {
                     sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     ArrayList<Challenger> top;
                     if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                        top = Main.dailyChallenge.getTopPlayers(3);
+                        top = Main.dailyChallenge.getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
                     } else {
                         top = Main.db.getAllChallengersTopYesterday();
                     }
@@ -534,7 +534,7 @@ public class Commands implements CommandExecutor {
                         return;
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                        ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(3);
+                        ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
                         Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
@@ -844,7 +844,7 @@ public class Commands implements CommandExecutor {
                     p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     ArrayList<Challenger> top;
                     if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                        top = Main.dailyChallenge.getTopPlayers(3);
+                        top = Main.dailyChallenge.getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
                     } else {
                         top = Main.db.getAllChallengersTopYesterday();
                     }

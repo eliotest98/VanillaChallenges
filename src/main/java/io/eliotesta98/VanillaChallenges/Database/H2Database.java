@@ -115,7 +115,7 @@ public class H2Database implements Database {
     public void loadPlayersPoints() {
         Main.dailyChallenge.setPlayers(H2Database.instance.getAllChallengers());
         Main.dailyChallenge.savePoints();
-        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(3);
+        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
         int i = 1;
         while (!top.isEmpty()) {
             Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
