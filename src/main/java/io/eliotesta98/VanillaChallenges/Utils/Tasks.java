@@ -103,22 +103,26 @@ public class Tasks {
                 int minutes = Integer.parseInt(dataSplit[1]);
                 if (hour > startHour) {
                     Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
-                            Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
+                            Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
+                            Main.instance.getConfigGestion().isRankingReward());
                     challengeStart = true;
                 } else if (hour == startHour && minutes >= startMinutes) {
                     Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
-                            Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
+                            Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
+                            Main.instance.getConfigGestion().isRankingReward());
                     challengeStart = true;
                 } else {
                     if (time < Main.instance.getConfigGestion().getChallenges().get(
                             Main.dailyChallenge.getChallengeName()).getTimeChallenge()) {
                         if (hour < startHour) {
                             Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
-                                    Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
+                                    Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
+                                    Main.instance.getConfigGestion().isRankingReward());
                             challengeStart = true;
                         } else if (hour == startHour && minutes <= startMinutes) {
                             Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
-                                    Main.instance.getConfigGestion().isResetPointsAtNewChallenge());
+                                    Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
+                                    Main.instance.getConfigGestion().isRankingReward());
                             challengeStart = true;
                         }
                     } else {
@@ -131,7 +135,7 @@ public class Tasks {
         tasks.add(checkStart);
     }
 
-    public void checkDay(long time, boolean resetPoints) {
+    public void checkDay(long time, boolean resetPoints, boolean rankingReward) {
         saving.put("CheckDay", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             boolean firstTime = true;
@@ -156,18 +160,27 @@ public class Tasks {
                             Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                         }
                         int number = Main.db.lastDailyWinnerId();
-                        while (!topPlayers.isEmpty()) {
+                        for (int z = 0; z < topPlayers.size(); z++) {
+                            int placeInTop = z;
+                            if (z >= Main.dailyChallenge.getRewards().size()) {
+                                placeInTop = Main.dailyChallenge.getRewards().size() - 1;
+                            }
                             number++;
                             DailyWinner dailyWinner = new DailyWinner();
-                            dailyWinner.setPlayerName(topPlayers.get(0).getNomePlayer());
+                            dailyWinner.setPlayerName(topPlayers.get(z).getNomePlayer());
                             dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
-                            for (int i = 0; i < Main.dailyChallenge.getRewards().size(); i++) {
+                            if (rankingReward) {
                                 dailyWinner.setId(number);
-                                dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
                                 Main.db.insertDailyWinner(dailyWinner);
-                                number++;
+                            } else {
+                                for (int i = 0; i < Main.dailyChallenge.getRewards().size(); i++) {
+                                    dailyWinner.setId(number);
+                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                    Main.db.insertDailyWinner(dailyWinner);
+                                    number++;
+                                }
                             }
-                            topPlayers.remove(0);
                         }
                         if (resetPoints) {
                             Main.db.clearChallengers();
@@ -194,7 +207,7 @@ public class Tasks {
                     if (minutesOnlinePlayer.get(p.getName()) == null) {
                         minutesOnlinePlayer.put(p.getName(), 0);
                     } else {
-                        if(minutesOnlinePlayer.get(p.getName()) == minutes) {
+                        if (minutesOnlinePlayer.get(p.getName()) == minutes) {
                             Main.dailyChallenge.increment(p.getName(), point);
                             minutesOnlinePlayer.replace(p.getName(), 0);
                         } else {

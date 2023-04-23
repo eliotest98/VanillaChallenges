@@ -22,7 +22,7 @@ public class ConfigGestion {
     private HashMap<String, Challenge> challengesEvent = new HashMap<>();
     private HashMap<String, Boolean> hooks = new HashMap<>();
     private HashMap<String,Interface> interfaces = new HashMap<>();
-    private boolean activeOnlinePoints, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration, pointsResume;
+    private boolean activeOnlinePoints, rankingReward, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration, pointsResume;
     private String database;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number, time;
     private ItemStack chestCollection;
@@ -275,6 +275,7 @@ public class ConfigGestion {
         resetPointsAtNewChallenge = file.getBoolean("Configuration.ResetPointsAtNewChallenge");
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
+        rankingReward = file.getBoolean("Configuration.Top.RankingReward");
         backupEnabled = file.getBoolean("Configuration.Backup.Enabled");
         randomChallengeGeneration = file.getBoolean("Configuration.RandomChallengeGeneration");
         numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
@@ -522,5 +523,13 @@ public class ConfigGestion {
 
     public void setChallengesEvent(HashMap<String, Challenge> challengesEvent) {
         this.challengesEvent = challengesEvent;
+    }
+
+    public boolean isRankingReward() {
+        return rankingReward;
+    }
+
+    public void setRankingReward(boolean rankingReward) {
+        this.rankingReward = rankingReward;
     }
 }
