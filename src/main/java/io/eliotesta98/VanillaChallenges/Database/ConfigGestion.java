@@ -92,6 +92,7 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dier.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dropper.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Healer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "AFK.yml"));
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "CubeGenerator.yml"));
             }
@@ -199,6 +200,7 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dier.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dropper.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Healer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "AFK.yml"));
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "CubeGenerator.yml"));
             }

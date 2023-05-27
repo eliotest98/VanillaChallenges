@@ -45,28 +45,13 @@ public class InventoryCheck {
 
                 int sizeInventory = 0;
                 boolean itemCheck = items.isEmpty();
-                //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
-                if(Main.version113) {
-                    Label: for (int i = 0; i < p.getInventory().getStorageContents().length; i++) {
-                        if (p.getInventory().getItem(i) != null) {
-                            sizeInventory++;
-                            for(String item: items) {
-                                if(p.getInventory().getItem(i).getType().toString().equalsIgnoreCase(item) && !itemCheck) {
-                                    itemCheck = true;
-                                    break Label;
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    Label: for(int i=0;i<p.getInventory().getContents().length;i++) {
-                        if (p.getInventory().getItem(i) != null) {
-                            sizeInventory++;
-                            for(String item: items) {
-                                if(p.getInventory().getItem(i).getType().toString().equalsIgnoreCase(item) && !itemCheck) {
-                                    itemCheck = true;
-                                    break Label;
-                                }
+                Label: for (int i = 0; i < p.getInventory().getStorageContents().length; i++) {
+                    if (p.getInventory().getItem(i) != null) {
+                        sizeInventory++;
+                        for(String item: items) {
+                            if(p.getInventory().getItem(i).getType().toString().equalsIgnoreCase(item) && !itemCheck) {
+                                itemCheck = true;
+                                break Label;
                             }
                         }
                     }

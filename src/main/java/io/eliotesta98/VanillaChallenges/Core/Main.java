@@ -253,6 +253,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new DropperEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("HealthChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new HealthRegenEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("AFKChallenge")) {
+            new AFKCheck();
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
             challengeSelected = false;

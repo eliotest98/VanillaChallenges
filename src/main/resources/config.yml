@@ -233,6 +233,8 @@ Debug:
   DyeEvent: false
   # Healt Regen Event debug
   HealthRegenEvent: false
+  # AFK Challenge debug
+  AFKEvent: false
   # Online Point give debug
   OnlinePoint: false
   # Enabled debug
