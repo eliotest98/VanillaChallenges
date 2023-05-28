@@ -4,11 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.eliotesta98.VanillaChallenges.Core.Main;
@@ -23,7 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class H2Database implements Database {
 
     public static Connection connection = null;
-    private static HikariConfig config = new HikariConfig();
+    private static final HikariConfig config = new HikariConfig();
     private static HikariDataSource ds = null;
     public static H2Database instance = null;
 
@@ -72,7 +68,7 @@ public class H2Database implements Database {
         int count = 1;
         if (challenges.isEmpty()) {
             String nome = "nessuno";
-            ArrayList<String> keys = new ArrayList<String>(Main.instance.getConfigGestion().getChallenges().keySet());
+            ArrayList<String> keys = new ArrayList<>(Main.instance.getConfigGestion().getChallenges().keySet());
             if (Main.instance.getConfigGestion().isRandomChallengeGeneration()) {
                 Collections.shuffle(keys);
             }
@@ -136,7 +132,7 @@ public class H2Database implements Database {
     }
 
     public void clearChallenges() {
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
                     "DROP TABLE Challenge");
@@ -153,7 +149,7 @@ public class H2Database implements Database {
     }
 
     public void clearChallengersOld() {
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
                     "DROP TABLE ChallengerEvent");
@@ -171,7 +167,7 @@ public class H2Database implements Database {
 
     @Override
     public void clearChallengers() {
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
                     "DROP TABLE Challenger");
@@ -188,7 +184,7 @@ public class H2Database implements Database {
     }
 
     public void clearDailyWinners() {
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
                     "DROP TABLE DailyWinner");
@@ -206,7 +202,7 @@ public class H2Database implements Database {
 
     @Override
     public void removeTopYesterday() {
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
                     "DROP TABLE TopYesterday");
@@ -224,8 +220,8 @@ public class H2Database implements Database {
 
     @Override
     public void saveTopYesterday(ArrayList<Challenger> newTopYesterday) {
-        for (int i = 0; i < newTopYesterday.size(); i++) {
-            insertChallengerTopYesterday(newTopYesterday.get(i).getNomePlayer(), newTopYesterday.get(i).getPoints());
+        for (Challenger challenger : newTopYesterday) {
+            insertChallengerTopYesterday(challenger.getNomePlayer(), challenger.getPoints());
         }
     }
 
@@ -240,8 +236,8 @@ public class H2Database implements Database {
 
     @Override
     public ArrayList<DailyWinner> getAllDailyWinners() {
-        ArrayList<DailyWinner> dailyWinners = new ArrayList<DailyWinner>();
-        ResultSet resultSet = null;
+        ArrayList<DailyWinner> dailyWinners = new ArrayList<>();
+        ResultSet resultSet;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM DailyWinner");
             resultSet = preparedStatement.executeQuery();
@@ -307,8 +303,8 @@ public class H2Database implements Database {
     }
 
     public ArrayList<Challenge> getAllChallenges() {
-        ArrayList<Challenge> challengeDBS = new ArrayList<Challenge>();
-        ResultSet resultSet = null;
+        ArrayList<Challenge> challengeDBS = new ArrayList<>();
+        ResultSet resultSet;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Challenge");
             resultSet = preparedStatement.executeQuery();
@@ -405,7 +401,7 @@ public class H2Database implements Database {
     @Override
     public ArrayList<Challenger> getAllOldChallengers() {
         ArrayList<Challenger> points = new ArrayList<>();
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM ChallengerEvent");
             resultSet = preparedStatement.executeQuery();
@@ -423,6 +419,23 @@ public class H2Database implements Database {
     }
 
     @Override
+    public boolean isChallengePresent(String challengeName) {
+        ResultSet resultSet;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Challenge WHERE `NomeChallenge`='" + challengeName + "'");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                return true;
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ReloadUtils.reload();
+        }
+        return false;
+    }
+
+    @Override
     public void updateChallenge(String challengeName, int time) {
         try {
             PreparedStatement preparedStatement =
@@ -436,8 +449,8 @@ public class H2Database implements Database {
     }
 
     public ArrayList<Challenger> getAllChallengers() {
-        ArrayList<Challenger> points = new ArrayList<Challenger>();
-        ResultSet resultSet = null;
+        ArrayList<Challenger> points = new ArrayList<>();
+        ResultSet resultSet;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Challenger");
             resultSet = preparedStatement.executeQuery();
@@ -457,7 +470,7 @@ public class H2Database implements Database {
 
     @Override
     public boolean isPresent(String playerName) {
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT `PlayerName` FROM Challenger WHERE `PlayerName` ='" + playerName + "'");
             resultSet = preparedStatement.executeQuery();
@@ -534,8 +547,8 @@ public class H2Database implements Database {
 
     @Override
     public ArrayList<Challenger> getAllChallengersTopYesterday() {
-        ArrayList<Challenger> points = new ArrayList<Challenger>();
-        ResultSet resultSet = null;
+        ArrayList<Challenger> points = new ArrayList<>();
+        ResultSet resultSet;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM TopYesterday");
             resultSet = preparedStatement.executeQuery();
@@ -588,8 +601,10 @@ public class H2Database implements Database {
                         File.separator + "backup");
                 boolean folderCreate = folder.mkdir();
                 if (!folderCreate) {
-                    if (folder.listFiles().length > numberOfBackupFiles) {
-                        folder.listFiles()[0].delete();
+                    File[] files = folder.listFiles();
+                    if (files.length > numberOfBackupFiles) {
+                        Arrays.sort(files);
+                        files[0].delete();
                     }
                 }
                 configFile.createNewFile();
@@ -611,7 +626,6 @@ public class H2Database implements Database {
                 file.save(configFile);
             } catch (IOException e) {
                 e.printStackTrace();
-                return;
             }
         }
     }

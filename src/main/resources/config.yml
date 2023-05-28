@@ -138,6 +138,7 @@ Messages:
     Reward: '   &e/vc &6<reward> &7for receive reward of win'
     List: '   &e/vc &6<list> &7for see the list of Challenges'
     Event: '   &e/vc &6<event> <stop|challenge> &7for start a challenge event'
+    Schedule: '   &e/vc &6<schedule> <add|remove> <challenge> &7for add or remove a challenge from schedule'
   Errors:
     YouAreNotAPlayer: '{prefix}&cYou are not a player'
     CommandNotFound: '{prefix}&cCommand not found'
@@ -145,6 +146,11 @@ Messages:
     AlreadyPlacedChest: '{prefix}&7You already placed a chest for Collection Item Challenge'
     AlreadyStartEvent: '{prefix}&cYou already start a Challenge Event! If you want stop it write vc <event> <stop>'
     AlreadyStopEvent: '{prefix}&cYou already stopped the Challenge Event! If you want start a new Challenge write vc <event> <challenge>'
+    Schedule: '{prefix}&cYou cannot remove the current challenge from the schedule, if you want to remove it use the /vc <next> command'
+    Add: '{prefix}&cYou cannot add this challenge because is already scheduled'
+  Success:
+    Add: '{prefix}&aSuccessfully scheduled this challenge'
+    Remove: '{prefix}&aSuccessfully removed form schedule this challenge'
   PointsInfo: '{prefix}&e{player} &7have &b{number}&7 points'
   ActuallyInTop: '{prefix}&7Actually in top there are:'
   TopPlayers:

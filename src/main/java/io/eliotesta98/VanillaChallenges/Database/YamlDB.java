@@ -12,20 +12,17 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class YamlDB implements Database {
 
     private FileConfiguration file;
     private File configFile;
-    private ArrayList<Challenger> playerPoints = new ArrayList<Challenger>();
-    private ArrayList<Challenge> challenges = new ArrayList<Challenge>();
-    private ArrayList<DailyWinner> dailyWinners = new ArrayList<DailyWinner>();
-    private ArrayList<Challenger> topYesterday = new ArrayList<Challenger>();
-    private ArrayList<Challenger> oldPoints = new ArrayList<>();
+    private final ArrayList<Challenger> playerPoints = new ArrayList<>();
+    private final ArrayList<Challenge> challenges = new ArrayList<>();
+    private final ArrayList<DailyWinner> dailyWinners = new ArrayList<>();
+    private final ArrayList<Challenger> topYesterday = new ArrayList<>();
+    private final ArrayList<Challenger> oldPoints = new ArrayList<>();
 
     public YamlDB() {
         initialize("");
@@ -118,57 +115,56 @@ public class YamlDB implements Database {
                         File.separator + "backup");
                 boolean folderCreate = folder.mkdir();
                 if (!folderCreate) {
-                    if (folder.listFiles().length > numberOfBackupFiles) {
-                        folder.listFiles()[0].delete();
+                    File[] files = folder.listFiles();
+                    if (files.length > numberOfBackupFiles) {
+                        Arrays.sort(files);
+                        files[0].delete();
                     }
                 }
                 configFile.createNewFile();
                 YamlConfiguration file = YamlConfiguration.loadConfiguration(configFile);
-                for (int i = 0; i < playerPoints.size(); i++) {
-                    file.set("Points." + playerPoints.get(i).getNomePlayer(), playerPoints.get(i).getPoints());
+                for (Challenger playerPoint : playerPoints) {
+                    file.set("Points." + playerPoint.getNomePlayer(), playerPoint.getPoints());
                 }
-                for (int i = 0; i < challenges.size(); i++) {
-                    file.set("Challenges." + challenges.get(i).getChallengeName(), challenges.get(i).getTimeChallenge());
+                for (Challenge challenge : challenges) {
+                    file.set("Challenges." + challenge.getChallengeName(), challenge.getTimeChallenge());
                 }
-                for (int i = 0; i < dailyWinners.size(); i++) {
-                    file.set("DailyWinners." + dailyWinners.get(i).getId() + ".PlayerName", dailyWinners.get(i).getPlayerName());
-                    file.set("DailyWinners." + dailyWinners.get(i).getId() + ".NomeChallenge", dailyWinners.get(i).getNomeChallenge());
-                    file.set("DailyWinners." + dailyWinners.get(i).getId() + ".Reward", dailyWinners.get(i).getReward());
+                for (DailyWinner dailyWinner : dailyWinners) {
+                    file.set("DailyWinners." + dailyWinner.getId() + ".PlayerName", dailyWinner.getPlayerName());
+                    file.set("DailyWinners." + dailyWinner.getId() + ".NomeChallenge", dailyWinner.getNomeChallenge());
+                    file.set("DailyWinners." + dailyWinner.getId() + ".Reward", dailyWinner.getReward());
                 }
-                for (int i = 0; i < topYesterday.size(); i++) {
-                    file.set("TopYesterday." + topYesterday.get(i).getNomePlayer(), topYesterday.get(i).getPoints());
+                for (Challenger challenger : topYesterday) {
+                    file.set("TopYesterday." + challenger.getNomePlayer(), challenger.getPoints());
                 }
                 file.save(configFile);
             } catch (IOException e) {
                 e.printStackTrace();
-                return;
             }
         }
     }
 
     @Override
     public void saveTopYesterday(ArrayList<Challenger> newTopYesterday) {
-        for (int i = 0; i < newTopYesterday.size(); i++) {
-            file.set("TopYesterday." + newTopYesterday.get(i).getNomePlayer(), newTopYesterday.get(i).getPoints());
+        for (Challenger challenger : newTopYesterday) {
+            file.set("TopYesterday." + challenger.getNomePlayer(), challenger.getPoints());
         }
         try {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
     @Override
     public void removeTopYesterday() {
-        for (int i = 0; i < topYesterday.size(); i++) {
-            file.set("TopYesterday." + topYesterday.get(i).getNomePlayer(), null);
+        for (Challenger challenger : topYesterday) {
+            file.set("TopYesterday." + challenger.getNomePlayer(), null);
         }
         try {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -179,8 +175,8 @@ public class YamlDB implements Database {
 
     @Override
     public boolean isPresent(String playerName) {
-        for (int i = 0; i < playerPoints.size(); i++) {
-            if (playerName.equalsIgnoreCase(playerPoints.get(i).getNomePlayer())) {
+        for (Challenger playerPoint : playerPoints) {
+            if (playerName.equalsIgnoreCase(playerPoint.getNomePlayer())) {
                 return true;
             }
         }
@@ -188,14 +184,13 @@ public class YamlDB implements Database {
     }
 
     public void saveChallenges() {
-        for (int i = 0; i < challenges.size(); i++) {
-            file.set("Challenges." + challenges.get(i).getChallengeName(), challenges.get(i).getTimeChallenge());
+        for (Challenge challenge : challenges) {
+            file.set("Challenges." + challenge.getChallengeName(), challenge.getTimeChallenge());
         }
         try {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -204,7 +199,7 @@ public class YamlDB implements Database {
         int count = 1;
         if (challenges.isEmpty()) {
             String nome = "nessuno";
-            ArrayList<String> keys = new ArrayList<String>(Main.instance.getConfigGestion().getChallenges().keySet());
+            ArrayList<String> keys = new ArrayList<>(Main.instance.getConfigGestion().getChallenges().keySet());
             if (Main.instance.getConfigGestion().isRandomChallengeGeneration()) {
                 Collections.shuffle(keys);
             }
@@ -258,7 +253,6 @@ public class YamlDB implements Database {
 
     @Override
     public void disconnect() {
-        return;
     }
 
     @Override
@@ -268,7 +262,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -279,7 +272,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -290,7 +282,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -300,7 +291,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -312,7 +302,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -323,7 +312,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -334,7 +322,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -356,8 +343,8 @@ public class YamlDB implements Database {
     @Override
     public void resumeOldPoints() {
         clearChallengers();
-        for(Challenger challenger: oldPoints) {
-            insertChallenger(challenger.getNomePlayer(),challenger.getPoints());
+        for (Challenger challenger : oldPoints) {
+            insertChallenger(challenger.getNomePlayer(), challenger.getPoints());
         }
         clearChallengersOldPoints();
     }
@@ -367,6 +354,16 @@ public class YamlDB implements Database {
         return oldPoints;
     }
 
+    @Override
+    public boolean isChallengePresent(String challengeName) {
+        for (Challenge challenge : challenges) {
+            if (challenge.getChallengeName().equalsIgnoreCase(challengeName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void clearChallengersOldPoints() {
         file.set("PointsLastChallenge", null);
         oldPoints.clear();
@@ -374,7 +371,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -386,7 +382,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -397,7 +392,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -410,7 +404,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -427,7 +420,6 @@ public class YamlDB implements Database {
             saveFile();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 

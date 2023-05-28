@@ -60,4 +60,6 @@ public interface Database {
     void resumeOldPoints();
 
     ArrayList<Challenger> getAllOldChallengers();
+
+    boolean isChallengePresent(String challengeName);
 }
