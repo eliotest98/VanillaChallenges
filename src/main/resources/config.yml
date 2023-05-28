@@ -66,6 +66,11 @@ Configuration:
     Enabled: true
     NumberOfFilesInFolder: 4
 
+
+  # If you want to obfuscate subsequent challenges in the interface
+  LockedInterface: false
+
+
 Interfaces:
   Challenges:
     Title: "&aChallenges"
@@ -120,6 +125,27 @@ Interfaces:
         Texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzE1NDQ1ZGExNmZhYjY3ZmNkODI3ZjcxYmFlOWMxZDJmOTBjNzNlYjJjMWJkMWVmOGQ4Mzk2Y2Q4ZTgifX19'
         SoundClick: ''
         Lore: [ ]
+      Locked:
+        Letter: 'h1'
+        Name: '&a{challengeName}'
+        Type: 'PLAYER_HEAD'
+        Texture: '' # set to '' to disable
+        Lore:
+          - '&7&oTime Duration: &f{time}'
+          - '&7&oDescription: &f{challengeDescription}'
+          - '&7&oPoints: &f{challengePoint}'
+          - '&7&oWords: {words}.&f * {word}'
+          - '&7&oRewards: {rewards}.&f * {reward} x {number}'
+          - '&7&oBlocks: {challengeBlocks}.&f * {block}'
+          - '&7&oItems in hand: {challengeItemsInHand}.&f * {item}'
+          - '&7&oSneaking: &f{challengeSneaking}'
+          - '&7&oBlocks On Place: {challengeBlocksOnPlane}.&f * {block}'
+          - '&7&oVehicles: {challengeVehicles}.&f * {vehicle}'
+          - '&7&oMobs: {challengeMobs}.&f * {mob}'
+          - '&7&oItems: {challengeItems}.&f * {item}'
+          - '&7&oCauses: {challengeCauses}.&f * {cause}'
+          - '&7&oColors: {challengeColors}.&f * {color}'
+        SoundClick: ''
 
 
 # you can use a different coloring by using a hexadecimal. for all messages Ex. &{#FFFF00}(yellow).

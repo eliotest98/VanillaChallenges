@@ -7,7 +7,6 @@ import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class ConfigGestion {
     private HashMap<String, Boolean> hooks = new HashMap<>();
     private HashMap<String, Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, rankingReward, randomReward = false, yesterdayTop, resetPointsAtNewChallenge,
-            backupEnabled, randomChallengeGeneration, pointsResume;
+            backupEnabled, randomChallengeGeneration, pointsResume, lockedInterface;
     private String database;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
             time, numberOfTop;
@@ -287,6 +286,7 @@ public class ConfigGestion {
         }
 
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
+        lockedInterface = file.getBoolean("Configuration.LockedInterface");
         database = file.getString("Configuration.Database");
         resetPointsAtNewChallenge = file.getBoolean("Configuration.ResetPointsAtNewChallenge");
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
@@ -566,5 +566,13 @@ public class ConfigGestion {
 
     public void setRandomReward(boolean randomReward) {
         this.randomReward = randomReward;
+    }
+
+    public boolean isLockedInterface() {
+        return lockedInterface;
+    }
+
+    public void setLockedInterface(boolean lockedInterface) {
+        this.lockedInterface = lockedInterface;
     }
 }
