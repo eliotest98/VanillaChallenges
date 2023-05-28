@@ -118,7 +118,11 @@ public class Main extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        config = new ConfigGestion(YamlConfiguration.loadConfiguration(configFile));
+        try {
+            config = new ConfigGestion(YamlConfiguration.loadConfiguration(configFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //loads challenges files
         config.loadCommentedConfiguration();
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D

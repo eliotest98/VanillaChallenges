@@ -15,7 +15,7 @@ public class FileCreator {
         }
     }
 
-    public  static void createAllFilesEvent(List<File> files) {
+    public static void createAllFilesEvent(List<File> files) {
         for (File file : files) {
             createFileChallenges("/Event", file);
         }

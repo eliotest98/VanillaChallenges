@@ -30,7 +30,7 @@ public class ConfigGestion {
     private Tasks tasks = new Tasks();
     private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
 
-    public ConfigGestion(FileConfiguration file) {
+    public ConfigGestion(FileConfiguration file) throws IOException {
         for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
             debug.put(event, file.getBoolean("Debug." + event));
         }
@@ -104,6 +104,13 @@ public class ConfigGestion {
                 File.separator + "Challenges/Global");
 
         for (File fileChallenge : folder.listFiles()) {
+
+            String splits = "bho";
+            String[] strings = splits.split(":");
+            String configname = "Challenges/Global/" + fileChallenge.getName();
+            CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(fileChallenge);
+            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configname), strings);
+
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
             boolean enabled = yamlChallenge.getBoolean(challengeName + ".Enabled");
@@ -116,7 +123,7 @@ public class ConfigGestion {
             ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
-            int timeChallenge = yamlChallenge.getInt(challengeName + ".TimeSettings.Time");
+            String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
             String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
@@ -163,7 +170,7 @@ public class ConfigGestion {
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
-                    pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
+                    pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, endTimeChallenge,
                     challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds, itemChallenge);
             challenges.put(challengeName, challenge);
         }
@@ -212,6 +219,13 @@ public class ConfigGestion {
                 File.separator + "Challenges/Event");
 
         for (File fileChallenge : folder.listFiles()) {
+
+            String splits = "bho";
+            String[] strings = splits.split(":");
+            String configname = "Challenges/Event/" + fileChallenge.getName();
+            CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(fileChallenge);
+            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configname), strings);
+
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
             ArrayList<String> worlds = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Worlds");
@@ -219,7 +233,7 @@ public class ConfigGestion {
             ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
-            int timeChallenge = yamlChallenge.getInt(challengeName + ".TimeSettings.Time");
+            String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
             String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
@@ -266,7 +280,7 @@ public class ConfigGestion {
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
-                    pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
+                    pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, endTimeChallenge,
                     challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds, itemChallenge);
             challengesEvent.put(challengeName, challenge);
         }

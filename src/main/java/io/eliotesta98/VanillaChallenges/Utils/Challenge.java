@@ -34,7 +34,7 @@ public class Challenge {
     private double power = 0.0;
     private int number = 0;
     private int time = 1;
-    private String startTimeChallenge = "5:00";
+    private String startTimeChallenge = "0:00";
     private String onGround = "NOBODY";
     private boolean keepInventory = false;
     // timer del salvataggio punti
@@ -48,6 +48,7 @@ public class Challenge {
     private int multiplierSinglePlayer = 1;
     private int minutesSinglePlayer = 0;
     private int timeChallenge = 24;
+    private String endTimeChallenge = "24:00";
     private String nameChallenge = "NOBODY";
     private boolean deathInLand = false;
     private long countPointsChallenge = 0;
@@ -67,7 +68,7 @@ public class Challenge {
                      ArrayList<String> mobs, double force, double power, ArrayList<String> colors, ArrayList<String> causes,
                      int point, int pointsBoost, int multiplier, int boostMinutes, int number, int time,
                      ArrayList<String> vehicles, String sneaking, String onGround, int pointsBoostSinglePlayer,
-                     int multiplierSinglePlayer, int minutesSinglePlayer, int timeChallenge, String challengeName,
+                     int multiplierSinglePlayer, int minutesSinglePlayer, String endTimeChallenge, String challengeName,
                      ArrayList<String> quests, int minutes, String startTimeChallenge, boolean keepInventory,
                      boolean deathInLand, ArrayList<String> worlds, String itemChallenge) {
         this.blocks = blocks;
@@ -95,7 +96,7 @@ public class Challenge {
         this.pointsBoostSinglePlayer = pointsBoostSinglePlayer;
         this.minutesSinglePlayer = minutesSinglePlayer;
         this.multiplierSinglePlayer = multiplierSinglePlayer;
-        this.timeChallenge = timeChallenge;
+        this.endTimeChallenge = endTimeChallenge;
         this.challengeName = challengeName;
         this.quests = quests;
         this.minutes = minutes;
@@ -104,6 +105,13 @@ public class Challenge {
         this.nameChallenge = nameChallenge;
         this.deathInLand = deathInLand;
         this.itemChallenge = itemChallenge;
+        timeChallenge();
+    }
+
+    private void timeChallenge() {
+        String[] startSplit = startTimeChallenge.split(":");
+        String[] endSplit = endTimeChallenge.split(":");
+        timeChallenge = Integer.parseInt(endSplit[0]) - Integer.parseInt(startSplit[0]);
     }
 
     public HashMap<String, Long> getBoostSinglePlayers() {
@@ -702,6 +710,14 @@ public class Challenge {
 
     public void setWorlds(ArrayList<String> worlds) {
         this.worlds = worlds;
+    }
+
+    public String getEndTimeChallenge() {
+        return endTimeChallenge;
+    }
+
+    public void setEndTimeChallenge(String endTimeChallenge) {
+        this.endTimeChallenge = endTimeChallenge;
     }
 
     @Override
