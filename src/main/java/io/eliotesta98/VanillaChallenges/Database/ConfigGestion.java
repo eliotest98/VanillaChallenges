@@ -20,8 +20,9 @@ public class ConfigGestion {
     private HashMap<String, Challenge> challenges = new HashMap<>();
     private HashMap<String, Challenge> challengesEvent = new HashMap<>();
     private HashMap<String, Boolean> hooks = new HashMap<>();
-    private HashMap<String,Interface> interfaces = new HashMap<>();
-    private boolean activeOnlinePoints, rankingReward, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration, pointsResume;
+    private HashMap<String, Interface> interfaces = new HashMap<>();
+    private boolean activeOnlinePoints, rankingReward, randomReward = false, yesterdayTop, resetPointsAtNewChallenge,
+            backupEnabled, randomChallengeGeneration, pointsResume;
     private String database;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
             time, numberOfTop;
@@ -150,7 +151,7 @@ public class ConfigGestion {
             String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
             String onGround = yamlChallenge.getString(challengeName + ".OnGround");
             ArrayList<String> quests = new ArrayList<>();
-            for(String quest: yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
+            for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
                 quests.add(quest.replace("{prefix}", messages.get("Prefix")));
             }
             if (quests.isEmpty()) {
@@ -253,7 +254,7 @@ public class ConfigGestion {
             String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
             String onGround = yamlChallenge.getString(challengeName + ".OnGround");
             ArrayList<String> quests = new ArrayList<>();
-            for(String quest: yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
+            for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
                 quests.add(quest.replace("{prefix}", messages.get("Prefix")));
             }
             if (quests.isEmpty()) {
@@ -276,6 +277,9 @@ public class ConfigGestion {
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
         rankingReward = file.getBoolean("Configuration.Top.RankingReward");
+        if (!rankingReward) {
+            randomReward = file.getBoolean("Configuration.Top.RandomReward");
+        }
         backupEnabled = file.getBoolean("Configuration.Backup.Enabled");
         randomChallengeGeneration = file.getBoolean("Configuration.RandomChallengeGeneration");
         numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
@@ -318,8 +322,8 @@ public class ConfigGestion {
                 customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
                         contaSlots.size(), nameInterface, "", "Generator");
             } else {*/
-                customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
-                        contaSlots.size(), nameInterface, "", "");
+            customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
+                    contaSlots.size(), nameInterface, "", "");
             //}
             interfaces.put(nameInterface, customInterface);
         }
@@ -539,5 +543,13 @@ public class ConfigGestion {
 
     public void setNumberOfTop(int numberOfTop) {
         this.numberOfTop = numberOfTop;
+    }
+
+    public boolean isRandomReward() {
+        return randomReward;
+    }
+
+    public void setRandomReward(boolean randomReward) {
+        this.randomReward = randomReward;
     }
 }

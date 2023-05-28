@@ -395,15 +395,16 @@ public class H2Database implements Database {
     @Override
     public void resumeOldPoints() {
         ArrayList<Challenger> oldPoints = getAllOldChallengers();
-        clearChallengersOld();
+        clearChallengers();
         for (Challenger challenger : oldPoints) {
             insertChallenger(challenger.getNomePlayer(), challenger.getPoints());
         }
+        clearChallengersOld();
     }
 
     @Override
     public ArrayList<Challenger> getAllOldChallengers() {
-        ArrayList<Challenger> points = new ArrayList<Challenger>();
+        ArrayList<Challenger> points = new ArrayList<>();
         ResultSet resultSet = null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM ChallengerEvent");
