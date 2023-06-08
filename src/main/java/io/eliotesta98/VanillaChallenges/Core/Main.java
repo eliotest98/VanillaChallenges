@@ -5,8 +5,7 @@ import io.eliotesta98.VanillaChallenges.Events.*;
 import io.eliotesta98.VanillaChallenges.Interfaces.GuiEvent;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
-import me.angeschossen.lands.api.integration.LandsIntegration;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import me.angeschossen.lands.api.LandsIntegration;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
@@ -165,7 +164,7 @@ public class Main extends JavaPlugin {
                 if (getConfigGestion().getHooks().get("Lands")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
-                    landsIntegration = new LandsIntegration(instance);
+                    landsIntegration = LandsIntegration.of(this);
                 }
             } else {
                 getConfigGestion().getHooks().replace("Lands", false);
