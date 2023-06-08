@@ -83,7 +83,7 @@ public class DyeEvent implements Listener {
             }
 
             if (deathInLand && landsEnabled) {
-                Land land = Main.landsIntegration.getLand(playerLocation);
+                Land land = Main.landsIntegration.getArea(playerLocation).getLand();
                 if (land != null) {
                     for (UUID p : land.getTrustedPlayers()) {// scorro la lista dei player membri
                         OfflinePlayer player = Bukkit.getOfflinePlayer(p);// prendo il player

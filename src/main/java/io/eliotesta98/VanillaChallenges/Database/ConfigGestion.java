@@ -7,7 +7,6 @@ import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +19,9 @@ public class ConfigGestion {
     private HashMap<String, Challenge> challenges = new HashMap<>();
     private HashMap<String, Challenge> challengesEvent = new HashMap<>();
     private HashMap<String, Boolean> hooks = new HashMap<>();
-    private HashMap<String,Interface> interfaces = new HashMap<>();
-    private boolean activeOnlinePoints, rankingReward, yesterdayTop, resetPointsAtNewChallenge, backupEnabled, randomChallengeGeneration, pointsResume;
+    private HashMap<String, Interface> interfaces = new HashMap<>();
+    private boolean activeOnlinePoints, rankingReward, randomReward = false, yesterdayTop, resetPointsAtNewChallenge,
+            backupEnabled, randomChallengeGeneration, pointsResume, lockedInterface;
     private String database;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
             time, numberOfTop;
@@ -29,12 +29,13 @@ public class ConfigGestion {
     private Tasks tasks = new Tasks();
     private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
 
-    public ConfigGestion(FileConfiguration file) {
+    public ConfigGestion(FileConfiguration file) throws IOException {
         for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
             debug.put(event, file.getBoolean("Debug." + event));
         }
         for (String message : file.getConfigurationSection("Messages").getKeys(false)) {
-            if (message.equalsIgnoreCase("Commands") || message.equalsIgnoreCase("Errors")) {
+            if (message.equalsIgnoreCase("Commands") || message.equalsIgnoreCase("Errors")
+                    || message.equalsIgnoreCase("Success")) {
                 for (String command : file.getConfigurationSection("Messages." + message).getKeys(false)) {
                     messages.put(message + "." + command, file.getString("Messages." + message + "." + command).replace("{prefix}", messages.get("Prefix")));
                 }
@@ -92,6 +93,7 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dier.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dropper.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Healer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "AFK.yml"));
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "CubeGenerator.yml"));
             }
@@ -102,6 +104,13 @@ public class ConfigGestion {
                 File.separator + "Challenges/Global");
 
         for (File fileChallenge : folder.listFiles()) {
+
+            String splits = "bho";
+            String[] strings = splits.split(":");
+            String configname = "Challenges/Global/" + fileChallenge.getName();
+            CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(fileChallenge);
+            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configname), strings);
+
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
             boolean enabled = yamlChallenge.getBoolean(challengeName + ".Enabled");
@@ -114,7 +123,7 @@ public class ConfigGestion {
             ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
-            int timeChallenge = yamlChallenge.getInt(challengeName + ".TimeSettings.Time");
+            String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
             String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
@@ -149,7 +158,7 @@ public class ConfigGestion {
             String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
             String onGround = yamlChallenge.getString(challengeName + ".OnGround");
             ArrayList<String> quests = new ArrayList<>();
-            for(String quest: yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
+            for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
                 quests.add(quest.replace("{prefix}", messages.get("Prefix")));
             }
             if (quests.isEmpty()) {
@@ -161,7 +170,7 @@ public class ConfigGestion {
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
-                    pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
+                    pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, endTimeChallenge,
                     challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds, itemChallenge);
             challenges.put(challengeName, challenge);
         }
@@ -199,6 +208,7 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dier.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dropper.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Healer.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "AFK.yml"));
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "CubeGenerator.yml"));
             }
@@ -209,6 +219,13 @@ public class ConfigGestion {
                 File.separator + "Challenges/Event");
 
         for (File fileChallenge : folder.listFiles()) {
+
+            String splits = "bho";
+            String[] strings = splits.split(":");
+            String configname = "Challenges/Event/" + fileChallenge.getName();
+            CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(fileChallenge);
+            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configname), strings);
+
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
             ArrayList<String> worlds = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Worlds");
@@ -216,7 +233,7 @@ public class ConfigGestion {
             ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
-            int timeChallenge = yamlChallenge.getInt(challengeName + ".TimeSettings.Time");
+            String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
             String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
@@ -251,7 +268,7 @@ public class ConfigGestion {
             String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
             String onGround = yamlChallenge.getString(challengeName + ".OnGround");
             ArrayList<String> quests = new ArrayList<>();
-            for(String quest: yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
+            for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
                 quests.add(quest.replace("{prefix}", messages.get("Prefix")));
             }
             if (quests.isEmpty()) {
@@ -263,17 +280,21 @@ public class ConfigGestion {
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
-                    pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, timeChallenge,
+                    pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, endTimeChallenge,
                     challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds, itemChallenge);
             challengesEvent.put(challengeName, challenge);
         }
 
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
+        lockedInterface = file.getBoolean("Configuration.LockedInterface");
         database = file.getString("Configuration.Database");
         resetPointsAtNewChallenge = file.getBoolean("Configuration.ResetPointsAtNewChallenge");
         activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
         rankingReward = file.getBoolean("Configuration.Top.RankingReward");
+        if (!rankingReward) {
+            randomReward = file.getBoolean("Configuration.Top.RandomReward");
+        }
         backupEnabled = file.getBoolean("Configuration.Backup.Enabled");
         randomChallengeGeneration = file.getBoolean("Configuration.RandomChallengeGeneration");
         numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
@@ -316,8 +337,8 @@ public class ConfigGestion {
                 customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
                         contaSlots.size(), nameInterface, "", "Generator");
             } else {*/
-                customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
-                        contaSlots.size(), nameInterface, "", "");
+            customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
+                    contaSlots.size(), nameInterface, "", "");
             //}
             interfaces.put(nameInterface, customInterface);
         }
@@ -537,5 +558,21 @@ public class ConfigGestion {
 
     public void setNumberOfTop(int numberOfTop) {
         this.numberOfTop = numberOfTop;
+    }
+
+    public boolean isRandomReward() {
+        return randomReward;
+    }
+
+    public void setRandomReward(boolean randomReward) {
+        this.randomReward = randomReward;
+    }
+
+    public boolean isLockedInterface() {
+        return lockedInterface;
+    }
+
+    public void setLockedInterface(boolean lockedInterface) {
+        this.lockedInterface = lockedInterface;
     }
 }

@@ -5,9 +5,9 @@ Crafter:
   # Time settings
   TimeSettings:
     # What time do you want the challenge to start?
-    Start: '5:00'
-    # How long do you want the challenge to last in hours ?
-    Time: 24
+    Start: '05:00'
+    # What time do you want the challenge to end?
+    End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Items you want crafting for challenge, if you want all items set []

@@ -88,11 +88,11 @@ public class Tasks {
     public void checkStartDay() {
         saving.put("CheckStartDay", false);
         this.checkStart = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
-            String startChallenge = Main.dailyChallenge.getStartTimeChallenge();
-            String[] startSplit = startChallenge.split(":");
-            int startHour = Integer.parseInt(startSplit[0]);
-            int startMinutes = Integer.parseInt(startSplit[1]);
-            int time = Main.dailyChallenge.getTimeChallenge();
+            final String startChallenge = Main.dailyChallenge.getStartTimeChallenge();
+            final String[] startSplit = startChallenge.split(":");
+            final int startHour = Integer.parseInt(startSplit[0]);
+            final int startMinutes = Integer.parseInt(startSplit[1]);
+            final int time = Main.dailyChallenge.getTimeChallenge();
 
             @Override
             public void run() {
@@ -107,12 +107,14 @@ public class Tasks {
                     Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                             Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
                             Main.instance.getConfigGestion().isRankingReward(),
+                            Main.instance.getConfigGestion().isRandomReward(),
                             Main.instance.getConfigGestion().getNumberOfTop());
                     challengeStart = true;
                 } else if (hour == startHour && minutes >= startMinutes) {
                     Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                             Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
                             Main.instance.getConfigGestion().isRankingReward(),
+                            Main.instance.getConfigGestion().isRandomReward(),
                             Main.instance.getConfigGestion().getNumberOfTop());
                     challengeStart = true;
                 } else {
@@ -122,12 +124,14 @@ public class Tasks {
                             Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                                     Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
                                     Main.instance.getConfigGestion().isRankingReward(),
+                                    Main.instance.getConfigGestion().isRandomReward(),
                                     Main.instance.getConfigGestion().getNumberOfTop());
                             challengeStart = true;
                         } else if (hour == startHour && minutes <= startMinutes) {
                             Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
                                     Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
                                     Main.instance.getConfigGestion().isRankingReward(),
+                                    Main.instance.getConfigGestion().isRandomReward(),
                                     Main.instance.getConfigGestion().getNumberOfTop());
                             challengeStart = true;
                         }
@@ -141,7 +145,7 @@ public class Tasks {
         tasks.add(checkStart);
     }
 
-    public void checkDay(long time, boolean resetPoints, boolean rankingReward, int numberOfTop) {
+    public void checkDay(long time, boolean resetPoints, boolean rankingReward, boolean randomReward, int numberOfTop) {
         saving.put("CheckDay", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             boolean firstTime = true;
@@ -166,10 +170,12 @@ public class Tasks {
                             Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                         }
                         int number = Main.db.lastDailyWinnerId();
+                        Random random = new Random();
                         for (int z = 0; z < topPlayers.size(); z++) {
                             int placeInTop = z;
-                            if (z >= Main.dailyChallenge.getRewards().size()) {
-                                placeInTop = Main.dailyChallenge.getRewards().size() - 1;
+                            int rewardsSize = Main.dailyChallenge.getRewards().size();
+                            if (z >= rewardsSize) {
+                                placeInTop = rewardsSize - 1;
                             }
                             number++;
                             DailyWinner dailyWinner = new DailyWinner();
@@ -180,11 +186,17 @@ public class Tasks {
                                 dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
                                 Main.db.insertDailyWinner(dailyWinner);
                             } else {
-                                for (int i = 0; i < Main.dailyChallenge.getRewards().size(); i++) {
+                                if (randomReward) {
                                     dailyWinner.setId(number);
-                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(random.nextInt(rewardsSize)));
                                     Main.db.insertDailyWinner(dailyWinner);
-                                    number++;
+                                } else {
+                                    for (int i = 0; i < rewardsSize; i++) {
+                                        dailyWinner.setId(number);
+                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                        Main.db.insertDailyWinner(dailyWinner);
+                                        number++;
+                                    }
                                 }
                             }
                         }

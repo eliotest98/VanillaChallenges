@@ -70,7 +70,7 @@ public class BlockPlaceEvent implements Listener {
             }
             if (landsEnabled) {
                 boolean playerTrusted = false;
-                Land land = Main.landsIntegration.getLand(location);
+                Land land = Main.landsIntegration.getArea(location).getLand();
                 if (land != null) {
                     for (UUID p : land.getTrustedPlayers()) {// scorro la lista dei player membri
                         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(p);// prendo il player

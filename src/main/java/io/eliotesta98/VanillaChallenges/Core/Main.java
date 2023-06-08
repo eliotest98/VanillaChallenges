@@ -5,8 +5,7 @@ import io.eliotesta98.VanillaChallenges.Events.*;
 import io.eliotesta98.VanillaChallenges.Interfaces.GuiEvent;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
-import me.angeschossen.lands.api.integration.LandsIntegration;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import me.angeschossen.lands.api.LandsIntegration;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
@@ -118,7 +117,11 @@ public class Main extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        config = new ConfigGestion(YamlConfiguration.loadConfiguration(configFile));
+        try {
+            config = new ConfigGestion(YamlConfiguration.loadConfiguration(configFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //loads challenges files
         config.loadCommentedConfiguration();
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
@@ -161,7 +164,7 @@ public class Main extends JavaPlugin {
                 if (getConfigGestion().getHooks().get("Lands")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
-                    landsIntegration = new LandsIntegration(instance);
+                    landsIntegration = LandsIntegration.of(this);
                 }
             } else {
                 getConfigGestion().getHooks().replace("Lands", false);
@@ -253,6 +256,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new DropperEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("HealthChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new HealthRegenEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("AFKChallenge")) {
+            new AFKCheck();
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
             challengeSelected = false;

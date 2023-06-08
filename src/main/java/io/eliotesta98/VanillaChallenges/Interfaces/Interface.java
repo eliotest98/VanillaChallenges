@@ -130,6 +130,7 @@ public class Interface {
         int slotModificable = items.size() - sizeModificableSlot;
         interfacesOpened.put(p.getName(), inventory);
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            boolean lock = Main.instance.getConfigGestion().isLockedInterface();
             int countItems = 0;
             for (int i = 0; i < slots.size(); i++) {// scorro gli slot
                 String slot = slots.get(i);// prendo lo slot
@@ -141,25 +142,69 @@ public class Interface {
                             if (challenge.getChallengeName().contains("Event_")) {
                                 challengeComplete = Main.instance.getConfigGestion().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
                             }
-                            inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, numberOfPage,
-                                    "vc.numberPage:" + (numberOfPage) +
-                                            ";vc.challengeName:" + challenge.getChallengeName() +
-                                            ";vc.challengeTime:" + challenge.getTimeChallenge() +
-                                            ";vc.challengeDescription:" + challengeComplete.getTitle() +
-                                            ";vc.challengePoint:" + challengeComplete.getPoint() +
-                                            ";vc.challengeItemsInHand:" + challengeComplete.getItemsInHand() +
-                                            ";vc.challengeWords:" + challengeComplete.getWorlds() +
-                                            ";vc.challengeBlocks:" + challengeComplete.getBlocks() +
-                                            ";vc.challengeRewards:" + challengeComplete.getRewards() +
-                                            ";vc.challengeSneaking:" + challengeComplete.getSneaking() +
-                                            ";vc.challengeBlocksOnPlace:" + challengeComplete.getBlocksOnPlace() +
-                                            ";vc.challengeVehicles:" + challengeComplete.getVehicle() +
-                                            ";vc.challengeMobs:" + challengeComplete.getMobs() +
-                                            ";vc.challengeItems:" + challengeComplete.getItems() +
-                                            ";vc.challengeCauses:" + challengeComplete.getCauses() +
-                                            ";vc.challengeColors:" + challengeComplete.getColors() +
-                                            ";vc.challengeItem:" + challengeComplete.getItemChallenge()
-                                    , i));
+                            if (!lock) {
+                                inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, numberOfPage,
+                                        "vc.numberPage:" + (numberOfPage) +
+                                                ";vc.challengeName:" + challenge.getChallengeName() +
+                                                ";vc.challengeTime:" + challenge.getTimeChallenge() +
+                                                ";vc.challengeDescription:" + challengeComplete.getTitle() +
+                                                ";vc.challengePoint:" + challengeComplete.getPoint() +
+                                                ";vc.challengeItemsInHand:" + challengeComplete.getItemsInHand() +
+                                                ";vc.challengeWords:" + challengeComplete.getWorlds() +
+                                                ";vc.challengeBlocks:" + challengeComplete.getBlocks() +
+                                                ";vc.challengeRewards:" + challengeComplete.getRewards() +
+                                                ";vc.challengeSneaking:" + challengeComplete.getSneaking() +
+                                                ";vc.challengeBlocksOnPlace:" + challengeComplete.getBlocksOnPlace() +
+                                                ";vc.challengeVehicles:" + challengeComplete.getVehicle() +
+                                                ";vc.challengeMobs:" + challengeComplete.getMobs() +
+                                                ";vc.challengeItems:" + challengeComplete.getItems() +
+                                                ";vc.challengeCauses:" + challengeComplete.getCauses() +
+                                                ";vc.challengeColors:" + challengeComplete.getColors() +
+                                                ";vc.challengeItem:" + challengeComplete.getItemChallenge()
+                                        , i));
+                            } else {
+                                if (Main.dailyChallenge.getChallengeName().equalsIgnoreCase(challenge.getChallengeName())) {
+                                    inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, numberOfPage,
+                                            "vc.numberPage:" + (numberOfPage) +
+                                                    ";vc.challengeName:" + challenge.getChallengeName() +
+                                                    ";vc.challengeTime:" + challenge.getTimeChallenge() +
+                                                    ";vc.challengeDescription:" + challengeComplete.getTitle() +
+                                                    ";vc.challengePoint:" + challengeComplete.getPoint() +
+                                                    ";vc.challengeItemsInHand:" + challengeComplete.getItemsInHand() +
+                                                    ";vc.challengeWords:" + challengeComplete.getWorlds() +
+                                                    ";vc.challengeBlocks:" + challengeComplete.getBlocks() +
+                                                    ";vc.challengeRewards:" + challengeComplete.getRewards() +
+                                                    ";vc.challengeSneaking:" + challengeComplete.getSneaking() +
+                                                    ";vc.challengeBlocksOnPlace:" + challengeComplete.getBlocksOnPlace() +
+                                                    ";vc.challengeVehicles:" + challengeComplete.getVehicle() +
+                                                    ";vc.challengeMobs:" + challengeComplete.getMobs() +
+                                                    ";vc.challengeItems:" + challengeComplete.getItems() +
+                                                    ";vc.challengeCauses:" + challengeComplete.getCauses() +
+                                                    ";vc.challengeColors:" + challengeComplete.getColors() +
+                                                    ";vc.challengeItem:" + challengeComplete.getItemChallenge()
+                                            , i));
+                                } else {
+                                    inventory.setItem(i, itemsConfig.get(slot.concat("" + 1)).createItemConfig(nameInterface, numberOfPage,
+                                            "vc.numberPage:" + (numberOfPage) +
+                                                    ";vc.challengeName:" + challenge.getChallengeName() +
+                                                    ";vc.challengeTime:" + challenge.getTimeChallenge() +
+                                                    ";vc.challengeDescription:" + challengeComplete.getTitle() +
+                                                    ";vc.challengePoint:" + challengeComplete.getPoint() +
+                                                    ";vc.challengeItemsInHand:" + challengeComplete.getItemsInHand() +
+                                                    ";vc.challengeWords:" + challengeComplete.getWorlds() +
+                                                    ";vc.challengeBlocks:" + challengeComplete.getBlocks() +
+                                                    ";vc.challengeRewards:" + challengeComplete.getRewards() +
+                                                    ";vc.challengeSneaking:" + challengeComplete.getSneaking() +
+                                                    ";vc.challengeBlocksOnPlace:" + challengeComplete.getBlocksOnPlace() +
+                                                    ";vc.challengeVehicles:" + challengeComplete.getVehicle() +
+                                                    ";vc.challengeMobs:" + challengeComplete.getMobs() +
+                                                    ";vc.challengeItems:" + challengeComplete.getItems() +
+                                                    ";vc.challengeCauses:" + challengeComplete.getCauses() +
+                                                    ";vc.challengeColors:" + challengeComplete.getColors() +
+                                                    ";vc.challengeItem:" + challengeComplete.getItemChallenge()
+                                            , i));
+                                }
+                            }
                             countItems++;
                         }
                     }
