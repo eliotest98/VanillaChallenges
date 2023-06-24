@@ -9,7 +9,7 @@ public interface Database {
 
     String insertDailyChallenges();
 
-    void insertChallengeEvent(String challengeName);
+    void insertChallengeEvent(String challengeName, int time);
 
     void deleteChallengeWithName(String challengeName);
 

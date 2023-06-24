@@ -1,6 +1,7 @@
 Mover:
   TypeChallenge: 'MoveChallenge'
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'
@@ -11,8 +12,18 @@ Mover:
   # How many points you want give at move?
   Point: 1
   # Blocks you want break for challenge, if you want all blocks set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Blocks: []
   # Items you want checked in hand ([] for all items)
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # if you want a multiplier based on all players
   Boost:

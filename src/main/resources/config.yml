@@ -6,8 +6,11 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #   
 
 Configuration:
-  #If you want random generation of Challenges
-  RandomChallengeGeneration: false
+
+  # Random: if you want random generation of Challenges
+  # Normal: if you want basic plugin schedule
+  # Single: if you want a single random challenge generated
+  ChallengeGeneration: 'Normal'
 
 
   # If you want reset the player points at the end of every challenge
@@ -56,6 +59,7 @@ Configuration:
     WorldGuard: false
     Lands: false
     GriefPrevention: false
+    Tombs: false
     
 
   # If you want use H2 or .yml file for data storage (write H2 or Yaml)
@@ -154,17 +158,19 @@ Messages:
   Prefix: '&eVanillaChallenges &r'
   Commands:
     Footer: '&7(&7&l(&c&l!&7&l)&7) &9[] optional value, <> required'
-    Reload: '   &e/vc &6<reload> &7command reload Plugin'
-    Next: '   &e/vc &6<next> &7go to the next challenge'
-    Top: '   &e/vc &6<top> &7for see the top 3'
-    Points: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
-    Clear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
+    Economy: '   &e/vc &6<add|remove> <playerName> <points> &7for add or remove points of a player'
     Challenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
-    Economy: '   &e/vc &6<add|remove> <playername> <points> &7for add or remove points of a player'
-    Reward: '   &e/vc &6<reward> &7for receive reward of win'
+    Clear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
+    Event: '   &e/vc &6<event> <stop|challenge|random> [duration|random] [time|random]&7for start a challenge event'
     List: '   &e/vc &6<list> &7for see the list of Challenges'
-    Event: '   &e/vc &6<event> <stop|challenge> &7for start a challenge event'
-    Schedule: '   &e/vc &6<schedule> <add|remove> <challenge> &7for add or remove a challenge from schedule'
+    Next: '   &e/vc &6<next> &7go to the next challenge'
+    Points: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
+    Reload: '   &e/vc &6<reload> &7command reload Plugin'
+    Reward: '   &e/vc &6<reward> &7for receive reward of win'
+    # if you want a file default duration or time use 0
+    Schedule: '   &e/vc &6<schedule> <add|remove> <challenge|random> &7for add or remove a challenge from schedule'
+    Top: '   &e/vc &6<top> &7for see the top 3'
+
   Errors:
     YouAreNotAPlayer: '{prefix}&cYou are not a player'
     CommandNotFound: '{prefix}&cCommand not found'

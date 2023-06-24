@@ -3,6 +3,7 @@ Damager:
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'
@@ -11,6 +12,12 @@ Damager:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Causes you want to damage for challenge, if you want all causes set []
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Causes: []
   # How many points you want give at damage?
   Point: 1

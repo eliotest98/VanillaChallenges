@@ -3,6 +3,7 @@ BoatMove:
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'
@@ -13,6 +14,12 @@ BoatMove:
   # How many points you want give for movement?
   Point: 1
   # What vehicle you want use the player? [] for all Vehicle
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Vehicles:
     - 'BOAT'
   # if you want a multiplier based on all players

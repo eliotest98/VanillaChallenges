@@ -1,6 +1,7 @@
 Fisher:
   TypeChallenge: 'FishingChallenge'
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'
@@ -9,6 +10,11 @@ Fisher:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Items you want to fish for challenge, if you want all items write []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'

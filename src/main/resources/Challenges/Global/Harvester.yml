@@ -3,6 +3,7 @@ Harvester:
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'
@@ -15,6 +16,12 @@ Harvester:
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
   # Items you want to harvest for challenge, if you want all items set []
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # if you want a multiplier based on all players
   Boost:

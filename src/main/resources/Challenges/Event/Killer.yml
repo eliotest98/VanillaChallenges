@@ -1,6 +1,7 @@
 Killer:
   TypeChallenge: 'KillChallenge'
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'
@@ -9,6 +10,11 @@ Killer:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Mobs you want to kill for challenge, if you want all mobs set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Mobs: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'

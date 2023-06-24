@@ -12,9 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Random;
+
+import java.util.*;
 
 public class Commands implements CommandExecutor {
 
@@ -114,13 +113,36 @@ public class Commands implements CommandExecutor {
                         debug.debug("Commands");
                     }
                 } else if (args[0].equalsIgnoreCase("event")) {
-                    if (args.length != 2) {
+                    if (args.length < 2 || args.length > 4) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
                         return;
+                    }
+                    int time = 0;
+                    int hour = 0;
+                    if (args.length == 3) {
+                        if (args[2].equalsIgnoreCase("random")) {
+                            Random random = new Random();
+                            time = random.nextInt(24) + 1;
+                        } else {
+                            time = Integer.parseInt(args[2]);
+                        }
+                    } else if (args.length == 4) {
+                        if (args[2].equalsIgnoreCase("random")) {
+                            Random random = new Random();
+                            time = random.nextInt(24) + 1;
+                        } else {
+                            time = Integer.parseInt(args[2]);
+                        }
+                        if (args[3].equalsIgnoreCase("random")) {
+                            Random random = new Random();
+                            hour = random.nextInt(24 - time) + 1;
+                        } else {
+                            hour = Integer.parseInt(args[3]);
+                        }
                     }
                     if (args[1].equalsIgnoreCase("stop")) {
                         if (!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
@@ -179,6 +201,43 @@ public class Commands implements CommandExecutor {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
+                    } else if (args[1].equalsIgnoreCase("random")) {
+                        if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                            sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        Random random = new Random();
+                        int sizeChallenges = random.nextInt(Main.instance.getConfigGestion().getChallengesEvent().size());
+                        int i = 0;
+                        Challenge challengeSelected = null;
+                        for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
+                            if (i == sizeChallenges) {
+                                challengeSelected = challenge.getValue();
+                                break;
+                            }
+                            i++;
+                        }
+                        if (time != 0) {
+                            challengeSelected.setTimeChallenge(time);
+                        }
+                        if (hour != 0) {
+                            challengeSelected.setStartTimeChallenge(hour + ":00");
+                        }
+                        Challenge finalChallengeSelected = challengeSelected;
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                            Main.db.insertChallengeEvent(finalChallengeSelected.getChallengeName(),
+                                    finalChallengeSelected.getTimeChallenge());
+                            Main.db.saveOldPointsForChallengeEvents();
+                            ReloadUtils.reload();
+                        });
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
                     } else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
                         if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
@@ -188,8 +247,12 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
+                        if (time != 0) {
+                            Main.instance.getConfigGestion().getChallenges().get(args[1]).setTimeChallenge(time);
+                        }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                            Main.db.insertChallengeEvent(args[1]);
+                            Main.db.insertChallengeEvent(args[1],
+                                    Main.instance.getConfigGestion().getChallenges().get(args[1]).getTimeChallenge());
                             Main.db.saveOldPointsForChallengeEvents();
                             ReloadUtils.reload();
                         });
@@ -202,6 +265,7 @@ public class Commands implements CommandExecutor {
                         for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
                             send.append(challengeOfList.replace("{challenge}", challenge.getKey())).append("\n");
                         }
+                        send.append("Random (Random Challenge)");
                         sender.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -323,18 +387,48 @@ public class Commands implements CommandExecutor {
                     }
                     Challenge challenge1 = Main.instance.getConfigGestion().getChallenges().get(args[2]);
                     if (args[1].equalsIgnoreCase("add")) {
-                        if (challenge1 == null) {
+                        if (challenge1 == null && !args[2].equalsIgnoreCase("random")) {
                             StringBuilder send = new StringBuilder("\n");
                             for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
                                 send.append(challengeOfList.replace("{challenge}", challenge.getKey())).append("\n");
                             }
+                            send.append("Random (Random Challenge)");
                             sender.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
                         } else {
-                            if (Main.db.isChallengePresent(args[2])) {
+                            if (args[2].equalsIgnoreCase("random")) {
+                                ArrayList<Challenge> scheduledChallenges = Main.db.getAllChallenges();
+                                ArrayList<Challenge> remainChallenges = new ArrayList<>();
+                                boolean find;
+                                for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallenges().entrySet()) {
+                                    find = false;
+                                    for (Challenge challenge2 : scheduledChallenges) {
+                                        if (challenge.getKey().equalsIgnoreCase(challenge2.getChallengeName())) {
+                                            find = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!find) {
+                                        remainChallenges.add(challenge.getValue());
+                                    }
+                                }
+                                if (remainChallenges.isEmpty()) {
+                                    sender.sendMessage(ColorUtils.applyColor(addError));
+                                    if (debugCommand) {
+                                        debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                        debug.debug("Commands");
+                                    }
+                                    return;
+                                } else {
+                                    Collections.shuffle(remainChallenges);
+                                    challenge1 = remainChallenges.get(0);
+                                }
+                            }
+                            if (Main.db.isChallengePresent(challenge1.getChallengeName())) {
                                 sender.sendMessage(ColorUtils.applyColor(addError));
                             } else {
+                                Challenge finalChallenge = challenge1;
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                                    Main.db.insertChallenge(args[2], challenge1.getTimeChallenge());
+                                    Main.db.insertChallenge(finalChallenge.getChallengeName(), finalChallenge.getTimeChallenge());
                                     sender.sendMessage(ColorUtils.applyColor(addSuccess));
                                     ReloadUtils.reload();
                                 });
@@ -700,18 +794,47 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        if (challenge1 == null) {
+                        if (challenge1 == null && !args[2].equalsIgnoreCase("random")) {
                             StringBuilder send = new StringBuilder("\n");
                             for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
                                 send.append(challengeOfList.replace("{challenge}", challenge.getKey())).append("\n");
                             }
                             sender.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
                         } else {
-                            if (Main.db.isChallengePresent(args[2])) {
+                            if (args[2].equalsIgnoreCase("random")) {
+                                ArrayList<Challenge> scheduledChallenges = Main.db.getAllChallenges();
+                                ArrayList<Challenge> remainChallenges = new ArrayList<>();
+                                boolean find;
+                                for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallenges().entrySet()) {
+                                    find = false;
+                                    for (Challenge challenge2 : scheduledChallenges) {
+                                        if (challenge.getKey().equalsIgnoreCase(challenge2.getChallengeName())) {
+                                            find = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!find) {
+                                        remainChallenges.add(challenge.getValue());
+                                    }
+                                }
+                                if (remainChallenges.isEmpty()) {
+                                    sender.sendMessage(ColorUtils.applyColor(addError));
+                                    if (debugCommand) {
+                                        debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                        debug.debug("Commands");
+                                    }
+                                    return;
+                                } else {
+                                    Collections.shuffle(remainChallenges);
+                                    challenge1 = remainChallenges.get(0);
+                                }
+                            }
+                            if (Main.db.isChallengePresent(challenge1.getChallengeName())) {
                                 sender.sendMessage(ColorUtils.applyColor(addError));
                             } else {
+                                Challenge finalChallenge = challenge1;
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                                    Main.db.insertChallenge(args[2], challenge1.getTimeChallenge());
+                                    Main.db.insertChallenge(finalChallenge.getChallengeName(), finalChallenge.getTimeChallenge());
                                     sender.sendMessage(ColorUtils.applyColor(addSuccess));
                                     ReloadUtils.reload();
                                 });
@@ -834,13 +957,36 @@ public class Commands implements CommandExecutor {
                         debug.debug("Commands");
                     }
                 } else if (args[0].equalsIgnoreCase("event")) {
-                    if (args.length != 2) {
+                    if (args.length < 2 || args.length > 4) {
                         p.sendMessage(ColorUtils.applyColor(commandVcEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
                         return;
+                    }
+                    int time = 0;
+                    int hour = 0;
+                    if (args.length == 3) {
+                        if (args[2].equalsIgnoreCase("random")) {
+                            Random random = new Random();
+                            time = random.nextInt(24) + 1;
+                        } else {
+                            time = Integer.parseInt(args[2]);
+                        }
+                    } else if (args.length == 4) {
+                        if (args[2].equalsIgnoreCase("random")) {
+                            Random random = new Random();
+                            time = random.nextInt(24) + 1;
+                        } else {
+                            time = Integer.parseInt(args[2]);
+                        }
+                        if (args[3].equalsIgnoreCase("random")) {
+                            Random random = new Random();
+                            hour = random.nextInt(24 - time) + 1;
+                        } else {
+                            hour = Integer.parseInt(args[3]);
+                        }
                     }
                     if (args[1].equalsIgnoreCase("stop")) {
                         if (!p.hasPermission("vc.event.stop.command")) {
@@ -906,6 +1052,43 @@ public class Commands implements CommandExecutor {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
+                    } else if (args[1].equalsIgnoreCase("random")) {
+                        if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                            p.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug("Commands");
+                            }
+                            return;
+                        }
+                        Random random = new Random();
+                        int sizeChallenges = random.nextInt(Main.instance.getConfigGestion().getChallengesEvent().size());
+                        int i = 0;
+                        Challenge challengeSelected = null;
+                        for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
+                            if (i == sizeChallenges) {
+                                challengeSelected = challenge.getValue();
+                                break;
+                            }
+                            i++;
+                        }
+                        if (time != 0) {
+                            challengeSelected.setTimeChallenge(time);
+                        }
+                        if (hour != 0) {
+                            challengeSelected.setStartTimeChallenge(hour + ":00");
+                        }
+                        Challenge finalChallengeSelected = challengeSelected;
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                            Main.db.insertChallengeEvent(finalChallengeSelected.getChallengeName(),
+                                    finalChallengeSelected.getTimeChallenge());
+                            Main.db.saveOldPointsForChallengeEvents();
+                            ReloadUtils.reload();
+                        });
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug("Commands");
+                        }
                     } else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
                         if (!p.hasPermission("vc.event.start.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -923,8 +1106,12 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
+                        if (time != 0) {
+                            Main.instance.getConfigGestion().getChallenges().get(args[1]).setTimeChallenge(time);
+                        }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                            Main.db.insertChallengeEvent(args[1]);
+                            Main.db.insertChallengeEvent(args[1],
+                                    Main.instance.getConfigGestion().getChallenges().get(args[1]).getTimeChallenge());
                             Main.db.saveOldPointsForChallengeEvents();
                             ReloadUtils.reload();
                         });

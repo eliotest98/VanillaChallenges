@@ -1,6 +1,7 @@
 Dier:
   TypeChallenge: 'DyerChallenge'
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'
@@ -9,10 +10,25 @@ Dier:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Causes you want to damage for challenge, if you want all causes write []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Causes: []
   # Type of item in main hand for death, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   ItemsInHand: []
   # Type of items in inventory for death (P.S. if the player have one in list is ok), if you want all items write []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'

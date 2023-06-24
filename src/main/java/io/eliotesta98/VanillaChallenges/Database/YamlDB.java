@@ -200,8 +200,12 @@ public class YamlDB implements Database {
         if (challenges.isEmpty()) {
             String nome = "nessuno";
             ArrayList<String> keys = new ArrayList<>(Main.instance.getConfigGestion().getChallenges().keySet());
-            if (Main.instance.getConfigGestion().isRandomChallengeGeneration()) {
+            if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Random")) {
                 Collections.shuffle(keys);
+            } else if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Single")) {
+                Collections.shuffle(keys);
+                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(keys.get(0));
+                return challenge.getChallengeName();
             }
             for (String key : keys) {
                 Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key);
@@ -408,9 +412,10 @@ public class YamlDB implements Database {
     }
 
     @Override
-    public void insertChallengeEvent(String challengeName) {
+    public void insertChallengeEvent(String challengeName, int time) {
         Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challengeName);
         challenge.setChallengeName("Event_" + challengeName);
+        challenge.setTimeChallenge(time);
         challenges.add(0, challenge);
         clearChallengesFromFile();
         for (Challenge challenge1 : challenges) {

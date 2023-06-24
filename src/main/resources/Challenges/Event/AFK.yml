@@ -1,6 +1,7 @@
 AFK:
   TypeChallenge: 'AFKChallenge'
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'
@@ -15,6 +16,11 @@ AFK:
   # Every x minutes you want check condition
   Minutes: 2
   # Items you want checked (P.S. if the player have one in list is ok) ([] for all items)
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # if you want a multiplier based on all players
   Boost:

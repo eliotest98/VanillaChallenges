@@ -152,14 +152,14 @@ public class Main extends JavaPlugin {
             } else {
                 getConfigGestion().getHooks().replace("GriefPrevention", false);
             }
-            /*if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
+            if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
                 if (getConfigGestion().getHooks().get("Tombs")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fTombs&a!"));
                 }
             } else {
                 getConfigGestion().getHooks().replace("Tombs", false);
-            }*/
+            }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Lands")) {
                 if (getConfigGestion().getHooks().get("Lands")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(

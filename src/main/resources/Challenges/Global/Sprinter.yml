@@ -3,6 +3,7 @@ Sprinter:
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'
@@ -13,8 +14,20 @@ Sprinter:
   # How many points you want give at sprinting?
   Point: 1
   # Blocks you want break for challenge, if you want all blocks set []
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Blocks: []
   # Items you want checked in hand ([] for all items)
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Item: []
   # if you want a multiplier based on all players
   Boost:
