@@ -6,8 +6,11 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #   
 
 Configuration:
-  #If you want random generation of Challenges
-  RandomChallengeGeneration: false
+
+  # Random: if you want random generation of Challenges
+  # Normal: if you want basic plugin schedule
+  # Single: if you want a single random challenge generated
+  ChallengeGeneration: 'Normal'
 
 
   # If you want reset the player points at the end of every challenge

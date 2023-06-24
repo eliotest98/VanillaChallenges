@@ -9,10 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ConfigGestion {
 
@@ -23,8 +20,8 @@ public class ConfigGestion {
     private HashMap<String, Boolean> hooks = new HashMap<>();
     private HashMap<String, Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, rankingReward, randomReward = false, yesterdayTop, resetPointsAtNewChallenge,
-            backupEnabled, randomChallengeGeneration, pointsResume, lockedInterface;
-    private String database;
+            backupEnabled, pointsResume, lockedInterface;
+    private String database, challengeGeneration;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
             time, numberOfTop;
     private ItemStack chestCollection;
@@ -140,7 +137,21 @@ public class ConfigGestion {
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
             String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
+            int end;
+            if (endTimeChallenge.equalsIgnoreCase("Random")) {
+                Random random = new Random();
+                end = random.nextInt(24) + 1;
+                endTimeChallenge = end + ":00";
+            } else {
+                end = Integer.parseInt(endTimeChallenge.split(":")[0]);
+            }
             String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
+            int start;
+            if (startTimeChallenge.equalsIgnoreCase("Random")) {
+                Random random = new Random();
+                start = random.nextInt(end) + 1;
+                startTimeChallenge = start + ":00";
+            }
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
             ArrayList<String> items = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Items");
@@ -306,7 +317,21 @@ public class ConfigGestion {
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
             String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
+            int end;
+            if (endTimeChallenge.equalsIgnoreCase("Random")) {
+                Random random = new Random();
+                end = random.nextInt(24) + 1;
+                endTimeChallenge = end + ":00";
+            } else {
+                end = Integer.parseInt(endTimeChallenge.split(":")[0]);
+            }
             String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
+            int start;
+            if (startTimeChallenge.equalsIgnoreCase("Random")) {
+                Random random = new Random();
+                start = random.nextInt(end) + 1;
+                startTimeChallenge = start + ":00";
+            }
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
             ArrayList<String> items = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Items");
@@ -410,7 +435,7 @@ public class ConfigGestion {
             randomReward = file.getBoolean("Configuration.Top.RandomReward");
         }
         backupEnabled = file.getBoolean("Configuration.Backup.Enabled");
-        randomChallengeGeneration = file.getBoolean("Configuration.RandomChallengeGeneration");
+        challengeGeneration = file.getString("Configuration.ChallengeGeneration");
         numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
         pointsOnlinePoints = file.getInt("Configuration.OnlinePoints.Point");
         minutesOnlinePoints = file.getInt("Configuration.OnlinePoints.Minutes");
@@ -610,12 +635,12 @@ public class ConfigGestion {
         this.time = time;
     }
 
-    public boolean isRandomChallengeGeneration() {
-        return randomChallengeGeneration;
+    public String getChallengeGeneration() {
+        return challengeGeneration;
     }
 
-    public void setRandomChallengeGeneration(boolean randomChallengeGeneration) {
-        this.randomChallengeGeneration = randomChallengeGeneration;
+    public void setChallengeGeneration(String challengeGeneration) {
+        this.challengeGeneration = challengeGeneration;
     }
 
     public Tasks getTasks() {

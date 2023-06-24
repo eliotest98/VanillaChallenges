@@ -3,6 +3,7 @@ BlockBreaker:
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
+  # If you want a random start or end set 'Random'
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '05:00'

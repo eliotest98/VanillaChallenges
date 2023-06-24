@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.eliotesta98.VanillaChallenges.Core.Main;
@@ -69,8 +70,12 @@ public class H2Database implements Database {
         if (challenges.isEmpty()) {
             String nome = "nessuno";
             ArrayList<String> keys = new ArrayList<>(Main.instance.getConfigGestion().getChallenges().keySet());
-            if (Main.instance.getConfigGestion().isRandomChallengeGeneration()) {
+            if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Random")) {
                 Collections.shuffle(keys);
+            } else if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Single")) {
+                Collections.shuffle(keys);
+                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(keys.get(0));
+                return challenge.getChallengeName();
             }
             for (String key : keys) {
                 Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key);

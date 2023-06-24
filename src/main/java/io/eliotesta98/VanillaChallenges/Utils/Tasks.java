@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -89,10 +90,13 @@ public class Tasks {
         saving.put("CheckStartDay", false);
         this.checkStart = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             final String startChallenge = Main.dailyChallenge.getStartTimeChallenge();
+            final String endChallenge = Main.dailyChallenge.getEndTimeChallenge();
             final String[] startSplit = startChallenge.split(":");
+            final String[] endSplit = endChallenge.split(":");
             final int startHour = Integer.parseInt(startSplit[0]);
             final int startMinutes = Integer.parseInt(startSplit[1]);
-            final int time = Main.dailyChallenge.getTimeChallenge();
+            final int endHour = Integer.parseInt(endSplit[0]);
+            final int endMinutes = Integer.parseInt(endSplit[1]);
 
             @Override
             public void run() {
@@ -100,44 +104,25 @@ public class Tasks {
                 SimpleDateFormat sdf = new SimpleDateFormat("ss.mm.HH.dd.MM.yyyy");
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 String data = sdf.format(timestamp);
-                String[] dataSplit = data.split(Pattern.quote("."));
-                int hour = Integer.parseInt(dataSplit[2]);
-                int minutes = Integer.parseInt(dataSplit[1]);
-                if (hour > startHour) {
-                    Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
-                            Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
-                            Main.instance.getConfigGestion().isRankingReward(),
-                            Main.instance.getConfigGestion().isRandomReward(),
-                            Main.instance.getConfigGestion().getNumberOfTop());
-                    challengeStart = true;
-                } else if (hour == startHour && minutes >= startMinutes) {
-                    Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
-                            Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
-                            Main.instance.getConfigGestion().isRankingReward(),
-                            Main.instance.getConfigGestion().isRandomReward(),
-                            Main.instance.getConfigGestion().getNumberOfTop());
-                    challengeStart = true;
-                } else {
-                    if (time < Main.instance.getConfigGestion().getChallenges().get(
-                            Main.dailyChallenge.getChallengeName()).getTimeChallenge()) {
-                        if (hour < startHour) {
-                            Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
-                                    Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
-                                    Main.instance.getConfigGestion().isRankingReward(),
-                                    Main.instance.getConfigGestion().isRandomReward(),
-                                    Main.instance.getConfigGestion().getNumberOfTop());
-                            challengeStart = true;
-                        } else if (hour == startHour && minutes <= startMinutes) {
-                            Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
-                                    Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
-                                    Main.instance.getConfigGestion().isRankingReward(),
-                                    Main.instance.getConfigGestion().isRandomReward(),
-                                    Main.instance.getConfigGestion().getNumberOfTop());
-                            challengeStart = true;
-                        }
+                try {
+                    Date now = sdf.parse(data);
+                    String[] dataSplit = data.split(Pattern.quote("."));
+                    String endData = "00." + endMinutes + "." + endHour + "." + dataSplit[3] + "." + dataSplit[4] + "." + dataSplit[5];
+                    String startData = "00." + startMinutes + "." + startHour + "." + dataSplit[3] + "." + dataSplit[4] + "." + dataSplit[5];
+                    Date end = sdf.parse(endData);
+                    Date start = sdf.parse(startData);
+                    if (now.compareTo(start) > 0 && now.compareTo(end) < 0) {
+                        Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
+                                Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
+                                Main.instance.getConfigGestion().isRankingReward(),
+                                Main.instance.getConfigGestion().isRandomReward(),
+                                Main.instance.getConfigGestion().getNumberOfTop());
+                        challengeStart = true;
                     } else {
                         challengeStart = false;
                     }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
                 saving.replace("CheckStartDay", false);
             }
