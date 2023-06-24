@@ -7,8 +7,10 @@ import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -120,7 +122,21 @@ public class ConfigGestion {
             }
             ArrayList<String> worlds = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Worlds");
             ArrayList<String> blocks = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Blocks");
+            if (blocks.contains("RANDOM")) {
+                blocks.remove(blocks.size() - 1);
+                Collections.shuffle(blocks);
+                String block = blocks.get(0);
+                blocks.clear();
+                blocks.add(block);
+            }
             ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
+            if (blocksOnPlaced.contains("RANDOM")) {
+                blocksOnPlaced.remove(blocks.size() - 1);
+                Collections.shuffle(blocksOnPlaced);
+                String block = blocksOnPlaced.get(0);
+                blocksOnPlaced.clear();
+                blocksOnPlaced.add(block);
+            }
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
             String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
@@ -128,13 +144,55 @@ public class ConfigGestion {
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
             ArrayList<String> items = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Items");
+            if (items.contains("RANDOM")) {
+                items.remove(blocks.size() - 1);
+                Collections.shuffle(items);
+                String block = items.get(0);
+                items.clear();
+                items.add(block);
+            }
             ArrayList<String> mobs = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Mobs");
+            if (mobs.contains("RANDOM")) {
+                mobs.remove(blocks.size() - 1);
+                Collections.shuffle(mobs);
+                String block = mobs.get(0);
+                mobs.clear();
+                mobs.add(block);
+            }
             ArrayList<String> itemsInHand = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".ItemsInHand");
+            if (itemsInHand.contains("RANDOM")) {
+                itemsInHand.remove(blocks.size() - 1);
+                Collections.shuffle(itemsInHand);
+                String block = itemsInHand.get(0);
+                itemsInHand.clear();
+                itemsInHand.add(block);
+            }
             double force = yamlChallenge.getDouble(challengeName + ".Force");
             double power = yamlChallenge.getDouble(challengeName + ".Power");
             ArrayList<String> colors = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Colors");
+            if (colors.contains("RANDOM")) {
+                colors.remove(blocks.size() - 1);
+                Collections.shuffle(colors);
+                String block = colors.get(0);
+                colors.clear();
+                colors.add(block);
+            }
             ArrayList<String> causes = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Causes");
+            if (causes.contains("RANDOM")) {
+                causes.remove(blocks.size() - 1);
+                Collections.shuffle(causes);
+                String block = causes.get(0);
+                causes.clear();
+                causes.add(block);
+            }
             ArrayList<String> vehicles = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Vehicles");
+            if (vehicles.contains("RANDOM")) {
+                vehicles.remove(blocks.size() - 1);
+                Collections.shuffle(vehicles);
+                String block = vehicles.get(0);
+                vehicles.clear();
+                vehicles.add(block);
+            }
             int point = yamlChallenge.getInt(challengeName + ".Point");
             int number = yamlChallenge.getInt(challengeName + ".Number");
             int time = yamlChallenge.getInt(challengeName + ".Time");
@@ -230,7 +288,21 @@ public class ConfigGestion {
             String challengeName = fileChallenge.getName().replace(".yml", "");
             ArrayList<String> worlds = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Worlds");
             ArrayList<String> blocks = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Blocks");
+            if (blocks.contains("RANDOM")) {
+                blocks.remove(blocks.size() - 1);
+                Collections.shuffle(blocks);
+                String block = blocks.get(0);
+                blocks.clear();
+                blocks.add(block);
+            }
             ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
+            if (blocksOnPlaced.contains("RANDOM")) {
+                blocksOnPlaced.remove(blocksOnPlaced.size() - 1);
+                Collections.shuffle(blocksOnPlaced);
+                String block = blocksOnPlaced.get(0);
+                blocksOnPlaced.clear();
+                blocksOnPlaced.add(block);
+            }
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
             String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
@@ -238,13 +310,55 @@ public class ConfigGestion {
             ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
             ArrayList<String> items = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Items");
+            if (items.contains("RANDOM")) {
+                items.remove(items.size() - 1);
+                Collections.shuffle(items);
+                String block = items.get(0);
+                items.clear();
+                items.add(block);
+            }
             ArrayList<String> mobs = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Mobs");
+            if (mobs.contains("RANDOM")) {
+                mobs.remove(mobs.size() - 1);
+                Collections.shuffle(mobs);
+                String block = mobs.get(0);
+                mobs.clear();
+                mobs.add(block);
+            }
             ArrayList<String> itemsInHand = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".ItemsInHand");
+            if (itemsInHand.contains("RANDOM")) {
+                itemsInHand.remove(itemsInHand.size() - 1);
+                Collections.shuffle(itemsInHand);
+                String block = itemsInHand.get(0);
+                itemsInHand.clear();
+                itemsInHand.add(block);
+            }
             double force = yamlChallenge.getDouble(challengeName + ".Force");
             double power = yamlChallenge.getDouble(challengeName + ".Power");
             ArrayList<String> colors = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Colors");
+            if (colors.contains("RANDOM")) {
+                colors.remove(colors.size() - 1);
+                Collections.shuffle(colors);
+                String block = colors.get(0);
+                colors.clear();
+                colors.add(block);
+            }
             ArrayList<String> causes = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Causes");
+            if (causes.contains("RANDOM")) {
+                causes.remove(causes.size() - 1);
+                Collections.shuffle(causes);
+                String block = causes.get(0);
+                causes.clear();
+                causes.add(block);
+            }
             ArrayList<String> vehicles = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Vehicles");
+            if (vehicles.contains("RANDOM")) {
+                vehicles.remove(vehicles.size() - 1);
+                Collections.shuffle(vehicles);
+                String block = vehicles.get(0);
+                vehicles.clear();
+                vehicles.add(block);
+            }
             int point = yamlChallenge.getInt(challengeName + ".Point");
             int number = yamlChallenge.getInt(challengeName + ".Number");
             int time = yamlChallenge.getInt(challengeName + ".Time");

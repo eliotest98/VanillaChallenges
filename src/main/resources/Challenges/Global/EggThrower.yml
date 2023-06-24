@@ -11,6 +11,12 @@ EggThrower:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # if you want count spawn chicken write CHICKEN, if you not want count chicken set [] (1 point at throw)
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Mobs: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'

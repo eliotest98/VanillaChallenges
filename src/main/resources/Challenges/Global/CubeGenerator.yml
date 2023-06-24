@@ -11,8 +11,20 @@ CubeGenerator:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Blocks you want placed for challenge, if you want all blocks set []
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Blocks: []
   # Type of item in main hand for break this blocks, if you want all items set []
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   ItemsInHand: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'

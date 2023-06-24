@@ -9,6 +9,11 @@ Crafter:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Items you want crafting for challenge, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # How many points you want give at craft?
   Point: 1

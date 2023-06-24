@@ -17,6 +17,11 @@ AFK:
   # Every x minutes you want check condition
   Minutes: 2
   # Items you want checked (P.S. if the player have one in list is ok) ([] for all items)
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # if you want a multiplier based on all players
   Boost:

@@ -11,8 +11,18 @@ Sprinter:
   # How many points you want give at sprinting?
   Point: 1
   # Blocks you want break for challenge, if you want all blocks set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Blocks: []
   # Items you want checked in hand ([] for all items)
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Item: []
   # if you want a multiplier based on all players
   Boost:

@@ -11,6 +11,11 @@ BoatMove:
   # How many points you want give for movement?
   Point: 1
   # What vehicle you want use the player? [] for all Vehicle
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Vehicles:
     - 'BOAT'
   # if you want a multiplier based on all players

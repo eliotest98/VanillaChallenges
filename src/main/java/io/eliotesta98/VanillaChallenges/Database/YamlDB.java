@@ -408,9 +408,10 @@ public class YamlDB implements Database {
     }
 
     @Override
-    public void insertChallengeEvent(String challengeName) {
+    public void insertChallengeEvent(String challengeName, int time) {
         Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challengeName);
         challenge.setChallengeName("Event_" + challengeName);
+        challenge.setTimeChallenge(time);
         challenges.add(0, challenge);
         clearChallengesFromFile();
         for (Challenge challenge1 : challenges) {

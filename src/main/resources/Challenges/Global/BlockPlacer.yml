@@ -11,8 +11,20 @@ BlockPlacer:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Blocks you want placed for challenge, if you want all blocks set []
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Blocks: []
   # Block you want place the block, if you want all block set []
+  # Type of item in main hand for break this blocks, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   BlocksOnPlaced:
     - GRASS_BLOCK
   # Able or disable Sneak when place Es. true or false or NOBODY

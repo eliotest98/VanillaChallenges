@@ -336,12 +336,11 @@ public class H2Database implements Database {
     }
 
     @Override
-    public void insertChallengeEvent(String challengeName) {
-        Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challengeName);
+    public void insertChallengeEvent(String challengeName, int time) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO Challenge (NomeChallenge,TimeResume) VALUES ('"
-                            + "Event_" + challengeName + "','" + challenge.getTimeChallenge()
+                            + "Event_" + challengeName + "','" + time
                             + "')");
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
