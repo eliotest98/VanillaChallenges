@@ -56,6 +56,7 @@ Configuration:
     WorldGuard: false
     Lands: false
     GriefPrevention: false
+    Tombs: false
     
 
   # If you want use H2 or .yml file for data storage (write H2 or Yaml)
@@ -160,7 +161,7 @@ Messages:
     Points: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
     Clear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
     Challenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
-    Economy: '   &e/vc &6<add|remove> <playername> <points> &7for add or remove points of a player'
+    Economy: '   &e/vc &6<add|remove> <playerName> <points> &7for add or remove points of a player'
     Reward: '   &e/vc &6<reward> &7for receive reward of win'
     List: '   &e/vc &6<list> &7for see the list of Challenges'
     Event: '   &e/vc &6<event> <stop|challenge> &7for start a challenge event'

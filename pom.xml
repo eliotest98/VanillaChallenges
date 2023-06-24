@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>VanillaChallenges</groupId>
     <artifactId>VanillaChallenges</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -183,7 +183,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--  GameProfile  -->
@@ -273,9 +273,9 @@
         <dependency>
             <groupId>io.eliotesta98</groupId>
             <artifactId>Tombs</artifactId>
-            <version>1.0.7</version>
+            <version>1.0.11</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Tombs 1.0.7.jar</systemPath>
+            <systemPath>${project.basedir}/lib/Tombs 1.0.11.jar</systemPath>
         </dependency>
         <!-- WorldGuard -->
         <dependency>

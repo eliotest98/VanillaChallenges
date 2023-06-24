@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Events;
 
+import io.eliotesta98.Tombs.Api.TombsApi;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import me.angeschossen.lands.api.land.Land;
