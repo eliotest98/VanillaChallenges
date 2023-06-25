@@ -113,36 +113,13 @@ public class Commands implements CommandExecutor {
                         debug.debug("Commands");
                     }
                 } else if (args[0].equalsIgnoreCase("event")) {
-                    if (args.length < 2 || args.length > 4) {
+                    if (args.length != 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    int time = 0;
-                    int hour = 0;
-                    if (args.length == 3) {
-                        if (args[2].equalsIgnoreCase("random")) {
-                            Random random = new Random();
-                            time = random.nextInt(24) + 1;
-                        } else {
-                            time = Integer.parseInt(args[2]);
-                        }
-                    } else if (args.length == 4) {
-                        if (args[2].equalsIgnoreCase("random")) {
-                            Random random = new Random();
-                            time = random.nextInt(24) + 1;
-                        } else {
-                            time = Integer.parseInt(args[2]);
-                        }
-                        if (args[3].equalsIgnoreCase("random")) {
-                            Random random = new Random();
-                            hour = random.nextInt(24 - time) + 1;
-                        } else {
-                            hour = Integer.parseInt(args[3]);
-                        }
                     }
                     if (args[1].equalsIgnoreCase("stop")) {
                         if (!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
@@ -221,12 +198,6 @@ public class Commands implements CommandExecutor {
                             }
                             i++;
                         }
-                        if (time != 0) {
-                            challengeSelected.setTimeChallenge(time);
-                        }
-                        if (hour != 0) {
-                            challengeSelected.setStartTimeChallenge(hour + ":00");
-                        }
                         Challenge finalChallengeSelected = challengeSelected;
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(finalChallengeSelected.getChallengeName(),
@@ -246,9 +217,6 @@ public class Commands implements CommandExecutor {
                                 debug.debug("Commands");
                             }
                             return;
-                        }
-                        if (time != 0) {
-                            Main.instance.getConfigGestion().getChallenges().get(args[1]).setTimeChallenge(time);
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(args[1],
@@ -957,36 +925,13 @@ public class Commands implements CommandExecutor {
                         debug.debug("Commands");
                     }
                 } else if (args[0].equalsIgnoreCase("event")) {
-                    if (args.length < 2 || args.length > 4) {
+                    if (args.length != 2) {
                         p.sendMessage(ColorUtils.applyColor(commandVcEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug("Commands");
                         }
                         return;
-                    }
-                    int time = 0;
-                    int hour = 0;
-                    if (args.length == 3) {
-                        if (args[2].equalsIgnoreCase("random")) {
-                            Random random = new Random();
-                            time = random.nextInt(24) + 1;
-                        } else {
-                            time = Integer.parseInt(args[2]);
-                        }
-                    } else if (args.length == 4) {
-                        if (args[2].equalsIgnoreCase("random")) {
-                            Random random = new Random();
-                            time = random.nextInt(24) + 1;
-                        } else {
-                            time = Integer.parseInt(args[2]);
-                        }
-                        if (args[3].equalsIgnoreCase("random")) {
-                            Random random = new Random();
-                            hour = random.nextInt(24 - time) + 1;
-                        } else {
-                            hour = Integer.parseInt(args[3]);
-                        }
                     }
                     if (args[1].equalsIgnoreCase("stop")) {
                         if (!p.hasPermission("vc.event.stop.command")) {
@@ -1072,12 +1017,6 @@ public class Commands implements CommandExecutor {
                             }
                             i++;
                         }
-                        if (time != 0) {
-                            challengeSelected.setTimeChallenge(time);
-                        }
-                        if (hour != 0) {
-                            challengeSelected.setStartTimeChallenge(hour + ":00");
-                        }
                         Challenge finalChallengeSelected = challengeSelected;
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(finalChallengeSelected.getChallengeName(),
@@ -1105,9 +1044,6 @@ public class Commands implements CommandExecutor {
                                 debug.debug("Commands");
                             }
                             return;
-                        }
-                        if (time != 0) {
-                            Main.instance.getConfigGestion().getChallenges().get(args[1]).setTimeChallenge(time);
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(args[1],
