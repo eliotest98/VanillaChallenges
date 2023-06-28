@@ -1131,27 +1131,23 @@ public class Commands implements CommandExecutor {
                                         winners.remove(number);
                                     });
                                 } else {
-                                    String[] listCommand = reward[1].split("\\s+");
-                                    int amount = 0;
-                                    Material material = Material.AIR;
-                                    for (String s : listCommand) {
-                                        try {
-                                            amount = Integer.parseInt(s);
-                                        } catch (NumberFormatException ex) {
-                                            try {
-                                                material = Material.getMaterial(s);
-                                            } catch (NullPointerException ignored) {
-
+                                    StringBuilder commandRefactor = new StringBuilder();
+                                    if (reward.length > 2) {
+                                        boolean first = false;
+                                        for (String part : reward) {
+                                            if (!first) {
+                                                first = true;
+                                                continue;
                                             }
+                                            commandRefactor.append(part).append(":");
                                         }
-                                    }
-                                    if (material == Material.AIR || material == null) {
-                                        p.sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", amount + "").replace("{item}", "")));
+                                        commandRefactor = new StringBuilder(commandRefactor.substring(0, commandRefactor.length() - 1));
                                     } else {
-                                        p.sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", amount + "").replace("{item}", material.toString())));
+                                        commandRefactor = new StringBuilder(reward[1]);
                                     }
+                                    String finalCommandRefactor = commandRefactor.toString();
                                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), reward[1].replace("%player%", p.getName()));
+                                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), finalCommandRefactor.replace("%player%", p.getName()));
                                         Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
                                         winners.remove(number);
                                     });

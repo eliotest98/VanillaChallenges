@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 
 public class DailyGiveWinners implements Listener {
@@ -52,7 +53,7 @@ public class DailyGiveWinners implements Listener {
                     if (e.getPlayer().getInventory().firstEmpty() != -1
                             && give
                             && !reward[0].equalsIgnoreCase("[command]")) {
-                        ItemStack item = null;
+                        ItemStack item;
                         if (reward[0].contains("-")) {
                             String[] splitItem = reward[0].split("-");
                             item = new ItemStack(Material.getMaterial(splitItem[0]), 1, Short.parseShort(splitItem[1]));
@@ -71,27 +72,23 @@ public class DailyGiveWinners implements Listener {
                     }
                     //command
                     else {
-                        String[] listCommand = reward[1].split("\\s+");
-                        int amount = 0;
-                        Material material = Material.AIR;
-                        for (int j = 0; j < listCommand.length; j++) {
-                            try {
-                                amount = Integer.parseInt(listCommand[j]);
-                            } catch (NumberFormatException ex) {
-                                try {
-                                    material = Material.getMaterial(listCommand[j]);
-                                } catch (NullPointerException e1) {
-
+                        StringBuilder commandRefactor = new StringBuilder();
+                        if (reward.length > 2) {
+                            boolean first = false;
+                            for (String part : reward) {
+                                if (!first) {
+                                    first = true;
+                                    continue;
                                 }
+                                commandRefactor.append(part).append(":");
                             }
-                        }
-                        if (material == Material.AIR || material == null) {
-                            e.getPlayer().sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", amount + "").replace("{item}", "")));
+                            commandRefactor = new StringBuilder(commandRefactor.substring(0, commandRefactor.length() - 1));
                         } else {
-                            e.getPlayer().sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", amount + "").replace("{item}", material.toString())));
+                            commandRefactor = new StringBuilder(reward[1]);
                         }
+                        String finalCommandRefactor = commandRefactor.toString();
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), reward[1].replace("%player%", e.getPlayer().getName()));
+                            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), finalCommandRefactor.replace("%player%", e.getPlayer().getName()));
                             Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
                             winners.remove(number);
                         });
