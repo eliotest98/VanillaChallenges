@@ -4,10 +4,14 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Challenge {
 
@@ -58,6 +62,16 @@ public class Challenge {
     int minutes = 1;
 
     private HashMap<String, Long> tempPoints = new HashMap<>();
+
+    private final static Pattern blockOnPlacedPattern = Pattern.compile("\\{blockOnPlaced[0-9]\\}");
+    private final static Pattern blockPattern = Pattern.compile("\\{block[0-9]\\}");
+    private final static Pattern worldPattern = Pattern.compile("\\{world[0-9]\\}");
+    private final static Pattern itemPattern = Pattern.compile("\\{item[0-9]\\}");
+    private final static Pattern itemInHandPattern = Pattern.compile("\\{itemInHand[0-9]\\}");
+    private final static Pattern vehiclePattern = Pattern.compile("\\{vehicle[0-9]\\}");
+    private final static Pattern causePattern = Pattern.compile("\\{cause[0-9]\\}");
+    private final static Pattern colorPattern = Pattern.compile("\\{color[0-9]\\}");
+    private final static Pattern mobPattern = Pattern.compile("\\{mob[0-9]\\}");
 
     public Challenge() {
 
@@ -823,5 +837,151 @@ public class Challenge {
             }
         }, 0, timeNumber);
         Main.instance.getConfigGestion().getTasks().addExternalTasks(boostingTask, "GlobalBoost", false);
+    }
+
+    public void message(CommandSender sender) {
+        ArrayList<String> title = new ArrayList<>(this.title);
+        for (int i = 0; i < title.size(); i++) {
+            Matcher matcherBlockPlaced = blockOnPlacedPattern.matcher(title.get(i));
+            while (matcherBlockPlaced.find()) {
+                String number = matcherBlockPlaced.group().replace("{blockOnPlaced", "").replace("}", "");
+                int numberInt = Integer.parseInt(number);
+                if (numberInt <= blocksOnPlaced.size()) {
+                    title.set(i,
+                            title.get(i).replace("{blockOnPlaced" + number + "}",
+                                    blocksOnPlaced.get(Integer.parseInt(number) - 1)));
+                } else {
+                    title.set(i,
+                            title.get(i).replace("{blockOnPlaced" + number + "}", "&cDELETE PLACEHOLDER"));
+                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {blockOnPlaced" + number + "}"));
+                }
+            }
+            Matcher matcherBlock = blockPattern.matcher(title.get(i));
+            while (matcherBlock.find()) {
+                String number = matcherBlock.group().replace("{block", "").replace("}", "");
+                int numberInt = Integer.parseInt(number);
+                if (numberInt <= blocks.size()) {
+                    title.set(i,
+                            title.get(i).replace("{block" + number + "}",
+                                    blocks.get(Integer.parseInt(number) - 1)));
+                } else {
+                    title.set(i,
+                            title.get(i).replace("{block" + number + "}", "&cDELETE PLACEHOLDER"));
+                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {block" + number + "}"));
+                }
+            }
+            Matcher matcherWorld = worldPattern.matcher(title.get(i));
+            while (matcherWorld.find()) {
+                String number = matcherWorld.group().replace("{world", "").replace("}", "");
+                int numberInt = Integer.parseInt(number);
+                if (numberInt <= worlds.size()) {
+                    title.set(i,
+                            title.get(i).replace("{world" + number + "}",
+                                    worlds.get(Integer.parseInt(number) - 1)));
+                } else {
+                    title.set(i,
+                            title.get(i).replace("{world" + number + "}", "&cDELETE PLACEHOLDER"));
+                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {world" + number + "}"));
+                }
+            }
+            Matcher matcherItem = itemPattern.matcher(title.get(i));
+            while (matcherItem.find()) {
+                String number = matcherItem.group().replace("{item", "").replace("}", "");
+                int numberInt = Integer.parseInt(number);
+                if (numberInt <= items.size()) {
+                    title.set(i,
+                            title.get(i).replace("{item" + number + "}",
+                                    items.get(Integer.parseInt(number) - 1)));
+                } else {
+                    title.set(i,
+                            title.get(i).replace("{item" + number + "}", "&cDELETE PLACEHOLDER"));
+                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {item" + number + "}"));
+                }
+            }
+            Matcher matcherItemInHand = itemInHandPattern.matcher(title.get(i));
+            while (matcherItemInHand.find()) {
+                String number = matcherItemInHand.group().replace("{itemInHand", "").replace("}", "");
+                int numberInt = Integer.parseInt(number);
+                if (numberInt <= itemsInHand.size()) {
+                    title.set(i,
+                            title.get(i).replace("{itemInHand" + number + "}",
+                                    itemsInHand.get(Integer.parseInt(number) - 1)));
+                } else {
+                    title.set(i,
+                            title.get(i).replace("{itemInHand" + number + "}", "&cDELETE PLACEHOLDER"));
+                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {itemInHand" + number + "}"));
+                }
+            }
+            Matcher matcherVehicle = vehiclePattern.matcher(title.get(i));
+            while (matcherVehicle.find()) {
+                String number = matcherVehicle.group().replace("{vehicle", "").replace("}", "");
+                int numberInt = Integer.parseInt(number);
+                if (numberInt <= vehicles.size()) {
+                    title.set(i,
+                            title.get(i).replace("{vehicle" + number + "}",
+                                    vehicles.get(Integer.parseInt(number) - 1)));
+                } else {
+                    title.set(i,
+                            title.get(i).replace("{vehicle" + number + "}", "&cDELETE PLACEHOLDER"));
+                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {vehicle" + number + "}"));
+                }
+            }
+            Matcher causeVehicle = causePattern.matcher(title.get(i));
+            while (causeVehicle.find()) {
+                String number = causeVehicle.group().replace("{cause", "").replace("}", "");
+                int numberInt = Integer.parseInt(number);
+                if (numberInt <= causes.size()) {
+                    title.set(i,
+                            title.get(i).replace("{cause" + number + "}",
+                                    causes.get(Integer.parseInt(number) - 1)));
+                } else {
+                    title.set(i,
+                            title.get(i).replace("{cause" + number + "}", "&cDELETE PLACEHOLDER"));
+                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {cause" + number + "}"));
+                }
+            }
+            Matcher matcherColor = colorPattern.matcher(title.get(i));
+            while (matcherColor.find()) {
+                String number = matcherColor.group().replace("{color", "").replace("}", "");
+                int numberInt = Integer.parseInt(number);
+                if (numberInt <= colors.size()) {
+                    title.set(i,
+                            title.get(i).replace("{color" + number + "}",
+                                    colors.get(Integer.parseInt(number) - 1)));
+                } else {
+                    title.set(i,
+                            title.get(i).replace("{color" + number + "}", "&cDELETE PLACEHOLDER"));
+                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {color" + number + "}"));
+                }
+            }
+            Matcher matcherMob = mobPattern.matcher(title.get(i));
+            while (matcherMob.find()) {
+                String number = matcherMob.group().replace("{mob", "").replace("}", "");
+                int numberInt = Integer.parseInt(number);
+                if (numberInt <= mobs.size()) {
+                    title.set(i,
+                            title.get(i).replace("{mob" + number + "}",
+                                    mobs.get(Integer.parseInt(number) - 1)));
+                } else {
+                    title.set(i,
+                            title.get(i).replace("{mob" + number + "}", "&cDELETE PLACEHOLDER"));
+                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {mob" + number + "}"));
+                }
+            }
+        }
+        for (String s : title) {
+            sender.sendMessage(ColorUtils.applyColor(s
+                    .replace("{hours}", Main.dailyChallenge.getTimeChallenge() + "")
+                    .replace("{points}", point + "")
+                    .replace("{slots}", number + "")
+                    .replace("{minutes}", minutes + "")
+                    .replace("{challengeName}", nameChallenge)
+                    .replace("{sneaking}", sneaking)
+                    .replace("{force}", force + "")
+                    .replace("{power}", power + "")
+                    .replace("{onGround}", onGround)
+                    .replace("{keepInventory}", keepInventory + "")
+            ));
+        }
     }
 }

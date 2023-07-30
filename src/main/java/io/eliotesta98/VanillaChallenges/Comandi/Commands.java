@@ -264,16 +264,7 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    int timeResume = Main.dailyChallenge.getTimeChallenge();
-                    for (int i = 0; i < Main.dailyChallenge.getTitle().size(); i++) {
-                        sender.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i)
-                                .replace("{hours}", timeResume + "")
-                                .replace("{points}", Main.dailyChallenge.getPoint() + "")
-                                .replace("{slots}", Main.dailyChallenge.getNumber() + "")
-                                .replace("{minutes}", Main.dailyChallenge.getMinutes() + "")
-                                .replace("{challengeName}", Main.dailyChallenge.getNameChallenge() + "")
-                        ));
-                    }
+                    Main.dailyChallenge.message(sender);
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                         debug.debug("Commands");
@@ -625,16 +616,7 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    int timeResume = Main.dailyChallenge.getTimeChallenge();
-                    for (int i = 0; i < Main.dailyChallenge.getTitle().size(); i++) {
-                        p.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i)
-                                .replace("{hours}", timeResume + "")
-                                .replace("{points}", Main.dailyChallenge.getPoint() + "")
-                                .replace("{slots}", Main.dailyChallenge.getNumber() + "")
-                                .replace("{minutes}", Main.dailyChallenge.getMinutes() + "")
-                                .replace("{challengeName}", Main.dailyChallenge.getNameChallenge() + "")
-                        ));
-                    }
+                    Main.dailyChallenge.message(sender);
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                         debug.debug("Commands");

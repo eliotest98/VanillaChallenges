@@ -128,7 +128,7 @@ public class ConfigGestion {
             }
             ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
             if (blocksOnPlaced.contains("RANDOM")) {
-                blocksOnPlaced.remove(blocks.size() - 1);
+                blocksOnPlaced.remove(blocksOnPlaced.size() - 1);
                 Collections.shuffle(blocksOnPlaced);
                 String block = blocksOnPlaced.get(0);
                 blocksOnPlaced.clear();
@@ -156,7 +156,7 @@ public class ConfigGestion {
             ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
             ArrayList<String> items = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Items");
             if (items.contains("RANDOM")) {
-                items.remove(blocks.size() - 1);
+                items.remove(items.size() - 1);
                 Collections.shuffle(items);
                 String block = items.get(0);
                 items.clear();
@@ -164,7 +164,7 @@ public class ConfigGestion {
             }
             ArrayList<String> mobs = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Mobs");
             if (mobs.contains("RANDOM")) {
-                mobs.remove(blocks.size() - 1);
+                mobs.remove(mobs.size() - 1);
                 Collections.shuffle(mobs);
                 String block = mobs.get(0);
                 mobs.clear();
@@ -172,7 +172,7 @@ public class ConfigGestion {
             }
             ArrayList<String> itemsInHand = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".ItemsInHand");
             if (itemsInHand.contains("RANDOM")) {
-                itemsInHand.remove(blocks.size() - 1);
+                itemsInHand.remove(itemsInHand.size() - 1);
                 Collections.shuffle(itemsInHand);
                 String block = itemsInHand.get(0);
                 itemsInHand.clear();
@@ -182,7 +182,7 @@ public class ConfigGestion {
             double power = yamlChallenge.getDouble(challengeName + ".Power");
             ArrayList<String> colors = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Colors");
             if (colors.contains("RANDOM")) {
-                colors.remove(blocks.size() - 1);
+                colors.remove(colors.size() - 1);
                 Collections.shuffle(colors);
                 String block = colors.get(0);
                 colors.clear();
@@ -190,7 +190,7 @@ public class ConfigGestion {
             }
             ArrayList<String> causes = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Causes");
             if (causes.contains("RANDOM")) {
-                causes.remove(blocks.size() - 1);
+                causes.remove(causes.size() - 1);
                 Collections.shuffle(causes);
                 String block = causes.get(0);
                 causes.clear();
@@ -198,7 +198,7 @@ public class ConfigGestion {
             }
             ArrayList<String> vehicles = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Vehicles");
             if (vehicles.contains("RANDOM")) {
-                vehicles.remove(blocks.size() - 1);
+                vehicles.remove(vehicles.size() - 1);
                 Collections.shuffle(vehicles);
                 String block = vehicles.get(0);
                 vehicles.clear();
@@ -444,12 +444,12 @@ public class ConfigGestion {
         pointsResume = file.getBoolean("Configuration.PointsResume");
 
         for (String nameInterface : file.getConfigurationSection("Interfaces").getKeys(false)) {
-            String title = file.getString("Interfaces." + nameInterface + ".Title");
+            String title = file.getString("Interfaces." + nameInterface + "..Title");
             String openSound = file.getString("Interfaces." + nameInterface + ".OpenSound");
-            ArrayList<String> slots = new ArrayList<String>();
-            ArrayList<String> contaSlots = new ArrayList<String>();
+            ArrayList<String> slots = new ArrayList<>();
+            ArrayList<String> contaSlots = new ArrayList<>();
 
-            HashMap<String, ItemConfig> itemsConfig = new HashMap<String, ItemConfig>();
+            HashMap<String, ItemConfig> itemsConfig = new HashMap<>();
             for (String nameItem : file.getConfigurationSection("Interfaces." + nameInterface + ".Items").getKeys(false)) {
                 String letter = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Letter");
                 String type = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Type");

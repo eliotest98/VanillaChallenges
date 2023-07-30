@@ -48,6 +48,25 @@ Sneaker:
   # item representing challenge
   ItemChallenge: 'SCULK_SENSOR'
   # Title challenge
+  # Placeholder List:
+  #  - {challengeName}
+  #  - {block#} where # is a number (start with 1) Ex. {block1}
+  #  - {blockOnPlaced#} where # is a number (start with 1) Ex. {blockOnPlaced1}
+  #  - {points}
+  #  - {minutes}
+  #  - {slots}
+  #  - {sneaking}
+  #  - {world#} where # is a number (start with 1) Ex. {world1}
+  #  - {item#} where # is a number (start with 1) Ex. {item1}
+  #  - {itemInHand#} where # is a number (start with 1) Ex. {itemInHand1}
+  #  - {vehicle#} where # is a number (start with 1) Ex. {vehicle1}
+  #  - {cause#} where # is a number (start with 1) Ex. {cause1}
+  #  - {color#} where # is a number (start with 1) Ex. {color1}
+  #  - {mob#} where # is a number (start with 1) Ex. {mob1}
+  #  - {force}
+  #  - {power}
+  #  - {onGround}
+  #  - {keepInventory}
   Title:
     - '&8'
     - '&8██&b███&8███&b██'

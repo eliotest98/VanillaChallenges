@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Tasks {
@@ -34,26 +35,19 @@ public class Tasks {
         return challengeStart;
     }
 
+    private final static Pattern hexPattern = Pattern.compile("\\{block[0-9]\\}");
+
     public void broadcast(long time, Challenge dailyChallenge,
                           String actuallyInTop, String pointsEveryMinutes, String pointsRemainForBoosting,
                           String pointsRemainForBoostingSinglePlayer, int numberOfTop) {
         saving.put("Broadcast", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
             saving.replace("Broadcast", true);
-            int timeResume = Main.dailyChallenge.getTimeChallenge();
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
                     break;
                 }
-                for (String s : dailyChallenge.getTitle()) {
-                    p.sendMessage(ColorUtils.applyColor(s
-                            .replace("{hours}", timeResume + "")
-                            .replace("{points}", dailyChallenge.getPoint() + "")
-                            .replace("{slots}", dailyChallenge.getNumber() + "")
-                            .replace("{minutes}", dailyChallenge.getMinutes() + "")
-                            .replace("{challengeName}", dailyChallenge.getNameChallenge() + "")
-                    ));
-                }
+                dailyChallenge.message(p);
                 ArrayList<Challenger> top;
                 if (!Main.instance.getConfigGestion().isYesterdayTop()) {
                     top = Main.dailyChallenge.getTopPlayers(numberOfTop);
