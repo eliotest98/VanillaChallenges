@@ -2,10 +2,12 @@ package io.eliotesta98.VanillaChallenges.Core;
 
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.*;
 import io.eliotesta98.VanillaChallenges.Interfaces.GuiEvent;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
-import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
-import me.angeschossen.lands.api.LandsIntegration;
+import io.eliotesta98.VanillaChallenges.Modules.CubeGenerator.CubeGeneratorEvent;
+import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
+import io.eliotesta98.VanillaChallenges.Modules.PlaceholderApi.ExpansionPlaceholderAPI;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
@@ -24,7 +26,6 @@ public class Main extends JavaPlugin {
     public static Challenge dailyChallenge;
     public static ExpansionPlaceholderAPI EPAPI;
     public static Database db;
-    public static LandsIntegration landsIntegration;
     public static boolean challengeSelected = true;
     public static boolean version113 = true;
 
@@ -164,7 +165,7 @@ public class Main extends JavaPlugin {
                 if (getConfigGestion().getHooks().get("Lands")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
-                    landsIntegration = LandsIntegration.of(this);
+                    LandsUtils.setLandsIntegration();
                 }
             } else {
                 getConfigGestion().getHooks().replace("Lands", false);
