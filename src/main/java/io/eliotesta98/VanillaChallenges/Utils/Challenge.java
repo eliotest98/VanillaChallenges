@@ -468,34 +468,27 @@ public class Challenge {
     }
 
     public void savePoints() {
-        task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
-            @Override
-            public void run() {
-                Main.instance.getConfigGestion().getTasks().changeStatusExternalTasks("SavePoints");
-                HashMap<String, Long> copyMap = new HashMap<String, Long>(players);
-                for (Map.Entry<String, Long> player : copyMap.entrySet()) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (player.getValue() > 0) {
-                                    if (Main.db.isPresent(player.getKey())) {
-                                        Main.db.updateChallenger(player.getKey(), player.getValue());
-                                    } else {
-                                        Main.db.insertChallenger(player.getKey(), player.getValue());
-                                    }
-                                }
-                            } catch (Exception ex) {
-                                Bukkit.getServer().getConsoleSender().sendMessage("Save Points Runtime: " + ex.getMessage());
+        task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
+            Main.instance.getConfigGestion().getTasks().changeStatusExternalTasks("SavePoints");
+            for (Map.Entry<String, Long> player : Collections.unmodifiableMap(players).entrySet()) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                    try {
+                        if (player.getValue() > 0) {
+                            if (Main.db.isPresent(player.getKey())) {
+                                Main.db.updateChallenger(player.getKey(), player.getValue());
+                            } else {
+                                Main.db.insertChallenger(player.getKey(), player.getValue());
                             }
                         }
-                    });
-                }
-                if (startBoost && (boostingTask == null || boostingTask.isCancelled())) {
-                    startBoosting();
-                }
-                Main.instance.getConfigGestion().getTasks().changeStatusExternalTasks("SavePoints");
+                    } catch (Exception ex) {
+                        Bukkit.getServer().getConsoleSender().sendMessage("Save Points Runtime: " + ex.getMessage());
+                    }
+                });
             }
+            if (startBoost && (boostingTask == null || boostingTask.isCancelled())) {
+                startBoosting();
+            }
+            Main.instance.getConfigGestion().getTasks().changeStatusExternalTasks("SavePoints");
         }, 0, timeNumber);
         Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "SavePoints", false);
     }
@@ -529,7 +522,7 @@ public class Challenge {
         try {
             for (int i = 0; i < numberOfTops; i++) {
                 Challenger challenger = new Challenger();
-                for (Map.Entry<String, Long> player : players.entrySet()) {
+                for (Map.Entry<String, Long> player : Collections.unmodifiableMap(players).entrySet()) {
                     if (player.getValue() > challenger.getPoints()) {
                         boolean trovato = false;
                         for (Challenger value : topList) {

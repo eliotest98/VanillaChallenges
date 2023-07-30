@@ -34,7 +34,7 @@ public class Tasks {
         return challengeStart;
     }
 
-    public void broadcast(long time, ArrayList<String> brodcastMessageTitle,
+    public void broadcast(long time, Challenge dailyChallenge,
                           String actuallyInTop, String pointsEveryMinutes, String pointsRemainForBoosting,
                           String pointsRemainForBoostingSinglePlayer, int numberOfTop) {
         saving.put("Broadcast", false);
@@ -45,8 +45,11 @@ public class Tasks {
                 if (!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
                     break;
                 }
-                for (String s : brodcastMessageTitle) {
-                    p.sendMessage(ColorUtils.applyColor(s.replace("{hours}", timeResume + "")));
+                for (String s : dailyChallenge.getTitle()) {
+                    p.sendMessage(ColorUtils.applyColor(s
+                            .replace("{hours}", timeResume + "")
+                            .replace("{points}", dailyChallenge.getPoint() + "")
+                    ));
                 }
                 ArrayList<Challenger> top;
                 if (!Main.instance.getConfigGestion().isYesterdayTop()) {

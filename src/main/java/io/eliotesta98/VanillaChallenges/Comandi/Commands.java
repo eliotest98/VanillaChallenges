@@ -266,7 +266,10 @@ public class Commands implements CommandExecutor {
                     }
                     int timeResume = Main.dailyChallenge.getTimeChallenge();
                     for (int i = 0; i < Main.dailyChallenge.getTitle().size(); i++) {
-                        sender.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i).replace("{hours}", timeResume + "")));
+                        sender.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i)
+                                .replace("{hours}", timeResume + "")
+                                .replace("{points}", Main.dailyChallenge.getPoint() + "")
+                        ));
                     }
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -621,7 +624,10 @@ public class Commands implements CommandExecutor {
                     }
                     int timeResume = Main.dailyChallenge.getTimeChallenge();
                     for (int i = 0; i < Main.dailyChallenge.getTitle().size(); i++) {
-                        p.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i).replace("{hours}", timeResume + "")));
+                        p.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i)
+                                .replace("{hours}", timeResume + "")
+                                .replace("{points}", Main.dailyChallenge.getPoint() + "")
+                        ));
                     }
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));

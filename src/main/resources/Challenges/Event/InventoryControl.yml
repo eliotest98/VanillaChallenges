@@ -47,14 +47,14 @@ InventoryControl:
   # Title challenge
   Title:
     - '&8'
-    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉       &7Inventory Control Challenge'
-    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Stay with 10 employed slot for receive points'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉               &7(10 point every 2 minutes)'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉     &7{hours} hours to the end of the challenge'
-    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8██&b███&8███&b██'
+    - '&8█&b██&8████&b███       &7Inventory Control Challenge'
+    - '&b██&6█&8███&b███&8█'
+    - '&b█&8██&6█&8█&b███&8██ &7Stay with 10 employed slot for receive points'
+    - '&b█&8███&6██&b█&8███               &7(10 point every 2 minutes)'
+    - '&8████&6██&8████'
+    - '&8███&6█&8██&6█&8███     &7{hours} hours to the end of the challenge'
+    - '&8██&6█&8████&6█&8██'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1

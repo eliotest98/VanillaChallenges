@@ -52,14 +52,14 @@ BlockBreaker:
   # Title challenge
   Title:
     - '&8'
-    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉              &7Block Break Challenge'
-    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉ &7Break all type of block for receive 1 point'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8██&b███&8███&b██'
+    - '&8█&b██&8████&b███              &7Block Break Challenge'
+    - '&b██&6█&8███&b███&8█'
+    - '&b█&8██&6█&8█&b███&8██ &7Break all type of block for receive 1 point'
+    - '&b█&8███&6██&b█&8███    &7{hours} hours to the end of the challenge'
+    - '&8████&6██&8████'
+    - '&8███&6█&8██&6█&8███'
+    - '&8██&6█&8████&6█&8██'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1
