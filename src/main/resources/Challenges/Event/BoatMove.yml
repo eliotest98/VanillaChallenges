@@ -47,7 +47,7 @@ BoatMove:
     - '&8██&b███&8███&b██'
     - '&8█&b██&8████&b███       &7Boat Move Challenge'
     - '&b██&6█&8███&b███&8█'
-    - '&b█&8██&6█&8█&b███&8██  &7Move with a boat for receive points'
+    - '&b█&8██&6█&8█&b███&8██  &7Move with a boat for receive {points} points'
     - '&b█&8███&6██&b█&8███'
     - '&8████&6██&8████'
     - '&8███&6█&8██&6█&8███     &7{hours} hours to the end of the challenge'

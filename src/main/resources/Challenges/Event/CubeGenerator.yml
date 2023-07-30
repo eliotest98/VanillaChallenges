@@ -56,7 +56,7 @@ CubeGenerator:
     - '&8█&b██&8████&b███      &7Block Break CubeGenerator Challenge'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██ &7Break all type of block of CubeGenerator'
-    - '&b█&8███&6██&b█&8███    &7for receive 1 point'
+    - '&b█&8███&6██&b█&8███    &7for receive {points} point'
     - '&8████&6██&8████   &7{hours} hours to the end of the challenge'
     - '&8███&6█&8██&6█&8███'
     - '&8██&6█&8████&6█&8██'

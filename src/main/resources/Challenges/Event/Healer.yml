@@ -47,7 +47,7 @@ Healer:
     - '&8█&b██&8████&b███                 &7Healer Challenge'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██        &7Take health for receive points'
-    - '&b█&8███&6██&b█&8███            &7(1 point for half heart)'
+    - '&b█&8███&6██&b█&8███            &7({points} point for half heart)'
     - '&8████&6██&8████        &7{hours} hours to the end of the challenge'
     - '&8███&6█&8██&6█&8███'
     - '&8██&6█&8████&6█&8██'

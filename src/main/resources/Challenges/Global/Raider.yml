@@ -42,7 +42,7 @@ Raider:
     - '&8█&b██&8████&b███                 &7Raid Challenge'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██           &7Win raid for receive points'
-    - '&b█&8███&6██&b█&8███      &7(100 points for waves if you win all)'
+    - '&b█&8███&6██&b█&8███      &7({points} points for waves if you win all)'
     - '&8████&6██&8████     &7{hours} hours to the end of the challenge'
     - '&8███&6█&8██&6█&8███'
     - '&8██&6█&8████&6█&8██'

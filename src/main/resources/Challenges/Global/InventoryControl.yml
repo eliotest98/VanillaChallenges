@@ -54,7 +54,7 @@ InventoryControl:
     - '&8█&b██&8████&b███       &7Inventory Control Challenge'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██ &7Stay with 10 employed slot for receive points'
-    - '&b█&8███&6██&b█&8███               &7(10 point every 2 minutes)'
+    - '&b█&8███&6██&b█&8███               &7({points} point every 2 minutes)'
     - '&8████&6██&8████'
     - '&8███&6█&8██&6█&8███     &7{hours} hours to the end of the challenge'
     - '&8██&6█&8████&6█&8██'

@@ -51,7 +51,7 @@ Killer:
     - '&8██&b███&8███&b██'
     - '&8█&b██&8████&b███                  &7Kill Challenge'
     - '&b██&6█&8███&b███&8█'
-    - '&b█&8██&6█&8█&b███&8██        &7Kill any mob for receive 1 point'
+    - '&b█&8██&6█&8█&b███&8██        &7Kill any mob for receive {points} point'
     - '&b█&8███&6██&b█&8███    &7{hours} hours to the end of the challenge'
     - '&8████&6██&8████'
     - '&8███&6█&8██&6█&8███'
