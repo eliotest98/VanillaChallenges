@@ -49,7 +49,7 @@ Dyer:
   Title:
     - '&8'
     - '&8██&b███&8███&b██'
-    - '&8█&b██&8████&b███         &7Color Sheep Challenge'
+    - '&8█&b██&8████&b███         {challengeName}'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██        &7Color sheep with any color'
     - '&b█&8███&6██&b█&8███             &7({points} point for 1 sheep)'

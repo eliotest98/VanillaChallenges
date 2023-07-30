@@ -44,7 +44,7 @@ Cooker:
   Title:
     - '&8'
     - '&8██&b███&8███&b██'
-    - '&8█&b██&8████&b███               &7Cooker Challenge'
+    - '&8█&b██&8████&b███               {challengeName}'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██       &7Cook any item for receive {points} point'
     - '&b█&8███&6██&b█&8███    &7{hours} hours to the end of the challenge'

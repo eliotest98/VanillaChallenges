@@ -50,10 +50,10 @@ AFK:
   Title:
     - '&8'
     - '&8██&b███&8███&b██'
-    - '&8█&b██&8████&b███             &7AFK Challenge'
+    - '&8█&b██&8████&b███             {challengeName}'
     - '&b██&6█&8███&b███&8█'
-    - '&b█&8██&6█&8█&b███&8██   &7Stay still with 10 employed slot'
-    - '&b█&8███&6██&b█&8███            &7({points} points every 2 minutes)'
+    - '&b█&8██&6█&8█&b███&8██   &7Stay still with {slots} employed slots'
+    - '&b█&8███&6██&b█&8███            &7({points} points every {minutes} minutes)'
     - '&8████&6██&8████'
     - '&8███&6█&8██&6█&8███     &7{hours} hours to the end of the challenge'
     - '&8██&6█&8████&6█&8██'

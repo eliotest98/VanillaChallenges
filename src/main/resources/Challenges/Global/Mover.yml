@@ -55,7 +55,7 @@ Mover:
   Title:
     - '&8'
     - '&8██&b███&8███&b██'
-    - '&8█&b██&8████&b███                 &7Move Challenge'
+    - '&8█&b██&8████&b███                 {challengeName}'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██             &7Move for receive points'
     - '&b█&8███&6██&b█&8███    &7{hours} hours to the end of the challenge'

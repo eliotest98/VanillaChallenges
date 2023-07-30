@@ -49,6 +49,9 @@ public class Tasks {
                     p.sendMessage(ColorUtils.applyColor(s
                             .replace("{hours}", timeResume + "")
                             .replace("{points}", dailyChallenge.getPoint() + "")
+                            .replace("{slots}", dailyChallenge.getNumber() + "")
+                            .replace("{minutes}", dailyChallenge.getMinutes() + "")
+                            .replace("{challengeName}", dailyChallenge.getNameChallenge() + "")
                     ));
                 }
                 ArrayList<Challenger> top;

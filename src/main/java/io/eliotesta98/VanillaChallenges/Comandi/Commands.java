@@ -269,6 +269,9 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i)
                                 .replace("{hours}", timeResume + "")
                                 .replace("{points}", Main.dailyChallenge.getPoint() + "")
+                                .replace("{slots}", Main.dailyChallenge.getNumber() + "")
+                                .replace("{minutes}", Main.dailyChallenge.getMinutes() + "")
+                                .replace("{challengeName}", Main.dailyChallenge.getNameChallenge() + "")
                         ));
                     }
                     if (debugCommand) {
@@ -627,6 +630,9 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(Main.dailyChallenge.getTitle().get(i)
                                 .replace("{hours}", timeResume + "")
                                 .replace("{points}", Main.dailyChallenge.getPoint() + "")
+                                .replace("{slots}", Main.dailyChallenge.getNumber() + "")
+                                .replace("{minutes}", Main.dailyChallenge.getMinutes() + "")
+                                .replace("{challengeName}", Main.dailyChallenge.getNameChallenge() + "")
                         ));
                     }
                     if (debugCommand) {

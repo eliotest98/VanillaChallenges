@@ -60,14 +60,14 @@ Dier:
     # For how many minutes you want give the multiplier?
     Minutes: 2
   # Name of Challenge
-  NameChallenge: "&7Dyer Challenge"
+  NameChallenge: "&7Dye Challenge"
   # item representing challenge
   ItemChallenge: 'RECOVERY_COMPASS'
   # Title challenge
   Title:
     - '&8'
     - '&8██&b███&8███&b██'
-    - '&8█&b██&8████&b███               &7Dye Challenge'
+    - '&8█&b██&8████&b███               {challengeName}'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██        &7Dye for receive points'
     - '&b█&8███&6██&b█&8███             &7({points} point for 1 death)'

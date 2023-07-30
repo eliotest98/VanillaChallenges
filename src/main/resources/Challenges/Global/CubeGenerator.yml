@@ -57,7 +57,7 @@ CubeGenerator:
   Title:
     - '&8'
     - '&8██&b███&8███&b██'
-    - '&8█&b██&8████&b███      &7Block Break CubeGenerator Challenge'
+    - '&8█&b██&8████&b███      {challengeName}'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██ &7Break all type of block of CubeGenerator'
     - '&b█&8███&6██&b█&8███    &7for receive {points} point'

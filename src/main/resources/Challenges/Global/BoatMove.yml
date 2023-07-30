@@ -48,7 +48,7 @@ BoatMove:
   Title:
     - '&8'
     - '&8██&b███&8███&b██'
-    - '&8█&b██&8████&b███       &7Boat Move Challenge'
+    - '&8█&b██&8████&b███       {challengeName}'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██  &7Move with a boat for receive points'
     - '&b█&8███&6██&b█&8███'
