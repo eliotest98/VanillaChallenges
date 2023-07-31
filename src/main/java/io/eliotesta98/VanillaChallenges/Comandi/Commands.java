@@ -141,31 +141,33 @@ public class Commands implements CommandExecutor {
                             }
                             int number = Main.db.lastDailyWinnerId();
                             Random random = new Random();
-                            for (int z = 0; z < topPlayers.size(); z++) {
-                                int placeInTop = z;
-                                int rewardsSize = Main.dailyChallenge.getRewards().size();
-                                if (z >= rewardsSize) {
-                                    placeInTop = rewardsSize - 1;
-                                }
-                                number++;
-                                DailyWinner dailyWinner = new DailyWinner();
-                                dailyWinner.setPlayerName(topPlayers.get(z).getNomePlayer());
-                                dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
-                                if (rankingReward) {
-                                    dailyWinner.setId(number);
-                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
-                                    Main.db.insertDailyWinner(dailyWinner);
-                                } else {
-                                    if (randomReward) {
+                            if (Main.dailyChallenge.isMinimumPointsReached()) {
+                                for (int z = 0; z < topPlayers.size(); z++) {
+                                    int placeInTop = z;
+                                    int rewardsSize = Main.dailyChallenge.getRewards().size();
+                                    if (z >= rewardsSize) {
+                                        placeInTop = rewardsSize - 1;
+                                    }
+                                    number++;
+                                    DailyWinner dailyWinner = new DailyWinner();
+                                    dailyWinner.setPlayerName(topPlayers.get(z).getNomePlayer());
+                                    dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
+                                    if (rankingReward) {
                                         dailyWinner.setId(number);
-                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(random.nextInt(rewardsSize)));
+                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
                                         Main.db.insertDailyWinner(dailyWinner);
                                     } else {
-                                        for (int i = 0; i < rewardsSize; i++) {
+                                        if (randomReward) {
                                             dailyWinner.setId(number);
-                                            dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                            dailyWinner.setReward(Main.dailyChallenge.getRewards().get(random.nextInt(rewardsSize)));
                                             Main.db.insertDailyWinner(dailyWinner);
-                                            number++;
+                                        } else {
+                                            for (int i = 0; i < rewardsSize; i++) {
+                                                dailyWinner.setId(number);
+                                                dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                                Main.db.insertDailyWinner(dailyWinner);
+                                                number++;
+                                            }
                                         }
                                     }
                                 }
@@ -300,6 +302,7 @@ public class Commands implements CommandExecutor {
                         return;
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+
                         ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
                         Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
                         Main.db.removeTopYesterday();
@@ -308,26 +311,28 @@ public class Commands implements CommandExecutor {
                             Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                         }
                         int number = Main.db.lastDailyWinnerId();
-                        for (int i = 0; i < topPlayers.size(); i++) {
-                            int placeInTop = i;
-                            if (i >= Main.dailyChallenge.getRewards().size()) {
-                                placeInTop = Main.dailyChallenge.getRewards().size() - 1;
-                            }
-                            number++;
-                            DailyWinner dailyWinner = new DailyWinner();
-                            dailyWinner.setId(number);
-                            dailyWinner.setPlayerName(topPlayers.get(i).getNomePlayer());
-                            dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
-                            if (Main.instance.getConfigGestion().isRankingReward()) {
+                        if (Main.dailyChallenge.isMinimumPointsReached()) {
+                            for (int i = 0; i < topPlayers.size(); i++) {
+                                int placeInTop = i;
+                                if (i >= Main.dailyChallenge.getRewards().size()) {
+                                    placeInTop = Main.dailyChallenge.getRewards().size() - 1;
+                                }
+                                number++;
+                                DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setId(number);
-                                dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
-                                Main.db.insertDailyWinner(dailyWinner);
-                            } else {
-                                for (int x = 0; x < Main.dailyChallenge.getRewards().size(); x++) {
+                                dailyWinner.setPlayerName(topPlayers.get(i).getNomePlayer());
+                                dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
+                                if (Main.instance.getConfigGestion().isRankingReward()) {
                                     dailyWinner.setId(number);
-                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(x));
+                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
                                     Main.db.insertDailyWinner(dailyWinner);
-                                    number++;
+                                } else {
+                                    for (int x = 0; x < Main.dailyChallenge.getRewards().size(); x++) {
+                                        dailyWinner.setId(number);
+                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(x));
+                                        Main.db.insertDailyWinner(dailyWinner);
+                                        number++;
+                                    }
                                 }
                             }
                         }
@@ -696,6 +701,7 @@ public class Commands implements CommandExecutor {
                         return;
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+
                         ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
                         Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
                         Main.db.removeTopYesterday();
@@ -704,26 +710,28 @@ public class Commands implements CommandExecutor {
                             Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                         }
                         int number = Main.db.lastDailyWinnerId();
-                        for (int i = 0; i < topPlayers.size(); i++) {
-                            int placeInTop = i;
-                            if (i >= Main.dailyChallenge.getRewards().size()) {
-                                placeInTop = Main.dailyChallenge.getRewards().size() - 1;
-                            }
-                            number++;
-                            DailyWinner dailyWinner = new DailyWinner();
-                            dailyWinner.setId(number);
-                            dailyWinner.setPlayerName(topPlayers.get(i).getNomePlayer());
-                            dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
-                            if (Main.instance.getConfigGestion().isRankingReward()) {
+                        if (Main.dailyChallenge.isMinimumPointsReached()) {
+                            for (int i = 0; i < topPlayers.size(); i++) {
+                                int placeInTop = i;
+                                if (i >= Main.dailyChallenge.getRewards().size()) {
+                                    placeInTop = Main.dailyChallenge.getRewards().size() - 1;
+                                }
+                                number++;
+                                DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setId(number);
-                                dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
-                                Main.db.insertDailyWinner(dailyWinner);
-                            } else {
-                                for (int x = 0; x < Main.dailyChallenge.getRewards().size(); x++) {
+                                dailyWinner.setPlayerName(topPlayers.get(i).getNomePlayer());
+                                dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
+                                if (Main.instance.getConfigGestion().isRankingReward()) {
                                     dailyWinner.setId(number);
-                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(x));
+                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
                                     Main.db.insertDailyWinner(dailyWinner);
-                                    number++;
+                                } else {
+                                    for (int x = 0; x < Main.dailyChallenge.getRewards().size(); x++) {
+                                        dailyWinner.setId(number);
+                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(x));
+                                        Main.db.insertDailyWinner(dailyWinner);
+                                        number++;
+                                    }
                                 }
                             }
                         }
@@ -945,6 +953,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+
                             ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(numberOfTop);
 
                             Main.db.removeTopYesterday();
@@ -954,31 +963,33 @@ public class Commands implements CommandExecutor {
                             }
                             int number = Main.db.lastDailyWinnerId();
                             Random random = new Random();
-                            for (int z = 0; z < topPlayers.size(); z++) {
-                                int placeInTop = z;
-                                int rewardsSize = Main.dailyChallenge.getRewards().size();
-                                if (z >= rewardsSize) {
-                                    placeInTop = rewardsSize - 1;
-                                }
-                                number++;
-                                DailyWinner dailyWinner = new DailyWinner();
-                                dailyWinner.setPlayerName(topPlayers.get(z).getNomePlayer());
-                                dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
-                                if (rankingReward) {
-                                    dailyWinner.setId(number);
-                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
-                                    Main.db.insertDailyWinner(dailyWinner);
-                                } else {
-                                    if (randomReward) {
+                            if (Main.dailyChallenge.isMinimumPointsReached()) {
+                                for (int z = 0; z < topPlayers.size(); z++) {
+                                    int placeInTop = z;
+                                    int rewardsSize = Main.dailyChallenge.getRewards().size();
+                                    if (z >= rewardsSize) {
+                                        placeInTop = rewardsSize - 1;
+                                    }
+                                    number++;
+                                    DailyWinner dailyWinner = new DailyWinner();
+                                    dailyWinner.setPlayerName(topPlayers.get(z).getNomePlayer());
+                                    dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
+                                    if (rankingReward) {
                                         dailyWinner.setId(number);
-                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(random.nextInt(rewardsSize)));
+                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
                                         Main.db.insertDailyWinner(dailyWinner);
                                     } else {
-                                        for (int i = 0; i < rewardsSize; i++) {
+                                        if (randomReward) {
                                             dailyWinner.setId(number);
-                                            dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                            dailyWinner.setReward(Main.dailyChallenge.getRewards().get(random.nextInt(rewardsSize)));
                                             Main.db.insertDailyWinner(dailyWinner);
-                                            number++;
+                                        } else {
+                                            for (int i = 0; i < rewardsSize; i++) {
+                                                dailyWinner.setId(number);
+                                                dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                                Main.db.insertDailyWinner(dailyWinner);
+                                                number++;
+                                            }
                                         }
                                     }
                                 }

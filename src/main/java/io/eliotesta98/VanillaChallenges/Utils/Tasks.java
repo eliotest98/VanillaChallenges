@@ -147,7 +147,9 @@ public class Tasks {
                 }
                 if (Main.dailyChallenge.getTimeChallenge() <= 0) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+
                         ArrayList<Challenger> topPlayers = Main.dailyChallenge.getTopPlayers(numberOfTop);
+
                         Main.db.deleteChallengeWithName(Main.dailyChallenge.getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
@@ -156,31 +158,33 @@ public class Tasks {
                         }
                         int number = Main.db.lastDailyWinnerId();
                         Random random = new Random();
-                        for (int z = 0; z < topPlayers.size(); z++) {
-                            int placeInTop = z;
-                            int rewardsSize = Main.dailyChallenge.getRewards().size();
-                            if (z >= rewardsSize) {
-                                placeInTop = rewardsSize - 1;
-                            }
-                            number++;
-                            DailyWinner dailyWinner = new DailyWinner();
-                            dailyWinner.setPlayerName(topPlayers.get(z).getNomePlayer());
-                            dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
-                            if (rankingReward) {
-                                dailyWinner.setId(number);
-                                dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
-                                Main.db.insertDailyWinner(dailyWinner);
-                            } else {
-                                if (randomReward) {
+                        if(Main.dailyChallenge.isMinimumPointsReached()) {
+                            for (int z = 0; z < topPlayers.size(); z++) {
+                                int placeInTop = z;
+                                int rewardsSize = Main.dailyChallenge.getRewards().size();
+                                if (z >= rewardsSize) {
+                                    placeInTop = rewardsSize - 1;
+                                }
+                                number++;
+                                DailyWinner dailyWinner = new DailyWinner();
+                                dailyWinner.setPlayerName(topPlayers.get(z).getNomePlayer());
+                                dailyWinner.setNomeChallenge(Main.dailyChallenge.getChallengeName());
+                                if (rankingReward) {
                                     dailyWinner.setId(number);
-                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(random.nextInt(rewardsSize)));
+                                    dailyWinner.setReward(Main.dailyChallenge.getRewards().get(placeInTop));
                                     Main.db.insertDailyWinner(dailyWinner);
                                 } else {
-                                    for (int i = 0; i < rewardsSize; i++) {
+                                    if (randomReward) {
                                         dailyWinner.setId(number);
-                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                        dailyWinner.setReward(Main.dailyChallenge.getRewards().get(random.nextInt(rewardsSize)));
                                         Main.db.insertDailyWinner(dailyWinner);
-                                        number++;
+                                    } else {
+                                        for (int i = 0; i < rewardsSize; i++) {
+                                            dailyWinner.setId(number);
+                                            dailyWinner.setReward(Main.dailyChallenge.getRewards().get(i));
+                                            Main.db.insertDailyWinner(dailyWinner);
+                                            number++;
+                                        }
                                     }
                                 }
                             }

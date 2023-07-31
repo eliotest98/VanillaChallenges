@@ -563,6 +563,14 @@ public class Challenge {
         }
     }
 
+    public boolean isMinimumPointsReached() {
+        long count = 0;
+        for (long number : Collections.unmodifiableMap(players).values()) {
+            count = count + number;
+        }
+        return count >= Main.instance.getConfigGestion().getMinimumPoints();
+    }
+
     public ArrayList<String> getTitle() {
         return title;
     }

@@ -23,7 +23,7 @@ public class ConfigGestion {
             backupEnabled, pointsResume, lockedInterface;
     private String database, challengeGeneration;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
-            time, numberOfTop;
+            time, numberOfTop, minimumPoints;
     private ItemStack chestCollection;
     private Tasks tasks = new Tasks();
     private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
@@ -224,8 +224,8 @@ public class ConfigGestion {
                 multiplierSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Multiplier");
                 minutesSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Minutes");
             }
-            String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
-            String onGround = yamlChallenge.getString(challengeName + ".OnGround");
+            String sneaking = (yamlChallenge.getString(challengeName + ".Sneaking") == null) ? "NOBODY" : yamlChallenge.getString(challengeName + ".Sneaking");
+            String onGround = (yamlChallenge.getString(challengeName + ".OnGround") == null) ? "NOBODY" : yamlChallenge.getString(challengeName + ".OnGround");
             ArrayList<String> quests = new ArrayList<>();
             for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
                 quests.add(quest.replace("{prefix}", messages.get("Prefix")));
@@ -427,8 +427,8 @@ public class ConfigGestion {
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         lockedInterface = file.getBoolean("Configuration.LockedInterface");
         database = file.getString("Configuration.Database");
-        resetPointsAtNewChallenge = file.getBoolean("Configuration.ResetPointsAtNewChallenge");
-        activeOnlinePoints = file.getBoolean("Configuration.OnlinePoints.Enabled");
+        resetPointsAtNewChallenge = file.getBoolean("Configuration.Points.ResetPointsAtNewChallenge");
+        activeOnlinePoints = file.getBoolean("Configuration.Points.OnlinePoints.Enabled");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
         rankingReward = file.getBoolean("Configuration.Top.RankingReward");
         if (!rankingReward) {
@@ -437,11 +437,12 @@ public class ConfigGestion {
         backupEnabled = file.getBoolean("Configuration.Backup.Enabled");
         challengeGeneration = file.getString("Configuration.ChallengeGeneration");
         numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
-        pointsOnlinePoints = file.getInt("Configuration.OnlinePoints.Point");
-        minutesOnlinePoints = file.getInt("Configuration.OnlinePoints.Minutes");
+        pointsOnlinePoints = file.getInt("Configuration.Points.OnlinePoints.Point");
+        minutesOnlinePoints = file.getInt("Configuration.Points.OnlinePoints.Minutes");
+        minimumPoints = file.getInt("Configuration.Points.MinimumPoints");
         ArrayList<String> lore = new ArrayList<>(file.getStringList("Configuration.CollectionChallengeItem.Lore"));
         chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
-        pointsResume = file.getBoolean("Configuration.PointsResume");
+        pointsResume = file.getBoolean("Configuration.Points.PointsResume");
 
         for (String nameInterface : file.getConfigurationSection("Interfaces").getKeys(false)) {
             String title = file.getString("Interfaces." + nameInterface + "..Title");
@@ -713,5 +714,13 @@ public class ConfigGestion {
 
     public void setLockedInterface(boolean lockedInterface) {
         this.lockedInterface = lockedInterface;
+    }
+
+    public int getMinimumPoints() {
+        return minimumPoints;
+    }
+
+    public void setMinimumPoints(int minimumPoints) {
+        this.minimumPoints = minimumPoints;
     }
 }

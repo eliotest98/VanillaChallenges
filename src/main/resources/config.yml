@@ -12,13 +12,25 @@ Configuration:
   # Single: if you want a single random challenge generated
   ChallengeGeneration: 'Normal'
 
+  # Points Gesture
+  Points:
+    # If you want reset the player points at the end of every challenge
+    ResetPointsAtNewChallenge: false
 
-  # If you want reset the player points at the end of every challenge
-  ResetPointsAtNewChallenge: false
+    # If you want resume points without zero (Ex 1.000 = 1k)
+    PointsResume: true
 
+    # Points if remain online for x minutes
+    OnlinePoints:
+      # If You want this feature
+      Enabled: false
+      # Point at minutes
+      Point: 10
+      # Every time you want player remain online for give points
+      Minutes: 10
 
-  # If you want resume points without zero (Ex 1.000 = 1k)
-  PointsResume: true
+    # Minimum points for give rewards
+    MinimumPoints: 0
 
 
   # Chest for ItemCollectionChallenge
@@ -27,16 +39,6 @@ Configuration:
     Name: "&7Chest Collector"
     Lore:
       - "&7Place this chest and use it for collect items"
-
-
-  # Points if remain online for x minutes
-  OnlinePoints:
-    # If You want this feature
-    Enabled: false
-    # Point at minutes
-    Point: 10
-    # Every time you want player remain online for give points
-    Minutes: 10
 
 
   BroadcastMessage:
