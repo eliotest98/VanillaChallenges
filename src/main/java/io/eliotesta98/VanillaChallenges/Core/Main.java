@@ -2,10 +2,13 @@ package io.eliotesta98.VanillaChallenges.Core;
 
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.*;
 import io.eliotesta98.VanillaChallenges.Interfaces.GuiEvent;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
-import io.eliotesta98.VanillaChallenges.Utils.DailyGiveWinners;
-import me.angeschossen.lands.api.LandsIntegration;
+import io.eliotesta98.VanillaChallenges.Modules.CubeGenerator.CubeGeneratorEvent;
+import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
+import io.eliotesta98.VanillaChallenges.Modules.PlaceholderApi.ExpansionPlaceholderAPI;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Events;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
@@ -24,12 +27,11 @@ public class Main extends JavaPlugin {
     public static Challenge dailyChallenge;
     public static ExpansionPlaceholderAPI EPAPI;
     public static Database db;
-    public static LandsIntegration landsIntegration;
     public static boolean challengeSelected = true;
     public static boolean version113 = true;
 
     public void onEnable() {
-        DebugUtils debugsistem = new DebugUtils();
+        DebugUtils debugsistem = new DebugUtils("Enabled");
         long tempo = System.currentTimeMillis();
         Main.instance = this;
 
@@ -164,7 +166,7 @@ public class Main extends JavaPlugin {
                 if (getConfigGestion().getHooks().get("Lands")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
-                    landsIntegration = LandsIntegration.of(this);
+                    LandsUtils.setLandsIntegration();
                 }
             } else {
                 getConfigGestion().getHooks().replace("Lands", false);
@@ -176,6 +178,14 @@ public class Main extends JavaPlugin {
                 }
             } else {
                 getConfigGestion().getHooks().replace("WorldGuard", false);
+            }
+            if (Bukkit.getServer().getPluginManager().isPluginEnabled("SuperiorSkyblock2")) {
+                if (getConfigGestion().getHooks().get("SuperiorSkyblock2")) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(
+                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fSuperiorSkyblock2&a!"));
+                }
+            } else {
+                getConfigGestion().getHooks().replace("SuperiorSkyblock2", false);
             }
         });
         getServer().getConsoleSender().sendMessage("§aConfiguration Loaded!");
@@ -258,6 +268,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new HealthRegenEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("AFKChallenge")) {
             new AFKCheck();
+        } else if (typeChallenge.equalsIgnoreCase("MissionChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new SuperiorSkyBlock2Events(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
             challengeSelected = false;
@@ -270,12 +282,13 @@ public class Main extends JavaPlugin {
             config.getTasks().checkStartDay();
             if (config.getTimeBrodcastMessageTitle() != 0) {
                 config.getTasks().broadcast(((long) config.getTimeBrodcastMessageTitle() * 60 * 20)
-                        , dailyChallenge.getTitle(),
-                        config.getMessages().get("ActuallyInTop")
+                        , dailyChallenge
+                        , config.getMessages().get("ActuallyInTop")
                         , config.getMessages().get("PointsEveryMinutes")
                         , config.getMessages().get("PointsRemainForBoosting")
                         , config.getMessages().get("PointsRemainForBoostingSinglePlayer")
-                        , config.getNumberOfTop());
+                        , config.getNumberOfTop()
+                );
             }
             if (config.isActiveOnlinePoints()) {
                 config.getTasks().onlinePoints(config.getMinutesOnlinePoints(), config.getPointsOnlinePoints());
@@ -285,12 +298,12 @@ public class Main extends JavaPlugin {
         getCommand("vc").setExecutor((CommandExecutor) new Commands());
         if (config.getDebug().get("Enabled")) {
             debugsistem.addLine("Enabled execution time= " + (System.currentTimeMillis() - tempo));
-            debugsistem.debug("Enabled");
+            debugsistem.debug();
         }
     }
 
     public void onDisable() {
-        DebugUtils debugsistem = new DebugUtils();
+        DebugUtils debugSystem = new DebugUtils("Disabled");
         long tempo = System.currentTimeMillis();
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "VanillaChallenges has been disabled, §cBye bye! §e:(");
         config.getTasks().stopAllTasks();
@@ -309,8 +322,8 @@ public class Main extends JavaPlugin {
         }
         db.disconnect();
         if (config.getDebug().get("Disabled")) {
-            debugsistem.addLine("Disabled execution time= " + (System.currentTimeMillis() - tempo));
-            debugsistem.debug("Disabled");
+            debugSystem.addLine("Disabled execution time= " + (System.currentTimeMillis() - tempo));
+            debugSystem.debug();
         }
     }
 

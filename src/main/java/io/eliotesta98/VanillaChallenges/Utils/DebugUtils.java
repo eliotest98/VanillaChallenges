@@ -4,17 +4,23 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.event.Event;
 
 public class DebugUtils {
 
-    private ArrayList<String> lines = new ArrayList<String>();
+    private ArrayList<String> lines = new ArrayList<>();
+    private String eventName = "Event";
 
     public DebugUtils(ArrayList<String> lines) {
         this.lines = lines;
     }
 
-    public DebugUtils() {
+    public DebugUtils(Event event) {
+        eventName = event.getEventName();
+    }
 
+    public DebugUtils(String event) {
+        eventName = event;
     }
 
     public void setLines(ArrayList<String> lines) {
@@ -34,7 +40,7 @@ public class DebugUtils {
     }
 
     public void addLine(String newLine) {
-        this.lines.add(newLine);
+        this.lines.add(eventName + " " + newLine);
     }
 
     public void removeLine(int index) {
@@ -53,8 +59,8 @@ public class DebugUtils {
         this.lines.removeAll(this.lines);
     }
 
-    public void debug(String type) {
-        String debug = " Debug VanillaChallenges for " + type;
+    public void debug() {
+        String debug = " Debug VanillaChallenges for " + eventName;
         Bukkit.getServer().getConsoleSender().sendMessage(" ");
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + debug);
         Bukkit.getServer().getConsoleSender().sendMessage(" ");
@@ -62,7 +68,7 @@ public class DebugUtils {
             Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + this.getLine(i));
         }
         Bukkit.getServer().getConsoleSender().sendMessage(" ");
-        debug = " Close Debug VanillaChallenges for " + type;
+        debug = " Close Debug VanillaChallenges for " + eventName;
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + debug);
         Bukkit.getServer().getConsoleSender().sendMessage(" ");
         removeAll();

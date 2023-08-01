@@ -43,16 +43,35 @@ Fisher:
   # item representing challenge
   ItemChallenge: 'FISHING_ROD'
   # Title challenge
+  # Placeholder List:
+  #  - {challengeName}
+  #  - {block#} where # is a number (start with 1) Ex. {block1}
+  #  - {blockOnPlaced#} where # is a number (start with 1) Ex. {blockOnPlaced1}
+  #  - {points}
+  #  - {minutes}
+  #  - {slots}
+  #  - {sneaking}
+  #  - {world#} where # is a number (start with 1) Ex. {world1}
+  #  - {item#} where # is a number (start with 1) Ex. {item1}
+  #  - {itemInHand#} where # is a number (start with 1) Ex. {itemInHand1}
+  #  - {vehicle#} where # is a number (start with 1) Ex. {vehicle1}
+  #  - {cause#} where # is a number (start with 1) Ex. {cause1}
+  #  - {color#} where # is a number (start with 1) Ex. {color1}
+  #  - {mob#} where # is a number (start with 1) Ex. {mob1}
+  #  - {force}
+  #  - {power}
+  #  - {onGround}
+  #  - {keepInventory}
   Title:
     - '&8'
-    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉                &7Fishing Challenge'
-    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉           &7Fishing for receive 1 point'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉    &7{hours} hours to the end of the challenge'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉'
-    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8██&b███&8███&b██'
+    - '&8█&b██&8████&b███                {challengeName}'
+    - '&b██&6█&8███&b███&8█'
+    - '&b█&8██&6█&8█&b███&8██           &7Fishing for receive {points} point'
+    - '&b█&8███&6██&b█&8███    &7{hours} hours to the end of the challenge'
+    - '&8████&6██&8████'
+    - '&8███&6█&8██&6█&8███'
+    - '&8██&6█&8████&6█&8██'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1

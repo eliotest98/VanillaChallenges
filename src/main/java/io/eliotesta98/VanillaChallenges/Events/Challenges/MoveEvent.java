@@ -1,0 +1,121 @@
+package io.eliotesta98.VanillaChallenges.Events.Challenges;
+
+import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
+import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class MoveEvent implements Listener {
+
+    private final HashMap<String, Double> distances = new HashMap<>();
+    private DebugUtils debugUtils;
+    private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
+    private final ArrayList<String> items = Main.dailyChallenge.getItems();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("MoveEvent");
+    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
+        debugUtils = new DebugUtils(e);
+        long tempo = System.currentTimeMillis();
+        if (e.getTo() == null) {
+            if (debugActive) {
+                debugUtils.addLine("EndLocation= null");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+            return;
+        }
+
+        final String playerName = e.getPlayer().getName();
+        final String worldName = e.getPlayer().getWorld().getName();
+        final Location from = e.getFrom();
+        final Location to = e.getTo();
+        final String materialFrom = from.getBlock().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
+        final String materialTo = to.getBlock().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
+        String playerMaterialInHand;
+        if(Main.version113) {
+            playerMaterialInHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
+        } else {
+            playerMaterialInHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
+        }
+        String finalPlayerMaterialInHand = playerMaterialInHand;
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if (debugActive) {
+                debugUtils.addLine("PlayerMoving= " + playerName);
+            }
+
+            if (superiorSkyBlock2Enabled) {
+                if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(playerName))) {
+                    if (debugActive) {
+                        debugUtils.addLine("Player is inside his own island");
+                    }
+                } else {
+                    if (debugActive) {
+                        debugUtils.addLine("Player isn't inside his own island");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
+                    }
+                    return;
+                }
+            }
+
+            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
+                if (debugActive) {
+                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("PlayerWorld= " + worldName);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
+                }
+                return;
+            }
+
+            if (!items.isEmpty() && !items.contains(finalPlayerMaterialInHand)) {
+                if (debugActive) {
+                    debugUtils.addLine("PlayerMaterialInHand= " + finalPlayerMaterialInHand);
+                    debugUtils.addLine("ConfigMaterialInHand= " + items);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
+                }
+                return;
+            }
+
+            if (!blocks.isEmpty() && !blocks.contains(materialFrom) && !blocks.contains(materialTo)) {
+                if (debugActive) {
+                    debugUtils.addLine("BlockToStepOn= " + materialTo);
+                    debugUtils.addLine("BlockFromStepOn= " + materialFrom);
+                    debugUtils.addLine("BlockStepOnConfig= " + blocks);
+                    debugUtils.debug();
+                }
+                return;
+            }
+
+            if (distances.get(playerName) == null) {
+                distances.put(playerName, from.distance(to));
+            } else {
+                double old = distances.get(playerName);
+                double newDouble = old + from.distance(to);
+                if (newDouble > 1.0) {
+                    Main.dailyChallenge.increment(playerName, point);
+                    distances.replace(playerName, newDouble - 1.0);
+                } else {
+                    distances.replace(playerName, newDouble);
+                }
+            }
+            if (debugActive) {
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+        });
+    }
+}
+

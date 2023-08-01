@@ -12,7 +12,6 @@ Dier:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Causes you want to damage for challenge, if you want all causes write []
-  # Type of item in main hand for break this blocks, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
@@ -20,7 +19,6 @@ Dier:
   #       - RANDOM
   Causes: []
   # Type of item in main hand for death, if you want all items set []
-  # Type of item in main hand for break this blocks, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
@@ -28,7 +26,6 @@ Dier:
   #       - RANDOM
   ItemsInHand: []
   # Type of items in inventory for death (P.S. if the player have one in list is ok), if you want all items write []
-  # Type of item in main hand for break this blocks, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
@@ -69,16 +66,35 @@ Dier:
   # item representing challenge
   ItemChallenge: 'RECOVERY_COMPASS'
   # Title challenge
+  # Placeholder List:
+  #  - {challengeName}
+  #  - {block#} where # is a number (start with 1) Ex. {block1}
+  #  - {blockOnPlaced#} where # is a number (start with 1) Ex. {blockOnPlaced1}
+  #  - {points}
+  #  - {minutes}
+  #  - {slots}
+  #  - {sneaking}
+  #  - {world#} where # is a number (start with 1) Ex. {world1}
+  #  - {item#} where # is a number (start with 1) Ex. {item1}
+  #  - {itemInHand#} where # is a number (start with 1) Ex. {itemInHand1}
+  #  - {vehicle#} where # is a number (start with 1) Ex. {vehicle1}
+  #  - {cause#} where # is a number (start with 1) Ex. {cause1}
+  #  - {color#} where # is a number (start with 1) Ex. {color1}
+  #  - {mob#} where # is a number (start with 1) Ex. {mob1}
+  #  - {force}
+  #  - {power}
+  #  - {onGround}
+  #  - {keepInventory}
   Title:
     - '&8'
-    - '&8▉▉&b▉▉▉&8▉▉▉&b▉▉'
-    - '&8▉&b▉▉&8▉▉▉▉&b▉▉▉               &7Dye Challenge'
-    - '&b▉▉&6▉&8▉▉▉&b▉▉▉&8▉'
-    - '&b▉&8▉▉&6▉&8▉&b▉▉▉&8▉▉        &7Dye for receive points'
-    - '&b▉&8▉▉▉&6▉▉&b▉&8▉▉▉             &7(1 point for 1 death)'
-    - '&8▉▉▉▉&6▉▉&8▉▉▉▉     &7{hours} hours to the end of the challenge'
-    - '&8▉▉▉&6▉&8▉▉&6▉&8▉▉▉'
-    - '&8▉▉&6▉&8▉▉▉▉&6▉&8▉▉'
+    - '&8██&b███&8███&b██'
+    - '&8█&b██&8████&b███               {challengeName}'
+    - '&b██&6█&8███&b███&8█'
+    - '&b█&8██&6█&8█&b███&8██        &7Dye for receive points'
+    - '&b█&8███&6██&b█&8███             &7({points} point for 1 death)'
+    - '&8████&6██&8████     &7{hours} hours to the end of the challenge'
+    - '&8███&6█&8██&6█&8███'
+    - '&8██&6█&8████&6█&8██'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1

@@ -12,13 +12,25 @@ Configuration:
   # Single: if you want a single random challenge generated
   ChallengeGeneration: 'Normal'
 
+  # Points Gesture
+  Points:
+    # If you want reset the player points at the end of every challenge
+    ResetPointsAtNewChallenge: false
 
-  # If you want reset the player points at the end of every challenge
-  ResetPointsAtNewChallenge: false
+    # If you want resume points without zero (Ex 1.000 = 1k)
+    PointsResume: true
 
+    # Points if remain online for x minutes
+    OnlinePoints:
+      # If You want this feature
+      Enabled: false
+      # Point at minutes
+      Point: 10
+      # Every time you want player remain online for give points
+      Minutes: 10
 
-  # If you want resume points without zero (Ex 1.000 = 1k)
-  PointsResume: true
+    # Minimum points for give rewards
+    MinimumPoints: 0
 
 
   # Chest for ItemCollectionChallenge
@@ -27,16 +39,6 @@ Configuration:
     Name: "&7Chest Collector"
     Lore:
       - "&7Place this chest and use it for collect items"
-
-
-  # Points if remain online for x minutes
-  OnlinePoints:
-    # If You want this feature
-    Enabled: false
-    # Point at minutes
-    Point: 10
-    # Every time you want player remain online for give points
-    Minutes: 10
 
 
   BroadcastMessage:
@@ -60,7 +62,8 @@ Configuration:
     Lands: false
     GriefPrevention: false
     Tombs: false
-    
+    SuperiorSkyblock2: false
+
 
   # If you want use H2 or .yml file for data storage (write H2 or Yaml)
   Database: 'H2'
@@ -153,7 +156,7 @@ Interfaces:
 
 
 # you can use a different coloring by using a hexadecimal. for all messages Ex. &{#FFFF00}(yellow).
-# Example for a command: '/tombs &{#FFFF00}<reload>&{#000000} command reload Plugin'
+# Example for a command: '/vc &{#FFFF00}<reload>&{#000000} command reload Plugin'
 Messages:
   Prefix: '&eVanillaChallenges &r'
   Commands:
@@ -161,7 +164,7 @@ Messages:
     Economy: '   &e/vc &6<add|remove> <playerName> <points> &7for add or remove points of a player'
     Challenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
     Clear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
-    Event: '   &e/vc &6<event> <stop|challenge|random> [duration|random] [time|random]&7for start a challenge event'
+    Event: '   &e/vc &6<event> <stop|challenge|random> &7for start a challenge event'
     List: '   &e/vc &6<list> &7for see the list of Challenges'
     Next: '   &e/vc &6<next> &7go to the next challenge'
     Points: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
