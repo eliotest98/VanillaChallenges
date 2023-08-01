@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class DailyGiveWinners implements Listener {
 
     private ArrayList<DailyWinner> winners;
-    private DebugUtils debugUtils = new DebugUtils();
+    private DebugUtils debugUtils = new DebugUtils("DailyGiveRewardEvent");
     private boolean debug = Main.instance.getConfigGestion().getDebug().get("DailyGiveRewardEvent");
     private String challengeReward = Main.instance.getConfigGestion().getMessages().get("ChallengeReward");
 
@@ -30,8 +30,8 @@ public class DailyGiveWinners implements Listener {
         long tempo = System.currentTimeMillis();
         if (winners.isEmpty()) {
             if (debug) {
-                debugUtils.addLine("DailyGiveRewardEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("DailyGiveRewardEvent");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
             return;
         }
@@ -43,12 +43,9 @@ public class DailyGiveWinners implements Listener {
                     boolean give = true;
                     if (winners.get(i).getReward().equalsIgnoreCase("NOBODY")) {
                         give = false;
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
-                            @Override
-                            public void run() {
-                                Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
-                                winners.remove(number);
-                            }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                            Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
+                            winners.remove(number);
                         });
                     }
                     //item

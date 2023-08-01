@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,15 +15,17 @@ import java.util.HashMap;
 
 public class HealthRegenEvent implements Listener {
 
-    private final DebugUtils debugUtils = new DebugUtils();
+    private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("HealthRegenEvent");
     private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final HashMap<String, Double> playersRegen = new HashMap<>();
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onHealthRegen(org.bukkit.event.entity.EntityRegainHealthEvent e) {
+        debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         final EntityRegainHealthEvent.RegainReason reason = e.getRegainReason();
         final double amount = e.getAmount();
@@ -32,7 +35,7 @@ public class HealthRegenEvent implements Listener {
         }
         if (player == null) {
             if (debugActive) {
-                debugUtils.addLine("HealthRegenEvent This is not a player");
+                debugUtils.addLine("This is not a player");
             }
             return;
         }
@@ -41,25 +44,40 @@ public class HealthRegenEvent implements Listener {
             String playerName = finalPlayer.getName();
             String worldName = finalPlayer.getWorld().getName();
             if (debugActive) {
-                debugUtils.addLine("HealthRegenEvent PlayerRegen= " + playerName);
+                debugUtils.addLine("PlayerRegen= " + playerName);
+            }
+
+            if (superiorSkyBlock2Enabled) {
+                if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(playerName))) {
+                    if (debugActive) {
+                        debugUtils.addLine("Player is inside his own island");
+                    }
+                } else {
+                    if (debugActive) {
+                        debugUtils.addLine("Player isn't inside his own island");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
+                    }
+                    return;
+                }
             }
 
             if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                 if (debugActive) {
-                    debugUtils.addLine("HealthRegenEvent WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("HealthRegenEvent PlayerWorld= " + worldName);
-                    debugUtils.addLine("HealthRegenEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("HealthRegenEvent");
+                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("PlayerWorld= " + worldName);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
 
             if (!causes.isEmpty() && !causes.contains(reason.toString())) {
                 if (debugActive) {
-                    debugUtils.addLine("HealthRegenEvent CausePlayer= " + reason);
-                    debugUtils.addLine("HealthRegenEvent CauseConfig= " + causes);
-                    debugUtils.addLine("HealthRegenEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("HealthRegenEvent");
+                    debugUtils.addLine("CausePlayer= " + reason);
+                    debugUtils.addLine("CauseConfig= " + causes);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
@@ -79,8 +97,8 @@ public class HealthRegenEvent implements Listener {
             }
 
             if (debugActive) {
-                debugUtils.addLine("HealthRegenEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("HealthRegenEvent");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
         });
     }

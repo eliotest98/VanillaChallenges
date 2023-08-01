@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Events.Challenges;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Modules.GriefPrevention.GriefPreventionUtils;
 import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Modules.WorldGuard.WorldGuardUtils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 public class BlockPlaceEvent implements Listener {
 
-    private final DebugUtils debugUtils = new DebugUtils();
+    private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockPlaceEvent");
     private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
     private final ArrayList<String> blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
@@ -28,10 +29,12 @@ public class BlockPlaceEvent implements Listener {
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
     private boolean ok = false;
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockPlaceEvent e) {
+        debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         final Player player = e.getPlayer();
         final String materialBlockOnPlaced = e.getBlockAgainst().getType().toString();
@@ -42,7 +45,7 @@ public class BlockPlaceEvent implements Listener {
         final World world = e.getPlayer().getWorld();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
-                debugUtils.addLine("BlockPlaceEvent PlayerPlacing= " + player.getName());
+                debugUtils.addLine("PlayerPlacing= " + player.getName());
             }
             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                 if (griefPreventionEnabled) {
@@ -52,22 +55,22 @@ public class BlockPlaceEvent implements Listener {
             if (ok) {
                 ok = false;
                 if (debugActive) {
-                    debugUtils.addLine("BlockPlaceEvent Player is not trusted at Claim");
-                    debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockPlaceEvent");
+                    debugUtils.addLine("Player is not trusted at Claim");
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
             if (landsEnabled) {
                 if (LandsUtils.isTrusted(location, player.getName())) {
                     if (debugActive) {
-                        debugUtils.addLine("BlockPlaceEvent Player is trusted at Land");
+                        debugUtils.addLine("Player is trusted at Land");
                     }
                 } else {
                     if (debugActive) {
-                        debugUtils.addLine("BlockPlaceEvent Player is not trusted at Land");
-                        debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug("BlockPlaceEvent");
+                        debugUtils.addLine("Player is not trusted at Land");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
                     }
                     return;
                 }
@@ -75,53 +78,69 @@ public class BlockPlaceEvent implements Listener {
             if (worldGuardEnabled) {
                 if (WorldGuardUtils.isARagion(world, location)) {
                     if (debugActive) {
-                        debugUtils.addLine("BlockPlaceEvent Player is in a region");
-                        debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug("BlockPlaceEvent");
+                        debugUtils.addLine("Player is in a region");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
                     }
                     return;
                 }
             }
+
+            if (superiorSkyBlock2Enabled) {
+                if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(player.getName()))) {
+                    if (debugActive) {
+                        debugUtils.addLine("Player is inside his own island");
+                    }
+                } else {
+                    if (debugActive) {
+                        debugUtils.addLine("Player isn't inside his own island");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
+                    }
+                    return;
+                }
+            }
+
             if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(world.getName())) {
                 if (debugActive) {
-                    debugUtils.addLine("BlockPlaceEvent WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("BlockPlaceEvent PlayerWorld= " + world.getName());
-                    debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockPlaceEvent");
+                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("PlayerWorld= " + world.getName());
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
             if (!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
                 if (debugActive) {
-                    debugUtils.addLine("BlockPlaceEvent ConfigSneaking= " + sneaking);
-                    debugUtils.addLine("BlockPlaceEvent PlayerSneaking= " + sneakingPlayer);
-                    debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockPlaceEvent");
+                    debugUtils.addLine("ConfigSneaking= " + sneaking);
+                    debugUtils.addLine("PlayerSneaking= " + sneakingPlayer);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
             if (!blocks.isEmpty() && !blocks.contains(materialBlockPlaced)) {
                 if (debugActive) {
-                    debugUtils.addLine("BlockPlaceEvent BlockConfig= " + blocks);
-                    debugUtils.addLine("BlockPlaceEvent BlockPlacing= " + materialBlockPlaced);
-                    debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockPlaceEvent");
+                    debugUtils.addLine("BlockConfig= " + blocks);
+                    debugUtils.addLine("BlockPlacing= " + materialBlockPlaced);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
             if (!blocksOnPlaced.isEmpty() && !blocksOnPlaced.contains(materialBlockOnPlaced)) {
                 if (debugActive) {
-                    debugUtils.addLine("BlockPlaceEvent BlockOnPlacedConfig= " + blocksOnPlaced);
-                    debugUtils.addLine("BlockPlaceEvent BlockOnPlaced= " + materialBlockOnPlaced);
-                    debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockPlaceEvent");
+                    debugUtils.addLine("BlockOnPlacedConfig= " + blocksOnPlaced);
+                    debugUtils.addLine("BlockOnPlaced= " + materialBlockOnPlaced);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
             Main.instance.getDailyChallenge().increment(player.getName(), point);
             if (debugActive) {
-                debugUtils.addLine("BlockPlaceEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("BlockPlaceEvent");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
         });
     }

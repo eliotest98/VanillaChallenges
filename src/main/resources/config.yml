@@ -62,7 +62,8 @@ Configuration:
     Lands: false
     GriefPrevention: false
     Tombs: false
-    
+    SuperiorSkyblock2: false
+
 
   # If you want use H2 or .yml file for data storage (write H2 or Yaml)
   Database: 'H2'

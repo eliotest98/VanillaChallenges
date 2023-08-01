@@ -96,6 +96,9 @@ public class ConfigGestion {
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "CubeGenerator.yml"));
             }
+            if(hooks.get("SuperiorSkyblock2")) {
+                files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "SuperiorSkyBlock2.yml"));
+            }
             FileCreator.createAllFilesGlobal(files);
         }
 
@@ -280,6 +283,9 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "AFK.yml"));
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "CubeGenerator.yml"));
+            }
+            if(hooks.get("SuperiorSkyblock2")) {
+                files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "SuperiorSkyBlock2.yml"));
             }
             FileCreator.createAllFilesEvent(files);
         }

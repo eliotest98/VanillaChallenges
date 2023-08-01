@@ -2,6 +2,7 @@ package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import de.tr7zw.nbtapi.NBTItem;
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -23,12 +24,13 @@ import java.util.HashMap;
 
 public class ItemCollector implements Listener {
 
-    private final DebugUtils debugUtils = new DebugUtils();
+    private final DebugUtils debugUtils = new DebugUtils("ItemCollector");
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemCollector");
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyPlacedChest");
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     // timer del controllo punti
     int number = 20 * 60 * 2;
@@ -47,14 +49,14 @@ public class ItemCollector implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (chestLocation.get(playerName) == null && playerInventory.firstEmpty() != -1) {
                 if (debugActive) {
-                    debugUtils.addLine("ItemCollector PlayerJoinName = " + playerName);
+                    debugUtils.addLine("PlayerJoinName = " + playerName);
                 }
                 chestLocation.put(playerName, new Location(Bukkit.getWorld("world"), 0, -100, 0));
                 playerInventory.addItem(Main.instance.getConfigGestion().getChestCollection());
             }
             if (debugActive) {
-                debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("ItemCollector");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
         });
     }
@@ -64,13 +66,13 @@ public class ItemCollector implements Listener {
         long tempo = System.currentTimeMillis();
         if (e.getBlockPlaced().getType() == Main.instance.getConfigGestion().getChestCollection().getType()) {
             if (debugActive) {
-                debugUtils.addLine("ItemCollector Player Place Block Name = " + e.getPlayer().getName());
+                debugUtils.addLine("Player Place Block Name = " + e.getPlayer().getName());
             }
             NBTItem nbtItem = new NBTItem(e.getItemInHand());
             if (nbtItem.getBoolean("vc.chest")) {
                 if (debugActive) {
-                    debugUtils.addLine("ItemCollector Location Place Chest = " + e.getBlockPlaced().getLocation());
-                    debugUtils.addLine("Item Collector Item in Hand = " + e.getItemInHand().getType());
+                    debugUtils.addLine("Location Place Chest = " + e.getBlockPlaced().getLocation());
+                    debugUtils.addLine("Item in Hand = " + e.getItemInHand().getType());
                 }
                 if (chestLocation.get(e.getPlayer().getName()) == null) {
                     chestLocation.put(e.getPlayer().getName(), e.getBlockPlaced().getLocation());
@@ -85,8 +87,8 @@ public class ItemCollector implements Listener {
             }
         }
         if (debugActive) {
-            debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("ItemCollector");
+            debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+            debugUtils.debug();
         }
     }
 
@@ -98,14 +100,14 @@ public class ItemCollector implements Listener {
             if (chestLocation.get(e.getPlayer().getName()) != null) {
                 Location loc = chestLocation.get(e.getPlayer().getName());
                 if (debugActive) {
-                    debugUtils.addLine("ItemCollector location chest= " + loc);
+                    debugUtils.addLine("location chest= " + loc);
                 }
                 if (block.getX() == loc.getBlockX()
                         && block.getY() == loc.getBlockY()
                         && block.getZ() == loc.getBlockZ()
                         && block.getWorld().getName().equalsIgnoreCase(loc.getWorld().getName())) {
                     if (debugActive) {
-                        debugUtils.addLine("ItemCollector location block = " + block.getLocation());
+                        debugUtils.addLine("location block = " + block.getLocation());
                     }
                     //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
                     if(Main.version113) {
@@ -120,11 +122,11 @@ public class ItemCollector implements Listener {
             }
         }
         if (debugActive) {
-            debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.addLine("ItemCollector break Block Type = " + block.getType());
-            debugUtils.addLine("ItemCollector break Block Type Config = " + Main.instance.getConfigGestion().getChestCollection().getType());
-            debugUtils.addLine("ItemCollector Player Name = " + e.getPlayer().getName());
-            debugUtils.debug("ItemCollector");
+            debugUtils.addLine("Break Block Type = " + block.getType());
+            debugUtils.addLine("Break Block Type Config = " + Main.instance.getConfigGestion().getChestCollection().getType());
+            debugUtils.addLine("Player Name = " + e.getPlayer().getName());
+            debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+            debugUtils.debug();
         }
     }
 
@@ -134,7 +136,7 @@ public class ItemCollector implements Listener {
             if (!chestLocation.isEmpty()) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (debugActive) {
-                        debugUtils.addLine("ItemCollector Player Name = " + player.getName());
+                        debugUtils.addLine("Player Name = " + player.getName());
                     }
                     if (chestLocation.get(player.getName()) != null) {
                         Location location = chestLocation.get(player.getName());
@@ -143,22 +145,37 @@ public class ItemCollector implements Listener {
                             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                                 Chest chest = (Chest) location.getBlock().getState();
                                 if (debugActive) {
-                                    debugUtils.addLine("ItemCollector Chest Location = " + location);
+                                    debugUtils.addLine("Chest Location = " + location);
                                 }
                                 for (int i = 0; i < chest.getInventory().getSize(); i++) {
                                     ItemStack itemInv = chest.getInventory().getItem(i);
                                     if (itemInv != null) {
                                         int amount = itemInv.getAmount();
                                         if (debugActive) {
-                                            debugUtils.addLine("ItemCollector Amount Item = " + amount);
+                                            debugUtils.addLine("Amount Item = " + amount);
+                                        }
+
+                                        if (superiorSkyBlock2Enabled) {
+                                            if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(player.getName()))) {
+                                                if (debugActive) {
+                                                    debugUtils.addLine("Player is inside his own island");
+                                                }
+                                            } else {
+                                                if (debugActive) {
+                                                    debugUtils.addLine("Player isn't inside his own island");
+                                                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                                                    debugUtils.debug();
+                                                }
+                                                return;
+                                            }
                                         }
 
                                         if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                                             if (debugActive) {
-                                                debugUtils.addLine("ItemCollector WorldsConfig= " + worldsEnabled);
-                                                debugUtils.addLine("ItemCollector PlayerWorld= " + worldName);
-                                                debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
-                                                debugUtils.debug("ItemCollector");
+                                                debugUtils.addLine("WorldsConfig= " + worldsEnabled);
+                                                debugUtils.addLine("PlayerWorld= " + worldName);
+                                                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                                                debugUtils.debug();
                                             }
                                             return;
                                         }
@@ -190,9 +207,9 @@ public class ItemCollector implements Listener {
                 }
             }
             if (debugActive) {
-                debugUtils.addLine("ItemCollector Item in chest destroyed");
-                debugUtils.addLine("ItemCollector execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("ItemCollector");
+                debugUtils.addLine("Item in chest destroyed");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
         }, 0, number);
         Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "ItemCollector", false);

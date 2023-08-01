@@ -7,14 +7,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EatEvent implements Listener {
 
     private final HashMap<String, Integer> foodLevels = new HashMap<>();
-    private final DebugUtils debugUtils = new DebugUtils();
+    private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
@@ -22,6 +21,7 @@ public class EatEvent implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onFoodLevelChange(org.bukkit.event.entity.FoodLevelChangeEvent e) {
+        debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         final String playerName = e.getEntity().getName();
         final String worldName = e.getEntity().getWorld().getName();
@@ -35,7 +35,7 @@ public class EatEvent implements Listener {
         ItemStack finalItemUsedByPlayer = itemUsedByPlayer;
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
-                debugUtils.addLine("EatEvent PlayerEating= " + playerName);
+                debugUtils.addLine("PlayerEating= " + playerName);
             }
             if (foodLevels.get(playerName) == null) {
                 foodLevels.put(playerName, Math.min(foodLevel, 20));
@@ -48,20 +48,20 @@ public class EatEvent implements Listener {
 
                     if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                         if (debugActive) {
-                            debugUtils.addLine("EatEvent WorldsConfig= " + worldsEnabled);
-                            debugUtils.addLine("EatEvent PlayerWorld= " + worldName);
-                            debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
-                            debugUtils.debug("EatEvent");
+                            debugUtils.addLine("WorldsConfig= " + worldsEnabled);
+                            debugUtils.addLine("PlayerWorld= " + worldName);
+                            debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                            debugUtils.debug();
                         }
                         return;
                     }
 
                     if(!items.isEmpty() && !items.contains(finalItemUsedByPlayer.getType().toString())) {
                         if (debugActive) {
-                            debugUtils.addLine("EatEvent ItemConsumedByPlayer= " + finalItemUsedByPlayer);
-                            debugUtils.addLine("EatEvent ItemConsumedConfig= " + items);
-                            debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
-                            debugUtils.debug("EatEvent");
+                            debugUtils.addLine("ItemConsumedByPlayer= " + finalItemUsedByPlayer);
+                            debugUtils.addLine("ItemConsumedConfig= " + items);
+                            debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                            debugUtils.debug();
                         }
                         return;
                     }
@@ -73,8 +73,8 @@ public class EatEvent implements Listener {
                 }
             }
             if (debugActive) {
-                debugUtils.addLine("EatEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("EatEvent");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
         });
     }

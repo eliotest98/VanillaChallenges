@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,19 +13,21 @@ import java.util.ArrayList;
 
 public class RaidEvent implements Listener {
 
-    private final DebugUtils debugUtils = new DebugUtils();
+    private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("RaidEvent");
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onRaidFinishEvent(org.bukkit.event.raid.RaidFinishEvent e) {
+        debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         if (e.getWinners().isEmpty()) {
             if (debugActive) {
-                debugUtils.addLine("RaidEvent Winners= empty");
-                debugUtils.addLine("RaidEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("RaidEvent");
+                debugUtils.addLine("Winners= empty");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
             return;
         }
@@ -33,15 +36,30 @@ public class RaidEvent implements Listener {
             for (Player winner : e.getWinners()) {
                 String worldName = winner.getWorld().getName();
                 if (debugActive) {
-                    debugUtils.addLine("RaidEvent RaidWinner= " + winner.getName());
+                    debugUtils.addLine("RaidWinner= " + winner.getName());
+                }
+
+                if (superiorSkyBlock2Enabled) {
+                    if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(winner.getName()))) {
+                        if (debugActive) {
+                            debugUtils.addLine("Player is inside his own island");
+                        }
+                    } else {
+                        if (debugActive) {
+                            debugUtils.addLine("Player isn't inside his own island");
+                            debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                            debugUtils.debug();
+                        }
+                        continue;
+                    }
                 }
 
                 if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                     if (debugActive) {
-                        debugUtils.addLine("RaidEvent WorldsConfig= " + worldsEnabled);
-                        debugUtils.addLine("RaidEvent PlayerWorld= " + worldName);
-                        debugUtils.addLine("RaidEvent execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug("RaidEvent");
+                        debugUtils.addLine("WorldsConfig= " + worldsEnabled);
+                        debugUtils.addLine("PlayerWorld= " + worldName);
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
                     }
                     continue;
                 }
@@ -49,8 +67,8 @@ public class RaidEvent implements Listener {
                 Main.dailyChallenge.increment(winner.getName(), (long) totalWaves * point);
             }
             if (debugActive) {
-                debugUtils.addLine("RaidEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("RaidEvent");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
         });
     }

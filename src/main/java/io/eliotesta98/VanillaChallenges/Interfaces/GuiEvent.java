@@ -73,7 +73,7 @@ public class GuiEvent implements Listener {
 
     @EventHandler
     public void onClick(final InventoryClickEvent inventoryClickEvent) {
-        DebugUtils debug = new DebugUtils();
+        DebugUtils debug = new DebugUtils("Gui");
         long tempo = System.currentTimeMillis();
         if (inventoryClickEvent.getWhoClicked() instanceof Player) {
             final Player player = (Player) inventoryClickEvent.getWhoClicked();
@@ -81,8 +81,8 @@ public class GuiEvent implements Listener {
             clicked.add(player);
             if (inv == null || !inv.getType().equals(InventoryType.CHEST)) {
                 if (debugGui) {
-                    debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
-                    debug.debug("Gui");
+                    debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debug.debug();
                 }
                 return;
             }
@@ -94,8 +94,8 @@ public class GuiEvent implements Listener {
                         || inv.getItem(inventoryClickEvent.getSlot()).getType() == Material.AIR) {
                     // se lo slot che clicco è vuoto o aria
                     if (debugGui) {
-                        debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Gui");
+                        debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debug.debug();
                     }
                     return;
                 }
@@ -118,8 +118,8 @@ public class GuiEvent implements Listener {
                         if (durability != 0) {
                             debug.addLine("Current Item Durability=" + durability);
                         }
-                        debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Gui");
+                        debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debug.debug();
                     }
                     boolean isItem113 = false;
                     if (!Main.version113) {
@@ -157,8 +157,8 @@ public class GuiEvent implements Listener {
                             Main.instance.getConfigGestion().getInterfaces().get(typeInterface).openInterface(challenges, player, pageNumber);
                             if (debugGui) {
                                 debug.addLine("Left Page");
-                                debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Gui");
+                                debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug();
                             }
                             return;
                         } else if (nameItemConfig.equalsIgnoreCase("RightPage")) {
@@ -177,8 +177,8 @@ public class GuiEvent implements Listener {
                             Main.instance.getConfigGestion().getInterfaces().get(typeInterface).openInterface(challenges, player, pageNumber);
                             if (debugGui) {
                                 debug.addLine("Right Page");
-                                debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Gui");
+                                debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug();
                             }
                             return;
                         }
@@ -186,14 +186,14 @@ public class GuiEvent implements Listener {
                 }
                 if (debugGui) {
                     debug.addLine("Challenges List");
-                    debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
-                    debug.debug("Gui");
+                    debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debug.debug();
                 }
                 return;
             }
             if (debugGui) {
-                debug.addLine("Gui execution time= " + (System.currentTimeMillis() - tempo));
-                debug.debug("Gui");
+                debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debug.debug();
             }
         }
     }

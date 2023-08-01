@@ -61,13 +61,13 @@ public class Commands implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
-                DebugUtils debug = new DebugUtils();
+                DebugUtils debug = new DebugUtils("Commands");
                 long tempo = System.currentTimeMillis();
                 if (!Main.challengeSelected) {
                     sender.sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                     return;
                 }
@@ -75,7 +75,7 @@ public class Commands implements CommandExecutor {
                     sender.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args.length == 0) {// se non ha scritto args
                     String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
@@ -95,14 +95,14 @@ public class Commands implements CommandExecutor {
                     sender.sendMessage(ColorUtils.applyColor(finale));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("add")) {
                     if (args.length == 1 || args.length == 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -110,14 +110,14 @@ public class Commands implements CommandExecutor {
                     sender.sendMessage(ColorUtils.applyColor(pointsadd.replace("{points}", args[2]).replace("{player}", args[1])));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("event")) {
                     if (args.length != 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -126,7 +126,7 @@ public class Commands implements CommandExecutor {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -178,14 +178,14 @@ public class Commands implements CommandExecutor {
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     } else if (args[1].equalsIgnoreCase("random")) {
                         if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -209,14 +209,14 @@ public class Commands implements CommandExecutor {
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     } else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
                         if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -228,7 +228,7 @@ public class Commands implements CommandExecutor {
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     } else {
                         StringBuilder send = new StringBuilder("\n");
@@ -239,7 +239,7 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     }
                 } else if (args[0].equalsIgnoreCase("remove")) {
@@ -247,7 +247,7 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -255,28 +255,28 @@ public class Commands implements CommandExecutor {
                     sender.sendMessage(ColorUtils.applyColor(pointsremove.replace("{points}", args[2]).replace("{player}", args[1])));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("challenge")) {
                     if (args.length != 1) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcChallenge));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
                     Main.dailyChallenge.message(sender);
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("clear")) {
                     if (args.length != 1) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcClear));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -289,7 +289,7 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor(commandVcNextHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -297,7 +297,7 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -344,14 +344,14 @@ public class Commands implements CommandExecutor {
                     });
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("schedule")) {
                     if (args.length != 3) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcSchedule));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -385,7 +385,7 @@ public class Commands implements CommandExecutor {
                                     sender.sendMessage(ColorUtils.applyColor(addError));
                                     if (debugCommand) {
                                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                        debug.debug("Commands");
+                                        debug.debug();
                                     }
                                     return;
                                 } else {
@@ -425,7 +425,7 @@ public class Commands implements CommandExecutor {
                     }
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("help")) {
                     String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
@@ -445,14 +445,14 @@ public class Commands implements CommandExecutor {
                     sender.sendMessage(ColorUtils.applyColor(finale));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("points")) {
                     if (args.length > 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -464,14 +464,14 @@ public class Commands implements CommandExecutor {
                     }
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("reload")) {
                     if (args.length != 1) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -481,27 +481,27 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor("&aReloaded!"));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     });
                 } else if (args[0].equalsIgnoreCase("reward")) {
                     sender.sendMessage(ColorUtils.applyColor(errorYouAreNotAPlayer));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("list")) {
                     sender.sendMessage(ColorUtils.applyColor(errorYouAreNotAPlayer));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("top")) {
                     if (args.length != 1) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -520,7 +520,7 @@ public class Commands implements CommandExecutor {
                     }
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else {
                     String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
@@ -541,20 +541,20 @@ public class Commands implements CommandExecutor {
                     sender.sendMessage(ColorUtils.applyColor(finale));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 }
             });
         } else {
             Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
                 final Player p = (Player) sender;
-                DebugUtils debug = new DebugUtils();
+                DebugUtils debug = new DebugUtils("Commands");
                 long tempo = System.currentTimeMillis();
                 if (!Main.challengeSelected) {
                     p.sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                     return;
                 }
@@ -562,7 +562,7 @@ public class Commands implements CommandExecutor {
                     p.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args.length == 0) {
                     String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
@@ -602,14 +602,14 @@ public class Commands implements CommandExecutor {
                     p.sendMessage(ColorUtils.applyColor(finale));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("challenge")) {
                     if (!p.hasPermission("vc.challenge.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -617,21 +617,21 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(commandVcChallenge));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
                     Main.dailyChallenge.message(sender);
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("clear")) {
                     if (!p.hasPermission("vc.clear.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -639,7 +639,7 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor(commandVcClear));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -652,7 +652,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -660,7 +660,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(commandVcList));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -680,7 +680,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -688,7 +688,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(commandVcNextHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -696,7 +696,7 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -743,14 +743,14 @@ public class Commands implements CommandExecutor {
                     });
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("schedule")) {
                     if (args.length != 3) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcSchedule));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -760,7 +760,7 @@ public class Commands implements CommandExecutor {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -791,7 +791,7 @@ public class Commands implements CommandExecutor {
                                     sender.sendMessage(ColorUtils.applyColor(addError));
                                     if (debugCommand) {
                                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                        debug.debug("Commands");
+                                        debug.debug();
                                     }
                                     return;
                                 } else {
@@ -815,7 +815,7 @@ public class Commands implements CommandExecutor {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -839,14 +839,14 @@ public class Commands implements CommandExecutor {
                     }
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("help")) {
                     if (!p.hasPermission("vc.help.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -887,7 +887,7 @@ public class Commands implements CommandExecutor {
                     p.sendMessage(ColorUtils.applyColor(finale));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("points")) {
                     // controllo se ha il permesso
@@ -895,7 +895,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -903,7 +903,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(commandVcPointsHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -915,7 +915,7 @@ public class Commands implements CommandExecutor {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -924,14 +924,14 @@ public class Commands implements CommandExecutor {
                     }
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("event")) {
                     if (args.length != 2) {
                         p.sendMessage(ColorUtils.applyColor(commandVcEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -940,7 +940,7 @@ public class Commands implements CommandExecutor {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -948,7 +948,7 @@ public class Commands implements CommandExecutor {
                             p.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -1000,14 +1000,14 @@ public class Commands implements CommandExecutor {
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     } else if (args[1].equalsIgnoreCase("random")) {
                         if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
                             p.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -1031,14 +1031,14 @@ public class Commands implements CommandExecutor {
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     } else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
                         if (!p.hasPermission("vc.event.start.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -1046,7 +1046,7 @@ public class Commands implements CommandExecutor {
                             p.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -1058,14 +1058,14 @@ public class Commands implements CommandExecutor {
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     } else {
                         if (!p.hasPermission("vc.event.start.command") || !p.hasPermission("vc.event.stop.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                                debug.debug("Commands");
+                                debug.debug();
                             }
                             return;
                         }
@@ -1076,7 +1076,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     }
                 } else if (args[0].equalsIgnoreCase("reward")) {
@@ -1085,7 +1085,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -1093,7 +1093,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(commandVcReward));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -1101,7 +1101,7 @@ public class Commands implements CommandExecutor {
                     if (winners.isEmpty()) {
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     } else {
                         for (int i = 0; i < winners.size(); i++) {
@@ -1167,7 +1167,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -1175,7 +1175,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -1194,7 +1194,7 @@ public class Commands implements CommandExecutor {
                     }
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("reload")) {
                     // controllo se ha il permesso
@@ -1202,7 +1202,7 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -1210,7 +1210,7 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                         return;
                     }
@@ -1220,7 +1220,7 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage(ColorUtils.applyColor("&aReloaded!"));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug("Commands");
+                            debug.debug();
                         }
                     });
                 } else {
@@ -1261,7 +1261,7 @@ public class Commands implements CommandExecutor {
                     p.sendMessage(ColorUtils.applyColor(finale));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug("Commands");
+                        debug.debug();
                     }
                 }
             });

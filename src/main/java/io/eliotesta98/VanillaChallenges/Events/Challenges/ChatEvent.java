@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -14,7 +15,7 @@ import java.util.Random;
 
 public class ChatEvent implements Listener {
 
-    private final DebugUtils debugUtils = new DebugUtils();
+    private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ChatEvent");
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> quests = Main.dailyChallenge.getQuests();
@@ -23,6 +24,7 @@ public class ChatEvent implements Listener {
     private final String message = Main.instance.getConfigGestion().getMessages().get("ChatWord");
     private final String correctAnswer = Main.instance.getConfigGestion().getMessages().get("CorrectAnswer");
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
 
     public ChatEvent() {
@@ -32,18 +34,36 @@ public class ChatEvent implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerChat(org.bukkit.event.player.AsyncPlayerChatEvent e) {
+        debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         String world = e.getPlayer().getWorld().getName();
+        String playerName = e.getPlayer().getName();
+
         if (debugActive) {
-            debugUtils.addLine("ChatEvent message: " + e.getMessage() + " word: " + word);
+            debugUtils.addLine("message: " + e.getMessage() + " word: " + word);
+        }
+
+        if (superiorSkyBlock2Enabled) {
+            if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(playerName))) {
+                if (debugActive) {
+                    debugUtils.addLine("Player is inside his own island");
+                }
+            } else {
+                if (debugActive) {
+                    debugUtils.addLine("Player isn't inside his own island");
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
+                }
+                return;
+            }
         }
 
         if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(world)) {
             if (debugActive) {
-                debugUtils.addLine("ChatEvent WorldsConfig= " + worldsEnabled);
-                debugUtils.addLine("ChatEvent PlayerWorld= " + world);
-                debugUtils.addLine("ChatEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("ChatEvent");
+                debugUtils.addLine("WorldsConfig= " + worldsEnabled);
+                debugUtils.addLine("PlayerWorld= " + world);
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
             return;
         }
@@ -54,13 +74,13 @@ public class ChatEvent implements Listener {
                 p.sendMessage(ColorUtils.applyColor(correctAnswer.replace("{player}", e.getPlayer().getName())));
             }
             if (debugActive) {
-                debugUtils.addLine("ChatEvent add " + (point * word.length()) + " points at " + e.getPlayer().getName());
+                debugUtils.addLine("add " + (point * word.length()) + " points at " + e.getPlayer().getName());
             }
             word = "";
         }
         if (debugActive) {
-            debugUtils.addLine("ChatEvent execution time= " + (System.currentTimeMillis() - tempo));
-            debugUtils.debug("ChatEvent");
+            debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+            debugUtils.debug();
         }
     }
 
@@ -71,7 +91,7 @@ public class ChatEvent implements Listener {
     public void execute(long time) {
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
             if (debugActive) {
-                debugUtils.addLine("ChatEvent world broadcasted: " + word);
+                debugUtils.addLine("world broadcasted: " + word);
             }
             word = "";
             quest = "";
@@ -97,7 +117,7 @@ public class ChatEvent implements Listener {
                 word = word + alphabet.charAt(random.nextInt(alphabet.length()));
             }
             if (debugActive) {
-                debugUtils.addLine("ChatEvent world generated: " + word);
+                debugUtils.addLine("world generated: " + word);
             }
         } else {
             String quest = quests.get(random.nextInt(quests.size()));

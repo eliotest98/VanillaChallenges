@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,15 +13,17 @@ import java.util.ArrayList;
 
 public class ShootArrowEvent implements Listener {
 
-    private final DebugUtils debugUtils = new DebugUtils();
+    private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ShootArrowEvent");
     private final double force = Main.dailyChallenge.getForce();
     private final String onGround = Main.dailyChallenge.getOnGround();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onShootEvent(org.bukkit.event.entity.EntityShootBowEvent e) {
+        debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         final String playerName = e.getEntity().getName();
         final String worldName = e.getEntity().getWorld().getName();
@@ -28,35 +31,50 @@ public class ShootArrowEvent implements Listener {
         final boolean onGroundPlayer = e.getEntity().isOnGround();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
-                debugUtils.addLine("ShootArrowEvent PlayerShooting= " + playerName);
+                debugUtils.addLine("PlayerShooting= " + playerName);
+            }
+
+            if (superiorSkyBlock2Enabled) {
+                if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(playerName))) {
+                    if (debugActive) {
+                        debugUtils.addLine("Player is inside his own island");
+                    }
+                } else {
+                    if (debugActive) {
+                        debugUtils.addLine("Player isn't inside his own island");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
+                    }
+                    return;
+                }
             }
 
             if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                 if (debugActive) {
-                    debugUtils.addLine("ShootArrowEvent WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("ShootArrowEvent PlayerWorld= " + worldName);
-                    debugUtils.addLine("ShootArrowEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("ShootArrowEvent");
+                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("PlayerWorld= " + worldName);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
 
             if (!onGround.equalsIgnoreCase("NOBODY") && Boolean.getBoolean(onGround) != onGroundPlayer) {
                 if (debugActive) {
-                    debugUtils.addLine("ShootArrowEvent OnGroundConfig= " + onGround);
-                    debugUtils.addLine("ShootArrowEvent OnGroundPlayer= " + onGroundPlayer);
-                    debugUtils.addLine("ShootArrowEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("ShootArrowEvent");
+                    debugUtils.addLine("OnGroundConfig= " + onGround);
+                    debugUtils.addLine("OnGroundPlayer= " + onGroundPlayer);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
 
             if (force != 0.0 && forceShoot < force) {
                 if (debugActive) {
-                    debugUtils.addLine("ShootArrowEvent ForceShootByPlayer= " + forceShoot);
-                    debugUtils.addLine("ShootArrowEvent ForceShootConfig= " + force);
-                    debugUtils.addLine("ShootArrowEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("ShootArrowEvent");
+                    debugUtils.addLine("ForceShootByPlayer= " + forceShoot);
+                    debugUtils.addLine("ForceShootConfig= " + force);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
@@ -67,8 +85,8 @@ public class ShootArrowEvent implements Listener {
             }
 
             if (debugActive) {
-                debugUtils.addLine("ShootArrowEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("ShootArrowEvent");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
         });
     }

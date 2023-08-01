@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,19 +13,20 @@ import java.util.ArrayList;
 
 public class JumpEvent implements Listener {
 
-    private final DebugUtils debugUtils = new DebugUtils();
+    private final DebugUtils debugUtils = new DebugUtils("JumpEvent");
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("JumpEvent");
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
         long tempo = System.currentTimeMillis();
         if (e.getTo() == null) {
             if (debugActive) {
-                debugUtils.addLine("JumpEvent EndLocation= null");
-                debugUtils.addLine("JumpEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("JumpEvent");
+                debugUtils.addLine("EndLocation= null");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
             return;
         }
@@ -35,17 +37,32 @@ public class JumpEvent implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             int number = to.getBlockY() - from.getBlockY();
             if (debugActive) {
-                debugUtils.addLine("JumpEvent PlayerMoving= " + playerName);
-                debugUtils.addLine("JumpEvent JumpHeight= " + number);
-                debugUtils.addLine("JumpEvent CalculationHeight= " + to.getBlockY() + " " + from.getBlockY());
+                debugUtils.addLine("PlayerMoving= " + playerName);
+                debugUtils.addLine("JumpHeight= " + number);
+                debugUtils.addLine("CalculationHeight= " + to.getBlockY() + " " + from.getBlockY());
+            }
+
+            if (superiorSkyBlock2Enabled) {
+                if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(playerName))) {
+                    if (debugActive) {
+                        debugUtils.addLine("Player is inside his own island");
+                    }
+                } else {
+                    if (debugActive) {
+                        debugUtils.addLine("Player isn't inside his own island");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
+                    }
+                    return;
+                }
             }
 
             if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
                 if (debugActive) {
-                    debugUtils.addLine("JumpEvent WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("JumpEvent PlayerWorld= " + worldName);
-                    debugUtils.addLine("JumpEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("JumpEvent");
+                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
+                    debugUtils.addLine("PlayerWorld= " + worldName);
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
                 }
                 return;
             }
@@ -54,8 +71,8 @@ public class JumpEvent implements Listener {
                 Main.dailyChallenge.increment(playerName, (long) point * number);
             }
             if (debugActive) {
-                debugUtils.addLine("JumpEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("JumpEvent");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
         });
     }

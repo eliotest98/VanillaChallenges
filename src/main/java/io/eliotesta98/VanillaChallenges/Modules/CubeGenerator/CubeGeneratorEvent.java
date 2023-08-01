@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class CubeGeneratorEvent implements Listener {
 
-    private final DebugUtils debugUtils = new DebugUtils();
+    private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockBreakEvent");
     private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
     private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
@@ -24,6 +24,7 @@ public class CubeGeneratorEvent implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockBreakEvent e) {
+        debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         final String blockBreaking = e.getBlock().getType().toString();
         final Location blockLocation = e.getBlock().getLocation();
@@ -40,7 +41,7 @@ public class CubeGeneratorEvent implements Listener {
                 if (debugActive) {
                     debugUtils.addLine("BlockBreakEvent IdGeneratorInvalid= " + idCube);
                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockBreakEvent");
+                    debugUtils.debug();
                 }
                 return;
             }
@@ -49,7 +50,7 @@ public class CubeGeneratorEvent implements Listener {
                     debugUtils.addLine("BlockBreakEvent WorldsConfig= " + worldsEnabled);
                     debugUtils.addLine("BlockBreakEvent PlayerWorld= " + worldName);
                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockBreakEvent");
+                    debugUtils.debug();
                 }
                 return;
             }
@@ -58,7 +59,7 @@ public class CubeGeneratorEvent implements Listener {
                     debugUtils.addLine("BlockBreakEvent ConfigSneaking= " + sneaking);
                     debugUtils.addLine("BlockBreakEvent PlayerSneaking= " + sneakingPlayer);
                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockBreakEvent");
+                    debugUtils.debug();
                 }
                 return;
             }
@@ -67,7 +68,7 @@ public class CubeGeneratorEvent implements Listener {
                     debugUtils.addLine("BlockBreakEvent BlockConfig= " + blocks);
                     debugUtils.addLine("BlockBreakEvent BlockBreaking= " + blockBreaking);
                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockBreakEvent");
+                    debugUtils.debug();
                 }
                 return;
             }
@@ -76,14 +77,14 @@ public class CubeGeneratorEvent implements Listener {
                     debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemsInHand);
                     debugUtils.addLine("BlockBreakEvent ItemInHandPlayer= " + itemInMainHand.getType());
                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug("BlockBreakEvent");
+                    debugUtils.debug();
                 }
                 return;
             }
             Main.instance.getDailyChallenge().increment(playerName, point);
             if (debugActive) {
                 debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug("BlockBreakEvent");
+                debugUtils.debug();
             }
         });
     }

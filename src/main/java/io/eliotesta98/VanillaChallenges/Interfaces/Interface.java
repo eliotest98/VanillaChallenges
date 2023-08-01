@@ -121,7 +121,7 @@ public class Interface {
 
     //Challenges interface
     public void openInterface(ArrayList<?> items, Player p, int numberOfPage) {
-        DebugUtils debug = new DebugUtils();
+        DebugUtils debug = new DebugUtils("Interface Creation");
         long tempo = System.currentTimeMillis();
         VanillaChallengesInterfaceHolder holder = new VanillaChallengesInterfaceHolder(slots.size(),
                 ChatColor.translateAlternateColorCodes('&', title));
@@ -238,8 +238,8 @@ public class Interface {
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> p.openInventory(inventory));
         if (this.debug) {
-            debug.addLine("ClickGui execution time= " + (System.currentTimeMillis() - tempo));
-            debug.debug("ClickGui");
+            debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+            debug.debug();
         }
     }
 
