@@ -2,17 +2,21 @@ package io.eliotesta98.VanillaChallenges.Comandi;
 
 import io.eliotesta98.VanillaChallenges.Database.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
+import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.*;
 
 public class Commands implements CommandExecutor {
@@ -27,6 +31,7 @@ public class Commands implements CommandExecutor {
 
     private final String addSuccess = Main.instance.getConfigGestion().getMessages().get("Success.Add");
     private final String removeSuccess = Main.instance.getConfigGestion().getMessages().get("Success.Remove");
+    private final String succesfullyRestored = Main.instance.getConfigGestion().getMessages().get("Success.Restored");
 
     private final String commandFooter = Main.instance.getConfigGestion().getMessages().get("Commands.Footer");
     private final String commandVcReloadHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Reload");
@@ -40,6 +45,10 @@ public class Commands implements CommandExecutor {
     private final String commandVcList = Main.instance.getConfigGestion().getMessages().get("Commands.List");
     private final String commandVcEvent = Main.instance.getConfigGestion().getMessages().get("Commands.Event");
     private final String commandVcSchedule = Main.instance.getConfigGestion().getMessages().get("Commands.Schedule");
+    private final String commandVcRestoreHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Restore");
+
+    private final String fileList = Main.instance.getConfigGestion().getMessages().get("Lists.Files");
+    private final String fileLine = Main.instance.getConfigGestion().getMessages().get("Lists.FilesLine");
 
     private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("PointsInfo");
     private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("ActuallyInTop");
@@ -88,6 +97,7 @@ public class Commands implements CommandExecutor {
                     finale = finale + commandVcNextHelp + "\n";
                     finale = finale + commandVcPointsHelp + "\n";
                     finale = finale + commandVcReloadHelp + "\n";
+                    finale = finale + commandVcRestoreHelp + "\n";
                     finale = finale + commandVcReward + "\n";
                     finale = finale + commandVcTopHelp + "\n";
                     finale = finale + "&r\n";
@@ -241,6 +251,67 @@ public class Commands implements CommandExecutor {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug();
                         }
+                    }
+                } else if (args[0].equalsIgnoreCase("restore")) {
+                    if (args.length > 3) {
+                        sender.sendMessage(ColorUtils.applyColor(commandVcRestoreHelp));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
+                    if (args.length == 1) {
+                        File folder = new File(Main.instance.getDataFolder() +
+                                File.separator + "backup");
+                        StringBuilder finale = new StringBuilder("\n" + fileList + "\n");
+                        for (int i = 0; i < folder.listFiles().length; i++) {
+                            if (folder.listFiles()[i].length() != 0L) {
+                                finale.append(fileLine.replace("{fileName}", folder.listFiles()[i].getName() + "\n"));
+                            }
+                        }
+                        sender.sendMessage(ColorUtils.applyColor(finale.toString()));
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
+                    File configFile = new File(Main.instance.getDataFolder() +
+                            File.separator + "backup", args[1]);
+                    Main.db.clearAll();
+                    YamlConfiguration file = YamlConfiguration.loadConfiguration(configFile);
+                    if (file.getConfigurationSection("Challenges") != null) {
+                        for (String challenge : file.getConfigurationSection("Challenges").getKeys(true)) {
+                            Main.db.insertChallenge(challenge, file.getInt("Challenges." + challenge));
+                        }
+                    }
+                    if (file.getConfigurationSection("Points") != null) {
+                        for (String challengerName : file.getConfigurationSection("Points").getKeys(true)) {
+                            Main.db.insertChallenger(challengerName, file.getInt("Points." + challengerName));
+                        }
+                    }
+                    if (file.getConfigurationSection("DailyWinners") != null) {
+                        for (String idWinner : file.getConfigurationSection("DailyWinners").getKeys(false)) {
+                            Main.db.insertDailyWinner(new DailyWinner(
+                                    Integer.parseInt(idWinner),
+                                    file.getString("DailyWinners." + idWinner + ".PlayerName"),
+                                    file.getString("DailyWinners." + idWinner + ".NomeChallenge"),
+                                    file.getString("DailyWinners." + idWinner + ".Reward")
+                            ));
+                        }
+                    }
+                    if (file.getConfigurationSection("TopYesterday") != null) {
+                        H2Database h2 = (H2Database) Main.db;
+                        for (String winnerYesterday : file.getConfigurationSection("TopYesterday").getKeys(true)) {
+                            h2.insertChallengerTopYesterday(winnerYesterday, file.getInt("TopYesterday." + winnerYesterday));
+                        }
+                    }
+                    sender.sendMessage(ColorUtils.applyColor(succesfullyRestored));
+                    ReloadUtils.reload();
+                    if (debugCommand) {
+                        debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("remove")) {
                     if (args.length == 1 || args.length == 2) {
@@ -437,6 +508,7 @@ public class Commands implements CommandExecutor {
                     finale = finale + commandVcNextHelp + "\n";
                     finale = finale + commandVcPointsHelp + "\n";
                     finale = finale + commandVcReloadHelp + "\n";
+                    finale = finale + commandVcRestoreHelp + "\n";
                     finale = finale + commandVcReward + "\n";
                     finale = finale + commandVcSchedule + "\n";
                     finale = finale + commandVcTopHelp + "\n";
@@ -533,6 +605,7 @@ public class Commands implements CommandExecutor {
                     finale = finale + commandVcNextHelp + "\n";
                     finale = finale + commandVcPointsHelp + "\n";
                     finale = finale + commandVcReloadHelp + "\n";
+                    finale = finale + commandVcRestoreHelp + "\n";
                     finale = finale + commandVcReward + "\n";
                     finale = finale + commandVcSchedule + "\n";
                     finale = finale + commandVcTopHelp + "\n";

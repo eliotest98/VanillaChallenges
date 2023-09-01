@@ -4,6 +4,15 @@ main: io.eliotesta98.VanillaChallenges.Core.Main
 api-version: 1.13
 authors: [ eliotesta98 ]
 softdepend: [PlaceholderAPI, CubeGenerator, Tombs, WorldGuard, Lands]
+
+libraries:
+  - com.googlecode.json-simple:json-simple:1.1.1
+  - com.h2database:h2:2.2.220
+
+legacy-libraries:
+  - com.googlecode.json-simple:json-simple:1.1.1
+  - com.h2database:h2:2.2.220
+
 depend: [ ]
 commands:
   vc:

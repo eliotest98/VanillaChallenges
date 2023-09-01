@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
@@ -20,12 +17,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class H2Database implements Database {
 
     public static Connection connection = null;
-    private static final HikariConfig config = new HikariConfig();
-    private static HikariDataSource ds = null;
     public static H2Database instance = null;
 
-    public H2Database() {
-        initialize(Main.instance.getDataFolder().getAbsolutePath());
+    public H2Database(String absolutePath) {
+        initialize(absolutePath);
     }
 
     @Override
@@ -55,8 +50,6 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
-            Main.instance.getServer().getConsoleSender().sendMessage("Folder: '" + com.zaxxer.hikari.HikariConfig.class
-                    .getProtectionDomain().getCodeSource().getLocation().getPath() + "'");
             Main.instance.getServer().getConsoleSender().sendMessage("§cError Database not connected!");
             e.printStackTrace();
             Main.instance.onDisable();
@@ -646,14 +639,22 @@ public class H2Database implements Database {
         }
     }
 
-    public void createConnection(final String AbsolutePath) {
-        config.setDriverClassName("org.h2.Driver");
-        config.setJdbcUrl("jdbc:h2:" + AbsolutePath + File.separator + "vanillachallenges;mode=MySQL;");
-        ds = new HikariDataSource(config);
+    public void createConnection(final String absolutePath) {
+        try {
+            Class.forName("org.h2.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            connection = DriverManager.
+                    getConnection("jdbc:h2:" + absolutePath + File.separator + "vanillachallenges;mode=MySQL;");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Connection getConnection() throws SQLException {
-        return ds.getConnection();
+        return connection;
     }
 
     @Override
@@ -663,10 +664,8 @@ public class H2Database implements Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        ds.close();
         instance = null;
         connection = null;
-        ds = null;
     }
 
 }

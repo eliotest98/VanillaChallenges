@@ -34,7 +34,7 @@ public class ConfigGestion {
         }
         for (String message : file.getConfigurationSection("Messages").getKeys(false)) {
             if (message.equalsIgnoreCase("Commands") || message.equalsIgnoreCase("Errors")
-                    || message.equalsIgnoreCase("Success")) {
+                    || message.equalsIgnoreCase("Success") || message.equalsIgnoreCase("Lists")) {
                 for (String command : file.getConfigurationSection("Messages." + message).getKeys(false)) {
                     messages.put(message + "." + command, file.getString("Messages." + message + "." + command).replace("{prefix}", messages.get("Prefix")));
                 }
@@ -93,10 +93,11 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dropper.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Healer.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "AFK.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "SensorActuator.yml"));
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "CubeGenerator.yml"));
             }
-            if(hooks.get("SuperiorSkyblock2")) {
+            if (hooks.get("SuperiorSkyblock2")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "SuperiorSkyBlock2.yml"));
             }
             FileCreator.createAllFilesGlobal(files);
@@ -281,10 +282,11 @@ public class ConfigGestion {
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dropper.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Healer.yml"));
             files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "AFK.yml"));
+            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "SensorActuator.yml"));
             if (hooks.get("CubeGenerator")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "CubeGenerator.yml"));
             }
-            if(hooks.get("SuperiorSkyblock2")) {
+            if (hooks.get("SuperiorSkyblock2")) {
                 files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "SuperiorSkyBlock2.yml"));
             }
             FileCreator.createAllFilesEvent(files);
