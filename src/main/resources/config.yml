@@ -173,7 +173,7 @@ Messages:
     # if you want a file default duration or time use 0
     Schedule: '   &e/vc &6<schedule> <add|remove> <challenge|random> &7for add or remove a challenge from schedule'
     Top: '   &e/vc &6<top> &7for see the top 3'
-    Restore: '&e  /vc &6<restore> [file] &7Allows you to restore a H2Database from backup file or see the list of backup files'
+    Restore: '   &e/vc &6<restore> [file] &7Allows you to restore a H2Database from backup file or see the list of backup files'
 
   Errors:
     YouAreNotAPlayer: '{prefix}&cYou are not a player'
@@ -288,6 +288,10 @@ Debug:
   AFKEvent: false
   # Sensor Actuator Event debug
   BlockReceiveGameEvent: false
+  # Tnt ignite event debug
+  TNTPrimeEvent: false
+  # Fire Catcher event debug
+  EntityCombustByBlockEvent: false
   # Online Point give debug
   OnlinePoint: false
   # Enabled debug

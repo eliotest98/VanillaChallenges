@@ -14,20 +14,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockReceiveGameEvent;
+import org.bukkit.event.entity.EntityCombustByBlockEvent;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 
-public class GameBlockEvent implements Listener {
+public class FireCatcher implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockReceiveGameEvent");
-    private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EntityCombustByBlockEvent");
     private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
-    private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
     private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
@@ -36,13 +33,13 @@ public class GameBlockEvent implements Listener {
     private boolean ok = false;
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onBlockGame(BlockReceiveGameEvent e) {
+    public void on(EntityCombustByBlockEvent e) {
         debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
 
-        if (e.getEntity() == null || !(e.getEntity() instanceof Player)) {
+        if (!(e.getEntity() instanceof Player)){
             if (debugActive) {
-                debugUtils.addLine("Entity is null or is not a Player");
+                debugUtils.addLine("This Entity is not a Player");
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();
             }
@@ -50,22 +47,20 @@ public class GameBlockEvent implements Listener {
         }
 
         final Player player = (Player) e.getEntity();
-        final String blockBreaking = e.getBlock().getType().toString();
         final ItemStack itemInMainHand;
-        final String detection = e.getEvent().getKey().getKey();
         if (Main.version113) {
             itemInMainHand = player.getInventory().getItemInMainHand();
         } else {
             itemInMainHand = player.getInventory().getItemInHand();
         }
+
         final boolean sneakingPlayer = player.isSneaking();
         final Location location = player.getLocation();
         final World world = player.getWorld();
-        final Block block = e.getBlock();
+        final Block block = location.getBlock();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
-
             if (debugActive) {
-                debugUtils.addLine("Player= " + player.getName());
+                debugUtils.addLine("PlayerBreaking= " + player.getName());
             }
             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                 if (griefPreventionEnabled) {
@@ -137,26 +132,6 @@ public class GameBlockEvent implements Listener {
                 if (debugActive) {
                     debugUtils.addLine("ConfigSneaking= " + sneaking);
                     debugUtils.addLine("PlayerSneaking= " + sneakingPlayer);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
-                return;
-            }
-
-            if (!causes.isEmpty() && !causes.contains(detection)) {
-                if (debugActive) {
-                    debugUtils.addLine("CausePlayer= " + detection);
-                    debugUtils.addLine("CauseConfig= " + causes);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
-                return;
-            }
-
-            if (!blocks.isEmpty() && !blocks.contains(blockBreaking)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockConfig= " + blocks);
-                    debugUtils.addLine("BlockBreaking= " + blockBreaking);
                     debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug();
                 }

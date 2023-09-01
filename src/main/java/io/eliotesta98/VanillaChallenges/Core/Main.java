@@ -286,6 +286,10 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new SuperiorSkyBlock2Events(), this);
         } else if (typeChallenge.equalsIgnoreCase("SensorChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new GameBlockEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("PrimerChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new PrimeEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("FireCatcherChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new FireCatcher(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
             challengeSelected = false;
