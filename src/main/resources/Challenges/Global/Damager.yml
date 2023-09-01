@@ -12,7 +12,6 @@ Damager:
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Causes you want to damage for challenge, if you want all causes set []
-  # Type of item in main hand for break this blocks, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

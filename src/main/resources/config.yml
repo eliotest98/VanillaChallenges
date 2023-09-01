@@ -292,6 +292,8 @@ Debug:
   TNTPrimeEvent: false
   # Fire Catcher event debug
   EntityCombustByBlockEvent: false
+  # Entity Catcher event debug
+  EntityCombustByEntityEvent: false
   # Online Point give debug
   OnlinePoint: false
   # Enabled debug

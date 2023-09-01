@@ -14,15 +14,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityCombustByBlockEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 
-public class FireCatcher implements Listener {
+public class EntityCatcherEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EntityCombustByBlockEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EntityCombustByEntityEvent");
     private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
+    private final ArrayList<String> mobs = Main.instance.getDailyChallenge().getMobs();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
@@ -33,11 +35,11 @@ public class FireCatcher implements Listener {
     private boolean ok = false;
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onBlockBurn(EntityCombustByBlockEvent e) {
+    public void onEntityBurn(EntityCombustByEntityEvent e) {
         debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
 
-        if (!(e.getEntity() instanceof Player)){
+        if (!(e.getEntity() instanceof Player)) {
             if (debugActive) {
                 debugUtils.addLine("This Entity is not a Player");
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
@@ -58,6 +60,7 @@ public class FireCatcher implements Listener {
         final Location location = player.getLocation();
         final World world = player.getWorld();
         final Block block = location.getBlock();
+        final String mobCaught = e.getCombuster().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("PlayerBreaking= " + player.getName());
@@ -122,6 +125,16 @@ public class FireCatcher implements Listener {
                 if (debugActive) {
                     debugUtils.addLine("WorldsConfig= " + worldsEnabled);
                     debugUtils.addLine("PlayerWorld= " + world.getName());
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
+                }
+                return;
+            }
+
+            if(!mobs.isEmpty() && !mobs.contains(mobCaught)) {
+                if (debugActive) {
+                    debugUtils.addLine("MobCaught= " + mobCaught);
+                    debugUtils.addLine("MobCaughtConfig= " + mobs);
                     debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug();
                 }

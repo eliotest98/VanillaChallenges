@@ -18,7 +18,6 @@ InventoryControl:
   # Every x minutes you want check condition
   Minutes: 2
   # Items you want checked (P.S. if the player have one in list is ok) ([] for all items)
-  # Type of item in main hand for break this blocks, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

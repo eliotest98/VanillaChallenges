@@ -1,5 +1,5 @@
-Consumer:
-  TypeChallenge: 'ConsumeChallenge'
+EntityCatcher:
+  TypeChallenge: 'EntityCatcherChallenge'
   # if you want to enable or disable challenge
   Enabled: true
   # Time settings
@@ -11,16 +11,23 @@ Consumer:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Items you want to consume for challenge, if you want all items set []
+  # Type of item in main hand for break this blocks, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
   #       - COBBLESTONE
   #       - RANDOM
-  Items: []
+  ItemsInHand: []
+  # Mobs you want for challenge, if you want all mobs set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
+  Mobs: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # How many points you want give at consume?
+  # How many points you want give at break?
   Point: 1
   # if you want a multiplier based on all players
   Boost:
@@ -41,9 +48,9 @@ Consumer:
     # For how many minutes you want give the multiplier?
     Minutes: 2
   # Name of Challenge
-  NameChallenge: "&7Consume Challenge"
+  NameChallenge: "&7Entity Catcher Challenge"
   # item representing challenge
-  ItemChallenge: 'DIAMOND_BOOTS'
+  ItemChallenge: 'LEAD'
   # Title challenge
   # Placeholder List:
   #  - {challengeName}
@@ -69,7 +76,7 @@ Consumer:
     - '&8██&b███&8███&b██'
     - '&8█&b██&8████&b███              {challengeName}'
     - '&b██&6█&8███&b███&8█'
-    - '&b█&8██&6█&8█&b███&8██    &7Consume any item for receive {points} point'
+    - '&b█&8██&6█&8█&b███&8██ &7Touch an entity that is burning for receive {points} point'
     - '&b█&8███&6██&b█&8███    &7{hours} hours to the end of the challenge'
     - '&8████&6██&8████'
     - '&8███&6█&8██&6█&8███'
@@ -78,4 +85,4 @@ Consumer:
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
   # Reward with command EX: [command]:give %player% TNT 1
   Rewards:
-    - 'WITHER_SKELETON_SKULL:1'
+    - 'TOTEM_OF_UNDYING:1'

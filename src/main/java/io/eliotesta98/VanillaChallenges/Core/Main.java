@@ -133,8 +133,6 @@ public class Main extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //loads challenges files
-        config.loadCommentedConfiguration();
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
         getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -290,6 +288,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new PrimeEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("FireCatcherChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new FireCatcher(), this);
+        } else if (typeChallenge.equalsIgnoreCase("EntityCatcherChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new EntityCatcherEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
             challengeSelected = false;

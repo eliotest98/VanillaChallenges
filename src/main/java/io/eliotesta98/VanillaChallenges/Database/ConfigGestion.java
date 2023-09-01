@@ -29,6 +29,7 @@ public class ConfigGestion {
     private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
 
     public ConfigGestion(FileConfiguration file) throws IOException {
+
         for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
             debug.put(event, file.getBoolean("Debug." + event));
         }
@@ -56,60 +57,25 @@ public class ConfigGestion {
         for (String hoock : file.getConfigurationSection("Configuration.Hooks").getKeys(false)) {
             hooks.put(hoock, file.getBoolean("Configuration.Hooks." + hoock));
         }
-        File folder = new File(Main.instance.getDataFolder() +
+
+        FileCreator.addFiles(hooks);
+
+        File folderChallenges = new File(Main.instance.getDataFolder() +
                 File.separator + "Challenges");
-        boolean folderCreate = folder.mkdir();
+        File folderGlobal = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges" + File.separator + "Global");
+        File folderEvent = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges" + File.separator + "Event");
+
+        boolean folderCreate = folderChallenges.mkdir();
+
         if (folderCreate) {
-            ArrayList<File> files = new ArrayList<>();
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "BlockBreaker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "BlockPlacer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Cooker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Crafter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Consumer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "ExpCollector.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Killer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Breeder.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Feeder.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Shooter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "JumperHorse.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Jumper.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dyer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Raider.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Fisher.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Sprinter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Mover.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Damager.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Sneaker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "ItemBreaker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Absorber.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Harvester.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "EggThrower.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Enchanter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Chatter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "ItemCollector.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "InventoryControl.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "BoatMove.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dier.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Dropper.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Healer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "AFK.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "SensorActuator.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "Primer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "FireCatcher.yml"));
-            if (hooks.get("CubeGenerator")) {
-                files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "CubeGenerator.yml"));
-            }
-            if (hooks.get("SuperiorSkyblock2")) {
-                files.add(new File(Main.instance.getDataFolder() + "Challenges/Global", "SuperiorSkyBlock2.yml"));
-            }
-            FileCreator.createAllFilesGlobal(files);
+            FileCreator.createAllFiles("Global");
+        } else {
+            FileCreator.controlFiles("Global", folderGlobal.listFiles());
         }
 
-        folder = new File(Main.instance.getDataFolder() +
-                File.separator + "Challenges/Global");
-
-        for (File fileChallenge : folder.listFiles()) {
-
+        for (File fileChallenge : folderGlobal.listFiles()) {
             String splits = "bho";
             String[] strings = splits.split(":");
             String configname = "Challenges/Global/" + fileChallenge.getName();
@@ -250,57 +216,15 @@ public class ConfigGestion {
             challenges.put(challengeName, challenge);
         }
 
+        Main.instance.getServer().getConsoleSender().sendMessage("§a" + folderGlobal.listFiles().length + " Global Challenges loaded!");
+
         if (folderCreate) {
-            ArrayList<File> files = new ArrayList<>();
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "BlockBreaker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "BlockPlacer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Cooker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Crafter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Consumer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "ExpCollector.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Killer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Breeder.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Feeder.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Shooter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "JumperHorse.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Jumper.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dyer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Raider.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Fisher.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Sprinter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Mover.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Damager.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Sneaker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "ItemBreaker.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Absorber.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Harvester.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "EggThrower.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Enchanter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Chatter.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "ItemCollector.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "InventoryControl.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "BoatMove.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dier.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Dropper.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Healer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "AFK.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "SensorActuator.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "Primer.yml"));
-            files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "FireCatcher.yml"));
-            if (hooks.get("CubeGenerator")) {
-                files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "CubeGenerator.yml"));
-            }
-            if (hooks.get("SuperiorSkyblock2")) {
-                files.add(new File(Main.instance.getDataFolder() + "Challenges/Event", "SuperiorSkyBlock2.yml"));
-            }
-            FileCreator.createAllFilesEvent(files);
+            FileCreator.createAllFiles("Event");
+        } else {
+            FileCreator.controlFiles("Event", folderEvent.listFiles());
         }
 
-        folder = new File(Main.instance.getDataFolder() +
-                File.separator + "Challenges/Event");
-
-        for (File fileChallenge : folder.listFiles()) {
-
+        for (File fileChallenge : folderEvent.listFiles()) {
             String splits = "bho";
             String[] strings = splits.split(":");
             String configname = "Challenges/Event/" + fileChallenge.getName();
@@ -436,6 +360,8 @@ public class ConfigGestion {
             challengesEvent.put(challengeName, challenge);
         }
 
+        Main.instance.getServer().getConsoleSender().sendMessage("§a" + folderEvent.listFiles().length + " Event Challenges loaded!");
+
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         lockedInterface = file.getBoolean("Configuration.LockedInterface");
         database = file.getString("Configuration.Database");
@@ -495,29 +421,6 @@ public class ConfigGestion {
             interfaces.put(nameInterface, customInterface);
         }
 
-    }
-
-    public void loadCommentedConfiguration() {
-        File folder = new File(Main.instance.getDataFolder() +
-                File.separator + "Challenges");
-        for (File fileChallenge : folder.listFiles()) {
-            CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(fileChallenge);
-            try {
-                String configname;
-
-                configname = fileChallenge.getName();
-
-                //esempio
-                String splits = "bho";
-                String[] strings = splits.split(":");
-                InputStream resource = Main.instance.getResource("Challenges/" + configname);
-                if (resource != null) {
-                    cfg.syncWithConfig(fileChallenge, resource, strings);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public HashMap<String, Boolean> getDebug() {
