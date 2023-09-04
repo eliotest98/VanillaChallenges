@@ -23,7 +23,6 @@ public class GameBlockEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockReceiveGameEvent");
-    private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
@@ -138,13 +137,7 @@ public class GameBlockEvent implements Listener {
                 return;
             }
 
-            if (!blocks.isEmpty() && !blocks.contains(blockBreaking)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockConfig= " + blocks);
-                    debugUtils.addLine("BlockBreaking= " + blockBreaking);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isBlock(blockBreaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 

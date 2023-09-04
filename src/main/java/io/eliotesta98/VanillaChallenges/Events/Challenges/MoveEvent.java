@@ -17,7 +17,6 @@ public class MoveEvent implements Listener {
 
     private final HashMap<String, Double> distances = new HashMap<>();
     private DebugUtils debugUtils;
-    private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("MoveEvent");
     private final int point = Main.dailyChallenge.getPoint();
@@ -83,13 +82,11 @@ public class MoveEvent implements Listener {
                 return;
             }
 
-            if (!blocks.isEmpty() && !blocks.contains(materialFrom) && !blocks.contains(materialTo)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockToStepOn= " + materialTo);
-                    debugUtils.addLine("BlockFromStepOn= " + materialFrom);
-                    debugUtils.addLine("BlockStepOnConfig= " + blocks);
-                    debugUtils.debug();
-                }
+            if (!Controls.isBlock(materialFrom, debugActive, debugUtils, tempo)) {
+                return;
+            }
+
+            if (!Controls.isBlock(materialTo, debugActive, debugUtils, tempo)) {
                 return;
             }
 

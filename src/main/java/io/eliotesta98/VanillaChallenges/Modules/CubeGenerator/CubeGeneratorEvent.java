@@ -17,10 +17,7 @@ public class CubeGeneratorEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockBreakEvent");
-    private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
-    private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final int point = Main.dailyChallenge.getPoint();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockBreakEvent e) {
@@ -37,7 +34,7 @@ public class CubeGeneratorEvent implements Listener {
             if (debugActive) {
                 debugUtils.addLine("BlockBreakEvent PlayerBreaking= " + playerName);
             }
-            if(idCube == -1) {
+            if (idCube == -1) {
                 if (debugActive) {
                     debugUtils.addLine("BlockBreakEvent IdGeneratorInvalid= " + idCube);
                     debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
@@ -54,13 +51,7 @@ public class CubeGeneratorEvent implements Listener {
                 return;
             }
 
-            if(!blocks.isEmpty() && !blocks.contains(blockBreaking)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockBreakEvent BlockConfig= " + blocks);
-                    debugUtils.addLine("BlockBreakEvent BlockBreaking= " + blockBreaking);
-                    debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isBlock(blockBreaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 

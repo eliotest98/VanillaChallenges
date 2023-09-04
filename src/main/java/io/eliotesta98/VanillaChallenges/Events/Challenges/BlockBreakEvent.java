@@ -15,15 +15,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
 
 public class BlockBreakEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockBreakEvent");
-    private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
@@ -115,13 +111,7 @@ public class BlockBreakEvent implements Listener {
                 return;
             }
 
-            if (!blocks.isEmpty() && !blocks.contains(blockBreaking)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockConfig= " + blocks);
-                    debugUtils.addLine("BlockBreaking= " + blockBreaking);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isBlock(blockBreaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 

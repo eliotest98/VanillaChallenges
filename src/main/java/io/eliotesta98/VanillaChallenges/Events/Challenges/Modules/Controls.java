@@ -9,6 +9,7 @@ public class Controls {
     private static final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private static final String sneaking = Main.dailyChallenge.getSneaking();
     private static final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
+    private static final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
 
     public static boolean isWorldEnable(String worldName, boolean debugActive, DebugUtils debugUtils, long tempo) {
         if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
@@ -43,6 +44,20 @@ public class Controls {
             if (debugActive) {
                 debugUtils.addLine("ItemInHandConfig= " + itemsInHand);
                 debugUtils.addLine("ItemInHandPlayer= " + itemInMainHand);
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isBlock(String block, boolean debugActive, DebugUtils debugUtils, long tempo) {
+        if (!blocks.isEmpty() && !blocks.contains(block)) {
+            if (debugActive) {
+                debugUtils.addLine("BlockConfig= " + blocks);
+                debugUtils.addLine("Block= " + block);
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();
             }

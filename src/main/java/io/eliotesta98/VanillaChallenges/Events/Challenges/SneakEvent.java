@@ -15,7 +15,6 @@ public class SneakEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SneakEvent");
-    private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
@@ -62,13 +61,7 @@ public class SneakEvent implements Listener {
                 return;
             }
 
-            if(!blocks.isEmpty() && !blocks.contains(blockWalk)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockStepOnPlayer= " + blockWalk);
-                    debugUtils.addLine("BlockStepOnConfig= " + blocks);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isBlock(blockWalk, debugActive, debugUtils, tempo)) {
                 return;
             }
 
