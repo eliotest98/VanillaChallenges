@@ -97,4 +97,6 @@ public class Controls {
             return true;
         }
     }
+
+    //TODO da finire di scrivere tutti i metodi per gli arraylist
 }

@@ -296,6 +296,8 @@ Debug:
   EntityCombustByEntityEvent: false
   # Leash event debug
   LeashEvent: false
+  # Sleep event debug
+  SleepEvent: false
   # Online Point give debug
   OnlinePoint: false
   # Enabled debug
