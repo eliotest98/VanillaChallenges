@@ -15,7 +15,7 @@ public class FishEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("FishEvent");
-    private final ArrayList<String> fishs = Main.dailyChallenge.getItems();
+    private final ArrayList<String> fish = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
@@ -63,10 +63,10 @@ public class FishEvent implements Listener {
                 return;
             }
 
-            if(!fishs.isEmpty() && !fishs.contains(fishCaugh)) {
+            if(!fish.isEmpty() && !fish.contains(fishCaugh)) {
                 if (debugActive) {
                     debugUtils.addLine("FishCaughByPlayer= " + fishCaugh);
-                    debugUtils.addLine("FishCaughConfig= " + fishs);
+                    debugUtils.addLine("FishCaughConfig= " + fish);
                     debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug();
                 }

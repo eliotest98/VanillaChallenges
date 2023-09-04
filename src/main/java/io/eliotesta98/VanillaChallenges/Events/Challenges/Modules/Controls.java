@@ -2,6 +2,7 @@ package io.eliotesta98.VanillaChallenges.Events.Challenges.Modules;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
+
 import java.util.ArrayList;
 
 public class Controls {
@@ -10,6 +11,8 @@ public class Controls {
     private static final String sneaking = Main.dailyChallenge.getSneaking();
     private static final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private static final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
+    private static final ArrayList<String> blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
+    private static final ArrayList<String> mobs = Main.dailyChallenge.getMobs();
 
     public static boolean isWorldEnable(String worldName, boolean debugActive, DebugUtils debugUtils, long tempo) {
         if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
@@ -58,6 +61,34 @@ public class Controls {
             if (debugActive) {
                 debugUtils.addLine("BlockConfig= " + blocks);
                 debugUtils.addLine("Block= " + block);
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isBlockOnPlaced(String block, boolean debugActive, DebugUtils debugUtils, long tempo) {
+        if (!blocksOnPlaced.isEmpty() && !blocksOnPlaced.contains(block)) {
+            if (debugActive) {
+                debugUtils.addLine("BlockOnPlacedConfig= " + blocksOnPlaced);
+                debugUtils.addLine("BlockOnPlaced= " + block);
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isMob(String mob, boolean debugActive, DebugUtils debugUtils, long tempo) {
+        if (!mobs.isEmpty() && !mobs.contains(mob)) {
+            if (debugActive) {
+                debugUtils.addLine("MobBreedConfig= " + mobs);
+                debugUtils.addLine("MobBreded= " + mob);
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();
             }

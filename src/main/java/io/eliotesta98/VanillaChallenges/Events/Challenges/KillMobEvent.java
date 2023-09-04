@@ -9,13 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
-
 public class KillMobEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("KillEvent");
-    private final ArrayList<String> mobsKill = Main.dailyChallenge.getMobs();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
@@ -40,7 +37,6 @@ public class KillMobEvent implements Listener {
         }
         final String playerName = pName;
         final String mobKilled = e.getEntity().getName();
-        boolean finalSneakingPlayer = sneakingPlayer;
         final String worldName = world;
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
@@ -70,16 +66,12 @@ public class KillMobEvent implements Listener {
                 return;
             }
 
-            if(!mobsKill.isEmpty() && !mobsKill.contains(mobKilled)) {
-                if (debugActive) {
-                    debugUtils.addLine("MobKilled= " + mobKilled);
-                    debugUtils.addLine("MobKilledConfig= " + mobsKill);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isMob(mobKilled, debugActive, debugUtils, tempo)) {
                 return;
             }
+
             Main.dailyChallenge.increment(playerName, point);
+
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();

@@ -22,7 +22,6 @@ public class BlockPlaceEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockPlaceEvent");
-    private final ArrayList<String> blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
@@ -111,15 +110,10 @@ public class BlockPlaceEvent implements Listener {
                 return;
             }
 
-            if (!blocksOnPlaced.isEmpty() && !blocksOnPlaced.contains(materialBlockOnPlaced)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockOnPlacedConfig= " + blocksOnPlaced);
-                    debugUtils.addLine("BlockOnPlaced= " + materialBlockOnPlaced);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isBlockOnPlaced(materialBlockOnPlaced, debugActive, debugUtils, tempo)) {
                 return;
             }
+
             Main.instance.getDailyChallenge().increment(player.getName(), point);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

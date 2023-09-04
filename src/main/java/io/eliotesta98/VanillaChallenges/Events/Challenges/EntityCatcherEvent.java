@@ -17,13 +17,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 
-import java.util.ArrayList;
-
 public class EntityCatcherEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EntityCombustByEntityEvent");
-    private final ArrayList<String> mobs = Main.instance.getDailyChallenge().getMobs();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
@@ -122,13 +119,7 @@ public class EntityCatcherEvent implements Listener {
                 return;
             }
 
-            if(!mobs.isEmpty() && !mobs.contains(mobCaught)) {
-                if (debugActive) {
-                    debugUtils.addLine("MobCaught= " + mobCaught);
-                    debugUtils.addLine("MobCaughtConfig= " + mobs);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isMob(mobCaught, debugActive, debugUtils, tempo)) {
                 return;
             }
 

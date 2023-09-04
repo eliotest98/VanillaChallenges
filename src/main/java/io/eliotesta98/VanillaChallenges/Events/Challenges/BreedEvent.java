@@ -16,7 +16,6 @@ public class BreedEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BreedEvent");
-    private final ArrayList<String> mobsBreed = Main.dailyChallenge.getMobs();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
@@ -64,15 +63,10 @@ public class BreedEvent implements Listener {
                 return;
             }
 
-            if (!mobsBreed.isEmpty() && !mobsBreed.contains(mobBreded)) {
-                if (debugActive) {
-                    debugUtils.addLine("MobBreedConfig= " + mobsBreed);
-                    debugUtils.addLine("MobBreded= " + mobBreded);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isMob(mobBreded, debugActive, debugUtils, tempo)) {
                 return;
             }
+
             Main.dailyChallenge.increment(pName, point);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

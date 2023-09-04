@@ -23,7 +23,6 @@ public class LeashEvent implements Listener {
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("LeashEvent");
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> mobs = Main.dailyChallenge.getMobs();
     private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
@@ -109,17 +108,12 @@ public class LeashEvent implements Listener {
                 return;
             }
 
-            if(!mobs.isEmpty() && !mobs.contains(mob)) {
-                if (debugActive) {
-                    debugUtils.addLine("MobLeashed= " + mob);
-                    debugUtils.addLine("MobLeashedConfig= " + mobs);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isMob(mob, debugActive, debugUtils, tempo)) {
                 return;
             }
 
             Main.instance.getDailyChallenge().increment(player.getName(), point);
+
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();
