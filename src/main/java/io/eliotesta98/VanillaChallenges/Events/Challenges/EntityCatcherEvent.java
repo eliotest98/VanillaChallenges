@@ -16,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,6 @@ public class EntityCatcherEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EntityCombustByEntityEvent");
-    private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final ArrayList<String> mobs = Main.instance.getDailyChallenge().getMobs();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
@@ -48,11 +46,11 @@ public class EntityCatcherEvent implements Listener {
         }
 
         final Player player = (Player) e.getEntity();
-        final ItemStack itemInMainHand;
+        final String itemInMainHand;
         if (Main.version113) {
-            itemInMainHand = player.getInventory().getItemInMainHand();
+            itemInMainHand = player.getInventory().getItemInMainHand().getType().toString();
         } else {
-            itemInMainHand = player.getInventory().getItemInHand();
+            itemInMainHand = player.getInventory().getItemInHand().getType().toString();
         }
 
         final boolean sneakingPlayer = player.isSneaking();
@@ -138,13 +136,7 @@ public class EntityCatcherEvent implements Listener {
                 return;
             }
 
-            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInMainHand.getType().toString())) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemInHandConfig= " + itemsInHand);
-                    debugUtils.addLine("ItemInHandPlayer= " + itemInMainHand.getType());
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 

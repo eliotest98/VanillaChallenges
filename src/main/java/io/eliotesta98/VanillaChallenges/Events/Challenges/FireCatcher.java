@@ -23,7 +23,6 @@ public class FireCatcher implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EntityCombustByBlockEvent");
-    private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
@@ -46,11 +45,11 @@ public class FireCatcher implements Listener {
         }
 
         final Player player = (Player) e.getEntity();
-        final ItemStack itemInMainHand;
+        final String itemInMainHand;
         if (Main.version113) {
-            itemInMainHand = player.getInventory().getItemInMainHand();
+            itemInMainHand = player.getInventory().getItemInMainHand().getType().toString();
         } else {
-            itemInMainHand = player.getInventory().getItemInHand();
+            itemInMainHand = player.getInventory().getItemInHand().getType().toString();
         }
 
         final boolean sneakingPlayer = player.isSneaking();
@@ -125,13 +124,7 @@ public class FireCatcher implements Listener {
                 return;
             }
 
-            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInMainHand.getType().toString())) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemInHandConfig= " + itemsInHand);
-                    debugUtils.addLine("ItemInHandPlayer= " + itemInMainHand.getType());
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 

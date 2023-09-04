@@ -22,7 +22,6 @@ public class DyeEvent implements Listener {
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DyeEvent");
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> itemsInHand = Main.dailyChallenge.getItemsInHand();
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
     private final boolean keepInventory = Main.dailyChallenge.isKeepInventory();
@@ -45,7 +44,7 @@ public class DyeEvent implements Listener {
         if (Main.version113) {
             itemInHandPlayer = e.getEntity().getInventory().getItemInMainHand().getType().toString();
         } else {
-            itemInHandPlayer = e.getEntity().getInventory().getItemInHand().toString();
+            itemInHandPlayer = e.getEntity().getInventory().getItemInHand().getType().toString();
         }
         if (keepInventory) {
             e.setKeepInventory(true);
@@ -131,13 +130,7 @@ public class DyeEvent implements Listener {
                 return;
             }
 
-            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInHandPlayer)) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemInHandConfig= " + itemsInHand);
-                    debugUtils.addLine("ItemInHandPlayer= " + itemInHandPlayer);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isItemInHand(itemInHandPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

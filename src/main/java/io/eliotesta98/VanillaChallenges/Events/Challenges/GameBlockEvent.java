@@ -16,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockReceiveGameEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
@@ -25,7 +24,6 @@ public class GameBlockEvent implements Listener {
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockReceiveGameEvent");
     private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
-    private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
@@ -50,12 +48,12 @@ public class GameBlockEvent implements Listener {
 
         final Player player = (Player) e.getEntity();
         final String blockBreaking = e.getBlock().getType().toString();
-        final ItemStack itemInMainHand;
+        final String itemInMainHand;
         final String detection = e.getEvent().getKey().getKey();
         if (Main.version113) {
-            itemInMainHand = player.getInventory().getItemInMainHand();
+            itemInMainHand = player.getInventory().getItemInMainHand().getType().toString();
         } else {
-            itemInMainHand = player.getInventory().getItemInHand();
+            itemInMainHand = player.getInventory().getItemInHand().getType().toString();
         }
         final boolean sneakingPlayer = player.isSneaking();
         final Location location = player.getLocation();
@@ -150,13 +148,7 @@ public class GameBlockEvent implements Listener {
                 return;
             }
 
-            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInMainHand.getType().toString())) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemInHandConfig= " + itemsInHand);
-                    debugUtils.addLine("ItemInHandPlayer= " + itemInMainHand.getType());
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 

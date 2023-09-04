@@ -28,7 +28,7 @@ public class CubeGeneratorEvent implements Listener {
         long tempo = System.currentTimeMillis();
         final String blockBreaking = e.getBlock().getType().toString();
         final Location blockLocation = e.getBlock().getLocation();
-        final ItemStack itemInMainHand = e.getPlayer().getInventory().getItemInMainHand();
+        final String itemInMainHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
         final String playerName = e.getPlayer().getName();
         final String worldName = e.getPlayer().getWorld().getName();
         final boolean sneakingPlayer = e.getPlayer().isSneaking();
@@ -50,15 +50,10 @@ public class CubeGeneratorEvent implements Listener {
                 return;
             }
 
-            if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockBreakEvent ConfigSneaking= " + sneaking);
-                    debugUtils.addLine("BlockBreakEvent PlayerSneaking= " + sneakingPlayer);
-                    debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
+
             if(!blocks.isEmpty() && !blocks.contains(blockBreaking)) {
                 if (debugActive) {
                     debugUtils.addLine("BlockBreakEvent BlockConfig= " + blocks);
@@ -68,15 +63,11 @@ public class CubeGeneratorEvent implements Listener {
                 }
                 return;
             }
-            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInMainHand.getType().toString())) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockBreakEvent ItemInHandConfig= " + itemsInHand);
-                    debugUtils.addLine("BlockBreakEvent ItemInHandPlayer= " + itemInMainHand.getType());
-                    debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+
+            if (!Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
                 return;
             }
+
             Main.instance.getDailyChallenge().increment(playerName, point);
             if (debugActive) {
                 debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));

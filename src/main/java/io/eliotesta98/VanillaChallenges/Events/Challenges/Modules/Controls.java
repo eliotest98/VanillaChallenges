@@ -2,13 +2,13 @@ package io.eliotesta98.VanillaChallenges.Events.Challenges.Modules;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
-
 import java.util.ArrayList;
 
 public class Controls {
 
     private static final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private static final String sneaking = Main.dailyChallenge.getSneaking();
+    private static final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
 
     public static boolean isWorldEnable(String worldName, boolean debugActive, DebugUtils debugUtils, long tempo) {
         if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
@@ -29,6 +29,20 @@ public class Controls {
             if (debugActive) {
                 debugUtils.addLine("ConfigSneaking= " + sneaking);
                 debugUtils.addLine("PlayerSneaking= " + sneakingPlayer);
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isItemInHand(String itemInMainHand, boolean debugActive, DebugUtils debugUtils, long tempo) {
+        if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInMainHand)) {
+            if (debugActive) {
+                debugUtils.addLine("ItemInHandConfig= " + itemsInHand);
+                debugUtils.addLine("ItemInHandPlayer= " + itemInMainHand);
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();
             }

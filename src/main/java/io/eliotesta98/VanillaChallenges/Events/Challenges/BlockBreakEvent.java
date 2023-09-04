@@ -24,7 +24,6 @@ public class BlockBreakEvent implements Listener {
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockBreakEvent");
     private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
-    private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final int point = Main.dailyChallenge.getPoint();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
@@ -37,11 +36,11 @@ public class BlockBreakEvent implements Listener {
         debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         final String blockBreaking = e.getBlock().getType().toString();
-        final ItemStack itemInMainHand;
+        final String itemInMainHand;
         if (Main.version113) {
-            itemInMainHand = e.getPlayer().getInventory().getItemInMainHand();
+            itemInMainHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
         } else {
-            itemInMainHand = e.getPlayer().getInventory().getItemInHand();
+            itemInMainHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
         }
         final Player player = e.getPlayer();
         final boolean sneakingPlayer = e.getPlayer().isSneaking();
@@ -126,13 +125,7 @@ public class BlockBreakEvent implements Listener {
                 return;
             }
 
-            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInMainHand.getType().toString())) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemInHandConfig= " + itemsInHand);
-                    debugUtils.addLine("ItemInHandPlayer= " + itemInMainHand.getType());
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 
