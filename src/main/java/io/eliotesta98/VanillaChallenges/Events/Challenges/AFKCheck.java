@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -20,7 +21,6 @@ public class AFKCheck {
     private final int timeTaskInMinute = Main.instance.getDailyChallenge().getMinutes();
     private final int point = Main.dailyChallenge.getPoint();
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     private final HashMap<String, Location> playerLocation = new HashMap<>();
 
@@ -55,13 +55,7 @@ public class AFKCheck {
 
                 String worldName = p.getWorld().getName();
 
-                if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                    if (debugActive) {
-                        debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                        debugUtils.addLine("PlayerWorld= " + worldName);
-                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug();
-                    }
+                if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     continue;
                 }
 

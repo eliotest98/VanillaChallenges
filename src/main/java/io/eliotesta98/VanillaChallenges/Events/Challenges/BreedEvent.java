@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -16,7 +17,6 @@ public class BreedEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BreedEvent");
     private final ArrayList<String> mobsBreed = Main.dailyChallenge.getMobs();
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -59,16 +59,11 @@ public class BreedEvent implements Listener {
                 }
             }
 
-            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(finalWorldName)) {
-                if (debugActive) {
-                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("PlayerWorld= " + finalWorldName);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isWorldEnable(finalWorldName, debugActive, debugUtils, tempo)) {
                 return;
             }
-            if(!mobsBreed.isEmpty() && !mobsBreed.contains(mobBreded)) {
+
+            if (!mobsBreed.isEmpty() && !mobsBreed.contains(mobBreded)) {
                 if (debugActive) {
                     debugUtils.addLine("MobBreedConfig= " + mobsBreed);
                     debugUtils.addLine("MobBreded= " + mobBreded);

@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -17,7 +18,6 @@ public class SneakEvent implements Listener {
     private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -48,13 +48,7 @@ public class SneakEvent implements Listener {
                 }
             }
 
-            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                if (debugActive) {
-                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("PlayerWorld= " + worldName);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 

@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -19,7 +20,6 @@ public class HealthRegenEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("HealthRegenEvent");
     private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final HashMap<String, Double> playersRegen = new HashMap<>();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
@@ -62,13 +62,7 @@ public class HealthRegenEvent implements Listener {
                 }
             }
 
-            if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                if (debugActive) {
-                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("PlayerWorld= " + worldName);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 

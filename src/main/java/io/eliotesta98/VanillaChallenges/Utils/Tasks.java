@@ -1,8 +1,8 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
-import io.eliotesta98.VanillaChallenges.Database.Challenger;
-import io.eliotesta98.VanillaChallenges.Database.DailyWinner;
+import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
+import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Tasks {

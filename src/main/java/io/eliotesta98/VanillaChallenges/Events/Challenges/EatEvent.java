@@ -1,12 +1,14 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,7 +19,6 @@ public class EatEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onFoodLevelChange(org.bukkit.event.entity.FoodLevelChangeEvent e) {
@@ -27,7 +28,7 @@ public class EatEvent implements Listener {
         final String worldName = e.getEntity().getWorld().getName();
         final int foodLevel = e.getFoodLevel();
         ItemStack itemUsedByPlayer;
-        if(Main.version113) {
+        if (Main.version113) {
             itemUsedByPlayer = e.getItem();
         } else {
             itemUsedByPlayer = e.getEntity().getInventory().getItemInHand();
@@ -46,17 +47,11 @@ public class EatEvent implements Listener {
                     foodLevels.remove(playerName);
                     foodLevels.put(playerName, Math.min(foodLevel, 20));
 
-                    if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                        if (debugActive) {
-                            debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                            debugUtils.addLine("PlayerWorld= " + worldName);
-                            debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                            debugUtils.debug();
-                        }
+                    if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                         return;
                     }
 
-                    if(!items.isEmpty() && !items.contains(finalItemUsedByPlayer.getType().toString())) {
+                    if (!items.isEmpty() && !items.contains(finalItemUsedByPlayer.getType().toString())) {
                         if (debugActive) {
                             debugUtils.addLine("ItemConsumedByPlayer= " + finalItemUsedByPlayer);
                             debugUtils.addLine("ItemConsumedConfig= " + items);

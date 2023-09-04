@@ -2,6 +2,7 @@ package io.eliotesta98.VanillaChallenges.Modules.CubeGenerator;
 
 import io.eliotesta98.CubeGenerator.api.CubeGeneratorAPI;
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,7 +21,6 @@ public class CubeGeneratorEvent implements Listener {
     private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockBreakEvent e) {
@@ -45,15 +45,11 @@ public class CubeGeneratorEvent implements Listener {
                 }
                 return;
             }
-            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockBreakEvent WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("BlockBreakEvent PlayerWorld= " + worldName);
-                    debugUtils.addLine("BlockBreakEvent execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+
+            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
+
             if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
                 if (debugActive) {
                     debugUtils.addLine("BlockBreakEvent ConfigSneaking= " + sneaking);

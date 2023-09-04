@@ -1,4 +1,4 @@
-package io.eliotesta98.VanillaChallenges.Database;
+package io.eliotesta98.VanillaChallenges.Database.Objects;
 
 public class DailyWinner {
 

@@ -1,5 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
+import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import java.util.ArrayList;
 

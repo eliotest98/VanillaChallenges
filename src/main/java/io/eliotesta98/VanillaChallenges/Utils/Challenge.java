@@ -1,10 +1,9 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
-import io.eliotesta98.VanillaChallenges.Database.Challenger;
+import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;

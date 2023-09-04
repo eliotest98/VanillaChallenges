@@ -15,57 +15,36 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockReceiveGameEvent;
-import org.bukkit.inventory.ItemStack;
-
+import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import java.util.ArrayList;
 
-public class GameBlockEvent implements Listener {
+public class LeashEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockReceiveGameEvent");
-    private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
-    private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("LeashEvent");
     private final int point = Main.dailyChallenge.getPoint();
     private final String sneaking = Main.dailyChallenge.getSneaking();
-    private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
-    private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
-    private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
+    private final ArrayList<String> mobs = Main.dailyChallenge.getMobs();
     private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
+    private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
     private boolean ok = false;
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onBlockGame(BlockReceiveGameEvent e) {
+    public void onLeash(PlayerLeashEntityEvent e) {
         debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
 
-        if (e.getEntity() == null || !(e.getEntity() instanceof Player)) {
-            if (debugActive) {
-                debugUtils.addLine("Entity is null or is not a Player");
-                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug();
-            }
-            return;
-        }
-
-        final Player player = (Player) e.getEntity();
-        final String blockBreaking = e.getBlock().getType().toString();
-        final ItemStack itemInMainHand;
-        final String detection = e.getEvent().getKey().getKey();
-        if (Main.version113) {
-            itemInMainHand = player.getInventory().getItemInMainHand();
-        } else {
-            itemInMainHand = player.getInventory().getItemInHand();
-        }
+        final Player player = e.getPlayer();
         final boolean sneakingPlayer = player.isSneaking();
         final Location location = player.getLocation();
         final World world = player.getWorld();
-        final Block block = e.getBlock();
+        final Block block = location.getBlock();
+        final String mob = e.getEntity().getType().getKey().getKey();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
-
             if (debugActive) {
-                debugUtils.addLine("Player= " + player.getName());
+                debugUtils.addLine("PlayerBreaking= " + player.getName());
             }
             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                 if (griefPreventionEnabled) {
@@ -137,30 +116,10 @@ public class GameBlockEvent implements Listener {
                 return;
             }
 
-            if (!causes.isEmpty() && !causes.contains(detection)) {
+            if(!mobs.isEmpty() && !mobs.contains(mob)) {
                 if (debugActive) {
-                    debugUtils.addLine("CausePlayer= " + detection);
-                    debugUtils.addLine("CauseConfig= " + causes);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
-                return;
-            }
-
-            if (!blocks.isEmpty() && !blocks.contains(blockBreaking)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockConfig= " + blocks);
-                    debugUtils.addLine("BlockBreaking= " + blockBreaking);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
-                return;
-            }
-
-            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInMainHand.getType().toString())) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemInHandConfig= " + itemsInHand);
-                    debugUtils.addLine("ItemInHandPlayer= " + itemInMainHand.getType());
+                    debugUtils.addLine("MobLeashed= " + mob);
+                    debugUtils.addLine("MobLeashedConfig= " + mobs);
                     debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug();
                 }

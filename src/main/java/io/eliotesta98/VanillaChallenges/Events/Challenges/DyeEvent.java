@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
@@ -12,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,7 +30,6 @@ public class DyeEvent implements Listener {
     private final boolean deathInLand = Main.dailyChallenge.isDeathInLand();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final int numberOfSlots = Main.dailyChallenge.getNumber();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -113,13 +114,7 @@ public class DyeEvent implements Listener {
                 }
             }
 
-            if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                if (debugActive) {
-                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("PlayerWorld= " + worldName);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 

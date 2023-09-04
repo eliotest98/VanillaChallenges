@@ -290,6 +290,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new FireCatcher(), this);
         } else if (typeChallenge.equalsIgnoreCase("EntityCatcherChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new EntityCatcherEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("LeashChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new LeashEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
             challengeSelected = false;

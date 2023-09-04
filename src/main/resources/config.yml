@@ -294,6 +294,8 @@ Debug:
   EntityCombustByBlockEvent: false
   # Entity Catcher event debug
   EntityCombustByEntityEvent: false
+  # Leash event debug
+  LeashEvent: false
   # Online Point give debug
   OnlinePoint: false
   # Enabled debug

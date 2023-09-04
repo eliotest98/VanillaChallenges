@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.GriefPrevention.GriefPreventionUtils;
 import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
@@ -15,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 
 public class BlockBreakEvent implements Listener {
@@ -29,7 +31,6 @@ public class BlockBreakEvent implements Listener {
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
     private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private boolean ok = false;
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -108,13 +109,7 @@ public class BlockBreakEvent implements Listener {
                 }
             }
 
-            if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(world.getName())) {
-                if (debugActive) {
-                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("PlayerWorld= " + world.getName());
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
                 return;
             }
 
