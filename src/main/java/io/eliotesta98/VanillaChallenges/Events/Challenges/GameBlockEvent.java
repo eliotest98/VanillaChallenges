@@ -27,7 +27,6 @@ public class GameBlockEvent implements Listener {
     private final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
     private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final int point = Main.dailyChallenge.getPoint();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
     private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
@@ -127,13 +126,7 @@ public class GameBlockEvent implements Listener {
                 return;
             }
 
-            if (!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
-                if (debugActive) {
-                    debugUtils.addLine("ConfigSneaking= " + sneaking);
-                    debugUtils.addLine("PlayerSneaking= " + sneakingPlayer);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

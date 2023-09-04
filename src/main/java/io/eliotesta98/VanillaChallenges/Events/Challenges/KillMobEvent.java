@@ -17,7 +17,6 @@ public class KillMobEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("KillEvent");
     private final ArrayList<String> mobsKill = Main.dailyChallenge.getMobs();
     private final int point = Main.dailyChallenge.getPoint();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -67,13 +66,7 @@ public class KillMobEvent implements Listener {
                 return;
             }
 
-            if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != finalSneakingPlayer) {
-                if (debugActive) {
-                    debugUtils.addLine("SneakingPlayer= " + finalSneakingPlayer);
-                    debugUtils.addLine("SneakingConfig= " + sneaking);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

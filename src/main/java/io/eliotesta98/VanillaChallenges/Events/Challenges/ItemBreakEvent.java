@@ -17,7 +17,6 @@ public class ItemBreakEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemBreakEvent");
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -33,7 +32,6 @@ public class ItemBreakEvent implements Listener {
             if (debugActive) {
                 debugUtils.addLine("PlayerBreaking= " + playerName);
                 debugUtils.addLine("PlayerSneaking= " + playerSneaking);
-                debugUtils.addLine("ConfigSneaking= " + sneaking);
             }
 
             if (superiorSkyBlock2Enabled) {
@@ -55,13 +53,7 @@ public class ItemBreakEvent implements Listener {
                 return;
             }
 
-            if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != playerSneaking) {
-                if (debugActive) {
-                    debugUtils.addLine("ConfigSneaking= " + sneaking);
-                    debugUtils.addLine("PlayerSneaking= " + playerSneaking);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 

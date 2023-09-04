@@ -25,7 +25,6 @@ public class DyeEvent implements Listener {
     private final ArrayList<String> itemsInHand = Main.dailyChallenge.getItemsInHand();
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean keepInventory = Main.dailyChallenge.isKeepInventory();
     private final boolean deathInLand = Main.dailyChallenge.isDeathInLand();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
@@ -128,13 +127,7 @@ public class DyeEvent implements Listener {
                 return;
             }
 
-            if (!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
-                if (debugActive) {
-                    debugUtils.addLine("SneakingPlayer= " + sneakingPlayer);
-                    debugUtils.addLine("SneakingConfig= " + sneaking);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

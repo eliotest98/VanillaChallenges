@@ -20,7 +20,6 @@ public class ColorSheepEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ColorSheepEvent");
     private final ArrayList<String> colors = Main.dailyChallenge.getColors();
     private final int point = Main.dailyChallenge.getPoint();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     private final HashMap<Entity, String> sheepColored = new HashMap<>();
@@ -58,15 +57,10 @@ public class ColorSheepEvent implements Listener {
                     return;
                 }
 
-                if (!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != playerSneaking) {
-                    if (debugActive) {
-                        debugUtils.addLine("ConfigSneaking= " + sneaking);
-                        debugUtils.addLine("PlayerSneaking= " + playerSneaking);
-                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug();
-                    }
+                if (!Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
                     return;
                 }
+
                 if (!colors.isEmpty() && !colors.contains(colorPlayer)) {
                     if (debugActive) {
                         debugUtils.addLine("ConfigColor= " + colors);
@@ -107,15 +101,10 @@ public class ColorSheepEvent implements Listener {
                     return;
                 }
 
-                if (!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != playerSneaking) {
-                    if (debugActive) {
-                        debugUtils.addLine("ConfigSneaking= " + sneaking);
-                        debugUtils.addLine("PlayerSneaking= " + playerSneaking);
-                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug();
-                    }
+                if (!Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
                     return;
                 }
+
                 if (!colors.isEmpty() && !colors.contains(colorPlayer)) {
                     if (debugActive) {
                         debugUtils.addLine("ConfigColor= " + colors);

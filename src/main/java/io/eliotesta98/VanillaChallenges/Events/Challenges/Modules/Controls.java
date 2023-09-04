@@ -8,12 +8,27 @@ import java.util.ArrayList;
 public class Controls {
 
     private static final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private static final String sneaking = Main.dailyChallenge.getSneaking();
 
     public static boolean isWorldEnable(String worldName, boolean debugActive, DebugUtils debugUtils, long tempo) {
         if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
             if (debugActive) {
                 debugUtils.addLine("WorldsConfig= " + worldsEnabled);
                 debugUtils.addLine("PlayerWorld= " + worldName);
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isSneaking(boolean sneakingPlayer, boolean debugActive, DebugUtils debugUtils, long tempo) {
+        if (!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
+            if (debugActive) {
+                debugUtils.addLine("ConfigSneaking= " + sneaking);
+                debugUtils.addLine("PlayerSneaking= " + sneakingPlayer);
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();
             }

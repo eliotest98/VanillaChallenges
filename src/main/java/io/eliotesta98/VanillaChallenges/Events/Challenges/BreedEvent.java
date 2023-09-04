@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityBreedEvent;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class BreedEvent implements Listener {
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onBreedAnimals(org.bukkit.event.entity.EntityBreedEvent e) {
+    public void onBreedAnimals(EntityBreedEvent e) {
         debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         String playerName;

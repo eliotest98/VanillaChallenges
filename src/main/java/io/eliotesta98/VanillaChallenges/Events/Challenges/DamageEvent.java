@@ -65,6 +65,7 @@ public class DamageEvent implements Listener {
                     }
                     return;
                 }
+
                 Main.dailyChallenge.increment(playerName, (long) finalDamage * point);
             }
             if (debugActive) {

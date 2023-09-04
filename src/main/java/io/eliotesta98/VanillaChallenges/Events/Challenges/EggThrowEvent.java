@@ -16,7 +16,6 @@ public class EggThrowEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EggThrowEvent");
     private final ArrayList<String> mobs = Main.dailyChallenge.getMobs();
     private final int point = Main.dailyChallenge.getPoint();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -53,13 +52,7 @@ public class EggThrowEvent implements Listener {
                 return;
             }
 
-            if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
-                if (debugActive) {
-                    debugUtils.addLine("ConfigSneaking= " + sneaking);
-                    debugUtils.addLine("PlayerSneaking= " + sneakingPlayer);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

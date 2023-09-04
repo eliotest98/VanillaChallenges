@@ -17,7 +17,6 @@ public class ItemConsumeEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemConsumeEvent");
     private final ArrayList<String> itemsConsume = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.dailyChallenge.getPoint();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -52,13 +51,7 @@ public class ItemConsumeEvent implements Listener {
                 return;
             }
 
-            if(!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
-                if (debugActive) {
-                    debugUtils.addLine("SneakingPlayer= " + sneakingPlayer);
-                    debugUtils.addLine("SneakingConfig= " + sneaking);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

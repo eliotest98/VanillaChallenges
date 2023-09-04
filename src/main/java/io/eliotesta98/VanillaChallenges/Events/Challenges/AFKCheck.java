@@ -53,9 +53,7 @@ public class AFKCheck {
                     continue;
                 }
 
-                String worldName = p.getWorld().getName();
-
-                if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+                if (!Controls.isWorldEnable(p.getWorld().getName(), debugActive, debugUtils, tempo)) {
                     continue;
                 }
 

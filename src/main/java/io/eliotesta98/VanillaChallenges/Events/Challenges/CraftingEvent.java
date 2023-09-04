@@ -61,6 +61,7 @@ public class CraftingEvent implements Listener {
                 }
                 return;
             }
+
             Main.dailyChallenge.increment(playerName, (long) point * amount);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

@@ -27,7 +27,6 @@ public class EntityCatcherEvent implements Listener {
     private final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private final ArrayList<String> mobs = Main.instance.getDailyChallenge().getMobs();
     private final int point = Main.dailyChallenge.getPoint();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
     private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
@@ -135,13 +134,7 @@ public class EntityCatcherEvent implements Listener {
                 return;
             }
 
-            if (!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
-                if (debugActive) {
-                    debugUtils.addLine("ConfigSneaking= " + sneaking);
-                    debugUtils.addLine("PlayerSneaking= " + sneakingPlayer);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
