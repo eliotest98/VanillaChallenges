@@ -14,7 +14,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import org.bukkit.inventory.ItemStack;
-
 import java.io.File;
 import java.util.*;
 
@@ -44,7 +43,7 @@ public class Commands implements CommandExecutor {
     private final String commandVcList = Main.instance.getConfigGestion().getMessages().get("Commands.List");
     private final String commandVcEvent = Main.instance.getConfigGestion().getMessages().get("Commands.Event");
     private final String commandVcSchedule = Main.instance.getConfigGestion().getMessages().get("Commands.Schedule");
-    private final String commandVcRestoreHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Restore");
+    private final String commandVcRestore = Main.instance.getConfigGestion().getMessages().get("Commands.Restore");
 
     private final String fileList = Main.instance.getConfigGestion().getMessages().get("Lists.Files");
     private final String fileLine = Main.instance.getConfigGestion().getMessages().get("Lists.FilesLine");
@@ -53,6 +52,7 @@ public class Commands implements CommandExecutor {
     private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("ActuallyInTop");
     private final String pointsadd = Main.instance.getConfigGestion().getMessages().get("PointsAdd");
     private final String pointsremove = Main.instance.getConfigGestion().getMessages().get("PointsRemove");
+    private final String prefix = Main.instance.getConfigGestion().getMessages().get("Prefix");
 
     private final String challengeList = Main.instance.getConfigGestion().getMessages().get("ChallengeList");
     private final String challengeOfList = Main.instance.getConfigGestion().getMessages().get("ChallengeofList");
@@ -96,7 +96,7 @@ public class Commands implements CommandExecutor {
                     finale = finale + commandVcNextHelp + "\n";
                     finale = finale + commandVcPointsHelp + "\n";
                     finale = finale + commandVcReloadHelp + "\n";
-                    finale = finale + commandVcRestoreHelp + "\n";
+                    finale = finale + commandVcRestore + "\n";
                     finale = finale + commandVcReward + "\n";
                     finale = finale + commandVcTopHelp + "\n";
                     finale = finale + "&r\n";
@@ -253,7 +253,7 @@ public class Commands implements CommandExecutor {
                     }
                 } else if (args[0].equalsIgnoreCase("restore")) {
                     if (args.length > 3) {
-                        sender.sendMessage(ColorUtils.applyColor(commandVcRestoreHelp));
+                        sender.sendMessage(ColorUtils.applyColor(commandVcRestore));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug();
@@ -507,7 +507,7 @@ public class Commands implements CommandExecutor {
                     finale = finale + commandVcNextHelp + "\n";
                     finale = finale + commandVcPointsHelp + "\n";
                     finale = finale + commandVcReloadHelp + "\n";
-                    finale = finale + commandVcRestoreHelp + "\n";
+                    finale = finale + commandVcRestore + "\n";
                     finale = finale + commandVcReward + "\n";
                     finale = finale + commandVcSchedule + "\n";
                     finale = finale + commandVcTopHelp + "\n";
@@ -604,7 +604,7 @@ public class Commands implements CommandExecutor {
                     finale = finale + commandVcNextHelp + "\n";
                     finale = finale + commandVcPointsHelp + "\n";
                     finale = finale + commandVcReloadHelp + "\n";
-                    finale = finale + commandVcRestoreHelp + "\n";
+                    finale = finale + commandVcRestore + "\n";
                     finale = finale + commandVcReward + "\n";
                     finale = finale + commandVcSchedule + "\n";
                     finale = finale + commandVcTopHelp + "\n";
@@ -896,14 +896,14 @@ public class Commands implements CommandExecutor {
                             for (Challenge challenge : Main.db.getAllChallenges()) {
                                 send.append(challengeOfList.replace("{challenge}", challenge.getChallengeName())).append("\n");
                             }
-                            sender.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
+                            p.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
                         } else {
                             if (Main.dailyChallenge.getChallengeName().equalsIgnoreCase(args[2])) {
-                                sender.sendMessage(ColorUtils.applyColor(scheduleError));
+                                p.sendMessage(ColorUtils.applyColor(scheduleError));
                             } else {
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                                     Main.db.deleteChallengeWithName(args[2]);
-                                    sender.sendMessage(ColorUtils.applyColor(removeSuccess));
+                                    p.sendMessage(ColorUtils.applyColor(removeSuccess));
                                     ReloadUtils.reload();
                                 });
                             }
