@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -8,6 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,16 +18,14 @@ public class SprintEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SprintEvent");
-    private HashMap<String, Boolean> players = new HashMap<>();
-    private HashMap<String, Double> distances = new HashMap<>();
-    private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
+    private final HashMap<String, Boolean> players = new HashMap<>();
+    private final HashMap<String, Double> distances = new HashMap<>();
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onSprint(org.bukkit.event.player.PlayerToggleSprintEvent e) {
+    public void onSprint(PlayerToggleSprintEvent e) {
         debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         final String blockWalk = e.getPlayer().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
@@ -39,7 +40,6 @@ public class SprintEvent implements Listener {
             if (debugActive) {
                 debugUtils.addLine("ToggledSprintPlayer= " + e.getPlayer().getName());
                 debugUtils.addLine("BlockStepOnPlayer= " + blockWalk);
-                debugUtils.addLine("BlockStepOnConfig= " + blocks);
                 debugUtils.addLine("ItemInHandConfig= " + items);
                 debugUtils.addLine("ItemInHandPlayer= " + itemInHand);
             }
@@ -59,13 +59,7 @@ public class SprintEvent implements Listener {
                 }
             }
 
-            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                if (debugActive) {
-                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("PlayerWorld= " + worldName);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
@@ -79,13 +73,7 @@ public class SprintEvent implements Listener {
                 return;
             }
 
-            if(!blocks.isEmpty() && !blocks.contains(blockWalk)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockStepOnPlayer= " + blockWalk);
-                    debugUtils.addLine("BlockStepOnConfig= " + blocks);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isBlock(blockWalk, debugActive, debugUtils, tempo)) {
                 return;
             }
 

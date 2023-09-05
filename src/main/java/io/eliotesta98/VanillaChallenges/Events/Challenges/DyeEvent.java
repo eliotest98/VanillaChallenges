@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
@@ -12,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,15 +22,12 @@ public class DyeEvent implements Listener {
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DyeEvent");
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> itemsInHand = Main.dailyChallenge.getItemsInHand();
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
-    private final String sneaking = Main.dailyChallenge.getSneaking();
     private final boolean keepInventory = Main.dailyChallenge.isKeepInventory();
     private final boolean deathInLand = Main.dailyChallenge.isDeathInLand();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final int numberOfSlots = Main.dailyChallenge.getNumber();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -45,7 +44,7 @@ public class DyeEvent implements Listener {
         if (Main.version113) {
             itemInHandPlayer = e.getEntity().getInventory().getItemInMainHand().getType().toString();
         } else {
-            itemInHandPlayer = e.getEntity().getInventory().getItemInHand().toString();
+            itemInHandPlayer = e.getEntity().getInventory().getItemInHand().getType().toString();
         }
         if (keepInventory) {
             e.setKeepInventory(true);
@@ -113,13 +112,7 @@ public class DyeEvent implements Listener {
                 }
             }
 
-            if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                if (debugActive) {
-                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("PlayerWorld= " + worldName);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
@@ -133,23 +126,11 @@ public class DyeEvent implements Listener {
                 return;
             }
 
-            if (!sneaking.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(sneaking) != sneakingPlayer) {
-                if (debugActive) {
-                    debugUtils.addLine("SneakingPlayer= " + sneakingPlayer);
-                    debugUtils.addLine("SneakingConfig= " + sneaking);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!itemsInHand.isEmpty() && !itemsInHand.contains(itemInHandPlayer)) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemInHandConfig= " + itemsInHand);
-                    debugUtils.addLine("ItemInHandPlayer= " + itemInHandPlayer);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isItemInHand(itemInHandPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

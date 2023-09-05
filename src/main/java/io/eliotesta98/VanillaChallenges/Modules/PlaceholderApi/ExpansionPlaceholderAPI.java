@@ -1,7 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Modules.PlaceholderApi;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
-import io.eliotesta98.VanillaChallenges.Database.Challenger;
+import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;

@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -16,11 +17,9 @@ public class MoveEvent implements Listener {
 
     private final HashMap<String, Double> distances = new HashMap<>();
     private DebugUtils debugUtils;
-    private final ArrayList<String> blocks = Main.dailyChallenge.getBlocks();
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("MoveEvent");
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -69,13 +68,7 @@ public class MoveEvent implements Listener {
                 }
             }
 
-            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                if (debugActive) {
-                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("PlayerWorld= " + worldName);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
@@ -89,13 +82,11 @@ public class MoveEvent implements Listener {
                 return;
             }
 
-            if (!blocks.isEmpty() && !blocks.contains(materialFrom) && !blocks.contains(materialTo)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockToStepOn= " + materialTo);
-                    debugUtils.addLine("BlockFromStepOn= " + materialFrom);
-                    debugUtils.addLine("BlockStepOnConfig= " + blocks);
-                    debugUtils.debug();
-                }
+            if (!Controls.isBlock(materialFrom, debugActive, debugUtils, tempo)) {
+                return;
+            }
+
+            if (!Controls.isBlock(materialTo, debugActive, debugUtils, tempo)) {
                 return;
             }
 

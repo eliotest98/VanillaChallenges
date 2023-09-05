@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
@@ -17,7 +18,6 @@ public class CraftingEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("CraftItemEvent");
     private final ArrayList<String> itemsCrafting = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -48,15 +48,10 @@ public class CraftingEvent implements Listener {
                 }
             }
 
-            if(!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                if (debugActive) {
-                    debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                    debugUtils.addLine("PlayerWorld= " + worldName);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
+
             if (!itemsCrafting.isEmpty() && !itemsCrafting.contains(recipePlayer)) {
                 if (debugActive) {
                     debugUtils.addLine("RecipePlayer= " + recipePlayer);
@@ -66,6 +61,7 @@ public class CraftingEvent implements Listener {
                 }
                 return;
             }
+
             Main.dailyChallenge.increment(playerName, (long) point * amount);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

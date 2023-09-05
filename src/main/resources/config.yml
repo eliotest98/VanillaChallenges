@@ -173,6 +173,7 @@ Messages:
     # if you want a file default duration or time use 0
     Schedule: '   &e/vc &6<schedule> <add|remove> <challenge|random> &7for add or remove a challenge from schedule'
     Top: '   &e/vc &6<top> &7for see the top 3'
+    Restore: '   &e/vc &6<restore> [file] &7Allows you to restore a H2Database from backup file or see the list of backup files'
 
   Errors:
     YouAreNotAPlayer: '{prefix}&cYou are not a player'
@@ -183,9 +184,16 @@ Messages:
     AlreadyStopEvent: '{prefix}&cYou already stopped the Challenge Event! If you want start a new Challenge write vc <event> <challenge>'
     Schedule: '{prefix}&cYou cannot remove the current challenge from the schedule, if you want to remove it use the /vc <next> command'
     Add: '{prefix}&cYou cannot add this challenge because is already scheduled'
+
   Success:
     Add: '{prefix}&aSuccessfully scheduled this challenge'
     Remove: '{prefix}&aSuccessfully removed form schedule this challenge'
+    Restored: '{prefix}&aSuccessfully restored database'
+
+  Lists:
+    Files: '{prefix}&7Files List:'
+    FilesLine: '&5File: {fileName}'
+
   PointsInfo: '{prefix}&e{player} &7have &b{number}&7 points'
   ActuallyInTop: '{prefix}&7Actually in top there are:'
   TopPlayers:
@@ -278,6 +286,18 @@ Debug:
   HealthRegenEvent: false
   # AFK Challenge debug
   AFKEvent: false
+  # Sensor Actuator Event debug
+  BlockReceiveGameEvent: false
+  # Tnt ignite event debug
+  TNTPrimeEvent: false
+  # Fire Catcher event debug
+  EntityCombustByBlockEvent: false
+  # Entity Catcher event debug
+  EntityCombustByEntityEvent: false
+  # Leash event debug
+  LeashEvent: false
+  # Sleep event debug
+  SleepEvent: false
   # Online Point give debug
   OnlinePoint: false
   # Enabled debug

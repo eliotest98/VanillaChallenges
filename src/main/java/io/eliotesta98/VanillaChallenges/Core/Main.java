@@ -15,6 +15,8 @@ import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.*;
@@ -30,10 +32,17 @@ public class Main extends JavaPlugin {
     public static boolean challengeSelected = true;
     public static boolean version113 = true;
 
+    @Override
+    public void onLoad() {
+        instance = this;
+
+        // Load libraries where Spigot does not do this automatically
+        loadLibraries();
+    }
+
     public void onEnable() {
         DebugUtils debugsistem = new DebugUtils("Enabled");
         long tempo = System.currentTimeMillis();
-        Main.instance = this;
 
         // All you have to do is adding the following two lines in your onEnable method.
         // You can find the plugin ids of your plugins on the page https://bstats.org/what-is-my-plugin-id
@@ -124,8 +133,6 @@ public class Main extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //loads challenges files
-        config.loadCommentedConfiguration();
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
         getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -190,10 +197,15 @@ public class Main extends JavaPlugin {
         });
         getServer().getConsoleSender().sendMessage("§aConfiguration Loaded!");
         getServer().getConsoleSender().sendMessage("§6Connection to database!");
-        if (config.getDatabase().equalsIgnoreCase("H2")) {
-            getServer().getConsoleSender().sendMessage("HikariCP Folder '" + com.zaxxer.hikari.HikariConfig.class
-                    .getProtectionDomain().getCodeSource().getLocation().getPath() + "'");
-            db = new H2Database();
+        if (getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
+            try {
+                db = new H2Database(getDataFolder().getAbsolutePath());
+            } catch (Exception ex) {
+                getServer().getConsoleSender().sendMessage("§cTry to restore the database");
+                restoreDatabase();
+                ex.printStackTrace();
+                return;
+            }
         } else {
             db = new YamlDB();
         }
@@ -270,6 +282,18 @@ public class Main extends JavaPlugin {
             new AFKCheck();
         } else if (typeChallenge.equalsIgnoreCase("MissionChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new SuperiorSkyBlock2Events(), this);
+        } else if (typeChallenge.equalsIgnoreCase("SensorChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new GameBlockEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("PrimerChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new PrimeEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("FireCatcherChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new FireCatcher(), this);
+        } else if (typeChallenge.equalsIgnoreCase("EntityCatcherChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new EntityCatcherEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("LeashChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new LeashEvent(), this);
+        } else if (typeChallenge.equalsIgnoreCase("SleepChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new SleepEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
             challengeSelected = false;
@@ -339,4 +363,42 @@ public class Main extends JavaPlugin {
         return dailyChallenge;
     }
 
+    private void loadLibraries() {
+        final List<Library> libraries = new ArrayList<>();
+
+        boolean oldVersion = getServer().getVersion().contains("1.8") || getServer().getVersion().contains("1.9")
+                || getServer().getVersion().contains("1.10") || getServer().getVersion().contains("1.11")
+                || getServer().getVersion().contains("1.12") || getServer().getVersion().contains("1.13")
+                || getServer().getVersion().contains("1.14") || getServer().getVersion().contains("1.15")
+                || getServer().getVersion().contains("1.16");
+
+        if (oldVersion) {
+            Bukkit.getConsoleSender().sendMessage("Loading legacy libraries...");
+            Reader targetReader = new InputStreamReader(getResource("plugin.yml"));
+
+            YamlConfiguration pluginFile = YamlConfiguration.loadConfiguration(targetReader);
+            for (final String libraryPath : pluginFile.getStringList("legacy-libraries")) {
+                final Library library = Library.fromMavenRepo(libraryPath);
+                Bukkit.getConsoleSender().sendMessage("Loading library " + libraryPath);
+                libraries.add(library);
+            }
+
+            for (final Library library : libraries)
+                library.load();
+            Bukkit.getConsoleSender().sendMessage("Legacy libraries loaded!");
+        }
+    }
+
+    public void restoreDatabase() {
+        File db = new File(Main.instance.getDataFolder(), "vanillachallenges.mv.db");
+        File dbNew = new File(Main.instance.getDataFolder(), "vanillachallengesOld.mv.db");
+        if (db.renameTo(dbNew)) {
+            getServer().getConsoleSender().sendMessage("§cOlder Database Successfully Renamed");
+        } else {
+            getServer().getConsoleSender().sendMessage("§cOlder Database Not Successfully Deleted");
+            onDisable();
+            return;
+        }
+        ReloadUtils.reload();
+    }
 }

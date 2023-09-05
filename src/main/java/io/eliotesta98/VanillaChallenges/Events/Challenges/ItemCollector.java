@@ -2,6 +2,7 @@ package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
 import de.tr7zw.nbtapi.NBTItem;
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
@@ -29,7 +30,6 @@ public class ItemCollector implements Listener {
     private final ArrayList<String> items = Main.dailyChallenge.getItems();
     private final int point = Main.dailyChallenge.getPoint();
     private final String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyPlacedChest");
-    private final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     // timer del controllo punti
@@ -170,13 +170,7 @@ public class ItemCollector implements Listener {
                                             }
                                         }
 
-                                        if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
-                                            if (debugActive) {
-                                                debugUtils.addLine("WorldsConfig= " + worldsEnabled);
-                                                debugUtils.addLine("PlayerWorld= " + worldName);
-                                                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                                                debugUtils.debug();
-                                            }
+                                        if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                                             return;
                                         }
 
