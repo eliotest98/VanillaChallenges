@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import org.bukkit.inventory.ItemStack;
+
 import java.io.File;
 import java.util.*;
 
@@ -1191,7 +1192,7 @@ public class Commands implements CommandExecutor {
                                 if (p.getInventory().firstEmpty() != -1
                                         && give
                                         && !reward[0].equalsIgnoreCase("[command]")) {
-                                    ItemStack item = null;
+                                    ItemStack item;
                                     if (reward[0].contains("-")) {
                                         String[] splitItem = reward[0].split("-");
                                         item = new ItemStack(Material.getMaterial(splitItem[0]), 1, Short.parseShort(splitItem[1]));
@@ -1205,6 +1206,7 @@ public class Commands implements CommandExecutor {
                                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                                         p.getInventory().addItem(finalItem);
                                         Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
+                                        Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor(prefix + "&6Winner: " + p.getName() + " has received his reward: " + finalItem));
                                         winners.remove(number);
                                     });
                                 } else {
@@ -1224,7 +1226,9 @@ public class Commands implements CommandExecutor {
                                     }
                                     String finalCommandRefactor = commandRefactor.toString();
                                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), finalCommandRefactor.replace("%player%", p.getName()));
+                                        String commandRefact = finalCommandRefactor.replace("%player%", p.getName());
+                                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandRefact);
+                                        Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor(prefix + "&6Winner: " + p.getName() + " has received his reward: " + commandRefact));
                                         Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
                                         winners.remove(number);
                                     });

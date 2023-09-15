@@ -16,10 +16,11 @@ import java.util.ArrayList;
 
 public class DailyGiveWinners implements Listener {
 
-    private ArrayList<DailyWinner> winners;
-    private DebugUtils debugUtils = new DebugUtils("DailyGiveRewardEvent");
-    private boolean debug = Main.instance.getConfigGestion().getDebug().get("DailyGiveRewardEvent");
-    private String challengeReward = Main.instance.getConfigGestion().getMessages().get("ChallengeReward");
+    private final ArrayList<DailyWinner> winners;
+    private final DebugUtils debugUtils = new DebugUtils("DailyGiveRewardEvent");
+    private final boolean debug = Main.instance.getConfigGestion().getDebug().get("DailyGiveRewardEvent");
+    private final String challengeReward = Main.instance.getConfigGestion().getMessages().get("ChallengeReward");
+    private final String prefix = Main.instance.getConfigGestion().getMessages().get("Prefix");
 
     public DailyGiveWinners() {
         winners = Main.db.getAllDailyWinners();
@@ -65,6 +66,7 @@ public class DailyGiveWinners implements Listener {
                         ItemStack finalItem = item;
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             e.getPlayer().getInventory().addItem(finalItem);
+                            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor(prefix + "&6Winner: " + e.getPlayer().getName() + " has received his reward: " + finalItem));
                             Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
                             winners.remove(number);
                         });
@@ -87,7 +89,9 @@ public class DailyGiveWinners implements Listener {
                         }
                         String finalCommandRefactor = commandRefactor.toString();
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), finalCommandRefactor.replace("%player%", e.getPlayer().getName()));
+                            String commandRefact = finalCommandRefactor.replace("%player%", e.getPlayer().getName());
+                            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandRefact);
+                            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor(prefix + "&6Winner: " + e.getPlayer().getName() + " has received his reward: " + commandRefact));
                             Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
                             winners.remove(number);
                         });
