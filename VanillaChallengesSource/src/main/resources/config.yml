@@ -304,3 +304,5 @@ Debug:
   Enabled: false
   # Disabled debug
   Disabled: false
+  # Debug for API
+  API: false

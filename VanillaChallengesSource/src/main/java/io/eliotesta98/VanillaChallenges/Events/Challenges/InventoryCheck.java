@@ -15,8 +15,8 @@ public class InventoryCheck {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("Inventory");
     private final int numberSlot = Main.instance.getDailyChallenge().getNumber();
     private final int timeTaskInMinute = Main.instance.getDailyChallenge().getMinutes();
-    private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> items = Main.dailyChallenge.getItems();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
+    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     public InventoryCheck() {

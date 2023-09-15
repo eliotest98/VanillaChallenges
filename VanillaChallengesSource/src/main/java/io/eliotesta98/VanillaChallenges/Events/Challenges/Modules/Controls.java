@@ -8,11 +8,11 @@ import java.util.ArrayList;
 public class Controls {
 
     private static final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
-    private static final String sneaking = Main.dailyChallenge.getSneaking();
+    private static final String sneaking = Main.instance.getDailyChallenge().getSneaking();
     private static final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
     private static final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
     private static final ArrayList<String> blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
-    private static final ArrayList<String> mobs = Main.dailyChallenge.getMobs();
+    private static final ArrayList<String> mobs = Main.instance.getDailyChallenge().getMobs();
 
     public static boolean isWorldEnable(String worldName, boolean debugActive, DebugUtils debugUtils, long tempo) {
         if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {

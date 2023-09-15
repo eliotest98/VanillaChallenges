@@ -18,8 +18,8 @@ public class HealthRegenEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("HealthRegenEvent");
-    private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final HashMap<String, Double> playersRegen = new HashMap<>();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
@@ -83,7 +83,7 @@ public class HealthRegenEvent implements Listener {
                 oldAmount = oldAmount + amount;
                 if (oldAmount > 1.0) {
                     double truncate = Math.floor(oldAmount);
-                    Main.dailyChallenge.increment(playerName, (long) (truncate * point));
+                    Main.instance.getDailyChallenge().increment(playerName, (long) (truncate * point));
                     playersRegen.replace(playerName, oldAmount - truncate);
                 } else {
                     playersRegen.replace(playerName, oldAmount);

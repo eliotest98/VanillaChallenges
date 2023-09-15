@@ -23,7 +23,7 @@ public class FireCatcher implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EntityCombustByBlockEvent");
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
     private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");

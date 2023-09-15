@@ -57,19 +57,19 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
         // %vanillachallenges_points%
         if (identifier.equalsIgnoreCase("points")) {
-            return MoneyUtils.transform(Main.dailyChallenge.getPointFromPLayerName(p.getName()));
+            return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointFromPLayerName(p.getName()));
         }
         // %vanillachallenges_dailychallenge_name%
         if (identifier.contains("dailychallenge_name")) {
-            return Main.dailyChallenge.getChallengeName();
+            return Main.instance.getDailyChallenge().getChallengeName();
         }
         // %vanillachallenges_dailychallenge_displayName%
         if (identifier.contains("dailychallenge_displayName")) {
-            return Main.dailyChallenge.getNameChallenge();
+            return Main.instance.getDailyChallenge().getNameChallenge();
         }
         // %vanillachallenges_dailychallenge_time%
         if (identifier.contains("dailychallenge_time")) {
-            return Main.dailyChallenge.getTimeChallenge() + "";
+            return Main.instance.getDailyChallenge().getTimeChallenge() + "";
         }
         // %vanillachallenges_dailychallenge_top_name_#% # = number
         if (identifier.contains("dailychallenge_top_name_")) {
@@ -83,7 +83,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
             if (numberTop < 1) {
                 numberTop = 1;
             }
-            ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(numberTop);
+            ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(numberTop);
             if (top.size() >= numberTop) {
                 return top.get(numberTop - 1).getNomePlayer();
             } else {
@@ -102,7 +102,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
             if (numberTop < 1) {
                 numberTop = 1;
             }
-            ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(numberTop);
+            ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(numberTop);
             if (top.size() >= numberTop) {
                 return MoneyUtils.transform(top.get(numberTop - 1).getPoints());
             } else {
@@ -111,40 +111,40 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
         // %vanillachallenges_dailychallenge_boost_multiplier%
         if (identifier.equalsIgnoreCase("dailychallenge_boost_multiplier")) {
-            if (Main.dailyChallenge.isActive()) {
-                return Main.dailyChallenge.getMultiplier() + "";
+            if (Main.instance.getDailyChallenge().isActive()) {
+                return Main.instance.getDailyChallenge().getMultiplier() + "";
             } else {
                 return 1 + "";
             }
         }
         // %vanillachallenges_dailychallenge_boost_points_remain%
         if (identifier.equalsIgnoreCase("dailychallenge_boost_points_remain")) {
-            if (!Main.dailyChallenge.isActive()) {
-                long pointsRemain = Main.dailyChallenge.getPointsBoost() - Main.dailyChallenge.getCountPointsChallenge();
+            if (!Main.instance.getDailyChallenge().isActive()) {
+                long pointsRemain = Main.instance.getDailyChallenge().getPointsBoost() - Main.instance.getDailyChallenge().getCountPointsChallenge();
                 return MoneyUtils.transform(pointsRemain) + "";
             } else {
-                return MoneyUtils.transform(Main.dailyChallenge.getPointsBoost()) + "";
+                return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoost()) + "";
             }
         }
         // %vanillachallenges_dailychallenge_boost_multiplier_single_player%
         if (identifier.contains("dailychallenge_boost_multiplier_single_player")) {
-            if (Main.dailyChallenge.isActiveSingleBoost(p.getName())) {
-                return Main.dailyChallenge.getMultiplierSinglePlayer() + "";
+            if (Main.instance.getDailyChallenge().isActiveSingleBoost(p.getName())) {
+                return Main.instance.getDailyChallenge().getMultiplierSinglePlayer() + "";
             } else {
                 return 1 + "";
             }
         }
         // %vanillachallenges_dailychallenge_boost_points_remain_single_player%
         if (identifier.contains("dailychallenge_boost_points_remain_single_player")) {
-            if (!Main.dailyChallenge.isActiveSingleBoost(p.getName())) {
-                if (Main.dailyChallenge.getBoostSinglePlayers().containsKey(p.getName())) {
-                    long pointsRemain = Main.dailyChallenge.getBoostSinglePlayers().get(p.getName());
+            if (!Main.instance.getDailyChallenge().isActiveSingleBoost(p.getName())) {
+                if (Main.instance.getDailyChallenge().getBoostSinglePlayers().containsKey(p.getName())) {
+                    long pointsRemain = Main.instance.getDailyChallenge().getBoostSinglePlayers().get(p.getName());
                     return pointsRemain + "";
                 } else {
-                    return MoneyUtils.transform(Main.dailyChallenge.getPointsBoostSinglePlayer()) + "";
+                    return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoostSinglePlayer()) + "";
                 }
             } else {
-                return MoneyUtils.transform(Main.dailyChallenge.getPointsBoostSinglePlayer()) + "";
+                return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoostSinglePlayer()) + "";
             }
         }
         return "Placeholder Not Found";

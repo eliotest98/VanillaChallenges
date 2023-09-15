@@ -27,8 +27,8 @@ public class ItemCollector implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils("ItemCollector");
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemCollector");
-    private final ArrayList<String> items = Main.dailyChallenge.getItems();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyPlacedChest");
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
@@ -175,7 +175,7 @@ public class ItemCollector implements Listener {
                                         }
 
                                         if (items.isEmpty()) {
-                                            Main.dailyChallenge.increment(player.getName(), (long) point * amount);
+                                            Main.instance.getDailyChallenge().increment(player.getName(), (long) point * amount);
                                             //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
                                             if (Main.version113) {
                                                 itemInv.setAmount(0);
@@ -184,7 +184,7 @@ public class ItemCollector implements Listener {
                                             }
                                         } else {
                                             if (items.contains(itemInv.getType().toString())) {
-                                                Main.dailyChallenge.increment(player.getName(), (long) point * amount);
+                                                Main.instance.getDailyChallenge().increment(player.getName(), (long) point * amount);
                                                 //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
                                                 if (Main.version113) {
                                                     itemInv.setAmount(0);

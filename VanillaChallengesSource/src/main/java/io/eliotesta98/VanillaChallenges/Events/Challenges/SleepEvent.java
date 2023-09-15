@@ -17,7 +17,7 @@ public class SleepEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SleepEvent");
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     private final ArrayList<String> players = new ArrayList<>();
@@ -26,7 +26,7 @@ public class SleepEvent implements Listener {
     public void onBedLeave(PlayerBedLeaveEvent e) {
         String playerName = e.getPlayer().getName();
         if (players.contains(playerName)) {
-            Main.dailyChallenge.increment(playerName, point);
+            Main.instance.getDailyChallenge().increment(playerName, point);
             players.remove(playerName);
         }
     }

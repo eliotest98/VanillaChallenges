@@ -18,8 +18,8 @@ public class ColorSheepEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ColorSheepEvent");
-    private final ArrayList<String> colors = Main.dailyChallenge.getColors();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> colors = Main.instance.getDailyChallenge().getColors();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     private final HashMap<Entity, String> sheepColored = new HashMap<>();
@@ -70,7 +70,7 @@ public class ColorSheepEvent implements Listener {
                     }
                     return;
                 }
-                Main.dailyChallenge.increment(playerName, point);
+                Main.instance.getDailyChallenge().increment(playerName, point);
                 if (debugActive) {
                     debugUtils.addLine("ConfigColor= " + colors);
                     debugUtils.addLine("PlayerColorg= " + colorPlayer);
@@ -114,7 +114,7 @@ public class ColorSheepEvent implements Listener {
                     }
                     return;
                 }
-                Main.dailyChallenge.increment(playerName, point);
+                Main.instance.getDailyChallenge().increment(playerName, point);
                 if (debugActive) {
                     debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug();

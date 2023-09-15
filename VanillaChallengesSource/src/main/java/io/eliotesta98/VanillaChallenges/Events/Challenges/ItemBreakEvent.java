@@ -15,8 +15,8 @@ public class ItemBreakEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemBreakEvent");
-    private final ArrayList<String> items = Main.dailyChallenge.getItems();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -67,7 +67,7 @@ public class ItemBreakEvent implements Listener {
                 return;
             }
 
-            Main.dailyChallenge.increment(playerName, point);
+            Main.instance.getDailyChallenge().increment(playerName, point);
 
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

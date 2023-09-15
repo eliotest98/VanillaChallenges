@@ -16,7 +16,7 @@ public class BreedEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BreedEvent");
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -67,7 +67,7 @@ public class BreedEvent implements Listener {
                 return;
             }
 
-            Main.dailyChallenge.increment(pName, point);
+            Main.instance.getDailyChallenge().increment(pName, point);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();

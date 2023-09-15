@@ -21,13 +21,13 @@ public class DyeEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DyeEvent");
-    private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> items = Main.dailyChallenge.getItems();
-    private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
-    private final boolean keepInventory = Main.dailyChallenge.isKeepInventory();
-    private final boolean deathInLand = Main.dailyChallenge.isDeathInLand();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
+    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
+    private final boolean keepInventory = Main.instance.getDailyChallenge().isKeepInventory();
+    private final boolean deathInLand = Main.instance.getDailyChallenge().isDeathInLand();
     private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
-    private final int numberOfSlots = Main.dailyChallenge.getNumber();
+    private final int numberOfSlots = Main.instance.getDailyChallenge().getNumber();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -144,7 +144,7 @@ public class DyeEvent implements Listener {
                 return;
             }
 
-            Main.dailyChallenge.increment(playerName, point);
+            Main.instance.getDailyChallenge().increment(playerName, point);
         });
 
         /*

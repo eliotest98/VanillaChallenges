@@ -14,7 +14,7 @@ public class DropperEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils("DropperEvent");
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DropperEvent");
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -60,7 +60,7 @@ public class DropperEvent implements Listener {
             }
 
             if (number < 0) {
-                Main.dailyChallenge.increment(playerName, (long) Math.negateExact(point) * number);
+                Main.instance.getDailyChallenge().increment(playerName, (long) Math.negateExact(point) * number);
             }
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

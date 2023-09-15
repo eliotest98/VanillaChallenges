@@ -17,7 +17,7 @@ public class CraftingEvent implements Listener {
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("CraftItemEvent");
     private final ArrayList<String> itemsCrafting = Main.instance.getDailyChallenge().getItems();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -62,7 +62,7 @@ public class CraftingEvent implements Listener {
                 return;
             }
 
-            Main.dailyChallenge.increment(playerName, (long) point * amount);
+            Main.instance.getDailyChallenge().increment(playerName, (long) point * amount);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();

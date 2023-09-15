@@ -76,7 +76,7 @@ public class H2Database implements Database {
                 Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key);
 
                 if (count == 1) {
-                    Main.dailyChallenge = challenge;
+                    Main.instance.setDailyChallenge(challenge);
                     nome = challenge.getTypeChallenge();
                 }
                 H2Database.instance.insertChallenge(challenge.getChallengeName(), challenge.getTimeChallenge());
@@ -92,15 +92,15 @@ public class H2Database implements Database {
                     if (challenges.get(i).getChallengeName().contains("Event_")) {
                         Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challenges.get(i).getChallengeName().replace("Event_", ""));
                         challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
-                        Main.dailyChallenge = challenge;
+                        Main.instance.setDailyChallenge(challenge);
                         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
-                        return Main.dailyChallenge.getTypeChallenge();
+                        return Main.instance.getDailyChallenge().getTypeChallenge();
                     }
                     Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(i).getChallengeName());
                     challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
-                    Main.dailyChallenge = challenge;
+                    Main.instance.setDailyChallenge(challenge);
                     Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
-                    return Main.dailyChallenge.getTypeChallenge();
+                    return Main.instance.getDailyChallenge().getTypeChallenge();
                 }
             }
             return "nessuno";
@@ -109,9 +109,9 @@ public class H2Database implements Database {
 
     @Override
     public void loadPlayersPoints() {
-        Main.dailyChallenge.setPlayers(H2Database.instance.getAllChallengers());
-        Main.dailyChallenge.savePoints();
-        ArrayList<Challenger> top = Main.dailyChallenge.getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+        Main.instance.getDailyChallenge().setPlayers(H2Database.instance.getAllChallengers());
+        Main.instance.getDailyChallenge().savePoints();
+        ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
         int i = 1;
         while (!top.isEmpty()) {
             Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
@@ -374,7 +374,7 @@ public class H2Database implements Database {
 
     @Override
     public void saveOldPointsForChallengeEvents() {
-        HashMap<String, Long> copyMap = new HashMap<>(Main.dailyChallenge.getPlayers());
+        HashMap<String, Long> copyMap = new HashMap<>(Main.instance.getDailyChallenge().getPlayers());
         for (Map.Entry<String, Long> player : copyMap.entrySet()) {
             try {
                 if (player.getValue() > 0) {
@@ -608,7 +608,7 @@ public class H2Database implements Database {
                 }
                 configFile.createNewFile();
                 YamlConfiguration file = YamlConfiguration.loadConfiguration(configFile);
-                for (Map.Entry<String, Long> players : Main.dailyChallenge.getPlayers().entrySet()) {
+                for (Map.Entry<String, Long> players : Main.instance.getDailyChallenge().getPlayers().entrySet()) {
                     file.set("Points." + players.getKey(), players.getValue());
                 }
                 for (Challenge challenge : getAllChallenges()) {

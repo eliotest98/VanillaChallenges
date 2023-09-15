@@ -163,7 +163,7 @@ public class Interface {
                                                 ";vc.challengeItem:" + challengeComplete.getItemChallenge()
                                         , i));
                             } else {
-                                if (Main.dailyChallenge.getChallengeName().equalsIgnoreCase(challenge.getChallengeName())) {
+                                if (Main.instance.getDailyChallenge().getChallengeName().equalsIgnoreCase(challenge.getChallengeName())) {
                                     inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, numberOfPage,
                                             "vc.numberPage:" + (numberOfPage) +
                                                     ";vc.challengeName:" + challenge.getChallengeName() +

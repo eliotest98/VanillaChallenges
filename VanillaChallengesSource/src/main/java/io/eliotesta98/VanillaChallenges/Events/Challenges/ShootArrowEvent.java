@@ -14,9 +14,9 @@ public class ShootArrowEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ShootArrowEvent");
-    private final double force = Main.dailyChallenge.getForce();
-    private final String onGround = Main.dailyChallenge.getOnGround();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final double force = Main.instance.getDailyChallenge().getForce();
+    private final String onGround = Main.instance.getDailyChallenge().getOnGround();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -73,7 +73,7 @@ public class ShootArrowEvent implements Listener {
 
             Player p = Bukkit.getPlayer(playerName);
             if (p != null) {
-                Main.dailyChallenge.increment(playerName, point);
+                Main.instance.getDailyChallenge().increment(playerName, point);
             }
 
             if (debugActive) {

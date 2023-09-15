@@ -17,7 +17,7 @@ public class SpongeAbsorbeEvent implements Listener {
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SpongeAbsorbEvent");
     private final HashMap<String, String> players = new HashMap<>();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -64,7 +64,7 @@ public class SpongeAbsorbeEvent implements Listener {
             }
 
             if (players.get(spongeBlock.getLocation().toString()) != null) {
-                Main.dailyChallenge.increment(players.get(spongeBlock.getLocation().toString()), (long) amount * point);
+                Main.instance.getDailyChallenge().increment(players.get(spongeBlock.getLocation().toString()), (long) amount * point);
                 players.remove(playerName);
             }
             if (debugActive) {

@@ -17,8 +17,8 @@ public class HarvestEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("HarvestEvent");
-    private final ArrayList<String> items = Main.dailyChallenge.getItems();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -74,7 +74,7 @@ public class HarvestEvent implements Listener {
             for (ItemStack itemStack : itemsHarvested) {
                 number = number + itemStack.getAmount();
             }
-            Main.dailyChallenge.increment(playerName, (long) point * number);
+            Main.instance.getDailyChallenge().increment(playerName, (long) point * number);
 
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

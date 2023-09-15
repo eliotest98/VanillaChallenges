@@ -26,7 +26,7 @@ public class Main extends JavaPlugin {
     public static Main instance;
     public SoundManager SoundManager;
     private ConfigGestion config;
-    public static Challenge dailyChallenge;
+    private Challenge dailyChallenge;
     public static ExpansionPlaceholderAPI EPAPI;
     public static Database db;
     public static boolean challengeSelected = true;
@@ -361,6 +361,10 @@ public class Main extends JavaPlugin {
 
     public Challenge getDailyChallenge() {
         return dailyChallenge;
+    }
+
+    public void setDailyChallenge(Challenge dailyChallenge) {
+        this.dailyChallenge = dailyChallenge;
     }
 
     private void loadLibraries() {

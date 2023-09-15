@@ -16,7 +16,7 @@ public class FurnaceBurnEvent implements Listener {
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("FurnaceCookEvent");
     private final ArrayList<String> itemsBurn = Main.instance.getDailyChallenge().getItems();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -60,7 +60,7 @@ public class FurnaceBurnEvent implements Listener {
                 }
                 return;
             }
-            Main.dailyChallenge.increment(playerName, (long) amount * point);
+            Main.instance.getDailyChallenge().increment(playerName, (long) amount * point);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();

@@ -20,8 +20,8 @@ public class SprintEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SprintEvent");
     private final HashMap<String, Boolean> players = new HashMap<>();
     private final HashMap<String, Double> distances = new HashMap<>();
-    private final ArrayList<String> items = Main.dailyChallenge.getItems();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -121,7 +121,7 @@ public class SprintEvent implements Listener {
                         double old = distances.get(playerName);
                         double newDouble = old + from.distance(to);
                         if (newDouble > 1.0) {
-                            Main.dailyChallenge.increment(playerName, point);
+                            Main.instance.getDailyChallenge().increment(playerName, point);
                             distances.replace(playerName, newDouble - 1.0);
                         } else {
                             distances.replace(playerName, newDouble);

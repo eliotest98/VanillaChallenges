@@ -978,7 +978,7 @@ public class Challenge {
         }
         for (String s : title) {
             sender.sendMessage(ColorUtils.applyColor(s
-                    .replace("{hours}", Main.dailyChallenge.getTimeChallenge() + "")
+                    .replace("{hours}", Main.instance.getDailyChallenge().getTimeChallenge() + "")
                     .replace("{points}", point + "")
                     .replace("{slots}", number + "")
                     .replace("{minutes}", minutes + "")

@@ -13,8 +13,8 @@ public class ExpCollector implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ExpCollectorEvent");
-    private final int point = Main.dailyChallenge.getPoint();
-    private final boolean prevention = Main.dailyChallenge.isKeepInventory();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
+    private final boolean prevention = Main.instance.getDailyChallenge().isKeepInventory();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -60,7 +60,7 @@ public class ExpCollector implements Listener {
                 return;
             }
 
-            Main.dailyChallenge.increment(playerName, (long) amount * point);
+            Main.instance.getDailyChallenge().increment(playerName, (long) amount * point);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();

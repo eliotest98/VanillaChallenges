@@ -13,7 +13,7 @@ public class EnchantEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EnchantItemEvent");
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -47,7 +47,7 @@ public class EnchantEvent implements Listener {
                 return;
             }
 
-            Main.dailyChallenge.increment(playerName, (long) point * numberOfEnchants);
+            Main.instance.getDailyChallenge().increment(playerName, (long) point * numberOfEnchants);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();

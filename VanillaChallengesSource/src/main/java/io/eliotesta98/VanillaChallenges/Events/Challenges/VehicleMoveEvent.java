@@ -19,8 +19,8 @@ public class VehicleMoveEvent implements Listener {
     private final HashMap<String, Double> distances = new HashMap<>();
     private final DebugUtils debugUtils = new DebugUtils("VehicleMoveEvent");
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("VehicleMoveEvent");
-    private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> vehicles = Main.dailyChallenge.getVehicle();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
+    private final ArrayList<String> vehicles = Main.instance.getDailyChallenge().getVehicle();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -81,7 +81,7 @@ public class VehicleMoveEvent implements Listener {
                 double old = distances.get(playerName);
                 double newDouble = old + from.distance(to);
                 if (newDouble > 1.0) {
-                    Main.dailyChallenge.increment(playerName, point);
+                    Main.instance.getDailyChallenge().increment(playerName, point);
                     distances.replace(playerName, newDouble - 1.0);
                 } else {
                     distances.replace(playerName, newDouble);

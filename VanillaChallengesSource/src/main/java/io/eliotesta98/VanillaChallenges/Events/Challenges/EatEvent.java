@@ -17,8 +17,8 @@ public class EatEvent implements Listener {
     private final HashMap<String, Integer> foodLevels = new HashMap<>();
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
-    private final ArrayList<String> items = Main.dailyChallenge.getItems();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onFoodLevelChange(org.bukkit.event.entity.FoodLevelChangeEvent e) {
@@ -40,7 +40,7 @@ public class EatEvent implements Listener {
             }
             if (foodLevels.get(playerName) == null) {
                 foodLevels.put(playerName, Math.min(foodLevel, 20));
-                Main.dailyChallenge.increment(playerName, Math.abs(point));
+                Main.instance.getDailyChallenge().increment(playerName, Math.abs(point));
             } else {
                 if (finalItemUsedByPlayer != null) {
                     int number = foodLevel - foodLevels.get(playerName);
@@ -60,11 +60,11 @@ public class EatEvent implements Listener {
                         }
                         return;
                     }
-                    Main.dailyChallenge.increment(playerName, (long) number * Math.abs(point));
+                    Main.instance.getDailyChallenge().increment(playerName, (long) number * Math.abs(point));
                 } else {
                     foodLevels.remove(playerName);
                     foodLevels.put(playerName, foodLevel);
-                    Main.dailyChallenge.increment(playerName, Math.abs(point));
+                    Main.instance.getDailyChallenge().increment(playerName, Math.abs(point));
                 }
             }
             if (debugActive) {

@@ -19,8 +19,8 @@ public class AFKCheck {
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
     private final int numberSlot = Main.instance.getDailyChallenge().getNumber();
     private final int timeTaskInMinute = Main.instance.getDailyChallenge().getMinutes();
-    private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> items = Main.dailyChallenge.getItems();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
+    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
 
     private final HashMap<String, Location> playerLocation = new HashMap<>();
 

@@ -21,6 +21,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>*</include>
+                    <include>**/*</include>
                 </includes>
             </resource>
         </resources>
@@ -243,11 +244,11 @@
         </dependency>
         <!-- CubeGenerator -->
         <dependency>
-            <groupId>io.eliotesta98</groupId>
-            <artifactId>CubeGenerator</artifactId>
-            <version>4.2.2</version>
+            <groupId>io.eliotesta98.CubeGenerator</groupId>
+            <artifactId>CubeGeneratorApi</artifactId>
+            <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/CubeGenerator 4.2.2.jar</systemPath>
+            <systemPath>${project.basedir}/lib/CubeGeneratorApi-1.0.jar</systemPath>
         </dependency>
         <!-- Tombs -->
         <dependency>

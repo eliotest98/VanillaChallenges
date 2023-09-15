@@ -16,7 +16,7 @@ public class JumpEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils("JumpEvent");
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("JumpEvent");
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -62,7 +62,7 @@ public class JumpEvent implements Listener {
             }
 
             if (number > 0) {
-                Main.dailyChallenge.increment(playerName, (long) point * number);
+                Main.instance.getDailyChallenge().increment(playerName, (long) point * number);
             }
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

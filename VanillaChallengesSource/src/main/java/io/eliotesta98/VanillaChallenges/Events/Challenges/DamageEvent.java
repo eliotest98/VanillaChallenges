@@ -18,8 +18,8 @@ public class DamageEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DamageEvent");
-    private final ArrayList<String> causes = Main.dailyChallenge.getCauses();
-    private final int point = Main.dailyChallenge.getPoint();
+    private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -66,7 +66,7 @@ public class DamageEvent implements Listener {
                     return;
                 }
 
-                Main.dailyChallenge.increment(playerName, (long) finalDamage * point);
+                Main.instance.getDailyChallenge().increment(playerName, (long) finalDamage * point);
             }
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

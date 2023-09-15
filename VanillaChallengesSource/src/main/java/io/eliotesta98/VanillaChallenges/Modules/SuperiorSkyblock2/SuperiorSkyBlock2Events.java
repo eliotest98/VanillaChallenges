@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 
 public class SuperiorSkyBlock2Events implements Listener {
 
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMissionComplete(MissionCompleteEvent event) {

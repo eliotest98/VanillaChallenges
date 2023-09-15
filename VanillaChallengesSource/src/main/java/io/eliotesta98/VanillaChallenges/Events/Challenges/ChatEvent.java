@@ -20,8 +20,8 @@ public class ChatEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ChatEvent");
-    private final int point = Main.dailyChallenge.getPoint();
-    private final ArrayList<String> quests = Main.dailyChallenge.getQuests();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
+    private final ArrayList<String> quests = Main.instance.getDailyChallenge().getQuests();
     private String word = "";
     private String quest = "";
     private final String message = Main.instance.getConfigGestion().getMessages().get("ChatWord");
@@ -65,7 +65,7 @@ public class ChatEvent implements Listener {
         }
 
         if (e.getMessage().equalsIgnoreCase(word)) {
-            Main.dailyChallenge.increment(e.getPlayer().getName(), (long) point * word.length());
+            Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), (long) point * word.length());
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.sendMessage(ColorUtils.applyColor(correctAnswer.replace("{player}", e.getPlayer().getName())));
             }

@@ -14,7 +14,7 @@ public class RaidEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("RaidEvent");
-    private final int point = Main.dailyChallenge.getPoint();
+    private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -56,7 +56,7 @@ public class RaidEvent implements Listener {
                     return;
                 }
 
-                Main.dailyChallenge.increment(winner.getName(), (long) totalWaves * point);
+                Main.instance.getDailyChallenge().increment(winner.getName(), (long) totalWaves * point);
             }
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
