@@ -194,7 +194,9 @@ Messages:
     Files: '{prefix}&7Files List:'
     FilesLine: '&5File: {fileName}'
 
-  PointsInfo: '{prefix}&e{player} &7have &b{number}&7 points'
+  Points:
+    Info: '{prefix}&e{player} &7have &b{number}&7 points'
+    PlayerPlaceholder: 'You'
   ActuallyInTop: '{prefix}&7Actually in top there are:'
   TopPlayers:
     - '&6{number}° &e{player}&7 with &b{points}&7 points'

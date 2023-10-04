@@ -50,7 +50,8 @@ public class Commands implements CommandExecutor {
     private final String fileList = Main.instance.getConfigGestion().getMessages().get("Lists.Files");
     private final String fileLine = Main.instance.getConfigGestion().getMessages().get("Lists.FilesLine");
 
-    private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("PointsInfo");
+    private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("Points.Info");
+    private final String pointsPlayerPlaceholder = Main.instance.getConfigGestion().getMessages().get("Points.PlayerPlaceholder");
     private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("ActuallyInTop");
     private final String pointsadd = Main.instance.getConfigGestion().getMessages().get("PointsAdd");
     private final String pointsremove = Main.instance.getConfigGestion().getMessages().get("PointsRemove");
@@ -1005,7 +1006,7 @@ public class Commands implements CommandExecutor {
                     }
                     if (args.length == 1) {
                         long points = Main.instance.getDailyChallenge().getPointFromPLayerName(p.getName());
-                        p.sendMessage(ColorUtils.applyColor(pointsInfo.replace("{player}", "You").replace("{number}", "" + points)));
+                        p.sendMessage(ColorUtils.applyColor(pointsInfo.replace("{player}", pointsPlayerPlaceholder).replace("{number}", "" + points)));
                     } else {
                         if (!p.hasPermission("vc.points.admin.command")) {
                             p.sendMessage(ColorUtils.applyColor(errorNoPerms));
