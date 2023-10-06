@@ -35,7 +35,8 @@ public class ConfigGestion {
         }
         for (String message : file.getConfigurationSection("Messages").getKeys(false)) {
             if (message.equalsIgnoreCase("Commands") || message.equalsIgnoreCase("Errors")
-                    || message.equalsIgnoreCase("Success") || message.equalsIgnoreCase("Lists")) {
+                    || message.equalsIgnoreCase("Success") || message.equalsIgnoreCase("Lists")
+            || message.equalsIgnoreCase("Points")) {
                 for (String command : file.getConfigurationSection("Messages." + message).getKeys(false)) {
                     messages.put(message + "." + command, file.getString("Messages." + message + "." + command).replace("{prefix}", messages.get("Prefix")));
                 }
