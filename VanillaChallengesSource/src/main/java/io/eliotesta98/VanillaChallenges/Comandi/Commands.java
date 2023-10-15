@@ -4,6 +4,7 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import io.eliotesta98.VanillaChallenges.Events.ApiEvents.ChallengeChangeEvent;
+import io.eliotesta98.VanillaChallenges.Events.DailyGiveWinners;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -55,14 +56,12 @@ public class Commands implements CommandExecutor {
     private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("ActuallyInTop");
     private final String pointsadd = Main.instance.getConfigGestion().getMessages().get("PointsAdd");
     private final String pointsremove = Main.instance.getConfigGestion().getMessages().get("PointsRemove");
-    private final String prefix = Main.instance.getConfigGestion().getMessages().get("Prefix");
 
     private final String challengeList = Main.instance.getConfigGestion().getMessages().get("ChallengeList");
     private final String challengeOfList = Main.instance.getConfigGestion().getMessages().get("ChallengeofList");
 
     private final boolean debugCommand = Main.instance.getConfigGestion().getDebug().get("Commands");
     private final boolean resetPoints = Main.instance.getConfigGestion().isResetPointsAtNewChallenge();
-    private final String challengeReward = Main.instance.getConfigGestion().getMessages().get("ChallengeReward");
 
     private final int numberOfTop = Main.instance.getConfigGestion().getNumberOfTop();
     private final boolean rankingReward = Main.instance.getConfigGestion().isRankingReward();
@@ -1201,65 +1200,7 @@ public class Commands implements CommandExecutor {
                             debug.debug();
                         }
                     } else {
-                        for (int i = 0; i < winners.size(); i++) {
-                            if (winners.get(i).getPlayerName().equalsIgnoreCase(p.getName())) {
-                                String[] reward = winners.get(i).getReward().split(":");
-                                final int number = i;
-                                boolean give = true;
-                                if (winners.get(i).getReward().equalsIgnoreCase("NOBODY")) {
-                                    give = false;
-                                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                                        Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
-                                        winners.remove(number);
-                                    });
-                                }
-                                if (p.getInventory().firstEmpty() != -1
-                                        && give
-                                        && !reward[0].equalsIgnoreCase("[command]")) {
-                                    ItemStack item;
-                                    if (reward[0].contains("-")) {
-                                        String[] splitItem = reward[0].split("-");
-                                        item = new ItemStack(Material.getMaterial(splitItem[0]), 1, Short.parseShort(splitItem[1]));
-                                        p.sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", reward[1]).replace("{item}", splitItem[0] + "-" + splitItem[1])));
-                                    } else {
-                                        item = new ItemStack(Material.getMaterial(reward[0]));
-                                        p.sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0])));
-                                    }
-                                    item.setAmount(Integer.parseInt(reward[1]));
-                                    ItemStack finalItem = item;
-                                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                                        p.getInventory().addItem(finalItem);
-                                        Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
-                                        Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor(prefix + "&6Winner: " + p.getName() + " has received his reward: " + finalItem));
-                                        winners.remove(number);
-                                    });
-                                } else {
-                                    StringBuilder commandRefactor = new StringBuilder();
-                                    if (reward.length > 2) {
-                                        boolean first = false;
-                                        for (String part : reward) {
-                                            if (!first) {
-                                                first = true;
-                                                continue;
-                                            }
-                                            commandRefactor.append(part).append(":");
-                                        }
-                                        commandRefactor = new StringBuilder(commandRefactor.substring(0, commandRefactor.length() - 1));
-                                    } else {
-                                        commandRefactor = new StringBuilder(reward[1]);
-                                    }
-                                    String finalCommandRefactor = commandRefactor.toString();
-                                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                                        String commandRefact = finalCommandRefactor.replace("%player%", p.getName());
-                                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandRefact);
-                                        Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor(prefix + "&6Winner: " + p.getName() + " has received his reward: " + commandRefact));
-                                        Main.db.deleteDailyWinnerWithId(winners.get(number).getId());
-                                        winners.remove(number);
-                                    });
-                                }
-                                break;
-                            }
-                        }
+                        DailyGiveWinners.getRewardsAtPlayers(p, winners);
                     }
                 } else if (args[0].equalsIgnoreCase("top")) {
                     // controllo se ha il permesso

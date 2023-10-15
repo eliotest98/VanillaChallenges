@@ -51,10 +51,10 @@ public class Main extends JavaPlugin {
 
         getServer().getConsoleSender()
                 .sendMessage("\n\n\n§a ___ ___                __  __  __          ______  __            __  __                                    \n" +
-                        "|   |   |.---.-..-----.|__||  ||  |.---.-. |      ||  |--..---.-.|  ||  |.-----..-----..-----..-----..-----.\n" +
-                        "|   |   ||  _  ||     ||  ||  ||  ||  _  | |   ---||     ||  _  ||  ||  ||  -__||     ||  _  ||  -__||__ --|\n" +
-                        " \\_____/ |___._||__|__||__||__||__||___._| |______||__|__||___._||__||__||_____||__|__||___  ||_____||_____|\n" +
-                        "                                                                                       |_____|              \n"
+                        "§a|   |   |.---.-..-----.|__||  ||  |.---.-. |      ||  |--..---.-.|  ||  |.-----..-----..-----..-----..-----.\n" +
+                        "§a|   |   ||  _  ||     ||  ||  ||  ||  _  | |   ---||     ||  _  ||  ||  ||  -__||     ||  _  ||  -__||__ --|\n" +
+                        "§a \\_____/ |___._||__|__||__||__||__||___._| |______||__|__||___._||__||__||_____||__|__||___  ||_____||_____|\n" +
+                        "§a                                                                                       |_____|              \n"
                         + "§a  \r\n" + "§a  \r\n" + "§e  Version " + getDescription().getVersion() + " \r\n"
                         + "§e© Developed by §feliotesta98 & xSavior_of_God §ewith §4<3 \r\n \r\n \r\n");
 
@@ -306,12 +306,12 @@ public class Main extends JavaPlugin {
             config.getTasks().checkStartDay();
             if (config.getTimeBrodcastMessageTitle() != 0) {
                 config.getTasks().broadcast(((long) config.getTimeBrodcastMessageTitle() * 60 * 20)
-                        , dailyChallenge
                         , config.getMessages().get("ActuallyInTop")
                         , config.getMessages().get("PointsEveryMinutes")
                         , config.getMessages().get("PointsRemainForBoosting")
                         , config.getMessages().get("PointsRemainForBoostingSinglePlayer")
                         , config.getNumberOfTop()
+                        , config.getMessages().get("PointsRemainForReward")
                 );
             }
             if (config.isActiveOnlinePoints()) {

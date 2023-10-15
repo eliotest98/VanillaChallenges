@@ -37,9 +37,8 @@ public class Tasks {
 
     private final static Pattern hexPattern = Pattern.compile("\\{block[0-9]\\}");
 
-    public void broadcast(long time, Challenge dailyChallenge,
-                          String actuallyInTop, String pointsEveryMinutes, String pointsRemainForBoosting,
-                          String pointsRemainForBoostingSinglePlayer, int numberOfTop) {
+    public void broadcast(long time, String actuallyInTop, String pointsEveryMinutes, String pointsRemainForBoosting,
+                          String pointsRemainForBoostingSinglePlayer, int numberOfTop, String pointsRemainForReward) {
         saving.put("Broadcast", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
             saving.replace("Broadcast", true);
@@ -47,7 +46,7 @@ public class Tasks {
                 if (!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
                     break;
                 }
-                dailyChallenge.message(p);
+                Main.instance.getDailyChallenge().message(p);
                 ArrayList<Challenger> top;
                 if (!Main.instance.getConfigGestion().isYesterdayTop()) {
                     top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
@@ -62,6 +61,13 @@ public class Tasks {
                     p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
                     top.remove(0);
                     i++;
+                }
+                if(Main.instance.getConfigGestion().getMinimumPoints() != -1) {
+                    if (!Main.instance.getDailyChallenge().isMinimumPointsReached()) {
+                        p.sendMessage(ColorUtils.applyColor(pointsRemainForReward.replace("{points}", Main.instance.getDailyChallenge().getPointsRemain() + "")));
+                    } else {
+                        p.sendMessage(ColorUtils.applyColor(pointsRemainForReward.replace("{points}", "0")));
+                    }
                 }
                 if (Main.instance.getDailyChallenge().getMin10PlayersPoints().get(p.getName()) != null) {
                     String minutes = ((time / 60) / 20) + "";
