@@ -53,6 +53,8 @@ Configuration:
     RankingReward: false
     # if you want give a random reward (ATTENTION if you use RankingReward this features is false of default)
     RandomReward: false
+    # how many players you want reward?
+    NumberOfReward: 3
 
 
   Hooks:

@@ -23,7 +23,7 @@ public class ConfigGestion {
             backupEnabled, pointsResume, lockedInterface;
     private String database, challengeGeneration;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
-            time, numberOfTop, minimumPoints;
+            time, numberOfTop, minimumPoints, numberOfPlayerRewarded;
     private ItemStack chestCollection;
     private Tasks tasks = new Tasks();
     private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
@@ -341,8 +341,10 @@ public class ConfigGestion {
                 multiplierSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Multiplier");
                 minutesSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Minutes");
             }
-            String sneaking = yamlChallenge.getString(challengeName + ".Sneaking");
-            String onGround = yamlChallenge.getString(challengeName + ".OnGround");
+
+            String sneaking = (yamlChallenge.getString(challengeName + ".Sneaking") == null) ? "NOBODY" : yamlChallenge.getString(challengeName + ".Sneaking");
+            String onGround = (yamlChallenge.getString(challengeName + ".OnGround") == null) ? "NOBODY" : yamlChallenge.getString(challengeName + ".OnGround");
+
             ArrayList<String> quests = new ArrayList<>();
             for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
                 quests.add(quest.replace("{prefix}", messages.get("Prefix")));
@@ -382,6 +384,7 @@ public class ConfigGestion {
         ArrayList<String> lore = new ArrayList<>(file.getStringList("Configuration.CollectionChallengeItem.Lore"));
         chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
         pointsResume = file.getBoolean("Configuration.Points.PointsResume");
+        numberOfPlayerRewarded = file.getInt("Configuration.Top.NumberOfReward");
 
         for (String nameInterface : file.getConfigurationSection("Interfaces").getKeys(false)) {
             String title = file.getString("Interfaces." + nameInterface + "..Title");
@@ -638,5 +641,13 @@ public class ConfigGestion {
 
     public void setMinimumPoints(int minimumPoints) {
         this.minimumPoints = minimumPoints;
+    }
+
+    public int getNumberOfPlayerRewarded() {
+        return numberOfPlayerRewarded;
+    }
+
+    public void setNumberOfPlayerRewarded(int numberOfPlayerRewarded) {
+        this.numberOfPlayerRewarded = numberOfPlayerRewarded;
     }
 }
