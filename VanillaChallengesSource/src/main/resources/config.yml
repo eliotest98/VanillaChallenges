@@ -29,7 +29,7 @@ Configuration:
       # Every time you want player remain online for give points
       Minutes: 10
 
-    # Minimum points for give rewards
+    # Minimum points for give rewards (-1 for disable)
     MinimumPoints: 0
 
 
@@ -210,6 +210,7 @@ Messages:
   BoostMessageSinglePlayer: '{prefix}&5Start personal boosting!&7Only you have &bx{number}&7 points for &e{minutes}&7 minutes'
   PointsRemainForBoosting: '{prefix}&7Remain &b{points}&7 points for start next boost!'
   PointsRemainForBoostingSinglePlayer: '{prefix}&7Remain &b{points}&7 points for start next personal boost!'
+  PointsRemainForReward: '{prefix}&7Remain &b{points}&7 points for get the reward!'
   ChatWord: '{prefix}&7Write this word for receive &b{points}&7 points: &5{word}'
   CorrectAnswer: '{prefix}&e{player} &7write the correct answer!'
   PointsAdd: '{prefix}&b{points} &7points added at &e{player}'

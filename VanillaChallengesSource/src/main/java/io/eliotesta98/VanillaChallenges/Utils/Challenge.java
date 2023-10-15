@@ -570,6 +570,14 @@ public class Challenge {
         return count >= Main.instance.getConfigGestion().getMinimumPoints();
     }
 
+    public long getPointsRemain() {
+        long count = 0;
+        for (long number : Collections.unmodifiableMap(players).values()) {
+            count = count + number;
+        }
+        return Main.instance.getConfigGestion().getMinimumPoints() - count;
+    }
+
     public ArrayList<String> getTitle() {
         return title;
     }
