@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -117,10 +118,27 @@ public class YamlDB implements Database {
                         File.separator + "backup");
                 boolean folderCreate = folder.mkdir();
                 if (!folderCreate) {
-                    File[] files = folder.listFiles();
-                    if (files.length > numberOfBackupFiles) {
-                        Arrays.sort(files);
-                        files[0].delete();
+                    if (folder.listFiles().length >= numberOfBackupFiles) {
+                        java.util.Date finalDate = null;
+                        int number = 0;
+                        for (int i = 0; i < folder.listFiles().length; i++) {
+                            try {
+                                Date date = sdf.parse(folder.listFiles()[i].getName());
+                                if (finalDate == null) {
+                                    finalDate = date;
+                                    number = i;
+                                } else {
+                                    int result = finalDate.compareTo(date);
+                                    if (result > 0) {
+                                        finalDate = date;
+                                        number = i;
+                                    }
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        folder.listFiles()[number].delete();
                     }
                 }
                 configFile.createNewFile();

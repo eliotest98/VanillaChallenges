@@ -4,6 +4,8 @@ import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +25,7 @@ public class ConfigGestion {
             backupEnabled, pointsResume, lockedInterface;
     private String database, challengeGeneration;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
-            time, numberOfTop, minimumPoints, numberOfPlayerRewarded;
+            time, numberOfTop, minimumPoints;
     private ItemStack chestCollection;
     private Tasks tasks = new Tasks();
     private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
@@ -36,7 +38,7 @@ public class ConfigGestion {
         for (String message : file.getConfigurationSection("Messages").getKeys(false)) {
             if (message.equalsIgnoreCase("Commands") || message.equalsIgnoreCase("Errors")
                     || message.equalsIgnoreCase("Success") || message.equalsIgnoreCase("Lists")
-            || message.equalsIgnoreCase("Points")) {
+                    || message.equalsIgnoreCase("Points")) {
                 for (String command : file.getConfigurationSection("Messages." + message).getKeys(false)) {
                     messages.put(message + "." + command, file.getString("Messages." + message + "." + command).replace("{prefix}", messages.get("Prefix")));
                 }
@@ -44,7 +46,6 @@ public class ConfigGestion {
                 messages.put(message, file.getString("Messages." + message));
             } else if (message.equalsIgnoreCase("TopPlayers")) {
                 ArrayList<String> mexs = new ArrayList<>(file.getStringList("Messages.TopPlayers"));
-                numberOfTop = mexs.size();
                 int i = 1;
                 while (!mexs.isEmpty()) {
                     messages.put("topPlayers" + i, mexs.get(0));
@@ -209,6 +210,18 @@ public class ConfigGestion {
             boolean keepInventory = yamlChallenge.getBoolean(challengeName + ".KeepInventory");
             boolean deathInLand = yamlChallenge.getBoolean(challengeName + ".DeathInLand");
             String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge");
+            if (itemChallenge.contains(";")) {
+                String[] x = itemChallenge.split(";");
+                if (Material.getMaterial(x[0]) == null) {
+                    Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + x[0] + " IN " + configname + " AT LINE: " + challengeName + ".ItemChallenge"));
+                    itemChallenge = "DIRT";
+                }
+            } else {
+                if (Material.getMaterial(itemChallenge) == null) {
+                    Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + itemChallenge + " IN " + configname + " AT LINE: " + challengeName + ".ItemChallenge"));
+                    itemChallenge = "DIRT";
+                }
+            }
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
@@ -355,6 +368,18 @@ public class ConfigGestion {
             boolean keepInventory = yamlChallenge.getBoolean(challengeName + ".KeepInventory");
             boolean deathInLand = yamlChallenge.getBoolean(challengeName + ".DeathInLand");
             String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge");
+            if (itemChallenge.contains(";")) {
+                String[] x = itemChallenge.split(";");
+                if (Material.getMaterial(x[0]) == null) {
+                    Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + x[0] + " IN " + configname + " AT LINE: " + challengeName + ".ItemChallenge"));
+                    itemChallenge = "DIRT";
+                }
+            } else {
+                if (Material.getMaterial(itemChallenge) == null) {
+                    Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + itemChallenge + " IN " + configname + " AT LINE: " + challengeName + ".ItemChallenge"));
+                    itemChallenge = "DIRT";
+                }
+            }
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
@@ -365,6 +390,7 @@ public class ConfigGestion {
 
         Main.instance.getServer().getConsoleSender().sendMessage("§a" + folderEvent.listFiles().length + " Event Challenges loaded!");
 
+        numberOfTop = file.getInt("Configuration.Top.NumberOfReward");
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         lockedInterface = file.getBoolean("Configuration.LockedInterface");
         database = file.getString("Configuration.Database");
@@ -384,7 +410,6 @@ public class ConfigGestion {
         ArrayList<String> lore = new ArrayList<>(file.getStringList("Configuration.CollectionChallengeItem.Lore"));
         chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
         pointsResume = file.getBoolean("Configuration.Points.PointsResume");
-        numberOfPlayerRewarded = file.getInt("Configuration.Top.NumberOfReward");
 
         for (String nameInterface : file.getConfigurationSection("Interfaces").getKeys(false)) {
             String title = file.getString("Interfaces." + nameInterface + "..Title");
@@ -396,6 +421,18 @@ public class ConfigGestion {
             for (String nameItem : file.getConfigurationSection("Interfaces." + nameInterface + ".Items").getKeys(false)) {
                 String letter = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Letter");
                 String type = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                if (type.contains(";")) {
+                    String[] x = type.split(";");
+                    if (Material.getMaterial(x[0]) == null) {
+                        Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type"));
+                        type = "DIRT";
+                    }
+                } else {
+                    if (Material.getMaterial(type) == null) {
+                        Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type"));
+                        type = "DIRT";
+                    }
+                }
                 String name = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Name");
                 String texture = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Texture");
                 String soundClick = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".SoundClick");
@@ -643,11 +680,4 @@ public class ConfigGestion {
         this.minimumPoints = minimumPoints;
     }
 
-    public int getNumberOfPlayerRewarded() {
-        return numberOfPlayerRewarded;
-    }
-
-    public void setNumberOfPlayerRewarded(int numberOfPlayerRewarded) {
-        this.numberOfPlayerRewarded = numberOfPlayerRewarded;
-    }
 }

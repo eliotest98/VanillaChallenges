@@ -3,8 +3,11 @@ package io.eliotesta98.VanillaChallenges.Database;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
+
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
@@ -600,10 +603,27 @@ public class H2Database implements Database {
                         File.separator + "backup");
                 boolean folderCreate = folder.mkdir();
                 if (!folderCreate) {
-                    File[] files = folder.listFiles();
-                    if (files.length > numberOfBackupFiles) {
-                        Arrays.sort(files);
-                        files[0].delete();
+                    if (folder.listFiles().length >= numberOfBackupFiles) {
+                        java.util.Date finalDate = null;
+                        int number = 0;
+                        for (int i = 0; i < folder.listFiles().length; i++) {
+                            try {
+                                Date date = sdf.parse(folder.listFiles()[i].getName());
+                                if (finalDate == null) {
+                                    finalDate = date;
+                                    number = i;
+                                } else {
+                                    int result = finalDate.compareTo(date);
+                                    if (result > 0) {
+                                        finalDate = date;
+                                        number = i;
+                                    }
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        folder.listFiles()[number].delete();
                     }
                 }
                 configFile.createNewFile();
