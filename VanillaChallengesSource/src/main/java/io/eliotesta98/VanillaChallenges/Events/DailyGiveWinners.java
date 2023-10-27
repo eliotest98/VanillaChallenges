@@ -22,7 +22,6 @@ public class DailyGiveWinners implements Listener {
     private final boolean debug = Main.instance.getConfigGestion().getDebug().get("DailyGiveRewardEvent");
     private static final String challengeReward = Main.instance.getConfigGestion().getMessages().get("ChallengeReward");
     private static final String prefix = Main.instance.getConfigGestion().getMessages().get("Prefix");
-    private static final int numberOfRewardPlayers = Main.instance.getConfigGestion().getNumberOfPlayerRewarded();
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDailyGiveRewards(PlayerJoinEvent e) {
@@ -41,7 +40,7 @@ public class DailyGiveWinners implements Listener {
 
     public static void getRewardsAtPlayers(Player player, ArrayList<DailyWinner> winners) {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
-            for (int i = 0; i < numberOfRewardPlayers; i++) {
+            for (int i = 0; i < winners.size(); i++) {
                 if (winners.get(i).getPlayerName().equalsIgnoreCase(player.getName())) {
                     String[] reward = winners.get(i).getReward().split(":");
                     final int number = i;

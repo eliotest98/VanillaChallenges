@@ -812,7 +812,12 @@ public class Challenge {
                 number--;
                 if (number <= 0) {
                     startBoostSinglePlayers.remove(playerName);
-                    tasksSinglePlayers.get(playerName).cancel();
+                    if (tasksSinglePlayers.containsKey(playerName)) {
+                        BukkitTask task = tasksSinglePlayers.get(playerName);
+                        if(task != null) {
+                            task.cancel();
+                        }
+                    }
                     tasksSinglePlayers.remove(playerName);
                 }
                 Player p = Bukkit.getPlayer(playerName);
