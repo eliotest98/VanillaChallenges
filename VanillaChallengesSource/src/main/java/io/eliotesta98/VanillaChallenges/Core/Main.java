@@ -294,6 +294,8 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new LeashEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("SleepChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new SleepEvent(), this);
+        } else if(typeChallenge.equalsIgnoreCase("WoolCutterChallenge")) {
+            Bukkit.getServer().getPluginManager().registerEvents(new PlayerShearsEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
             challengeSelected = false;

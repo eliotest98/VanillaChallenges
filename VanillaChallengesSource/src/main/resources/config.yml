@@ -305,6 +305,8 @@ Debug:
   SleepEvent: false
   # Online Point give debug
   OnlinePoint: false
+  # Wool Cutter debug
+  PlayerShearsEvent: false
   # Enabled debug
   Enabled: false
   # Disabled debug
