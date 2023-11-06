@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Comandi;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
+import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Events.ApiEvents.ChallengeChangeEvent;
 import io.eliotesta98.VanillaChallenges.Events.DailyGiveWinners;
 import io.eliotesta98.VanillaChallenges.Utils.*;
@@ -398,9 +399,36 @@ public class Commands implements CommandExecutor {
                         if (Main.instance.getDailyChallenge().isMinimumPointsReached()) {
                             for (int i = 0; i < topPlayers.size(); i++) {
                                 int placeInTop = i;
-                                if (i >= Main.instance.getDailyChallenge().getRewards().size()) {
-                                    placeInTop = Main.instance.getDailyChallenge().getRewards().size() - 1;
+                                int rewardSize = Main.instance.getDailyChallenge().getRewards().size();
+                                if (i >= rewardSize) {
+                                    placeInTop = rewardSize - 1;
                                 }
+                                // Player Stat section
+                                if (Main.db.isPlayerHaveStats(topPlayers.get(i).getNomePlayer())) {
+                                    PlayerStats playerStats = Main.db.getStatsPlayer(topPlayers.get(i).getNomePlayer());
+                                    playerStats.setNumberOfVictories(playerStats.getNumberOfVictories() + 1);
+                                    if (i == 0) {
+                                        playerStats.setNumberOfFirstPlace(playerStats.getNumberOfFirstPlace() + 1);
+                                    } else if (i == 1) {
+                                        playerStats.setNumberOfSecondPlace(playerStats.getNumberOfSecondPlace() + 1);
+                                    } else if (i == 2) {
+                                        playerStats.setNumberOfThirdPlace(playerStats.getNumberOfThirdPlace() + 1);
+                                    }
+                                    Main.db.updatePlayerStat(playerStats);
+                                } else {
+                                    PlayerStats playerStats = new PlayerStats();
+                                    playerStats.setPlayerName(topPlayers.get(i).getNomePlayer());
+                                    playerStats.setNumberOfVictories(1);
+                                    if (i == 0) {
+                                        playerStats.setNumberOfFirstPlace(1);
+                                    } else if (i == 1) {
+                                        playerStats.setNumberOfSecondPlace(1);
+                                    } else if (i == 2) {
+                                        playerStats.setNumberOfThirdPlace(1);
+                                    }
+                                    Main.db.insertPlayerStat(playerStats);
+                                }
+
                                 number++;
                                 DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setId(number);
@@ -411,7 +439,7 @@ public class Commands implements CommandExecutor {
                                     dailyWinner.setReward(Main.instance.getDailyChallenge().getRewards().get(placeInTop));
                                     Main.db.insertDailyWinner(dailyWinner);
                                 } else {
-                                    for (int x = 0; x < Main.instance.getDailyChallenge().getRewards().size(); x++) {
+                                    for (int x = 0; x < rewardSize; x++) {
                                         dailyWinner.setId(number);
                                         dailyWinner.setReward(Main.instance.getDailyChallenge().getRewards().get(x));
                                         Main.db.insertDailyWinner(dailyWinner);
@@ -801,7 +829,6 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-
                         ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
@@ -816,6 +843,33 @@ public class Commands implements CommandExecutor {
                                 if (i >= Main.instance.getDailyChallenge().getRewards().size()) {
                                     placeInTop = Main.instance.getDailyChallenge().getRewards().size() - 1;
                                 }
+
+                                // Player Stat section
+                                if (Main.db.isPlayerHaveStats(topPlayers.get(i).getNomePlayer())) {
+                                    PlayerStats playerStats = Main.db.getStatsPlayer(topPlayers.get(i).getNomePlayer());
+                                    playerStats.setNumberOfVictories(playerStats.getNumberOfVictories() + 1);
+                                    if (i == 0) {
+                                        playerStats.setNumberOfFirstPlace(playerStats.getNumberOfFirstPlace() + 1);
+                                    } else if (i == 1) {
+                                        playerStats.setNumberOfSecondPlace(playerStats.getNumberOfSecondPlace() + 1);
+                                    } else if (i == 2) {
+                                        playerStats.setNumberOfThirdPlace(playerStats.getNumberOfThirdPlace() + 1);
+                                    }
+                                    Main.db.updatePlayerStat(playerStats);
+                                } else {
+                                    PlayerStats playerStats = new PlayerStats();
+                                    playerStats.setPlayerName(topPlayers.get(i).getNomePlayer());
+                                    playerStats.setNumberOfVictories(1);
+                                    if (i == 0) {
+                                        playerStats.setNumberOfFirstPlace(1);
+                                    } else if (i == 1) {
+                                        playerStats.setNumberOfSecondPlace(1);
+                                    } else if (i == 2) {
+                                        playerStats.setNumberOfThirdPlace(1);
+                                    }
+                                    Main.db.insertPlayerStat(playerStats);
+                                }
+
                                 number++;
                                 DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setId(number);

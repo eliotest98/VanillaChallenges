@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Database;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
+import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
@@ -26,6 +27,7 @@ public class YamlDB implements Database {
     private final ArrayList<DailyWinner> dailyWinners = new ArrayList<>();
     private final ArrayList<Challenger> topYesterday = new ArrayList<>();
     private final ArrayList<Challenger> oldPoints = new ArrayList<>();
+    private final ArrayList<PlayerStats> stats = new ArrayList<>();
 
     public YamlDB() {
         initialize("");
@@ -60,12 +62,25 @@ public class YamlDB implements Database {
                     challenges.add(challengeDB);
                 }
                 for (String number : file.getConfigurationSection("DailyWinners").getKeys(false)) {
-                    DailyWinner dailyWinner = new DailyWinner(Integer.parseInt(number), file.getString("DailyWinners." + number + ".PlayerName"), file.getString("DailyWinners." + number + ".NomeChallenge"), file.getString("DailyWinners." + number + ".Reward"));
+                    DailyWinner dailyWinner = new DailyWinner(Integer.parseInt(number),
+                            file.getString("DailyWinners." + number + ".PlayerName"),
+                            file.getString("DailyWinners." + number + ".NomeChallenge"),
+                            file.getString("DailyWinners." + number + ".Reward")
+                    );
                     dailyWinners.add(dailyWinner);
                 }
                 for (String playerName : file.getConfigurationSection("TopYesterday").getKeys(false)) {
                     Challenger challenger = new Challenger(playerName, file.getInt("TopYesterday." + playerName));
                     topYesterday.add(challenger);
+                }
+                for (String playerName : file.getConfigurationSection("Statistic").getKeys(false)) {
+                    PlayerStats playerStats = new PlayerStats(playerName,
+                            file.getInt("Statistic." + playerName + ".NumberVictories"),
+                            file.getInt("Statistic." + playerName + ".NumberFirstPlace"),
+                            file.getInt("Statistic." + playerName + ".NumberSecondPlace"),
+                            file.getInt("Statistic." + playerName + ".NumberThirdPlace")
+                    );
+                    stats.add(playerStats);
                 }
             }
         } else {
@@ -100,6 +115,17 @@ public class YamlDB implements Database {
                 for (String playerName : file.getConfigurationSection("TopYesterday").getKeys(false)) {
                     Challenger challenger = new Challenger(playerName, file.getInt("TopYesterday." + playerName));
                     topYesterday.add(challenger);
+                }
+            }
+            if (file.getConfigurationSection("Statistic") != null) {
+                for (String playerName : file.getConfigurationSection("Statistic").getKeys(false)) {
+                    PlayerStats playerStats = new PlayerStats(playerName,
+                            file.getInt("Statistic." + playerName + ".NumberVictories"),
+                            file.getInt("Statistic." + playerName + ".NumberFirstPlace"),
+                            file.getInt("Statistic." + playerName + ".NumberSecondPlace"),
+                            file.getInt("Statistic." + playerName + ".NumberThirdPlace")
+                    );
+                    stats.add(playerStats);
                 }
             }
         }
@@ -156,6 +182,12 @@ public class YamlDB implements Database {
                 }
                 for (Challenger challenger : topYesterday) {
                     file.set("TopYesterday." + challenger.getNomePlayer(), challenger.getPoints());
+                }
+                for (PlayerStats playerStats : stats) {
+                    file.set("Statistic." + playerStats.getPlayerName() + ".NumberVictories", playerStats.getNumberOfVictories());
+                    file.set("Statistic." + playerStats.getPlayerName() + ".NumberFirstPlace", playerStats.getNumberOfFirstPlace());
+                    file.set("Statistic." + playerStats.getPlayerName() + ".NumberSecondPlace", playerStats.getNumberOfSecondPlace());
+                    file.set("Statistic." + playerStats.getPlayerName() + ".NumberThirdPlace", playerStats.getNumberOfThirdPlace());
                 }
                 file.save(configFile);
             } catch (IOException e) {
@@ -280,6 +312,48 @@ public class YamlDB implements Database {
     }
 
     @Override
+    public ArrayList<PlayerStats> getAllPlayerStats() {
+        return stats;
+    }
+
+    @Override
+    public void insertPlayerStat(PlayerStats playerStats) {
+        file.set("Statistic." + playerStats.getPlayerName() + ".NumberVictories", playerStats.getNumberOfVictories());
+        file.set("Statistic." + playerStats.getPlayerName() + ".NumberFirstPlace", playerStats.getNumberOfFirstPlace());
+        file.set("Statistic." + playerStats.getPlayerName() + ".NumberSecondPlace", playerStats.getNumberOfSecondPlace());
+        file.set("Statistic." + playerStats.getPlayerName() + ".NumberThirdPlace", playerStats.getNumberOfThirdPlace());
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deletePlayerStatWithPlayerName(String playerName) {
+        file.set("Statistic." + playerName, null);
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updatePlayerStat(PlayerStats playerStats) {
+        ArrayList<PlayerStats> stats = getAllPlayerStats();
+        while (!stats.isEmpty()) {
+            if (stats.get(0).getPlayerName().equalsIgnoreCase(playerStats.getPlayerName())) {
+                deletePlayerStatWithPlayerName(stats.get(0).getPlayerName());
+                insertPlayerStat(playerStats);
+                return;
+            }
+            stats.remove(0);
+        }
+        insertPlayerStat(playerStats);
+    }
+
+    @Override
     public void deleteChallengeWithName(String challengeName) {
         file.set("Challenges." + challengeName, null);
         try {
@@ -337,6 +411,26 @@ public class YamlDB implements Database {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void clearStats() {
+        file.set("Statistic", null);
+        try {
+            saveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean isPlayerHaveStats(String playerName) {
+        for (PlayerStats playerStats : stats) {
+            if (playerStats.getPlayerName().equalsIgnoreCase(playerName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -417,6 +511,24 @@ public class YamlDB implements Database {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public PlayerStats getStatsPlayer(String playerName) {
+        for (PlayerStats playerStats : stats) {
+            if (playerStats.getPlayerName().equalsIgnoreCase(playerName)) {
+                return playerStats;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<PlayerStats> getTopVictories() {
+        ArrayList<PlayerStats> top = new ArrayList<>(stats);
+        top.sort(Comparator.comparing(PlayerStats::getNumberOfVictories));
+        Collections.reverse(top);
+        return top;
     }
 
     @Override

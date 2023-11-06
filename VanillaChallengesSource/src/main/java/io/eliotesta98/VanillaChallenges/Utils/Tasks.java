@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Utils;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
+import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Events.ApiEvents.ChallengeChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -62,7 +63,7 @@ public class Tasks {
                     top.remove(0);
                     i++;
                 }
-                if(Main.instance.getConfigGestion().getMinimumPoints() != -1) {
+                if (Main.instance.getConfigGestion().getMinimumPoints() != -1) {
                     if (!Main.instance.getDailyChallenge().isMinimumPointsReached()) {
                         p.sendMessage(ColorUtils.applyColor(pointsRemainForReward.replace("{points}", Main.instance.getDailyChallenge().getPointsRemain() + "")));
                     } else {
@@ -177,7 +178,35 @@ public class Tasks {
                                 if (z >= rewardsSize) {
                                     placeInTop = rewardsSize - 1;
                                 }
+
+                                // Player Stat section
+                                if (Main.db.isPlayerHaveStats(topPlayers.get(z).getNomePlayer())) {
+                                    PlayerStats playerStats = Main.db.getStatsPlayer(topPlayers.get(z).getNomePlayer());
+                                    playerStats.setNumberOfVictories(playerStats.getNumberOfVictories() + 1);
+                                    if (z == 0) {
+                                        playerStats.setNumberOfFirstPlace(playerStats.getNumberOfFirstPlace() + 1);
+                                    } else if (z == 1) {
+                                        playerStats.setNumberOfSecondPlace(playerStats.getNumberOfSecondPlace() + 1);
+                                    } else if (z == 2) {
+                                        playerStats.setNumberOfThirdPlace(playerStats.getNumberOfThirdPlace() + 1);
+                                    }
+                                    Main.db.updatePlayerStat(playerStats);
+                                } else {
+                                    PlayerStats playerStats = new PlayerStats();
+                                    playerStats.setPlayerName(topPlayers.get(z).getNomePlayer());
+                                    playerStats.setNumberOfVictories(1);
+                                    if (z == 0) {
+                                        playerStats.setNumberOfFirstPlace(1);
+                                    } else if (z == 1) {
+                                        playerStats.setNumberOfSecondPlace(1);
+                                    } else if (z == 2) {
+                                        playerStats.setNumberOfThirdPlace(1);
+                                    }
+                                    Main.db.insertPlayerStat(playerStats);
+                                }
                                 number++;
+
+                                //Register Winner
                                 DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setPlayerName(topPlayers.get(z).getNomePlayer());
                                 dailyWinner.setNomeChallenge(Main.instance.getDailyChallenge().getChallengeName());

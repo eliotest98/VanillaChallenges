@@ -11,6 +11,7 @@ import java.util.Date;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
+import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
@@ -52,6 +53,10 @@ public class H2Database implements Database {
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS TopYesterday (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `PlayerName` VARCHAR(100) NOT NULL, `Points` INT(15) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS Statistic (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `NumberVictories` INT(10) NOT NULL, `NumberFirstPlace` INT(10) NOT NULL, `NumberSecondPlace` INT(10) NOT NULL, `NumberThirdPlace` INT(10) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -182,7 +187,6 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtils.reload();
         }
     }
 
@@ -199,7 +203,6 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtils.reload();
         }
     }
 
@@ -217,7 +220,23 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            ReloadUtils.reload();
+        }
+    }
+
+    @Override
+    public void clearStats() {
+        PreparedStatement preparedStatement;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "DROP TABLE Statistic");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS Statistic (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `NumberVictories` INT(10) NOT NULL, `NumberFirstPlace` INT(10) NOT NULL, `NumberSecondPlace` INT(10) NOT NULL, `NumberThirdPlace` INT(10) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -235,6 +254,136 @@ public class H2Database implements Database {
         clearChallengersOld();
         clearDailyWinners();
         removeTopYesterday();
+        clearStats();
+    }
+
+    @Override
+    public ArrayList<PlayerStats> getAllPlayerStats() {
+        ArrayList<PlayerStats> stats = new ArrayList<>();
+        ResultSet resultSet;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                final PlayerStats playerStats = new PlayerStats();
+                playerStats.setPlayerName(resultSet.getString("PlayerName"));
+                playerStats.setNumberOfVictories(resultSet.getInt("NumberVictories"));
+                playerStats.setNumberOfFirstPlace(resultSet.getInt("NumberFirstPlace"));
+                playerStats.setNumberOfSecondPlace(resultSet.getInt("NumberSecondPlace"));
+                playerStats.setNumberOfThirdPlace(resultSet.getInt("NumberThirdPlace"));
+                stats.add(playerStats);
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stats;
+    }
+
+    @Override
+    public boolean isPlayerHaveStats(String playerName) {
+        ResultSet resultSet;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic WHERE PlayerName = '" + playerName + "'");
+            resultSet = preparedStatement.executeQuery();
+            boolean result = resultSet.next();
+            preparedStatement.close();
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public PlayerStats getStatsPlayer(String playerName) {
+        ResultSet resultSet;
+        PlayerStats playerStats = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic WHERE PlayerName = '" + playerName + "'");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                playerStats = new PlayerStats();
+                playerStats.setPlayerName(playerName);
+                playerStats.setNumberOfVictories(resultSet.getInt("NumberVictories"));
+                playerStats.setNumberOfFirstPlace(resultSet.getInt("NumberFirstPlace"));
+                playerStats.setNumberOfSecondPlace(resultSet.getInt("NumberSecondPlace"));
+                playerStats.setNumberOfThirdPlace(resultSet.getInt("NumberThirdPlace"));
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return playerStats;
+    }
+
+    @Override
+    public ArrayList<PlayerStats> getTopVictories() {
+        ArrayList<PlayerStats> stats = new ArrayList<>();
+        ResultSet resultSet;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic ORDER BY NumberVictories");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                PlayerStats playerStats = new PlayerStats();
+                playerStats.setPlayerName(resultSet.getString("PlayerName"));
+                playerStats.setNumberOfVictories(resultSet.getInt("NumberVictories"));
+                playerStats.setNumberOfFirstPlace(resultSet.getInt("NumberFirstPlace"));
+                playerStats.setNumberOfSecondPlace(resultSet.getInt("NumberSecondPlace"));
+                playerStats.setNumberOfThirdPlace(resultSet.getInt("NumberThirdPlace"));
+                stats.add(playerStats);
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Collections.reverse(stats);
+        return stats;
+    }
+
+    @Override
+    public void insertPlayerStat(PlayerStats playerStats) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO Statistic (PlayerName,NumberVictories,NumberFirstPlace,NumberSecondPlace,NumberThirdPlace) VALUES ('"
+                            + playerStats.getPlayerName() + "','" + playerStats.getNumberOfVictories() + "','"
+                            + playerStats.getNumberOfFirstPlace() + "','" + playerStats.getNumberOfSecondPlace() + "','"
+                            + playerStats.getNumberOfThirdPlace()
+                            + "')");
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Insert failed, no rows affected.");
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deletePlayerStatWithPlayerName(String playerName) {
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("DELETE FROM Statistic WHERE `PlayerName`='" + playerName + "'");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updatePlayerStat(PlayerStats playerStats) {
+        ArrayList<PlayerStats> stats = getAllPlayerStats();
+        while (!stats.isEmpty()) {
+            if (stats.get(0).getPlayerName().equalsIgnoreCase(playerStats.getPlayerName())) {
+                deletePlayerStatWithPlayerName(stats.get(0).getPlayerName());
+                insertPlayerStat(playerStats);
+                return;
+            }
+            stats.remove(0);
+        }
+        insertPlayerStat(playerStats);
     }
 
     @Override
