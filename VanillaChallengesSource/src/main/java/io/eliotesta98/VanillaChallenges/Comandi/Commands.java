@@ -582,7 +582,7 @@ public class Commands implements CommandExecutor {
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("top")) {
-                    if (args.length != 1) {
+                    if (args.length > 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -590,13 +590,17 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
-                    ArrayList<Challenger> top;
-                    if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                        top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
-                    } else {
+                    ArrayList<Challenger> top = new ArrayList<>();
+                    if (args.length == 1) {
+                        if (!Main.instance.getConfigGestion().isYesterdayTop()) {
+                            top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+                        } else {
+                            top = Main.db.getAllChallengersTopYesterday();
+                        }
+                    } else if (args[1].equalsIgnoreCase("yesterday")) {
                         top = Main.db.getAllChallengersTopYesterday();
                     }
+                    sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;
                     while (!top.isEmpty()) {
                         sender.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
@@ -1212,7 +1216,7 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    if (args.length != 1) {
+                    if (args.length > 2) {
                         p.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1220,13 +1224,25 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    p.sendMessage(ColorUtils.applyColor(actuallyInTop));
-                    ArrayList<Challenger> top;
-                    if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                        top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
-                    } else {
+                    ArrayList<Challenger> top = new ArrayList<>();
+                    if (args.length == 1) {
+                        if (!Main.instance.getConfigGestion().isYesterdayTop()) {
+                            top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+                        } else {
+                            top = Main.db.getAllChallengersTopYesterday();
+                        }
+                    } else if (args[1].equalsIgnoreCase("yesterday")) {
+                        if (!p.hasPermission("vc.top.yesterday.command")) {
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug();
+                            }
+                            return;
+                        }
                         top = Main.db.getAllChallengersTopYesterday();
                     }
+                    p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;
                     while (!top.isEmpty()) {
                         p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));

@@ -174,7 +174,7 @@ Messages:
     Reward: '   &e/vc &6<reward> &7for receive reward of win'
     # if you want a file default duration or time use 0
     Schedule: '   &e/vc &6<schedule> <add|remove> <challenge|random> &7for add or remove a challenge from schedule'
-    Top: '   &e/vc &6<top> &7for see the top 3'
+    Top: '   &e/vc &6<top> [yesterday] &7for see the top 3'
     Restore: '   &e/vc &6<restore> [file] &7Allows you to restore a H2Database from backup file or see the list of backup files'
 
   Errors:
