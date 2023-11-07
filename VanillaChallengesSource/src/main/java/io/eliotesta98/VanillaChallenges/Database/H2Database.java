@@ -119,7 +119,7 @@ public class H2Database implements Database {
     public void loadPlayersPoints() {
         Main.instance.getDailyChallenge().setPlayers(H2Database.instance.getAllChallengers());
         Main.instance.getDailyChallenge().savePoints();
-        ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+        ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfRewardPlayer());
         int i = 1;
         while (!top.isEmpty()) {
             Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
@@ -323,6 +323,78 @@ public class H2Database implements Database {
         ResultSet resultSet;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic ORDER BY NumberVictories");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                PlayerStats playerStats = new PlayerStats();
+                playerStats.setPlayerName(resultSet.getString("PlayerName"));
+                playerStats.setNumberOfVictories(resultSet.getInt("NumberVictories"));
+                playerStats.setNumberOfFirstPlace(resultSet.getInt("NumberFirstPlace"));
+                playerStats.setNumberOfSecondPlace(resultSet.getInt("NumberSecondPlace"));
+                playerStats.setNumberOfThirdPlace(resultSet.getInt("NumberThirdPlace"));
+                stats.add(playerStats);
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Collections.reverse(stats);
+        return stats;
+    }
+
+    @Override
+    public ArrayList<PlayerStats> getTopFirstPlace() {
+        ArrayList<PlayerStats> stats = new ArrayList<>();
+        ResultSet resultSet;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic ORDER BY NumberFirstPlace");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                PlayerStats playerStats = new PlayerStats();
+                playerStats.setPlayerName(resultSet.getString("PlayerName"));
+                playerStats.setNumberOfVictories(resultSet.getInt("NumberVictories"));
+                playerStats.setNumberOfFirstPlace(resultSet.getInt("NumberFirstPlace"));
+                playerStats.setNumberOfSecondPlace(resultSet.getInt("NumberSecondPlace"));
+                playerStats.setNumberOfThirdPlace(resultSet.getInt("NumberThirdPlace"));
+                stats.add(playerStats);
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Collections.reverse(stats);
+        return stats;
+    }
+
+    @Override
+    public ArrayList<PlayerStats> getTopSecondPlace() {
+        ArrayList<PlayerStats> stats = new ArrayList<>();
+        ResultSet resultSet;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic ORDER BY NumberSecondPlace");
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                PlayerStats playerStats = new PlayerStats();
+                playerStats.setPlayerName(resultSet.getString("PlayerName"));
+                playerStats.setNumberOfVictories(resultSet.getInt("NumberVictories"));
+                playerStats.setNumberOfFirstPlace(resultSet.getInt("NumberFirstPlace"));
+                playerStats.setNumberOfSecondPlace(resultSet.getInt("NumberSecondPlace"));
+                playerStats.setNumberOfThirdPlace(resultSet.getInt("NumberThirdPlace"));
+                stats.add(playerStats);
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Collections.reverse(stats);
+        return stats;
+    }
+
+    @Override
+    public ArrayList<PlayerStats> getTopThirdPlace() {
+        ArrayList<PlayerStats> stats = new ArrayList<>();
+        ResultSet resultSet;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic ORDER BY NumberThirdPlace");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 PlayerStats playerStats = new PlayerStats();

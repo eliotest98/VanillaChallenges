@@ -65,6 +65,7 @@ public class Commands implements CommandExecutor {
     private final boolean resetPoints = Main.instance.getConfigGestion().isResetPointsAtNewChallenge();
 
     private final int numberOfTop = Main.instance.getConfigGestion().getNumberOfTop();
+    private final int numberOfPlayerRewarded = Main.instance.getConfigGestion().getNumberOfRewardPlayer();
     private final boolean rankingReward = Main.instance.getConfigGestion().isRankingReward();
     private final boolean randomReward = Main.instance.getConfigGestion().isRandomReward();
 
@@ -144,7 +145,7 @@ public class Commands implements CommandExecutor {
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
 
-                            ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
+                            ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
 
                             Main.db.removeTopYesterday();
                             Main.db.saveTopYesterday(topPlayers);
@@ -388,7 +389,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
 
-                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
@@ -621,7 +622,7 @@ public class Commands implements CommandExecutor {
                     ArrayList<Challenger> top = new ArrayList<>();
                     if (args.length == 1) {
                         if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                            top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+                            top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
                         } else {
                             top = Main.db.getAllChallengersTopYesterday();
                         }
@@ -829,7 +830,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
@@ -1108,7 +1109,7 @@ public class Commands implements CommandExecutor {
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
 
-                            ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
+                            ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
 
                             Main.db.removeTopYesterday();
                             Main.db.saveTopYesterday(topPlayers);
@@ -1281,7 +1282,7 @@ public class Commands implements CommandExecutor {
                     ArrayList<Challenger> top = new ArrayList<>();
                     if (args.length == 1) {
                         if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                            top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+                            top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
                         } else {
                             top = Main.db.getAllChallengersTopYesterday();
                         }

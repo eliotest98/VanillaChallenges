@@ -60,6 +60,12 @@ public interface Database {
 
     ArrayList<PlayerStats> getTopVictories();
 
+    ArrayList<PlayerStats> getTopFirstPlace();
+
+    ArrayList<PlayerStats> getTopSecondPlace();
+
+    ArrayList<PlayerStats> getTopThirdPlace();
+
     void clearAll();
 
     void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist);

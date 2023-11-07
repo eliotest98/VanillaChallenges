@@ -123,7 +123,7 @@ public class Tasks {
                                 Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
                                 Main.instance.getConfigGestion().isRankingReward(),
                                 Main.instance.getConfigGestion().isRandomReward(),
-                                Main.instance.getConfigGestion().getNumberOfTop());
+                                Main.instance.getConfigGestion().getNumberOfRewardPlayer());
                         challengeStart = true;
                     } else {
                         challengeStart = false;
@@ -137,7 +137,7 @@ public class Tasks {
         tasks.add(checkStart);
     }
 
-    public void checkDay(long time, boolean resetPoints, boolean rankingReward, boolean randomReward, int numberOfTop) {
+    public void checkDay(long time, boolean resetPoints, boolean rankingReward, boolean randomReward, int numberOfRewardedPlayer) {
         saving.put("CheckDay", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             boolean firstTime = true;
@@ -161,7 +161,7 @@ public class Tasks {
                             return;
                         }
 
-                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
+                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfRewardedPlayer);
 
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();

@@ -298,7 +298,7 @@ public class YamlDB implements Database {
     public void loadPlayersPoints() {
         Main.instance.getDailyChallenge().setPlayers(playerPoints);
         Main.instance.getDailyChallenge().savePoints();
-        ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+        ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfRewardPlayer());
         int i = 1;
         while (!top.isEmpty()) {
             Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
@@ -527,6 +527,30 @@ public class YamlDB implements Database {
     public ArrayList<PlayerStats> getTopVictories() {
         ArrayList<PlayerStats> top = new ArrayList<>(stats);
         top.sort(Comparator.comparing(PlayerStats::getNumberOfVictories));
+        Collections.reverse(top);
+        return top;
+    }
+
+    @Override
+    public ArrayList<PlayerStats> getTopFirstPlace() {
+        ArrayList<PlayerStats> top = new ArrayList<>(stats);
+        top.sort(Comparator.comparing(PlayerStats::getNumberOfFirstPlace));
+        Collections.reverse(top);
+        return top;
+    }
+
+    @Override
+    public ArrayList<PlayerStats> getTopSecondPlace() {
+        ArrayList<PlayerStats> top = new ArrayList<>(stats);
+        top.sort(Comparator.comparing(PlayerStats::getNumberOfSecondPlace));
+        Collections.reverse(top);
+        return top;
+    }
+
+    @Override
+    public ArrayList<PlayerStats> getTopThirdPlace() {
+        ArrayList<PlayerStats> top = new ArrayList<>(stats);
+        top.sort(Comparator.comparing(PlayerStats::getNumberOfThirdPlace));
         Collections.reverse(top);
         return top;
     }
