@@ -30,6 +30,9 @@ permissions:
   vc.top.command:
     description: for /vc top
     default: op
+  vc.top.yesterday.command:
+    description: for /vc top yesterday
+    default: op
   vc.points.command:
     description: for /vc points
     default: op

@@ -49,6 +49,7 @@ public class FileCreator {
         files.add("EntityCatcher.yml");
         files.add("Leasher.yml");
         files.add("Sleeper.yml");
+        files.add("WoolCutter.yml");
         if (hooks.get("CubeGenerator")) {
             files.add("CubeGenerator.yml");
         }

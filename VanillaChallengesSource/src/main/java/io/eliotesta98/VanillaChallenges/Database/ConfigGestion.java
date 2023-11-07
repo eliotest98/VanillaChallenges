@@ -25,7 +25,7 @@ public class ConfigGestion {
             backupEnabled, pointsResume, lockedInterface;
     private String database, challengeGeneration;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
-            time, numberOfTop, minimumPoints;
+            time, numberOfTop, numberOfRewardPlayer, minimumPoints;
     private ItemStack chestCollection;
     private Tasks tasks = new Tasks();
     private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
@@ -46,6 +46,7 @@ public class ConfigGestion {
                 messages.put(message, file.getString("Messages." + message));
             } else if (message.equalsIgnoreCase("TopPlayers")) {
                 ArrayList<String> mexs = new ArrayList<>(file.getStringList("Messages.TopPlayers"));
+                numberOfTop = mexs.size();
                 int i = 1;
                 while (!mexs.isEmpty()) {
                     messages.put("topPlayers" + i, mexs.get(0));
@@ -390,7 +391,7 @@ public class ConfigGestion {
 
         Main.instance.getServer().getConsoleSender().sendMessage("§a" + folderEvent.listFiles().length + " Event Challenges loaded!");
 
-        numberOfTop = file.getInt("Configuration.Top.NumberOfReward");
+        numberOfRewardPlayer = file.getInt("Configuration.Top.NumberOfReward");
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         lockedInterface = file.getBoolean("Configuration.LockedInterface");
         database = file.getString("Configuration.Database");
@@ -648,12 +649,12 @@ public class ConfigGestion {
         this.rankingReward = rankingReward;
     }
 
-    public int getNumberOfTop() {
-        return numberOfTop;
+    public int getNumberOfRewardPlayer() {
+        return numberOfRewardPlayer;
     }
 
-    public void setNumberOfTop(int numberOfTop) {
-        this.numberOfTop = numberOfTop;
+    public void setNumberOfRewardPlayer(int numberOfRewardPlayer) {
+        this.numberOfRewardPlayer = numberOfRewardPlayer;
     }
 
     public boolean isRandomReward() {
@@ -680,4 +681,11 @@ public class ConfigGestion {
         this.minimumPoints = minimumPoints;
     }
 
+    public int getNumberOfTop() {
+        return numberOfTop;
+    }
+
+    public void setNumberOfTop(int numberOfTop) {
+        this.numberOfTop = numberOfTop;
+    }
 }

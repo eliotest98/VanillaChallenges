@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Comandi;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
+import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Events.ApiEvents.ChallengeChangeEvent;
 import io.eliotesta98.VanillaChallenges.Events.DailyGiveWinners;
 import io.eliotesta98.VanillaChallenges.Utils.*;
@@ -64,6 +65,7 @@ public class Commands implements CommandExecutor {
     private final boolean resetPoints = Main.instance.getConfigGestion().isResetPointsAtNewChallenge();
 
     private final int numberOfTop = Main.instance.getConfigGestion().getNumberOfTop();
+    private final int numberOfPlayerRewarded = Main.instance.getConfigGestion().getNumberOfRewardPlayer();
     private final boolean rankingReward = Main.instance.getConfigGestion().isRankingReward();
     private final boolean randomReward = Main.instance.getConfigGestion().isRandomReward();
 
@@ -143,7 +145,7 @@ public class Commands implements CommandExecutor {
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
 
-                            ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
+                            ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
 
                             Main.db.removeTopYesterday();
                             Main.db.saveTopYesterday(topPlayers);
@@ -387,7 +389,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
 
-                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
@@ -398,9 +400,36 @@ public class Commands implements CommandExecutor {
                         if (Main.instance.getDailyChallenge().isMinimumPointsReached()) {
                             for (int i = 0; i < topPlayers.size(); i++) {
                                 int placeInTop = i;
-                                if (i >= Main.instance.getDailyChallenge().getRewards().size()) {
-                                    placeInTop = Main.instance.getDailyChallenge().getRewards().size() - 1;
+                                int rewardSize = Main.instance.getDailyChallenge().getRewards().size();
+                                if (i >= rewardSize) {
+                                    placeInTop = rewardSize - 1;
                                 }
+                                // Player Stat section
+                                if (Main.db.isPlayerHaveStats(topPlayers.get(i).getNomePlayer())) {
+                                    PlayerStats playerStats = Main.db.getStatsPlayer(topPlayers.get(i).getNomePlayer());
+                                    playerStats.setNumberOfVictories(playerStats.getNumberOfVictories() + 1);
+                                    if (i == 0) {
+                                        playerStats.setNumberOfFirstPlace(playerStats.getNumberOfFirstPlace() + 1);
+                                    } else if (i == 1) {
+                                        playerStats.setNumberOfSecondPlace(playerStats.getNumberOfSecondPlace() + 1);
+                                    } else if (i == 2) {
+                                        playerStats.setNumberOfThirdPlace(playerStats.getNumberOfThirdPlace() + 1);
+                                    }
+                                    Main.db.updatePlayerStat(playerStats);
+                                } else {
+                                    PlayerStats playerStats = new PlayerStats();
+                                    playerStats.setPlayerName(topPlayers.get(i).getNomePlayer());
+                                    playerStats.setNumberOfVictories(1);
+                                    if (i == 0) {
+                                        playerStats.setNumberOfFirstPlace(1);
+                                    } else if (i == 1) {
+                                        playerStats.setNumberOfSecondPlace(1);
+                                    } else if (i == 2) {
+                                        playerStats.setNumberOfThirdPlace(1);
+                                    }
+                                    Main.db.insertPlayerStat(playerStats);
+                                }
+
                                 number++;
                                 DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setId(number);
@@ -411,7 +440,7 @@ public class Commands implements CommandExecutor {
                                     dailyWinner.setReward(Main.instance.getDailyChallenge().getRewards().get(placeInTop));
                                     Main.db.insertDailyWinner(dailyWinner);
                                 } else {
-                                    for (int x = 0; x < Main.instance.getDailyChallenge().getRewards().size(); x++) {
+                                    for (int x = 0; x < rewardSize; x++) {
                                         dailyWinner.setId(number);
                                         dailyWinner.setReward(Main.instance.getDailyChallenge().getRewards().get(x));
                                         Main.db.insertDailyWinner(dailyWinner);
@@ -582,7 +611,7 @@ public class Commands implements CommandExecutor {
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("top")) {
-                    if (args.length != 1) {
+                    if (args.length > 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -590,13 +619,17 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
-                    ArrayList<Challenger> top;
-                    if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                        top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
-                    } else {
+                    ArrayList<Challenger> top = new ArrayList<>();
+                    if (args.length == 1) {
+                        if (!Main.instance.getConfigGestion().isYesterdayTop()) {
+                            top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
+                        } else {
+                            top = Main.db.getAllChallengersTopYesterday();
+                        }
+                    } else if (args[1].equalsIgnoreCase("yesterday")) {
                         top = Main.db.getAllChallengersTopYesterday();
                     }
+                    sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;
                     while (!top.isEmpty()) {
                         sender.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
@@ -797,8 +830,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-
-                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
+                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
@@ -812,6 +844,33 @@ public class Commands implements CommandExecutor {
                                 if (i >= Main.instance.getDailyChallenge().getRewards().size()) {
                                     placeInTop = Main.instance.getDailyChallenge().getRewards().size() - 1;
                                 }
+
+                                // Player Stat section
+                                if (Main.db.isPlayerHaveStats(topPlayers.get(i).getNomePlayer())) {
+                                    PlayerStats playerStats = Main.db.getStatsPlayer(topPlayers.get(i).getNomePlayer());
+                                    playerStats.setNumberOfVictories(playerStats.getNumberOfVictories() + 1);
+                                    if (i == 0) {
+                                        playerStats.setNumberOfFirstPlace(playerStats.getNumberOfFirstPlace() + 1);
+                                    } else if (i == 1) {
+                                        playerStats.setNumberOfSecondPlace(playerStats.getNumberOfSecondPlace() + 1);
+                                    } else if (i == 2) {
+                                        playerStats.setNumberOfThirdPlace(playerStats.getNumberOfThirdPlace() + 1);
+                                    }
+                                    Main.db.updatePlayerStat(playerStats);
+                                } else {
+                                    PlayerStats playerStats = new PlayerStats();
+                                    playerStats.setPlayerName(topPlayers.get(i).getNomePlayer());
+                                    playerStats.setNumberOfVictories(1);
+                                    if (i == 0) {
+                                        playerStats.setNumberOfFirstPlace(1);
+                                    } else if (i == 1) {
+                                        playerStats.setNumberOfSecondPlace(1);
+                                    } else if (i == 2) {
+                                        playerStats.setNumberOfThirdPlace(1);
+                                    }
+                                    Main.db.insertPlayerStat(playerStats);
+                                }
+
                                 number++;
                                 DailyWinner dailyWinner = new DailyWinner();
                                 dailyWinner.setId(number);
@@ -1050,7 +1109,7 @@ public class Commands implements CommandExecutor {
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
 
-                            ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
+                            ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
 
                             Main.db.removeTopYesterday();
                             Main.db.saveTopYesterday(topPlayers);
@@ -1212,7 +1271,7 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    if (args.length != 1) {
+                    if (args.length > 2) {
                         p.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1220,13 +1279,25 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    p.sendMessage(ColorUtils.applyColor(actuallyInTop));
-                    ArrayList<Challenger> top;
-                    if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                        top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
-                    } else {
+                    ArrayList<Challenger> top = new ArrayList<>();
+                    if (args.length == 1) {
+                        if (!Main.instance.getConfigGestion().isYesterdayTop()) {
+                            top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
+                        } else {
+                            top = Main.db.getAllChallengersTopYesterday();
+                        }
+                    } else if (args[1].equalsIgnoreCase("yesterday")) {
+                        if (!p.hasPermission("vc.top.yesterday.command")) {
+                            p.sendMessage(ColorUtils.applyColor(errorNoPerms));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug();
+                            }
+                            return;
+                        }
                         top = Main.db.getAllChallengersTopYesterday();
                     }
+                    p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;
                     while (!top.isEmpty()) {
                         p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));

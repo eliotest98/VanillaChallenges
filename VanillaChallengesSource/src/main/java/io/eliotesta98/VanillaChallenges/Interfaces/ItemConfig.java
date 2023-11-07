@@ -4,20 +4,27 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import de.tr7zw.nbtapi.NBTItem;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class ItemConfig {
 
+    private static final UUID RANDOM_UUID = UUID.fromString("92864445-51c5-4c3b-9039-517c9927d1b4");
     private String name, type, texture, soundClick, nameItemConfig;
     private ArrayList<String> lore;
 
@@ -51,15 +58,23 @@ public class ItemConfig {
         if (type.equalsIgnoreCase("PLAYER_HEAD") || type.contains("SKULL")) {
             if (!texture.equalsIgnoreCase("")) {
                 SkullMeta meta = (SkullMeta) item.getItemMeta();
-                GameProfile profile = new GameProfile(UUID.randomUUID(), "");
-                profile.getProperties().put("textures", new Property("textures", texture));
-                Field profileField = null;
                 try {
-                    profileField = meta.getClass().getDeclaredField("profile");
-                    profileField.setAccessible(true);
-                    profileField.set(meta, profile);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    PlayerProfile player_profile = Bukkit.createPlayerProfile(RANDOM_UUID);
+                    PlayerTextures textures = player_profile.getTextures();
+                    textures.setSkin(getUrlFromBase64(texture));
+                    player_profile.setTextures(textures);
+                    meta.setOwnerProfile(player_profile);
+                } catch (NoSuchMethodError | MalformedURLException ignored) {
+                    GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+                    profile.getProperties().put("textures", new Property("textures", texture));
+                    Field profileField = null;
+                    try {
+                        profileField = meta.getClass().getDeclaredField("profile");
+                        profileField.setAccessible(true);
+                        profileField.set(meta, profile);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 item.setItemMeta(meta);
             } /*else if (!generator.getNomePlayer().equalsIgnoreCase("")) {
@@ -453,6 +468,13 @@ public class ItemConfig {
 
     public void setNameItemConfig(String nameItemConfig) {
         this.nameItemConfig = nameItemConfig;
+    }
+
+    public static URL getUrlFromBase64(String base64) throws MalformedURLException {
+        String decoded = new String(Base64.getDecoder().decode(base64));
+        // We simply remove the "beginning" and "ending" part of the JSON, so we're left with only the URL. You could use a proper
+        // JSON parser for this, but that's not worth it. The String will always start exactly with this stuff anyway
+        return new URL(decoded.substring("{\"textures\":{\"SKIN\":{\"url\":\"".length(), decoded.length() - "\"}}}".length()));
     }
 
     @Override

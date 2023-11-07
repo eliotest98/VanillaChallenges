@@ -2,6 +2,7 @@ package io.eliotesta98.VanillaChallenges.Database;
 
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
+import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import java.util.ArrayList;
 
@@ -18,6 +19,14 @@ public interface Database {
     void loadPlayersPoints();
 
     void disconnect();
+
+    ArrayList<PlayerStats> getAllPlayerStats();
+
+    void insertPlayerStat(PlayerStats playerStats);
+
+    void deletePlayerStatWithPlayerName(String playerName);
+
+    void updatePlayerStat(PlayerStats playerStats);
 
     ArrayList<Challenger> getAllChallengersTopYesterday();
 
@@ -47,6 +56,16 @@ public interface Database {
 
     void deleteDailyWinnerWithId(int id);
 
+    PlayerStats getStatsPlayer(String playerName);
+
+    ArrayList<PlayerStats> getTopVictories();
+
+    ArrayList<PlayerStats> getTopFirstPlace();
+
+    ArrayList<PlayerStats> getTopSecondPlace();
+
+    ArrayList<PlayerStats> getTopThirdPlace();
+
     void clearAll();
 
     void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist);
@@ -54,6 +73,10 @@ public interface Database {
     ArrayList<Challenge> getAllChallenges();
 
     void clearChallengesFromFile();
+
+    void clearStats();
+
+    boolean isPlayerHaveStats(String playerName);
 
     void insertChallenge(String challengeName, int time);
 

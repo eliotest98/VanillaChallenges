@@ -16,8 +16,8 @@ public class ItemUtils {
         // setto il nome
         itemm.setDisplayName(ColorUtils.applyColor(name));
         ArrayList<String> newLore = new ArrayList<>();
-        for (int i = 0; i < lore.size(); i++) {
-            newLore.add(ColorUtils.applyColor(lore.get(i)));
+        for (String s : lore) {
+            newLore.add(ColorUtils.applyColor(s));
         }
         itemm.setLore(newLore);
         chest.setItemMeta(itemm);
