@@ -166,7 +166,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
                 return "";
             }
         }
-        // %vanillachallenges_top_victories_#% # = number
+        // %vanillachallenges_top_victories_points_#% # = number
         if (identifier.contains("top_victories_points_")) {
             String number = identifier.replace("top_victories_points_", "");
             int numberTop = 1;
