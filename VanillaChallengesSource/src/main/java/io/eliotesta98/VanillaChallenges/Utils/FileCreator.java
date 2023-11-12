@@ -4,6 +4,7 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class FileCreator {
@@ -64,6 +65,41 @@ public class FileCreator {
             String fileName = file.getName();
             copyFiles.remove(fileName);
         }
+        if (!copyFiles.isEmpty()) {
+            for (String file : copyFiles) {
+                createFileChallenges(folder, file);
+            }
+            Main.instance.getServer().getConsoleSender().sendMessage("§e" + copyFiles.size() + " " + folder + " Challenges recreated!");
+            Main.instance.getServer().getConsoleSender().sendMessage("§ePlease not delete files! Disable the challenge in the configuration file!");
+        }
+    }
+
+    public static void controlFiles(String folder, File[] folderFiles, ArrayList<String> otherFiles, String blacklistOrWhitelist) {
+
+        // Carico la lista dei file
+        ArrayList<String> copyFiles = new ArrayList<>(files);
+        // Se whitelist voglio una lista diversa
+        if (blacklistOrWhitelist.equalsIgnoreCase("Whitelist")) {
+            copyFiles = new ArrayList<>();
+            for (String fileName : otherFiles) {
+                copyFiles.add(fileName + ".yml");
+            }
+        }
+
+        // se i file già esistono non li rigenero
+        for (File file : folderFiles) {
+            String fileName = file.getName();
+            copyFiles.remove(fileName);
+        }
+
+        // se è blacklist rimuovo i file che non voglio rigenerare dalla lista
+        if (blacklistOrWhitelist.equalsIgnoreCase("Blacklist")) {
+            for (String fileName : otherFiles) {
+                copyFiles.remove(fileName + ".yml");
+            }
+        }
+
+        // tutto pronto per la generazione di file non esistenti
         if (!copyFiles.isEmpty()) {
             for (String file : copyFiles) {
                 createFileChallenges(folder, file);

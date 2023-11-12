@@ -210,6 +210,11 @@ public class Main extends JavaPlugin {
             db = new YamlDB();
         }
         getServer().getConsoleSender().sendMessage("§aDatabase connected!");
+        new UpdateChecker(instance, 101426).getVersion(version1 -> {
+            if (!instance.getDescription().getVersion().equals(version1)) {
+                getServer().getConsoleSender().sendMessage(ChatColor.RED + "New Update available for VanillaChallenges!");
+            }
+        });
         // control if challenges is on db but is disabled on config
         db.controlIfChallengeExist(config.getControlIfChallengeExist());
         // select challenge

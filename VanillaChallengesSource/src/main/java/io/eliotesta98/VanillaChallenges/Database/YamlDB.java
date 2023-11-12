@@ -132,7 +132,7 @@ public class YamlDB implements Database {
     }
 
     @Override
-    public void backupDb(int numberOfBackupFiles) {
+    public void backupDb(int numberOfFiles) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String data = sdf.format(timestamp);
@@ -144,7 +144,7 @@ public class YamlDB implements Database {
                         File.separator + "backup");
                 boolean folderCreate = folder.mkdir();
                 if (!folderCreate) {
-                    if (folder.listFiles().length >= numberOfBackupFiles) {
+                    if (folder.listFiles().length >= numberOfFiles) {
                         java.util.Date finalDate = null;
                         int number = 0;
                         for (int i = 0; i < folder.listFiles().length; i++) {

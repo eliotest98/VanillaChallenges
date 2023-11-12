@@ -29,6 +29,8 @@ public class ConfigGestion {
     private ItemStack chestCollection;
     private Tasks tasks = new Tasks();
     private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
+    private ArrayList<String> regenerationFilesGlobalChallenges = new ArrayList<>();
+    private ArrayList<String> regenerationFilesEventChallenges = new ArrayList<>();
 
     public ConfigGestion(FileConfiguration file) throws IOException {
 
@@ -61,24 +63,27 @@ public class ConfigGestion {
             hooks.put(hoock, file.getBoolean("Configuration.Hooks." + hoock));
         }
 
+        String challengeRegenerationType = file.getString("Configuration.ChallengeRegeneration.Type", "Blacklist");
+        regenerationFilesGlobalChallenges.addAll(file.getStringList("Configuration.ChallengeRegeneration.Globals"));
+        regenerationFilesEventChallenges.addAll(file.getStringList("Configuration.ChallengeRegeneration.Events"));
+
         FileCreator.addFiles(hooks);
 
-        File folderChallenges = new File(Main.instance.getDataFolder() +
-                File.separator + "Challenges");
-        File folderGlobal = new File(Main.instance.getDataFolder() +
-                File.separator + "Challenges" + File.separator + "Global");
-        File folderEvent = new File(Main.instance.getDataFolder() +
-                File.separator + "Challenges" + File.separator + "Event");
+        boolean folderCreate = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges").mkdir();
 
-        boolean folderCreate = folderChallenges.mkdir();
+        File[] listOfChallengesGlobalFiles = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges" + File.separator + "Global").listFiles();
+        File[] listOfChallengesEventFiles = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges" + File.separator + "Event").listFiles();
 
         if (folderCreate) {
             FileCreator.createAllFiles("Global");
         } else {
-            FileCreator.controlFiles("Global", folderGlobal.listFiles());
+            FileCreator.controlFiles("Global", listOfChallengesGlobalFiles, regenerationFilesGlobalChallenges, challengeRegenerationType);
         }
 
-        for (File fileChallenge : folderGlobal.listFiles()) {
+        for (File fileChallenge : listOfChallengesGlobalFiles) {
             String splits = "bho";
             String[] strings = splits.split(":");
             String configname = "Challenges/Global/" + fileChallenge.getName();
@@ -231,15 +236,15 @@ public class ConfigGestion {
             challenges.put(challengeName, challenge);
         }
 
-        Main.instance.getServer().getConsoleSender().sendMessage("§a" + folderGlobal.listFiles().length + " Global Challenges loaded!");
+        Main.instance.getServer().getConsoleSender().sendMessage("§a" + listOfChallengesGlobalFiles.length + " Global Challenges loaded!");
 
         if (folderCreate) {
             FileCreator.createAllFiles("Event");
         } else {
-            FileCreator.controlFiles("Event", folderEvent.listFiles());
+            FileCreator.controlFiles("Event", listOfChallengesEventFiles, regenerationFilesEventChallenges, challengeRegenerationType);
         }
 
-        for (File fileChallenge : folderEvent.listFiles()) {
+        for (File fileChallenge : listOfChallengesEventFiles) {
             String splits = "bho";
             String[] strings = splits.split(":");
             String configname = "Challenges/Event/" + fileChallenge.getName();
@@ -389,7 +394,7 @@ public class ConfigGestion {
             challengesEvent.put(challengeName, challenge);
         }
 
-        Main.instance.getServer().getConsoleSender().sendMessage("§a" + folderEvent.listFiles().length + " Event Challenges loaded!");
+        Main.instance.getServer().getConsoleSender().sendMessage("§a" + listOfChallengesEventFiles.length + " Event Challenges loaded!");
 
         numberOfRewardPlayer = file.getInt("Configuration.Top.NumberOfReward");
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
