@@ -79,6 +79,8 @@ public class ConfigGestion {
 
         if (folderCreate) {
             FileCreator.createAllFiles("Global");
+            listOfChallengesGlobalFiles = new File(Main.instance.getDataFolder() +
+                    File.separator + "Challenges" + File.separator + "Global").listFiles();
         } else {
             FileCreator.controlFiles("Global", listOfChallengesGlobalFiles, regenerationFilesGlobalChallenges, challengeRegenerationType);
         }
@@ -240,6 +242,8 @@ public class ConfigGestion {
 
         if (folderCreate) {
             FileCreator.createAllFiles("Event");
+            listOfChallengesEventFiles = new File(Main.instance.getDataFolder() +
+                    File.separator + "Challenges" + File.separator + "Event").listFiles();
         } else {
             FileCreator.controlFiles("Event", listOfChallengesEventFiles, regenerationFilesEventChallenges, challengeRegenerationType);
         }
