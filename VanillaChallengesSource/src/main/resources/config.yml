@@ -79,6 +79,17 @@ Configuration:
   # If you want to obfuscate subsequent challenges in the interface
   LockedInterface: false
 
+  # If you want not regenerate a file of specific challenge or list of files of challenges you want regenerate
+  ChallengeRegeneration:
+    # What you want? Blacklist or Whitelist?
+    Type: "Blacklist"
+    # Global Challenges
+    Globals:
+      - "FileName"
+    # Event Challenges
+    Events:
+      - "FileName"
+
 
 Interfaces:
   Challenges:
