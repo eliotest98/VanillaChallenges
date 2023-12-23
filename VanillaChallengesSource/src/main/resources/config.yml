@@ -318,6 +318,8 @@ Debug:
   OnlinePoint: false
   # Wool Cutter debug
   PlayerShearsEvent: false
+  # Riptide debug
+  RiptideEvent: false
   # Enabled debug
   Enabled: false
   # Disabled debug
