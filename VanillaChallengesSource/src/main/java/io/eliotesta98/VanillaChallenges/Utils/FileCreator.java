@@ -51,6 +51,7 @@ public class FileCreator {
         files.add("Leasher.yml");
         files.add("Sleeper.yml");
         files.add("WoolCutter.yml");
+        files.add("Riptider.yml");
         if (hooks.get("CubeGenerator")) {
             files.add("CubeGenerator.yml");
         }
