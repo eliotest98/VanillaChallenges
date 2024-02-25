@@ -1,4 +1,4 @@
-package io.eliotesta98.VanillaChallenges.Events.Challenges;
+package io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector;
 
 import de.tr7zw.nbtapi.NBTItem;
 import io.eliotesta98.VanillaChallenges.Core.Main;
@@ -22,9 +22,11 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ItemCollector implements Listener {
 
+    private static Database db;
     private final DebugUtils debugUtils = new DebugUtils("ItemCollector");
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemCollector");
     private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
@@ -39,6 +41,9 @@ public class ItemCollector implements Listener {
 
     public ItemCollector() {
         controlChest();
+        db = new Database();
+        db.loadChests(chestLocation);
+        saveChests();
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -110,7 +115,7 @@ public class ItemCollector implements Listener {
                         debugUtils.addLine("location block = " + block.getLocation());
                     }
                     //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
-                    if(Main.version113) {
+                    if (Main.version113) {
                         e.setDropItems(false);
                     } else {
                         e.setCancelled(true);
@@ -209,4 +214,15 @@ public class ItemCollector implements Listener {
         Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "ItemCollector", false);
     }
 
+    public void saveChests() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.instance, () -> {
+            for (Map.Entry<String, Location> location : chestLocation.entrySet()) {
+                db.updateChest(location.getKey(), location.getValue());
+            }
+        }, 0, 1200L);
+    }
+
+    public static void deleteDb() {
+        db.deleteFile();
+    }
 }

@@ -3,6 +3,7 @@ package io.eliotesta98.VanillaChallenges.Core;
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.*;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector.ItemCollector;
 import io.eliotesta98.VanillaChallenges.Interfaces.GuiEvent;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Modules.CubeGenerator.CubeGeneratorEvent;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.*;
-import org.bukkit.command.*;
 
 public class Main extends JavaPlugin {
     public static Main instance;
@@ -328,7 +328,7 @@ public class Main extends JavaPlugin {
             }
         }
 
-        getCommand("vc").setExecutor((CommandExecutor) new Commands());
+        getCommand("vanillachallenges").setExecutor(new Commands());
         if (config.getDebug().get("Enabled")) {
             debugsistem.addLine("Enabled execution time= " + (System.currentTimeMillis() - tempo));
             debugsistem.debug();

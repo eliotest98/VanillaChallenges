@@ -3,7 +3,7 @@ version: maven-version-number
 main: io.eliotesta98.VanillaChallenges.Core.Main
 api-version: 1.13
 authors: [ eliotesta98 ]
-softdepend: [PlaceholderAPI, CubeGenerator, Tombs, WorldGuard, Lands]
+softdepend: [ PlaceholderAPI, CubeGenerator, Tombs, WorldGuard, Lands ]
 
 libraries:
   - com.googlecode.json-simple:json-simple:1.1.1
@@ -15,8 +15,8 @@ legacy-libraries:
 
 depend: [ ]
 commands:
-  vc:
-    aliases: [ vanillachallenges ]
+  vanillachallenges:
+    aliases: [ vc ]
 permissions:
   vc.reload.command:
     description: for /vc reload

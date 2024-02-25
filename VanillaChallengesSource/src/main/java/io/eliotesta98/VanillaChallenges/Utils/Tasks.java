@@ -5,6 +5,7 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Events.ApiEvents.ChallengeChangeEvent;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector.ItemCollector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -166,6 +167,9 @@ public class Tasks {
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
+                        if (Main.instance.getDailyChallenge().getTypeChallenge().equalsIgnoreCase("ItemCollectionChallenge")) {
+                            ItemCollector.deleteDb();
+                        }
                         if (Main.instance.getConfigGestion().isBackupEnabled()) {
                             Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                         }
