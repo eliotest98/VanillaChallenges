@@ -5,6 +5,7 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Events.ApiEvents.ChallengeChangeEvent;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector.ItemCollector;
 import io.eliotesta98.VanillaChallenges.Events.DailyGiveWinners;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.Bukkit;
@@ -83,7 +84,7 @@ public class Commands implements CommandExecutor {
                     }
                     return;
                 }
-                if (!command.getName().equalsIgnoreCase("vc")) {// comando se esiste
+                if (!command.getName().equalsIgnoreCase("vanillachallenges")) {// comando se esiste
                     sender.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -393,6 +394,9 @@ public class Commands implements CommandExecutor {
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
+                        if (Main.instance.getDailyChallenge().getTypeChallenge().equalsIgnoreCase("ItemCollectionChallenge")) {
+                            ItemCollector.deleteDb();
+                        }
                         if (Main.instance.getConfigGestion().isBackupEnabled()) {
                             Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                         }
@@ -677,7 +681,7 @@ public class Commands implements CommandExecutor {
                     }
                     return;
                 }
-                if (!command.getName().equalsIgnoreCase("vc")) {// comando se esiste
+                if (!command.getName().equalsIgnoreCase("vanillachallenges")) {// comando se esiste
                     p.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -834,6 +838,9 @@ public class Commands implements CommandExecutor {
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
                         Main.db.saveTopYesterday(topPlayers);
+                        if (Main.instance.getDailyChallenge().getTypeChallenge().equalsIgnoreCase("ItemCollectionChallenge")) {
+                            ItemCollector.deleteDb();
+                        }
                         if (Main.instance.getConfigGestion().isBackupEnabled()) {
                             Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                         }
