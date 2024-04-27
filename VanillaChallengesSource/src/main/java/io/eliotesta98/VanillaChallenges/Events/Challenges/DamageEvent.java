@@ -66,7 +66,10 @@ public class DamageEvent implements Listener {
                     return;
                 }
 
-                Main.instance.getDailyChallenge().increment(playerName, (long) finalDamage * point);
+                double damage = finalDamage * point;
+                if (damage > 0) {
+                    Main.instance.getDailyChallenge().increment(playerName, (long) finalDamage * point);
+                }
             }
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
