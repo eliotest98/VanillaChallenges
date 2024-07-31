@@ -5,7 +5,7 @@
 
     <groupId>io.eliotesta98.VanillaChallenges</groupId>
     <artifactId>VanillaChallenges</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -84,14 +84,14 @@
         <dependency>
             <groupId>io.eliotesta98.VanillaChallenges</groupId>
             <artifactId>VanillaChallengesApi</artifactId>
-            <version>1.0</version>
+            <version>LATEST</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>io.eliotesta98.VanillaChallenges</groupId>
             <artifactId>VanillaChallengesSource</artifactId>
-            <version>1.4</version>
+            <version>LATEST</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>

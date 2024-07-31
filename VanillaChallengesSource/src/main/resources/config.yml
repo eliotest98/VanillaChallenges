@@ -195,6 +195,7 @@ Messages:
     AlreadyPlacedChest: '{prefix}&7You already placed a chest for Collection Item Challenge'
     AlreadyStartEvent: '{prefix}&cYou already start a Challenge Event! If you want stop it write vc <event> <stop>'
     AlreadyStopEvent: '{prefix}&cYou already stopped the Challenge Event! If you want start a new Challenge write vc <event> <challenge>'
+    CaseBroken: '{prefix}&7Your chest location is broken, please replace it'
     Schedule: '{prefix}&cYou cannot remove the current challenge from the schedule, if you want to remove it use the /vc <next> command'
     Add: '{prefix}&cYou cannot add this challenge because is already scheduled'
 

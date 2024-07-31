@@ -1,6 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
@@ -29,6 +29,7 @@ public class ItemCollector implements Listener {
     private static Database db;
     private final DebugUtils debugUtils = new DebugUtils("ItemCollector");
     private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemCollector");
+    private final String caseBroken = Main.instance.getConfigGestion().getMessages().get("Errors.CaseBroken");
     private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyPlacedChest");
@@ -145,7 +146,7 @@ public class ItemCollector implements Listener {
                     }
                     if (chestLocation.get(player.getName()) != null) {
                         Location location = chestLocation.get(player.getName());
-                        if (location.getBlock().getType() == Main.instance.getConfigGestion().getChestCollection().getType()) {
+                        if (location.getWorld() != null && location.getBlock().getType() == Main.instance.getConfigGestion().getChestCollection().getType()) {
                             final String worldName = player.getWorld().getName();
                             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                                 Chest chest = (Chest) location.getBlock().getState();
@@ -216,8 +217,24 @@ public class ItemCollector implements Listener {
 
     public void saveChests() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.instance, () -> {
+            ArrayList<String> chestBroken = new ArrayList<>();
             for (Map.Entry<String, Location> location : chestLocation.entrySet()) {
-                db.updateChest(location.getKey(), location.getValue());
+                if(location.getValue().getWorld() == null) {
+                    Player player = Bukkit.getPlayer(location.getKey());
+                    if(player != null && player.isOnline()) {
+                        player.sendMessage(ColorUtils.applyColor(caseBroken));
+                        db.deleteChest(player.getName());
+                        chestBroken.add(location.getKey());
+                        player.getInventory().addItem(Main.instance.getConfigGestion().getChestCollection());
+                    }
+                } else {
+                    db.updateChest(location.getKey(), location.getValue());
+                }
+            }
+            if(!chestBroken.isEmpty()) {
+                for(String playerName: chestBroken) {
+                    chestLocation.remove(playerName);
+                }
             }
         }, 0, 1200L);
     }
