@@ -2,7 +2,7 @@ package io.eliotesta98.VanillaChallenges.Interfaces;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

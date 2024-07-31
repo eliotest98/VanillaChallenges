@@ -1,24 +1,65 @@
 package io.eliotesta98.VanillaChallenges.Interfaces;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.*;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class GuiEvent implements Listener {
 
-    private ArrayList<Player> clicked = new ArrayList<Player>();
-    private ArrayList<Player> spamClick = new ArrayList<>();
+    private ArrayList<Player> clicked = new ArrayList<>();
     private final boolean debugGui = Main.instance.getConfigGestion().getDebug().get("ClickGui");
+
+    /**
+     * In API versions 1.20.6 and earlier, InventoryView is a class.
+     * In versions 1.21 and later, it is an interface.
+     * This method uses reflection to get the top Inventory object from the
+     * InventoryView associated with an InventoryEvent, to avoid runtime errors.
+     *
+     * @param inventoryView The generic InventoryView with an InventoryView to inspect.
+     * @return The top Inventory object from the event's InventoryView.
+     */
+    public static Inventory getTopInventory(InventoryView inventoryView) {
+        try {
+            Method getTopInventory = ((Object) inventoryView).getClass().getMethod("getTopInventory");
+            getTopInventory.setAccessible(true);
+            return (Inventory) getTopInventory.invoke(inventoryView);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * In API versions 1.20.6 and earlier, InventoryView is a class.
+     * In versions 1.21 and later, it is an interface.
+     * This method uses reflection to get the OpenInventory object from the
+     * InventoryView associated with an InventoryEvent, to avoid runtime errors.
+     *
+     * @param inventoryView The generic InventoryView with an InventoryView to inspect.
+     * @return The Open Inventory object from the event's InventoryView.
+     */
+    public static InventoryView getOpenInventoryView(InventoryView inventoryView) {
+        try {
+            Method getPlayer = ((Object) inventoryView).getClass().getMethod("getPlayer");
+            getPlayer.setAccessible(true);
+            HumanEntity humanEntity = (HumanEntity) getPlayer.invoke(inventoryView);
+            return humanEntity.getOpenInventory();
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @EventHandler
     public void InventoryDragEvent(final InventoryDragEvent e) {
@@ -63,10 +104,9 @@ public class GuiEvent implements Listener {
 
     @EventHandler
     public void cancelOnClick(final InventoryClickEvent event) {
-        if (event.getWhoClicked().getOpenInventory().getTopInventory() != null) {
-            final Inventory x = (Inventory) event.getWhoClicked().getOpenInventory().getTopInventory();
-
-            if (x.getHolder() instanceof VanillaChallengesInterfaceHolder)
+        Inventory inventory = getTopInventory(getOpenInventoryView(event.getWhoClicked().getOpenInventory()));
+        if (inventory != null) {
+            if (inventory.getHolder() instanceof VanillaChallengesInterfaceHolder)
                 event.setCancelled(true);
         }
     }
