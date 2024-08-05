@@ -23,7 +23,7 @@ public class ConfigGestion {
     private HashMap<String, Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, rankingReward, randomReward = false, yesterdayTop, resetPointsAtNewChallenge,
             backupEnabled, pointsResume, lockedInterface;
-    private String database, challengeGeneration;
+    private String database, challengeGeneration, url, username, password;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
             time, numberOfTop, numberOfRewardPlayer, minimumPoints;
     private ItemStack chestCollection;
@@ -404,6 +404,9 @@ public class ConfigGestion {
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         lockedInterface = file.getBoolean("Configuration.LockedInterface");
         database = file.getString("Configuration.Database");
+        url = file.getString("Configuration.MySql.Url");
+        username = file.getString("Configuration.MySql.Username");
+        password = file.getString("Configuration.MySql.Password");
         resetPointsAtNewChallenge = file.getBoolean("Configuration.Points.ResetPointsAtNewChallenge");
         activeOnlinePoints = file.getBoolean("Configuration.Points.OnlinePoints.Enabled");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
@@ -696,5 +699,29 @@ public class ConfigGestion {
 
     public void setNumberOfTop(int numberOfTop) {
         this.numberOfTop = numberOfTop;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

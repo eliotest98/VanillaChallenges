@@ -206,6 +206,8 @@ public class Main extends JavaPlugin {
                 ex.printStackTrace();
                 return;
             }
+        } else if (getConfigGestion().getDatabase().equalsIgnoreCase("MySql")) {
+            db = new MySql(config.getUrl());
         } else {
             db = new YamlDB();
         }
@@ -299,9 +301,9 @@ public class Main extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new LeashEvent(), this);
         } else if (typeChallenge.equalsIgnoreCase("SleepChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new SleepEvent(), this);
-        } else if(typeChallenge.equalsIgnoreCase("WoolCutterChallenge")) {
+        } else if (typeChallenge.equalsIgnoreCase("WoolCutterChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new PlayerShearsEvent(), this);
-        } else if(typeChallenge.equalsIgnoreCase("RiptideChallenge")) {
+        } else if (typeChallenge.equalsIgnoreCase("RiptideChallenge")) {
             Bukkit.getServer().getPluginManager().registerEvents(new RiptideEvent(), this);
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");

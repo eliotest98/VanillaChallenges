@@ -547,10 +547,10 @@ public class H2Database implements Database {
     }
 
     @Override
-    public void deleteChallengeWithName(String nomeChallenge) {
+    public void deleteChallengeWithName(String challengeName) {
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM Challenge WHERE `NomeChallenge`='" + nomeChallenge + "'");
+                    .prepareStatement("DELETE FROM Challenge WHERE `NomeChallenge`='" + challengeName + "'");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -789,11 +789,11 @@ public class H2Database implements Database {
         return points;
     }
 
-    public void insertChallengerTopYesterday(String playerName, long points) {
+    public void insertChallengerTopYesterday(String playerName, long point) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO TopYesterday (PlayerName,Points) VALUES ('"
-                            + playerName + "','" + points
+                            + playerName + "','" + point
                             + "')");
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
