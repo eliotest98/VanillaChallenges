@@ -67,9 +67,14 @@ Configuration:
     SuperiorSkyblock2: false
 
 
-  # If you want use H2 or .yml file for data storage (write H2 or Yaml)
+  # If you want use H2, MySql or .yml file for data storage (write H2, MySql or Yaml)
   Database: 'H2'
 
+  # These configurations work only for MySql database
+  MySql:
+    Url: "jdbc:mysql://localhost:3306/vanillachallenges"
+    Username: "eliotesta98"
+    Password: "eliotesta98"
 
   Backup:
     Enabled: true
