@@ -23,7 +23,7 @@ public class ConfigGestion {
     private HashMap<String, Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, rankingReward, randomReward = false, yesterdayTop, resetPointsAtNewChallenge,
             backupEnabled, pointsResume, lockedInterface;
-    private String database, challengeGeneration, url, username, password;
+    private String database, challengeGeneration, url, username, password, mySqlPrefix;
     private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
             time, numberOfTop, numberOfRewardPlayer, minimumPoints;
     private ItemStack chestCollection;
@@ -404,6 +404,7 @@ public class ConfigGestion {
         timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         lockedInterface = file.getBoolean("Configuration.LockedInterface");
         database = file.getString("Configuration.Database");
+        mySqlPrefix = file.getString("Configuration.MySql.Prefix");
         url = file.getString("Configuration.MySql.Url");
         username = file.getString("Configuration.MySql.Username");
         password = file.getString("Configuration.MySql.Password");
@@ -587,6 +588,14 @@ public class ConfigGestion {
 
     public void setNumberOfFilesInFolderForBackup(int numberOfFilesInFolderForBackup) {
         this.numberOfFilesInFolderForBackup = numberOfFilesInFolderForBackup;
+    }
+
+    public String getMySqlPrefix() {
+        return mySqlPrefix;
+    }
+
+    public void setMySqlPrefix(String mySqlPrefix) {
+        this.mySqlPrefix = mySqlPrefix;
     }
 
     public int getNumber() {

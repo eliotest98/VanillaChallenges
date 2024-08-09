@@ -11,7 +11,6 @@ import io.eliotesta98.VanillaChallenges.Utils.ReloadUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
@@ -24,9 +23,11 @@ public class MySql implements Database {
 
     public static Connection connection = null;
     public static MySql instance = null;
+    private String prefix = "";
 
     public MySql(String AbsolutePath) {
         initialize(AbsolutePath);
+        prefix = Main.instance.getConfigGestion().getMySqlPrefix();
     }
 
     @Override
@@ -36,27 +37,27 @@ public class MySql implements Database {
         try {
             connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS Challenge (`NomeChallenge` VARCHAR(100) NOT NULL PRIMARY KEY, `TimeResume` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "Challenge (`NomeChallenge` VARCHAR(100) NOT NULL PRIMARY KEY, `TimeResume` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS Challenger (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "Challenger (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS ChallengerEvent (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "ChallengerEvent (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS DailyWinner (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `NomeChallenge` VARCHAR(100) NOT NULL, `PlayerName` VARCHAR(100) NOT NULL, `Reward` VARCHAR(100) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "DailyWinner (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `NomeChallenge` VARCHAR(100) NOT NULL, `PlayerName` VARCHAR(100) NOT NULL, `Reward` VARCHAR(100) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS TopYesterday (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `PlayerName` VARCHAR(100) NOT NULL, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "TopYesterday (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `PlayerName` VARCHAR(100) NOT NULL, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS Statistic (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `NumberVictories` INT(10) NOT NULL, `NumberFirstPlace` INT(10) NOT NULL, `NumberSecondPlace` INT(10) NOT NULL, `NumberThirdPlace` INT(10) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "Statistic (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `NumberVictories` INT(10) NOT NULL, `NumberFirstPlace` INT(10) NOT NULL, `NumberSecondPlace` INT(10) NOT NULL, `NumberThirdPlace` INT(10) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -137,7 +138,7 @@ public class MySql implements Database {
     public void insertChallengeEvent(String challengeName, int time) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO Challenge (NomeChallenge,TimeResume) VALUES ('"
+                    "INSERT INTO " + prefix + "Challenge (NomeChallenge,TimeResume) VALUES ('"
                             + "Event_" + challengeName + "','" + time
                             + "')");
             int affectedRows = preparedStatement.executeUpdate();
@@ -156,7 +157,7 @@ public class MySql implements Database {
     public void deleteChallengeWithName(String challengeName) {
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM Challenge WHERE `NomeChallenge`='" + challengeName + "'");
+                    .prepareStatement("DELETE FROM " + prefix + "Challenge WHERE `NomeChallenge`='" + challengeName + "'");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -172,7 +173,7 @@ public class MySql implements Database {
         ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfRewardPlayer());
         int i = 1;
         while (!top.isEmpty()) {
-            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
             top.remove(0);
             i++;
         }
@@ -195,7 +196,7 @@ public class MySql implements Database {
         ArrayList<PlayerStats> stats = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Statistic");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 final PlayerStats playerStats = new PlayerStats();
@@ -217,7 +218,7 @@ public class MySql implements Database {
     public void insertPlayerStat(PlayerStats playerStats) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO Statistic (PlayerName,NumberVictories,NumberFirstPlace,NumberSecondPlace,NumberThirdPlace) VALUES ('"
+                    "INSERT INTO " + prefix + "Statistic (PlayerName,NumberVictories,NumberFirstPlace,NumberSecondPlace,NumberThirdPlace) VALUES ('"
                             + playerStats.getPlayerName() + "','" + playerStats.getNumberOfVictories() + "','"
                             + playerStats.getNumberOfFirstPlace() + "','" + playerStats.getNumberOfSecondPlace() + "','"
                             + playerStats.getNumberOfThirdPlace()
@@ -236,7 +237,7 @@ public class MySql implements Database {
     public void deletePlayerStatWithPlayerName(String playerName) {
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM Statistic WHERE `PlayerName`='" + playerName + "'");
+                    .prepareStatement("DELETE FROM " + prefix + "Statistic WHERE `PlayerName`='" + playerName + "'");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -263,7 +264,7 @@ public class MySql implements Database {
         ArrayList<Challenger> points = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM TopYesterday");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "TopYesterday");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 final Challenger point = new Challenger();
@@ -283,7 +284,7 @@ public class MySql implements Database {
     public boolean isPresent(String playerName) {
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT `PlayerName` FROM Challenger WHERE `PlayerName` ='" + playerName + "'");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT `PlayerName` FROM " + prefix + "Challenger WHERE `PlayerName` ='" + playerName + "'");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 return true;
@@ -300,7 +301,7 @@ public class MySql implements Database {
     public void updateChallenger(String playerName, long points) {
         try {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("UPDATE Challenger SET Points = '" + points + "' WHERE PlayerName = '" + playerName + "'");
+                    connection.prepareStatement("UPDATE " + prefix + "Challenger SET Points = '" + points + "' WHERE PlayerName = '" + playerName + "'");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -313,7 +314,7 @@ public class MySql implements Database {
     public void insertChallenger(String playerName, long points) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO Challenger (PlayerName,Points) VALUES ('"
+                    "INSERT INTO " + prefix + "Challenger (PlayerName,Points) VALUES ('"
                             + playerName + "','" + points
                             + "')");
             int affectedRows = preparedStatement.executeUpdate();
@@ -346,11 +347,11 @@ public class MySql implements Database {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
-                    "DROP TABLE TopYesterday");
+                    "DROP TABLE " + prefix + "TopYesterday");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS TopYesterday (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `PlayerName` VARCHAR(100) NOT NULL, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "TopYesterday (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `PlayerName` VARCHAR(100) NOT NULL, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -368,7 +369,7 @@ public class MySql implements Database {
     public void insertChallengerTopYesterday(String playerName, long point) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO TopYesterday (PlayerName,Points) VALUES ('"
+                    "INSERT INTO " + prefix + "TopYesterday (PlayerName,Points) VALUES ('"
                             + playerName + "','" + point
                             + "')");
             int affectedRows = preparedStatement.executeUpdate();
@@ -450,7 +451,7 @@ public class MySql implements Database {
         ArrayList<Challenger> points = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Challenger");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Challenger");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 final Challenger point = new Challenger();
@@ -470,7 +471,7 @@ public class MySql implements Database {
     public void insertDailyWinner(DailyWinner dailyWinner) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO DailyWinner (NomeChallenge,PlayerName,Reward) VALUES ('"
+                    "INSERT INTO " + prefix + "DailyWinner (NomeChallenge,PlayerName,Reward) VALUES ('"
                             + dailyWinner.getNomeChallenge() + "','" + dailyWinner.getPlayerName() + "','" + dailyWinner.getReward()
                             + "')");
             int affectedRows = preparedStatement.executeUpdate();
@@ -489,11 +490,11 @@ public class MySql implements Database {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
-                    "DROP TABLE Challenger");
+                    "DROP TABLE " + prefix + "Challenger");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS Challenger (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "Challenger (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -505,7 +506,7 @@ public class MySql implements Database {
     public void updateChallenge(String nomeChallenge, int timeResume) {
         try {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("UPDATE Challenge SET TimeResume = '" + timeResume + "' WHERE NomeChallenge = '" + nomeChallenge + "'");
+                    connection.prepareStatement("UPDATE " + prefix + "Challenge SET TimeResume = '" + timeResume + "' WHERE NomeChallenge = '" + nomeChallenge + "'");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -519,7 +520,7 @@ public class MySql implements Database {
         ArrayList<DailyWinner> dailyWinners = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM DailyWinner");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "DailyWinner");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 final DailyWinner dailyWinner = new DailyWinner();
@@ -541,7 +542,7 @@ public class MySql implements Database {
     public void deleteDailyWinnerWithId(int id) {
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM DailyWinner WHERE `ID`='" + id + "'");
+                    .prepareStatement("DELETE FROM " + prefix + "DailyWinner WHERE `ID`='" + id + "'");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -555,7 +556,7 @@ public class MySql implements Database {
         ResultSet resultSet;
         PlayerStats playerStats = null;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic WHERE PlayerName = '" + playerName + "'");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Statistic WHERE PlayerName = '" + playerName + "'");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 playerStats = new PlayerStats();
@@ -577,7 +578,7 @@ public class MySql implements Database {
         ArrayList<PlayerStats> stats = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic ORDER BY NumberVictories");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Statistic ORDER BY NumberVictories");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 PlayerStats playerStats = new PlayerStats();
@@ -601,7 +602,7 @@ public class MySql implements Database {
         ArrayList<PlayerStats> stats = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic ORDER BY NumberFirstPlace");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Statistic ORDER BY NumberFirstPlace");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 PlayerStats playerStats = new PlayerStats();
@@ -625,7 +626,7 @@ public class MySql implements Database {
         ArrayList<PlayerStats> stats = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic ORDER BY NumberSecondPlace");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Statistic ORDER BY NumberSecondPlace");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 PlayerStats playerStats = new PlayerStats();
@@ -649,7 +650,7 @@ public class MySql implements Database {
         ArrayList<PlayerStats> stats = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic ORDER BY NumberThirdPlace");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Statistic ORDER BY NumberThirdPlace");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 PlayerStats playerStats = new PlayerStats();
@@ -682,11 +683,11 @@ public class MySql implements Database {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
-                    "DROP TABLE DailyWinner");
+                    "DROP TABLE " + prefix + "DailyWinner");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS DailyWinner (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `NomeChallenge` VARCHAR(100) NOT NULL, `PlayerName` VARCHAR(100) NOT NULL, `Reward` VARCHAR(100) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "DailyWinner (`ID` INT(100) NOT NULL AUTO_INCREMENT PRIMARY KEY, `NomeChallenge` VARCHAR(100) NOT NULL, `PlayerName` VARCHAR(100) NOT NULL, `Reward` VARCHAR(100) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -698,11 +699,11 @@ public class MySql implements Database {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
-                    "DROP TABLE ChallengerEvent");
+                    "DROP TABLE " + prefix + "ChallengerEvent");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS ChallengerEvent (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "ChallengerEvent (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `Points` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -728,7 +729,7 @@ public class MySql implements Database {
         ArrayList<Challenge> challengeDBS = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Challenge");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Challenge");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 final Challenge challengeDB = new Challenge();
@@ -759,11 +760,11 @@ public class MySql implements Database {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
-                    "DROP TABLE Challenge");
+                    "DROP TABLE " + prefix + "Challenge");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS Challenge (`NomeChallenge` VARCHAR(100) NOT NULL PRIMARY KEY, `TimeResume` INT(15) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "Challenge (`NomeChallenge` VARCHAR(100) NOT NULL PRIMARY KEY, `TimeResume` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -777,11 +778,11 @@ public class MySql implements Database {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(
-                    "DROP TABLE Statistic");
+                    "DROP TABLE " + prefix + "Statistic");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS Statistic (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `NumberVictories` INT(10) NOT NULL, `NumberFirstPlace` INT(10) NOT NULL, `NumberSecondPlace` INT(10) NOT NULL, `NumberThirdPlace` INT(10) NOT NULL);");
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "Statistic (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `NumberVictories` INT(10) NOT NULL, `NumberFirstPlace` INT(10) NOT NULL, `NumberSecondPlace` INT(10) NOT NULL, `NumberThirdPlace` INT(10) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -793,7 +794,7 @@ public class MySql implements Database {
     public boolean isPlayerHaveStats(String playerName) {
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Statistic WHERE PlayerName = '" + playerName + "'");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Statistic WHERE PlayerName = '" + playerName + "'");
             resultSet = preparedStatement.executeQuery();
             boolean result = resultSet.next();
             preparedStatement.close();
@@ -808,7 +809,7 @@ public class MySql implements Database {
     public void insertChallenge(String challengeName, int timeResume) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO Challenge (NomeChallenge,TimeResume) VALUES ('"
+                    "INSERT INTO " + prefix + "Challenge (NomeChallenge,TimeResume) VALUES ('"
                             + challengeName + "','" + timeResume
                             + "')");
             int affectedRows = preparedStatement.executeUpdate();
@@ -840,7 +841,7 @@ public class MySql implements Database {
     public void insertChallengerEvent(String playerName, long points) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO ChallengerEvent (PlayerName,Points) VALUES ('"
+                    "INSERT INTO " + prefix + "ChallengerEvent (PlayerName,Points) VALUES ('"
                             + playerName + "','" + points
                             + "')");
             int affectedRows = preparedStatement.executeUpdate();
@@ -869,7 +870,7 @@ public class MySql implements Database {
         ArrayList<Challenger> points = new ArrayList<>();
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM ChallengerEvent");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "ChallengerEvent");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 final Challenger point = new Challenger();
@@ -888,7 +889,7 @@ public class MySql implements Database {
     public boolean isChallengePresent(String challengeName) {
         ResultSet resultSet;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Challenge WHERE `NomeChallenge`='" + challengeName + "'");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Challenge WHERE `NomeChallenge`='" + challengeName + "'");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 return true;
