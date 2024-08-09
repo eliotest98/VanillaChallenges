@@ -75,6 +75,7 @@ Configuration:
     Url: "jdbc:mysql://localhost:3306/vanillachallenges"
     Username: "eliotesta98"
     Password: "eliotesta98"
+    Prefix: ""
 
   Backup:
     Enabled: true
