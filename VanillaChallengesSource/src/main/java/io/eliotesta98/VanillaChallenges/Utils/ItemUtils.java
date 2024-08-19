@@ -9,9 +9,10 @@ import java.util.ArrayList;
 
 public class ItemUtils {
 
+    @SuppressWarnings("deprecation")
     public static ItemStack getChest(String type, String name, ArrayList<String> lore) {
-        ItemStack chest = null;
-        chest = new ItemStack(Material.getMaterial((String) type), 1, (short) 0);
+        ItemStack chest;
+        chest = new ItemStack(Material.getMaterial(type), 1, (short) 0);
         ItemMeta itemm = chest.getItemMeta();
         // setto il nome
         itemm.setDisplayName(ColorUtils.applyColor(name));
