@@ -5,7 +5,7 @@
 
     <groupId>io.eliotesta98.VanillaChallenges</groupId>
     <artifactId>VanillaChallenges</artifactId>
-    <version>1.6.1</version>
+    <version>1.6.3</version>
     <packaging>pom</packaging>
 
     <modules>
