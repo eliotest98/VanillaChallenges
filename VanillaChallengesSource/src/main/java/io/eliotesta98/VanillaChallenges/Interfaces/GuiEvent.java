@@ -60,10 +60,14 @@ public class GuiEvent implements Listener {
 
     @EventHandler
     public void cancelOnClick(final InventoryClickEvent event) {
-        Inventory inventory = event.getWhoClicked().getOpenInventory().getTopInventory();
-        if (inventory != null) {
-            if (inventory.getHolder() instanceof VanillaChallengesInterfaceHolder)
-                event.setCancelled(true);
+        if (event.getInventory().getHolder() instanceof VanillaChallengesInterfaceHolder) {
+            try {
+                Inventory inventory = event.getWhoClicked().getOpenInventory().getTopInventory();
+                if (inventory.getHolder() instanceof VanillaChallengesInterfaceHolder)
+                    event.setCancelled(true);
+            } catch (IncompatibleClassChangeError ignore) {
+                // This is for not spam in versions < 1.21
+            }
         }
     }
 

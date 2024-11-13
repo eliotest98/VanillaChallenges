@@ -100,7 +100,7 @@ Configuration:
 Interfaces:
   Challenges:
     Title: "&aChallenges"
-    OpenSound: ENTITY_ENDER_DRAGON_FLAP # ENDERDRAGON_WINGS <1.13
+    OpenSound: minecraft:entity.ender_dragon.flap # ENDERDRAGON_WINGS <1.13
     Slots:
       - 'bbbbbbbbb'
       - 'bhhhhhhhb'

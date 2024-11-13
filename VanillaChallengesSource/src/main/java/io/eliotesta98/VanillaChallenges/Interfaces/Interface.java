@@ -234,7 +234,7 @@ public class Interface {
                     inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, 0, "", i));
                 }
             }
-            Main.instance.SoundManager.playSound(p, Sound.valueOf(soundOpen), 15.0f, 10.0f);
+            Main.instance.SoundManager.playSound(p, soundOpen, 15.0f, 10.0f);
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> p.openInventory(inventory));
         if (this.debug) {
