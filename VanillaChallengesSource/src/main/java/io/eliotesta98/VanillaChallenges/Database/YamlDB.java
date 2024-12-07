@@ -197,7 +197,7 @@ public class YamlDB implements Database {
     }
 
     @Override
-    public void saveTopYesterday(ArrayList<Challenger> newTopYesterday) {
+    public void saveTopYesterday(List<Challenger> newTopYesterday) {
         for (Challenger challenger : newTopYesterday) {
             file.set("TopYesterday." + challenger.getNomePlayer(), challenger.getPoints());
         }
@@ -251,16 +251,16 @@ public class YamlDB implements Database {
         int count = 1;
         if (challenges.isEmpty()) {
             String nome = "nessuno";
-            ArrayList<String> keys = new ArrayList<>(Main.instance.getConfigGestion().getChallenges().keySet());
-            if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Random")) {
+            ArrayList<String> keys = new ArrayList<>(Main.instance.getConfigGesture().getChallenges().keySet());
+            if (Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Random")) {
                 Collections.shuffle(keys);
-            } else if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Single")) {
+            } else if (Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Single")) {
                 Collections.shuffle(keys);
-                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(keys.get(0));
+                Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(keys.get(0));
                 return challenge.getChallengeName();
             }
             for (String key : keys) {
-                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key);
+                Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(key);
                 if (count == 1) {
                     Main.instance.setDailyChallenge(challenge);
                     nome = challenge.getTypeChallenge();
@@ -277,13 +277,13 @@ public class YamlDB implements Database {
                     challenges.remove(i);
                 } else {
                     if (challenges.get(i).getChallengeName().contains("Event_")) {
-                        Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challenges.get(i).getChallengeName().replace("Event_", ""));
+                        Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challenges.get(i).getChallengeName().replace("Event_", ""));
                         challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
                         Main.instance.setDailyChallenge(challenge);
                         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
                         return Main.instance.getDailyChallenge().getTypeChallenge();
                     }
-                    Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(i).getChallengeName());
+                    Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(challenges.get(i).getChallengeName());
                     challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
                     Main.instance.setDailyChallenge(challenge);
                     Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
@@ -298,10 +298,10 @@ public class YamlDB implements Database {
     public void loadPlayersPoints() {
         Main.instance.getDailyChallenge().setPlayers(playerPoints);
         Main.instance.getDailyChallenge().savePoints();
-        ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfRewardPlayer());
+        List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGesture().getNumberOfRewardPlayer());
         int i = 1;
         while (!top.isEmpty()) {
-            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
             top.remove(0);
             i++;
         }
@@ -569,7 +569,7 @@ public class YamlDB implements Database {
 
     @Override
     public void insertChallengeEvent(String challengeName, int time) {
-        Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challengeName);
+        Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challengeName);
         challenge.setChallengeName("Event_" + challengeName);
         challenge.setTimeChallenge(time);
         challenges.add(0, challenge);
@@ -620,7 +620,7 @@ public class YamlDB implements Database {
     }
 
     @Override
-    public void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist) {
+    public void controlIfChallengeExist(List<String> controlIfChallengeExist) {
         for (String challengeName : controlIfChallengeExist) {
             for (Challenge challenge : challenges) {
                 if (challenge.getChallengeName().equalsIgnoreCase(challengeName)) {

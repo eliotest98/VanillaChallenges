@@ -15,16 +15,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class BlockBreakEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockBreakEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("BlockBreakEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
-    private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
-    private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean landsEnabled = Main.instance.getConfigGesture().getHooks().get("Lands");
+    private final boolean worldGuardEnabled = Main.instance.getConfigGesture().getHooks().get("WorldGuard");
+    private final boolean griefPreventionEnabled = Main.instance.getConfigGesture().getHooks().get("GriefPrevention");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
     private boolean ok = false;
 
     @EventHandler(priority = EventPriority.NORMAL)

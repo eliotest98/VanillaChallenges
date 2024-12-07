@@ -4,15 +4,16 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Controls {
 
-    private static final ArrayList<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private static final List<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
     private static final String sneaking = Main.instance.getDailyChallenge().getSneaking();
-    private static final ArrayList<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
-    private static final ArrayList<String> blocks = Main.instance.getDailyChallenge().getBlocks();
-    private static final ArrayList<String> blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
-    private static final ArrayList<String> mobs = Main.instance.getDailyChallenge().getMobs();
+    private static final List<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
+    private static final List<String> blocks = Main.instance.getDailyChallenge().getBlocks();
+    private static final List<String> blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
+    private static final List<String> mobs = Main.instance.getDailyChallenge().getMobs();
 
     public static boolean isWorldEnable(String worldName, boolean debugActive, DebugUtils debugUtils, long tempo) {
         if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {

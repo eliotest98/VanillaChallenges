@@ -6,11 +6,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemUtils {
 
     @SuppressWarnings("deprecation")
-    public static ItemStack getChest(String type, String name, ArrayList<String> lore) {
+    public static ItemStack getChest(String type, String name, List<String> lore) {
         ItemStack chest;
         chest = new ItemStack(Material.getMaterial(type), 1, (short) 0);
         ItemMeta itemm = chest.getItemMeta();

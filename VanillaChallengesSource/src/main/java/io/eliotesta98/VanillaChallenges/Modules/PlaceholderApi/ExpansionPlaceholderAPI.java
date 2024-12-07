@@ -2,15 +2,13 @@ package io.eliotesta98.VanillaChallenges.Modules.PlaceholderApi;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
-import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
 
@@ -84,7 +82,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
             if (numberTop < 1) {
                 numberTop = 1;
             }
-            ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(numberTop);
+            List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(numberTop);
             if (top.size() >= numberTop) {
                 return top.get(numberTop - 1).getNomePlayer();
             } else {
@@ -103,7 +101,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
             if (numberTop < 1) {
                 numberTop = 1;
             }
-            ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(numberTop);
+            List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(numberTop);
             if (top.size() >= numberTop) {
                 return MoneyUtils.transform(top.get(numberTop - 1).getPoints());
             } else {

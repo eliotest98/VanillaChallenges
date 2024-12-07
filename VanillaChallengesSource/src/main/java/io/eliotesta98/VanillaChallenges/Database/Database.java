@@ -5,6 +5,7 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface Database {
 
@@ -40,7 +41,7 @@ public interface Database {
 
     void removeTopYesterday();
 
-    void saveTopYesterday(ArrayList<Challenger> newTopYesterday);
+    void saveTopYesterday(List<Challenger> newTopYesterday);
 
     int lastDailyWinnerId();
 
@@ -68,7 +69,7 @@ public interface Database {
 
     void clearAll();
 
-    void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist);
+    void controlIfChallengeExist(List<String> controlIfChallengeExist);
 
     ArrayList<Challenge> getAllChallenges();
 

@@ -45,26 +45,26 @@ public class Tasks {
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
             saving.replace("Broadcast", true);
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
+                if (!Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
                     break;
                 }
                 Main.instance.getDailyChallenge().message(p);
-                ArrayList<Challenger> top;
-                if (!Main.instance.getConfigGestion().isYesterdayTop()) {
-                    top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
-                } else {
+                List<Challenger> top;
+                if (Main.instance.getConfigGesture().isYesterdayTop()) {
                     top = Main.db.getAllChallengersTopYesterday();
+                } else {
+                    top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
                 }
                 if (!top.isEmpty()) {
                     p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                 }
                 int i = 1;
                 while (!top.isEmpty()) {
-                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
                     top.remove(0);
                     i++;
                 }
-                if (Main.instance.getConfigGestion().getMinimumPoints() != -1) {
+                if (Main.instance.getConfigGesture().getMinimumPoints() != -1) {
                     if (!Main.instance.getDailyChallenge().isMinimumPointsReached()) {
                         p.sendMessage(ColorUtils.applyColor(pointsRemainForReward.replace("{points}", Main.instance.getDailyChallenge().getPointsRemain() + "")));
                     } else {
@@ -120,11 +120,11 @@ public class Tasks {
                     Date end = sdf.parse(endData);
                     Date start = sdf.parse(startData);
                     if (now.compareTo(start) > 0 && now.compareTo(end) < 0) {
-                        Main.instance.getConfigGestion().getTasks().checkDay(20 * 60 * 60,
-                                Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
-                                Main.instance.getConfigGestion().isRankingReward(),
-                                Main.instance.getConfigGestion().isRandomReward(),
-                                Main.instance.getConfigGestion().getNumberOfRewardPlayer());
+                        Main.instance.getConfigGesture().getTasks().checkDay(20 * 60 * 60,
+                                Main.instance.getConfigGesture().isResetPointsAtNewChallenge(),
+                                Main.instance.getConfigGesture().isRankingReward(),
+                                Main.instance.getConfigGesture().isRandomReward(),
+                                Main.instance.getConfigGesture().getNumberOfRewardPlayer());
                         challengeStart = true;
                     } else {
                         challengeStart = false;
@@ -162,7 +162,7 @@ public class Tasks {
                             return;
                         }
 
-                        ArrayList<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfRewardedPlayer);
+                        List<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfRewardedPlayer);
 
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
@@ -170,8 +170,8 @@ public class Tasks {
                         if (Main.instance.getDailyChallenge().getTypeChallenge().equalsIgnoreCase("ItemCollectionChallenge")) {
                             ItemCollector.deleteDb();
                         }
-                        if (Main.instance.getConfigGestion().isBackupEnabled()) {
-                            Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
+                        if (Main.instance.getConfigGesture().isBackupEnabled()) {
+                            Main.db.backupDb(Main.instance.getConfigGesture().getNumberOfFilesInFolderForBackup());
                         }
                         int number = Main.db.lastDailyWinnerId();
                         Random random = new Random();

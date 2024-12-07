@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 public class PlayerShearsEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("PlayerShearsEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("PlayerShearsEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onShear(PlayerShearEntityEvent e) {

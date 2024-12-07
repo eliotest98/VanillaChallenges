@@ -16,19 +16,16 @@ import org.bukkit.profile.PlayerTextures;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class ItemConfig {
 
     private static final UUID RANDOM_UUID = UUID.fromString("92864445-51c5-4c3b-9039-517c9927d1b4");
     private String name, type, texture, soundClick, nameItemConfig;
-    private ArrayList<String> lore;
+    private List<String> lore;
 
-    public ItemConfig(String nameItemConfig, String name, String type, String texture, ArrayList<String> lore, String soundClick) {
+    public ItemConfig(String nameItemConfig, String name, String type, String texture, List<String> lore, String soundClick) {
         this.name = name;
         this.type = type;
         this.texture = texture;
@@ -86,7 +83,7 @@ public class ItemConfig {
         }
         ItemMeta itemm = item.getItemMeta();
         if (!lore.isEmpty()) {
-            ArrayList<String> lorenew = new ArrayList<String>();
+            ArrayList<String> lorenew = new ArrayList<>();
             for (String lorePart : lore) {
                 if (lorePart.contains("{time}")) {
                     lorenew.add(ColorUtils.applyColor(lorePart.replace("{time}", nbt.split(";")[2].split(":")[1])));
@@ -446,11 +443,11 @@ public class ItemConfig {
         this.texture = texture;
     }
 
-    public ArrayList<String> getLore() {
+    public List<String> getLore() {
         return lore;
     }
 
-    public void setLore(ArrayList<String> lore) {
+    public void setLore(List<String> lore) {
         this.lore = lore;
     }
 

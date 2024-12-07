@@ -72,16 +72,16 @@ public class H2Database implements Database {
         int count = 1;
         if (challenges.isEmpty()) {
             String nome = "nessuno";
-            ArrayList<String> keys = new ArrayList<>(Main.instance.getConfigGestion().getChallenges().keySet());
-            if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Random")) {
+            ArrayList<String> keys = new ArrayList<>(Main.instance.getConfigGesture().getChallenges().keySet());
+            if (Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Random")) {
                 Collections.shuffle(keys);
-            } else if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Single")) {
+            } else if (Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Single")) {
                 Collections.shuffle(keys);
-                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(keys.get(0));
+                Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(keys.get(0));
                 return challenge.getChallengeName();
             }
             for (String key : keys) {
-                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key);
+                Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(key);
 
                 if (count == 1) {
                     Main.instance.setDailyChallenge(challenge);
@@ -98,13 +98,13 @@ public class H2Database implements Database {
                     challenges.remove(i);
                 } else {
                     if (challenges.get(i).getChallengeName().contains("Event_")) {
-                        Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challenges.get(i).getChallengeName().replace("Event_", ""));
+                        Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challenges.get(i).getChallengeName().replace("Event_", ""));
                         challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
                         Main.instance.setDailyChallenge(challenge);
                         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
                         return Main.instance.getDailyChallenge().getTypeChallenge();
                     }
-                    Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(challenges.get(i).getChallengeName());
+                    Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(challenges.get(i).getChallengeName());
                     challenge.setTimeChallenge(challenges.get(i).getTimeChallenge());
                     Main.instance.setDailyChallenge(challenge);
                     Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
@@ -119,10 +119,10 @@ public class H2Database implements Database {
     public void loadPlayersPoints() {
         Main.instance.getDailyChallenge().setPlayers(H2Database.instance.getAllChallengers());
         Main.instance.getDailyChallenge().savePoints();
-        ArrayList<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfRewardPlayer());
+        List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGesture().getNumberOfRewardPlayer());
         int i = 1;
         while (!top.isEmpty()) {
-            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
             top.remove(0);
             i++;
         }
@@ -241,7 +241,7 @@ public class H2Database implements Database {
     }
 
     @Override
-    public void saveTopYesterday(ArrayList<Challenger> newTopYesterday) {
+    public void saveTopYesterday(List<Challenger> newTopYesterday) {
         for (Challenger challenger : newTopYesterday) {
             insertChallengerTopYesterday(challenger.getNomePlayer(), challenger.getPoints());
         }
@@ -871,7 +871,7 @@ public class H2Database implements Database {
     }
 
     @Override
-    public void controlIfChallengeExist(ArrayList<String> controlIfChallengeExist) {
+    public void controlIfChallengeExist(List<String> controlIfChallengeExist) {
         for (String challengeName : controlIfChallengeExist) {
             for (Challenge challenge : getAllChallenges()) {
                 if (challenge.getChallengeName().equalsIgnoreCase(challengeName)) {

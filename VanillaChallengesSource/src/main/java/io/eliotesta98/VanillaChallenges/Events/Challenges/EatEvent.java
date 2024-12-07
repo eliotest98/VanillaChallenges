@@ -11,13 +11,14 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EatEvent implements Listener {
 
     private final HashMap<String, Integer> foodLevels = new HashMap<>();
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
-    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("EatEvent");
+    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)

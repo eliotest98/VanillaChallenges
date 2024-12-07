@@ -10,14 +10,15 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemBreakEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemBreakEvent");
-    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ItemBreakEvent");
+    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBreakItem(org.bukkit.event.player.PlayerItemBreakEvent e) {

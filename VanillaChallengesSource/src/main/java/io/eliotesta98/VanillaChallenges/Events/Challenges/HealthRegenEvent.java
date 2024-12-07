@@ -10,18 +10,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
-
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class HealthRegenEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("HealthRegenEvent");
-    private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("HealthRegenEvent");
+    private final List<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final HashMap<String, Double> playersRegen = new HashMap<>();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onHealthRegen(org.bukkit.event.entity.EntityRegainHealthEvent e) {

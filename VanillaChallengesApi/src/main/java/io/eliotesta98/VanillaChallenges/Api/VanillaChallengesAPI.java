@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class VanillaChallengesAPI {
 
-    private static final boolean isDebugEnabled = Main.instance.getConfigGestion().getDebug().get("API");
+    private static final boolean isDebugEnabled = Main.instance.getConfigGesture().getDebug().get("API");
 
     /**
      * Returns the name of Daily Challenge Selected.
@@ -171,7 +171,7 @@ public class VanillaChallengesAPI {
      */
     public static List<String> getTop() {
         ArrayList<String> players = new ArrayList<>();
-        for (Challenger challenger : Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop())) {
+        for (Challenger challenger : Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGesture().getNumberOfTop())) {
             players.add(challenger.getNomePlayer());
         }
         return Collections.unmodifiableList(players);

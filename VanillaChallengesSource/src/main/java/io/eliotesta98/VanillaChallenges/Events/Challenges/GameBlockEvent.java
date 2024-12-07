@@ -16,19 +16,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockReceiveGameEvent;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class GameBlockEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockReceiveGameEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("BlockReceiveGameEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
-    private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
-    private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
-    private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final List<String> causes = Main.instance.getDailyChallenge().getCauses();
+    private final boolean landsEnabled = Main.instance.getConfigGesture().getHooks().get("Lands");
+    private final boolean worldGuardEnabled = Main.instance.getConfigGesture().getHooks().get("WorldGuard");
+    private final boolean griefPreventionEnabled = Main.instance.getConfigGesture().getHooks().get("GriefPrevention");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
     private boolean ok = false;
 
     @EventHandler(priority = EventPriority.NORMAL)

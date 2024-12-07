@@ -3,36 +3,34 @@ package io.eliotesta98.VanillaChallenges.Utils;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Challenge {
 
-    private HashMap<String, Long> players = new HashMap<String, Long>();
-    private HashMap<String, Long> min10PlayersPoints = new HashMap<String, Long>();
-    private HashMap<String, Long> boostSinglePlayers = new HashMap<String, Long>();
-    private HashMap<String, Boolean> startBoostSinglePlayers = new HashMap<String, Boolean>();
-    private HashMap<String, BukkitTask> tasksSinglePlayers = new HashMap<String, BukkitTask>();
-    private ArrayList<String> worlds = new ArrayList<>();
+    private final Map<String, Long> players = new HashMap<>();
+    private final Map<String, Long> min10PlayersPoints = new HashMap<>();
+    private final Map<String, Long> boostSinglePlayers = new HashMap<>();
+    private final Map<String, Boolean> startBoostSinglePlayers = new HashMap<>();
+    private final Map<String, BukkitTask> tasksSinglePlayers = new HashMap<>();
+    private List<String> worlds = new ArrayList<>();
     private String challengeName = "nessuna";
     private String itemChallenge = "BEDROCK";
-    private ArrayList<String> blocks = new ArrayList<>();
-    private ArrayList<String> blocksOnPlaced = new ArrayList<>();
+    private List<String> blocks = new ArrayList<>();
+    private List<String> blocksOnPlaced = new ArrayList<>();
     private String typeChallenge = "nessuna";
-    private ArrayList<String> rewards = new ArrayList<>();
-    private ArrayList<String> title = new ArrayList<>();
-    private ArrayList<String> items = new ArrayList<>();
-    private ArrayList<String> itemsInHand = new ArrayList<>();
-    private ArrayList<String> mobs = new ArrayList<>();
-    private ArrayList<String> colors = new ArrayList<>();
-    private ArrayList<String> causes = new ArrayList<>();
-    private ArrayList<String> vehicles = new ArrayList<>();
+    private List<String> rewards = new ArrayList<>();
+    private List<String> title = new ArrayList<>();
+    private List<String> items = new ArrayList<>();
+    private List<String> itemsInHand = new ArrayList<>();
+    private List<String> mobs = new ArrayList<>();
+    private List<String> colors = new ArrayList<>();
+    private List<String> causes = new ArrayList<>();
+    private List<String> vehicles = new ArrayList<>();
     private double force = 0.0;
     private double power = 0.0;
     private int number = 0;
@@ -57,33 +55,33 @@ public class Challenge {
     private long countPointsChallenge = 0;
     private boolean startBoost = false;
     private String sneaking = "NOBODY";
-    private ArrayList<String> quests = new ArrayList<>();
+    private List<String> quests = new ArrayList<>();
     int minutes = 1;
 
-    private HashMap<String, Long> tempPoints = new HashMap<>();
+    private final Map<String, Long> tempPoints = new HashMap<>();
 
-    private final static Pattern blockOnPlacedPattern = Pattern.compile("\\{blockOnPlaced[0-9]\\}");
-    private final static Pattern blockPattern = Pattern.compile("\\{block[0-9]\\}");
-    private final static Pattern worldPattern = Pattern.compile("\\{world[0-9]\\}");
-    private final static Pattern itemPattern = Pattern.compile("\\{item[0-9]\\}");
-    private final static Pattern itemInHandPattern = Pattern.compile("\\{itemInHand[0-9]\\}");
-    private final static Pattern vehiclePattern = Pattern.compile("\\{vehicle[0-9]\\}");
-    private final static Pattern causePattern = Pattern.compile("\\{cause[0-9]\\}");
-    private final static Pattern colorPattern = Pattern.compile("\\{color[0-9]\\}");
-    private final static Pattern mobPattern = Pattern.compile("\\{mob[0-9]\\}");
+    private final static Pattern blockOnPlacedPattern = Pattern.compile("\\{blockOnPlaced[0-9]}");
+    private final static Pattern blockPattern = Pattern.compile("\\{block[0-9]}");
+    private final static Pattern worldPattern = Pattern.compile("\\{world[0-9]}");
+    private final static Pattern itemPattern = Pattern.compile("\\{item[0-9]}");
+    private final static Pattern itemInHandPattern = Pattern.compile("\\{itemInHand[0-9]}");
+    private final static Pattern vehiclePattern = Pattern.compile("\\{vehicle[0-9]}");
+    private final static Pattern causePattern = Pattern.compile("\\{cause[0-9]}");
+    private final static Pattern colorPattern = Pattern.compile("\\{color[0-9]}");
+    private final static Pattern mobPattern = Pattern.compile("\\{mob[0-9]}");
 
     public Challenge() {
 
     }
 
-    public Challenge(String nameChallenge, ArrayList<String> blocks, ArrayList<String> blocksOnPlaced, String typeChallenge,
-                     ArrayList<String> rewards, ArrayList<String> title, ArrayList<String> items, ArrayList<String> itemsInHand,
-                     ArrayList<String> mobs, double force, double power, ArrayList<String> colors, ArrayList<String> causes,
+    public Challenge(String nameChallenge, List<String> blocks, List<String> blocksOnPlaced, String typeChallenge,
+                     List<String> rewards, List<String> title, List<String> items, List<String> itemsInHand,
+                     List<String> mobs, double force, double power, List<String> colors, List<String> causes,
                      int point, int pointsBoost, int multiplier, int boostMinutes, int number, int time,
-                     ArrayList<String> vehicles, String sneaking, String onGround, int pointsBoostSinglePlayer,
+                     List<String> vehicles, String sneaking, String onGround, int pointsBoostSinglePlayer,
                      int multiplierSinglePlayer, int minutesSinglePlayer, String endTimeChallenge, String challengeName,
-                     ArrayList<String> quests, int minutes, String startTimeChallenge, boolean keepInventory,
-                     boolean deathInLand, ArrayList<String> worlds, String itemChallenge) {
+                     List<String> quests, int minutes, String startTimeChallenge, boolean keepInventory,
+                     boolean deathInLand, List<String> worlds, String itemChallenge) {
         this.blocks = blocks;
         this.worlds = worlds;
         this.blocksOnPlaced = blocksOnPlaced;
@@ -127,59 +125,35 @@ public class Challenge {
         timeChallenge = Integer.parseInt(endSplit[0]) - Integer.parseInt(startSplit[0]);
     }
 
-    public HashMap<String, Long> getBoostSinglePlayers() {
+    public Map<String, Long> getBoostSinglePlayers() {
         return boostSinglePlayers;
-    }
-
-    public void setBoostSinglePlayers(HashMap<String, Long> boostSinglePlayers) {
-        this.boostSinglePlayers = boostSinglePlayers;
     }
 
     public int getPointsBoostSinglePlayer() {
         return pointsBoostSinglePlayer;
     }
 
-    public void setPointsBoostSinglePlayer(int pointsBoostSinglePlayer) {
-        this.pointsBoostSinglePlayer = pointsBoostSinglePlayer;
-    }
-
     public int getMultiplierSinglePlayer() {
         return multiplierSinglePlayer;
     }
 
-    public void setMultiplierSinglePlayer(int multiplierSinglePlayer) {
-        this.multiplierSinglePlayer = multiplierSinglePlayer;
-    }
-
-    public int getMinutesSinglePlayer() {
-        return minutesSinglePlayer;
-    }
-
-    public void setMinutesSinglePlayer(int minutesSinglePlayer) {
-        this.minutesSinglePlayer = minutesSinglePlayer;
-    }
-
-    public HashMap<String, Long> getMin10PlayersPoints() {
+    public Map<String, Long> getMin10PlayersPoints() {
         return min10PlayersPoints;
     }
 
-    public void setMin10PlayersPoints(HashMap<String, Long> min10PlayersPoints) {
-        this.min10PlayersPoints = min10PlayersPoints;
-    }
-
-    public ArrayList<String> getCauses() {
+    public List<String> getCauses() {
         return causes;
     }
 
-    public void setCauses(ArrayList<String> causes) {
+    public void setCauses(List<String> causes) {
         this.causes = causes;
     }
 
-    public ArrayList<String> getColors() {
+    public List<String> getColors() {
         return colors;
     }
 
-    public void setColors(ArrayList<String> color) {
+    public void setColors(List<String> colors) {
         this.colors = colors;
     }
 
@@ -199,20 +173,16 @@ public class Challenge {
         this.force = force;
     }
 
-    public ArrayList<String> getBlocks() {
+    public List<String> getBlocks() {
         return blocks;
     }
 
-    public void setBlocks(ArrayList<String> blocks) {
+    public void setBlocks(List<String> blocks) {
         this.blocks = blocks;
     }
 
-    public ArrayList<String> getBlocksOnPlace() {
+    public List<String> getBlocksOnPlace() {
         return blocksOnPlaced;
-    }
-
-    public void setBlocksOnPlace(ArrayList<String> blocksOnPlaced) {
-        this.blocksOnPlaced = blocksOnPlaced;
     }
 
     public String getChallengeName() {
@@ -223,11 +193,11 @@ public class Challenge {
         this.challengeName = challengeName;
     }
 
-    public HashMap<String, Long> getPlayers() {
+    public Map<String, Long> getPlayers() {
         return players;
     }
 
-    public void setPlayers(ArrayList<Challenger> challengers) {
+    public void setPlayers(List<Challenger> challengers) {
         while (!challengers.isEmpty()) {
             players.put(challengers.get(0).getNomePlayer(), challengers.get(0).getPoints());
             challengers.remove(0);
@@ -238,24 +208,16 @@ public class Challenge {
         return deathInLand;
     }
 
-    public void setDeathInLand(boolean deathInLand) {
-        this.deathInLand = deathInLand;
-    }
-
-    public ArrayList<String> getQuests() {
+    public List<String> getQuests() {
         return quests;
     }
 
-    public void setQuests(ArrayList<String> stringFormatter) {
+    public void setQuests(List<String> quests) {
         this.quests = quests;
     }
 
     public String getTypeChallenge() {
         return typeChallenge;
-    }
-
-    public void setTypeChallenge(String typeChallenge) {
-        this.typeChallenge = typeChallenge;
     }
 
     public int getPoint() {
@@ -278,41 +240,25 @@ public class Challenge {
         return nameChallenge;
     }
 
-    public void setNameChallenge(String nameChallenge) {
-        this.nameChallenge = nameChallenge;
-    }
-
     public String getItemChallenge() {
         return itemChallenge;
     }
 
-    public void setItemChallenge(String itemChallenge) {
-        this.itemChallenge = itemChallenge;
-    }
-
-    public ArrayList<String> getBlocksOnPlaced() {
-        return blocksOnPlaced;
-    }
-
-    public void setBlocksOnPlaced(ArrayList<String> blocksOnPlaced) {
-        this.blocksOnPlaced = blocksOnPlaced;
-    }
-
-    public ArrayList<String> getVehicles() {
+    public List<String> getVehicles() {
         return vehicles;
     }
 
-    public void setVehicles(ArrayList<String> vehicles) {
+    public void setVehicles(List<String> vehicles) {
         this.vehicles = vehicles;
     }
 
     public void incrementCommands(String playerName, long amount) {
-        if (!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
+        if (!Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
             return;
         }
-        if (Main.instance.getConfigGestion().getTasks().getIfTaskSaving("SavePoints")
-                || Main.instance.getConfigGestion().getTasks().getIfTaskSaving("CheckDay")
-                || Main.instance.getConfigGestion().getTasks().getIfTaskSaving("Broadcast")) {
+        if (Main.instance.getConfigGesture().getTasks().getIfTaskSaving("SavePoints")
+                || Main.instance.getConfigGesture().getTasks().getIfTaskSaving("CheckDay")
+                || Main.instance.getConfigGesture().getTasks().getIfTaskSaving("Broadcast")) {
             if (!tempPoints.containsKey(playerName)) {
                 tempPoints.put(playerName, amount);
             } else {
@@ -342,12 +288,12 @@ public class Challenge {
     }
 
     public void increment(String playerName, long amount) {
-        if (!Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
+        if (!Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
             return;
         }
-        if (Main.instance.getConfigGestion().getTasks().getIfTaskSaving("SavePoints")
-                || Main.instance.getConfigGestion().getTasks().getIfTaskSaving("CheckDay")
-                || Main.instance.getConfigGestion().getTasks().getIfTaskSaving("Broadcast")) {
+        if (Main.instance.getConfigGesture().getTasks().getIfTaskSaving("SavePoints")
+                || Main.instance.getConfigGesture().getTasks().getIfTaskSaving("CheckDay")
+                || Main.instance.getConfigGesture().getTasks().getIfTaskSaving("Broadcast")) {
             if (!tempPoints.containsKey(playerName)) {
                 tempPoints.put(playerName, amount);
             } else {
@@ -475,14 +421,9 @@ public class Challenge {
         }
     }
 
-    public void stampaNumero(String playerName) {
-        long blocchiPiazzati = players.get(playerName);
-        Bukkit.getPlayer(playerName).sendMessage(ChatColor.RED + typeChallenge + ": " + blocchiPiazzati);
-    }
-
     public void savePoints() {
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
-            Main.instance.getConfigGestion().getTasks().changeStatusExternalTasks("SavePoints");
+            Main.instance.getConfigGesture().getTasks().changeStatusExternalTasks("SavePoints");
             for (Map.Entry<String, Long> player : Collections.unmodifiableMap(players).entrySet()) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                     try {
@@ -501,9 +442,9 @@ public class Challenge {
             if (startBoost && (boostingTask == null || boostingTask.isCancelled())) {
                 startBoosting();
             }
-            Main.instance.getConfigGestion().getTasks().changeStatusExternalTasks("SavePoints");
+            Main.instance.getConfigGesture().getTasks().changeStatusExternalTasks("SavePoints");
         }, 0, timeNumber);
-        Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "SavePoints", false);
+        Main.instance.getConfigGesture().getTasks().addExternalTasks(task, "SavePoints", false);
     }
 
     public void stopTask() {
@@ -522,33 +463,19 @@ public class Challenge {
         }
     }
 
-    public ArrayList<String> getRewards() {
+    public List<String> getRewards() {
         return rewards;
     }
 
-    public void setRewards(ArrayList<String> rewards) {
+    public void setRewards(List<String> rewards) {
         this.rewards = rewards;
     }
 
-    public ArrayList<Challenger> getTopPlayers(int numberOfTops) {
-        ArrayList<Challenger> topList = new ArrayList<>();
+    public List<Challenger> getTopPlayers(int numberOfTops) {
+        List<Challenger> topList = new ArrayList<>();
         try {
             for (int i = 0; i < numberOfTops; i++) {
-                Challenger challenger = new Challenger();
-                for (Map.Entry<String, Long> player : Collections.unmodifiableMap(players).entrySet()) {
-                    if (player.getValue() > challenger.getPoints()) {
-                        boolean trovato = false;
-                        for (Challenger value : topList) {
-                            if (value.getNomePlayer().equalsIgnoreCase(player.getKey())) {
-                                trovato = true;
-                                break;
-                            }
-                        }
-                        if (!trovato) {
-                            challenger = new Challenger(player.getKey(), player.getValue());
-                        }
-                    }
-                }
+                Challenger challenger = getChallenger(topList);
                 if (!challenger.getNomePlayer().equalsIgnoreCase("Notch")) {
                     topList.add(challenger);
                 } else {
@@ -562,12 +489,31 @@ public class Challenge {
         }
     }
 
+    private Challenger getChallenger(List<Challenger> topList) {
+        Challenger challenger = new Challenger();
+        for (Map.Entry<String, Long> player : Collections.unmodifiableMap(players).entrySet()) {
+            if (player.getValue() > challenger.getPoints()) {
+                boolean trovato = false;
+                for (Challenger value : topList) {
+                    if (value.getNomePlayer().equalsIgnoreCase(player.getKey())) {
+                        trovato = true;
+                        break;
+                    }
+                }
+                if (!trovato) {
+                    challenger = new Challenger(player.getKey(), player.getValue());
+                }
+            }
+        }
+        return challenger;
+    }
+    
     public boolean isMinimumPointsReached() {
         long count = 0;
         for (long number : Collections.unmodifiableMap(players).values()) {
             count = count + number;
         }
-        return count >= Main.instance.getConfigGestion().getMinimumPoints();
+        return count >= Main.instance.getConfigGesture().getMinimumPoints();
     }
 
     public long getPointsRemain() {
@@ -575,47 +521,39 @@ public class Challenge {
         for (long number : Collections.unmodifiableMap(players).values()) {
             count = count + number;
         }
-        return Main.instance.getConfigGestion().getMinimumPoints() - count;
+        return Main.instance.getConfigGesture().getMinimumPoints() - count;
     }
 
-    public ArrayList<String> getTitle() {
+    public List<String> getTitle() {
         return title;
     }
 
-    public void setTitle(ArrayList<String> title) {
+    public void setTitle(List<String> title) {
         this.title = title;
     }
 
-    public ArrayList<String> getItems() {
+    public List<String> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<String> items) {
+    public void setItems(List<String> items) {
         this.items = items;
     }
 
-    public ArrayList<String> getItemsInHand() {
+    public List<String> getItemsInHand() {
         return itemsInHand;
     }
 
-    public void setItemsInHand(ArrayList<String> itemsInHand) {
-        this.itemsInHand = itemsInHand;
-    }
-
-    public ArrayList<String> getMobs() {
+    public List<String> getMobs() {
         return mobs;
     }
 
-    public void setMobs(ArrayList<String> mobs) {
+    public void setMobs(List<String> mobs) {
         this.mobs = mobs;
     }
 
     public int getPointsBoost() {
         return pointsBoost;
-    }
-
-    public void setPointsBoost(int pointsBoost) {
-        this.pointsBoost = pointsBoost;
     }
 
     public int getMultiplier() {
@@ -634,24 +572,12 @@ public class Challenge {
         this.minutes = minutes;
     }
 
-    public int getBoostMinutes() {
-        return boostMinutes;
-    }
-
-    public void setBoostMinutes(int boostMinutes) {
-        this.boostMinutes = boostMinutes;
-    }
-
     public boolean isActive() {
         return startBoost || boostMinutes == 0 || multiplier == 1 || pointsBoost == 0;
     }
 
     public boolean isActiveSingleBoost(String playerName) {
         return startBoostSinglePlayers.getOrDefault(playerName, false);
-    }
-
-    public void setStartBoost(boolean startBoost) {
-        this.startBoost = startBoost;
     }
 
     public long getCountPointsChallenge() {
@@ -664,10 +590,6 @@ public class Challenge {
         } else {
             return 0;
         }
-    }
-
-    public void setCountPointsChallenge(long countPointsChallenge) {
-        this.countPointsChallenge = countPointsChallenge;
     }
 
     public int getNumber() {
@@ -686,11 +608,11 @@ public class Challenge {
         this.time = time;
     }
 
-    public ArrayList<String> getVehicle() {
+    public List<String> getVehicle() {
         return vehicles;
     }
 
-    public void setVehicle(ArrayList<String> vehicles) {
+    public void setVehicle(List<String> vehicles) {
         this.vehicles = vehicles;
     }
 
@@ -714,10 +636,6 @@ public class Challenge {
         return startTimeChallenge;
     }
 
-    public void setStartTimeChallenge(String startTimeChallenge) {
-        this.startTimeChallenge = startTimeChallenge;
-    }
-
     public boolean isKeepInventory() {
         return keepInventory;
     }
@@ -726,20 +644,16 @@ public class Challenge {
         this.keepInventory = keepInventory;
     }
 
-    public ArrayList<String> getWorlds() {
+    public List<String> getWorlds() {
         return worlds;
     }
 
-    public void setWorlds(ArrayList<String> worlds) {
+    public void setWorlds(List<String> worlds) {
         this.worlds = worlds;
     }
 
     public String getEndTimeChallenge() {
         return endTimeChallenge;
-    }
-
-    public void setEndTimeChallenge(String endTimeChallenge) {
-        this.endTimeChallenge = endTimeChallenge;
     }
 
     @Override
@@ -822,12 +736,12 @@ public class Challenge {
                 }
                 Player p = Bukkit.getPlayer(playerName);
                 if (p != null) {
-                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("BoostMessageSinglePlayer").replace("{number}", multiplierSinglePlayer + "").replace("{minutes}", number + "")));
+                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("BoostMessageSinglePlayer").replace("{number}", multiplierSinglePlayer + "").replace("{minutes}", number + "")));
                 }
             }
         }, 0, timeNumber);
         tasksSinglePlayers.put(playerName, boostSingleTask);
-        Main.instance.getConfigGestion().getTasks().addExternalTasks(boostSingleTask, "SingleBoost", false);
+        Main.instance.getConfigGesture().getTasks().addExternalTasks(boostSingleTask, "SingleBoost", false);
     }
 
     private void checkPointsMultiplier() {
@@ -852,15 +766,15 @@ public class Challenge {
                     boostingTask.cancel();
                 }
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGestion().getMessages().get("BoostMessage").replace("{number}", multiplier + "").replace("{minutes}", number + "")));
+                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("BoostMessage").replace("{number}", multiplier + "").replace("{minutes}", number + "")));
                 }
             }
         }, 0, timeNumber);
-        Main.instance.getConfigGestion().getTasks().addExternalTasks(boostingTask, "GlobalBoost", false);
+        Main.instance.getConfigGesture().getTasks().addExternalTasks(boostingTask, "GlobalBoost", false);
     }
 
     public void message(CommandSender sender) {
-        ArrayList<String> title = new ArrayList<>(this.title);
+        List<String> title = new ArrayList<>(this.title);
         for (int i = 0; i < title.size(); i++) {
             Matcher matcherBlockPlaced = blockOnPlacedPattern.matcher(title.get(i));
             while (matcherBlockPlaced.find()) {

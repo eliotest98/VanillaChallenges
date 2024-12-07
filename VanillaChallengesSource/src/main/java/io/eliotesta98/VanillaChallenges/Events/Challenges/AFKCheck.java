@@ -11,16 +11,17 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class AFKCheck {
 
     private final DebugUtils debugUtils = new DebugUtils("AFKEvent");
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("AFKEvent");
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("AFKEvent");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
     private final int numberSlot = Main.instance.getDailyChallenge().getNumber();
     private final int timeTaskInMinute = Main.instance.getDailyChallenge().getMinutes();
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final List<String> items = Main.instance.getDailyChallenge().getItems();
 
     private final HashMap<String, Location> playerLocation = new HashMap<>();
 
@@ -104,6 +105,6 @@ public class AFKCheck {
                 debugUtils.debug();
             }
         }, 0, (long) timeTaskInMinute * 60 * 20);
-        Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "AFKEvent", false);
+        Main.instance.getConfigGesture().getTasks().addExternalTasks(task, "AFKEvent", false);
     }
 }

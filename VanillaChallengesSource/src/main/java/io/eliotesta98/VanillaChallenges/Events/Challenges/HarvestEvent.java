@@ -16,10 +16,10 @@ import java.util.List;
 public class HarvestEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("HarvestEvent");
-    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("HarvestEvent");
+    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onHarvestEvent(org.bukkit.event.player.PlayerHarvestBlockEvent e) {

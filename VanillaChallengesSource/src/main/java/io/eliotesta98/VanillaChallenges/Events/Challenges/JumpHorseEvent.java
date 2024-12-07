@@ -9,15 +9,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
-
 public class JumpHorseEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("JumpHorseEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("JumpHorseEvent");
     private final double power = Main.instance.getDailyChallenge().getPower();
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onHorseJumpEvent(org.bukkit.event.entity.HorseJumpEvent e) {

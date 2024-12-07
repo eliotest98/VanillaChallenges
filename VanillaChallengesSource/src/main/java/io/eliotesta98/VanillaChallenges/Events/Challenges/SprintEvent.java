@@ -13,16 +13,17 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class SprintEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SprintEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("SprintEvent");
     private final HashMap<String, Boolean> players = new HashMap<>();
     private final HashMap<String, Double> distances = new HashMap<>();
-    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
+    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSprint(PlayerToggleSprintEvent e) {

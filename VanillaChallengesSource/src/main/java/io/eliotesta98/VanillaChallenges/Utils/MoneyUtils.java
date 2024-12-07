@@ -5,7 +5,7 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 public class MoneyUtils {
 
     public static String transform(long number) {
-        if (Main.instance.getConfigGestion().isPointsResume()) {
+        if (Main.instance.getConfigGesture().isPointsResume()) {
             String transform = number + "";
             int size = transform.length();
             //1000 - 9999

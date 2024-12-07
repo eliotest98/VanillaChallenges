@@ -12,15 +12,16 @@ import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MoveEvent implements Listener {
 
     private final HashMap<String, Double> distances = new HashMap<>();
     private DebugUtils debugUtils;
-    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("MoveEvent");
+    private final List<String> items = Main.instance.getDailyChallenge().getItems();
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("MoveEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {

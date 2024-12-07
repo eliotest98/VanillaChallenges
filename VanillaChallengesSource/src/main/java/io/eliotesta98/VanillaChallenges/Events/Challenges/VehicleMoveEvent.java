@@ -10,18 +10,17 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class VehicleMoveEvent implements Listener {
 
     private final HashMap<String, Double> distances = new HashMap<>();
     private final DebugUtils debugUtils = new DebugUtils("VehicleMoveEvent");
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("VehicleMoveEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("VehicleMoveEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final ArrayList<String> vehicles = Main.instance.getDailyChallenge().getVehicle();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final List<String> vehicles = Main.instance.getDailyChallenge().getVehicle();
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {

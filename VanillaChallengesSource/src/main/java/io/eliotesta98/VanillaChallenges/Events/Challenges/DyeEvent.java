@@ -13,22 +13,21 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DyeEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DyeEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("DyeEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final ArrayList<String> items = Main.instance.getDailyChallenge().getItems();
-    private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
+    private final List<String> items = Main.instance.getDailyChallenge().getItems();
+    private final List<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final boolean keepInventory = Main.instance.getDailyChallenge().isKeepInventory();
     private final boolean deathInLand = Main.instance.getDailyChallenge().isDeathInLand();
-    private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
+    private final boolean landsEnabled = Main.instance.getConfigGesture().getHooks().get("Lands");
     private final int numberOfSlots = Main.instance.getDailyChallenge().getNumber();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDeath(org.bukkit.event.entity.PlayerDeathEvent e) {

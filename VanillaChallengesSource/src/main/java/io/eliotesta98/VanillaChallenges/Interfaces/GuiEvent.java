@@ -11,11 +11,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GuiEvent implements Listener {
 
-    private ArrayList<Player> clicked = new ArrayList<>();
-    private final boolean debugGui = Main.instance.getConfigGestion().getDebug().get("ClickGui");
+    private final List<Player> clicked = new ArrayList<>();
+    private final boolean debugGui = Main.instance.getConfigGesture().getDebug().get("ClickGui");
 
     @EventHandler
     public void InventoryDragEvent(final InventoryDragEvent e) {
@@ -49,7 +50,7 @@ public class GuiEvent implements Listener {
                         count++;
                     }
                     if (nbtItem != null) {
-                        Main.instance.getConfigGestion().getInterfaces().get(nbtItem.getString("vc.currentInterface")).removeInventory(inventoryCloseEvent.getPlayer().getName());
+                        Main.instance.getConfigGesture().getInterfaces().get(nbtItem.getString("vc.currentInterface")).removeInventory(inventoryCloseEvent.getPlayer().getName());
                     }
                 }
             }
@@ -104,14 +105,14 @@ public class GuiEvent implements Listener {
                 int pageNumber = nbtItem.getInteger("vc.numberPage");
                 String typeInterface = nbtItem.getString("vc.currentInterface");
                 int itemSlot = nbtItem.getInteger("vc.positionItem");
-                ArrayList<String> slots = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getSlots();
-                String returnInterface = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getNameInterfaceToReturn();
-                String nameItemConfig = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getNameItemConfig();
-                String interfaceToOpen = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getNameInterfaceToOpen();
+                List<String> slots = Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getSlots();
+                String returnInterface = Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getNameInterfaceToReturn();
+                String nameItemConfig = Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getNameItemConfig();
+                String interfaceToOpen = Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getNameInterfaceToOpen();
                 if (typeInterface.equalsIgnoreCase("Challenges")) {
                     String currentItem = inventoryClickEvent.getCurrentItem().getType().toString();
                     short durability = inventoryClickEvent.getCurrentItem().getDurability();
-                    String configItem = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getType();
+                    String configItem = Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getType();
                     if (debugGui) {
                         debug.addLine("Config Item=" + configItem);
                         debug.addLine("Current Item=" + currentItem);
@@ -128,13 +129,13 @@ public class GuiEvent implements Listener {
                             isItem113 = true;
                         }
                     }
-                    if (isItem113 || Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getType().equalsIgnoreCase(inventoryClickEvent.getCurrentItem().getType().toString())) {
+                    if (isItem113 || Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getItemsConfig().get(slots.get(inventoryClickEvent.getSlot())).getType().equalsIgnoreCase(inventoryClickEvent.getCurrentItem().getType().toString())) {
                         if (nameItemConfig.equalsIgnoreCase("LeftPage")) {
                             player.closeInventory();
                             ArrayList<Challenge> challenges = new ArrayList<>();
-                            int limit = (pageNumber - 1) * Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getSizeModificableSlot();
+                            int limit = (pageNumber - 1) * Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getSizeModificableSlot();
                             int count = 1;
-                            int number = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getSizeModificableSlot();
+                            int number = Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getSizeModificableSlot();
                             if (pageNumber != 1) {
                                 for (Challenge entry : Main.db.getAllChallenges()) {
                                     if (limit < count && number > 0) {
@@ -154,7 +155,7 @@ public class GuiEvent implements Listener {
                                 }
                             }
                             // apro l'interfaccia
-                            Main.instance.getConfigGestion().getInterfaces().get(typeInterface).openInterface(challenges, player, pageNumber);
+                            Main.instance.getConfigGesture().getInterfaces().get(typeInterface).openInterface(challenges, player, pageNumber);
                             if (debugGui) {
                                 debug.addLine("Left Page");
                                 debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
@@ -164,9 +165,9 @@ public class GuiEvent implements Listener {
                         } else if (nameItemConfig.equalsIgnoreCase("RightPage")) {
                             player.closeInventory();
                             ArrayList<Challenge> challenges = new ArrayList<>();
-                            int limit = (pageNumber - 1) * Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getSizeModificableSlot();
+                            int limit = (pageNumber - 1) * Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getSizeModificableSlot();
                             int count = 1;
-                            int number = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getSizeModificableSlot();
+                            int number = Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getSizeModificableSlot();
                             for (Challenge entry : Main.db.getAllChallenges()) {
                                 if (limit < count && number > 0) {
                                     challenges.add(entry);
@@ -174,7 +175,7 @@ public class GuiEvent implements Listener {
                                 }
                                 count++;
                             }
-                            Main.instance.getConfigGestion().getInterfaces().get(typeInterface).openInterface(challenges, player, pageNumber);
+                            Main.instance.getConfigGesture().getInterfaces().get(typeInterface).openInterface(challenges, player, pageNumber);
                             if (debugGui) {
                                 debug.addLine("Right Page");
                                 debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));

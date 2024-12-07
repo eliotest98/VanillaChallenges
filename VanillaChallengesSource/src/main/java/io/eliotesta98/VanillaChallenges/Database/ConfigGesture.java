@@ -6,6 +6,7 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -13,59 +14,77 @@ import org.bukkit.inventory.ItemStack;
 import java.io.*;
 import java.util.*;
 
-public class ConfigGestion {
+public class ConfigGesture {
 
-    private HashMap<String, Boolean> debug = new HashMap<>();
-    private HashMap<String, String> messages = new HashMap<>();
-    private HashMap<String, Challenge> challenges = new HashMap<>();
-    private HashMap<String, Challenge> challengesEvent = new HashMap<>();
-    private HashMap<String, Boolean> hooks = new HashMap<>();
-    private HashMap<String, Interface> interfaces = new HashMap<>();
-    private boolean activeOnlinePoints, rankingReward, randomReward = false, yesterdayTop, resetPointsAtNewChallenge,
-            backupEnabled, pointsResume, lockedInterface;
-    private String database, challengeGeneration, url, username, password, mySqlPrefix;
-    private int timeBrodcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup, number,
-            time, numberOfTop, numberOfRewardPlayer, minimumPoints;
+    private Map<String, Boolean> debug = new HashMap<>();
+    private final Map<String, String> messages = new HashMap<>();
+    private Map<String, Challenge> challenges = new HashMap<>();
+    private final Map<String, Challenge> challengesEvent = new HashMap<>();
+    private final Map<String, Boolean> hooks = new HashMap<>();
+    private final Map<String, Interface> interfaces = new HashMap<>();
+    private boolean activeOnlinePoints, rankingReward, yesterdayTop, resetPointsAtNewChallenge,
+            backupEnabled, pointsResume, lockedInterface, randomReward = false;
+    private String challengeGeneration, url, username, password, mySqlPrefix, database;
+    private int timeBroadcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup,
+            numberOfRewardPlayer, minimumPoints, number, time, numberOfTop;
     private ItemStack chestCollection;
-    private Tasks tasks = new Tasks();
-    private ArrayList<String> controlIfChallengeExist = new ArrayList<>();
-    private ArrayList<String> regenerationFilesGlobalChallenges = new ArrayList<>();
-    private ArrayList<String> regenerationFilesEventChallenges = new ArrayList<>();
+    private final Tasks tasks = new Tasks();
+    private final List<String> controlIfChallengeExist = new ArrayList<>();
 
-    public ConfigGestion(FileConfiguration file) throws IOException {
+    public ConfigGesture(FileConfiguration file) throws IOException {
 
-        for (String event : file.getConfigurationSection("Debug").getKeys(false)) {
+        ConfigurationSection section = file.getConfigurationSection("Debug");
+        if (section == null) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Debug configuration section, please refresh the " + file.getName() + " file!"));
+            return;
+        }
+        for (String event : section.getKeys(false)) {
             debug.put(event, file.getBoolean("Debug." + event));
         }
-        for (String message : file.getConfigurationSection("Messages").getKeys(false)) {
+        section = file.getConfigurationSection("Messages");
+        if (section == null) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Messages configuration section, please refresh the " + file.getName() + " file!"));
+            return;
+        }
+        for (String message : section.getKeys(false)) {
             if (message.equalsIgnoreCase("Commands") || message.equalsIgnoreCase("Errors")
                     || message.equalsIgnoreCase("Success") || message.equalsIgnoreCase("Lists")
                     || message.equalsIgnoreCase("Points")) {
-                for (String command : file.getConfigurationSection("Messages." + message).getKeys(false)) {
-                    messages.put(message + "." + command, file.getString("Messages." + message + "." + command).replace("{prefix}", messages.get("Prefix")));
+                section = file.getConfigurationSection("Messages." + message);
+                if (section == null) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Messages configuration section, please refresh the " + file.getName() + " file!"));
+                    return;
+                }
+                for (String command : section.getKeys(false)) {
+                    messages.put(message + "." + command, file.getString("Messages." + message + "." + command, "").replace("{prefix}", messages.get("Prefix")));
                 }
             } else if (message.equalsIgnoreCase("Prefix")) {
                 messages.put(message, file.getString("Messages." + message));
             } else if (message.equalsIgnoreCase("TopPlayers")) {
-                ArrayList<String> mexs = new ArrayList<>(file.getStringList("Messages.TopPlayers"));
-                numberOfTop = mexs.size();
+                List<String> topMessages = file.getStringList("Messages.TopPlayers");
+                numberOfTop = topMessages.size();
                 int i = 1;
-                while (!mexs.isEmpty()) {
-                    messages.put("topPlayers" + i, mexs.get(0));
-                    mexs.remove(0);
+                while (!topMessages.isEmpty()) {
+                    messages.put("topPlayers" + i, topMessages.get(0));
+                    topMessages.remove(0);
                     i++;
                 }
             } else {
-                messages.put(message, file.getString("Messages." + message).replace("{prefix}", messages.get("Prefix")));
+                messages.put(message, file.getString("Messages." + message, "").replace("{prefix}", messages.get("Prefix")));
             }
         }
-        for (String hoock : file.getConfigurationSection("Configuration.Hooks").getKeys(false)) {
-            hooks.put(hoock, file.getBoolean("Configuration.Hooks." + hoock));
+        section = file.getConfigurationSection("Configuration.Hooks");
+        if (section == null) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Hooks configuration section, please refresh the " + file.getName() + " file!"));
+            return;
+        }
+        for (String hook : section.getKeys(false)) {
+            hooks.put(hook, file.getBoolean("Configuration.Hooks." + hook));
         }
 
         String challengeRegenerationType = file.getString("Configuration.ChallengeRegeneration.Type", "Blacklist");
-        regenerationFilesGlobalChallenges.addAll(file.getStringList("Configuration.ChallengeRegeneration.Globals"));
-        regenerationFilesEventChallenges.addAll(file.getStringList("Configuration.ChallengeRegeneration.Events"));
+        List<String> regenerationFilesGlobalChallenges = file.getStringList("Configuration.ChallengeRegeneration.Globals");
+        List<String> regenerationFilesEventChallenges = file.getStringList("Configuration.ChallengeRegeneration.Events");
 
         FileCreator.addFiles(hooks);
 
@@ -85,12 +104,16 @@ public class ConfigGestion {
             FileCreator.controlFiles("Global", listOfChallengesGlobalFiles, regenerationFilesGlobalChallenges, challengeRegenerationType);
         }
 
+        if (listOfChallengesGlobalFiles == null) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Challenge Files, please refresh all files!"));
+            return;
+        }
         for (File fileChallenge : listOfChallengesGlobalFiles) {
             String splits = "bho";
             String[] strings = splits.split(":");
-            String configname = "Challenges/Global/" + fileChallenge.getName();
+            String configName = "Challenges/Global/" + fileChallenge.getName();
             CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(fileChallenge);
-            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configname), strings);
+            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configName), strings);
 
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
@@ -99,8 +122,8 @@ public class ConfigGestion {
                 controlIfChallengeExist.add(challengeName);
                 continue;
             }
-            ArrayList<String> worlds = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Worlds");
-            ArrayList<String> blocks = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Blocks");
+            List<String> worlds = yamlChallenge.getStringList(challengeName + ".Worlds");
+            List<String> blocks = yamlChallenge.getStringList(challengeName + ".Blocks");
             if (blocks.contains("RANDOM")) {
                 blocks.remove(blocks.size() - 1);
                 Collections.shuffle(blocks);
@@ -108,7 +131,7 @@ public class ConfigGestion {
                 blocks.clear();
                 blocks.add(block);
             }
-            ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
+            List<String> blocksOnPlaced = yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
             if (blocksOnPlaced.contains("RANDOM")) {
                 blocksOnPlaced.remove(blocksOnPlaced.size() - 1);
                 Collections.shuffle(blocksOnPlaced);
@@ -118,7 +141,7 @@ public class ConfigGestion {
             }
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
-            String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
+            String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End", "24:00");
             int end;
             if (endTimeChallenge.equalsIgnoreCase("Random")) {
                 Random random = new Random();
@@ -127,16 +150,16 @@ public class ConfigGestion {
             } else {
                 end = Integer.parseInt(endTimeChallenge.split(":")[0]);
             }
-            String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
+            String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start", "00:00");
             int start;
             if (startTimeChallenge.equalsIgnoreCase("Random")) {
                 Random random = new Random();
                 start = random.nextInt(end) + 1;
                 startTimeChallenge = start + ":00";
             }
-            ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
-            ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
-            ArrayList<String> items = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Items");
+            List<String> rewards = yamlChallenge.getStringList(challengeName + ".Rewards");
+            List<String> title = yamlChallenge.getStringList(challengeName + ".Title");
+            List<String> items = yamlChallenge.getStringList(challengeName + ".Items");
             if (items.contains("RANDOM")) {
                 items.remove(items.size() - 1);
                 Collections.shuffle(items);
@@ -144,7 +167,7 @@ public class ConfigGestion {
                 items.clear();
                 items.add(block);
             }
-            ArrayList<String> mobs = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Mobs");
+            List<String> mobs = yamlChallenge.getStringList(challengeName + ".Mobs");
             if (mobs.contains("RANDOM")) {
                 mobs.remove(mobs.size() - 1);
                 Collections.shuffle(mobs);
@@ -152,7 +175,7 @@ public class ConfigGestion {
                 mobs.clear();
                 mobs.add(block);
             }
-            ArrayList<String> itemsInHand = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".ItemsInHand");
+            List<String> itemsInHand = yamlChallenge.getStringList(challengeName + ".ItemsInHand");
             if (itemsInHand.contains("RANDOM")) {
                 itemsInHand.remove(itemsInHand.size() - 1);
                 Collections.shuffle(itemsInHand);
@@ -162,7 +185,7 @@ public class ConfigGestion {
             }
             double force = yamlChallenge.getDouble(challengeName + ".Force");
             double power = yamlChallenge.getDouble(challengeName + ".Power");
-            ArrayList<String> colors = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Colors");
+            List<String> colors = yamlChallenge.getStringList(challengeName + ".Colors");
             if (colors.contains("RANDOM")) {
                 colors.remove(colors.size() - 1);
                 Collections.shuffle(colors);
@@ -170,7 +193,7 @@ public class ConfigGestion {
                 colors.clear();
                 colors.add(block);
             }
-            ArrayList<String> causes = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Causes");
+            List<String> causes = yamlChallenge.getStringList(challengeName + ".Causes");
             if (causes.contains("RANDOM")) {
                 causes.remove(causes.size() - 1);
                 Collections.shuffle(causes);
@@ -178,7 +201,7 @@ public class ConfigGestion {
                 causes.clear();
                 causes.add(block);
             }
-            ArrayList<String> vehicles = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Vehicles");
+            List<String> vehicles = yamlChallenge.getStringList(challengeName + ".Vehicles");
             if (vehicles.contains("RANDOM")) {
                 vehicles.remove(vehicles.size() - 1);
                 Collections.shuffle(vehicles);
@@ -193,7 +216,7 @@ public class ConfigGestion {
             int pointsBoost = 0;
             int multiplier = 1;
             int boostMinutes = 0;
-            if (yamlChallenge.getBoolean(challengeName + ".Boost.Enabled")) {
+            if (yamlChallenge.getBoolean(challengeName + ".Boost.Enabled", false)) {
                 pointsBoost = yamlChallenge.getInt(challengeName + ".Boost.Points");
                 multiplier = yamlChallenge.getInt(challengeName + ".Boost.Multiplier");
                 boostMinutes = yamlChallenge.getInt(challengeName + ".Boost.Minutes");
@@ -201,35 +224,23 @@ public class ConfigGestion {
             int pointsBoostSinglePlayer = 0;
             int multiplierSinglePlayer = 1;
             int minutesSinglePlayer = 0;
-            if (yamlChallenge.getBoolean(challengeName + ".BoostPlayer.Enabled")) {
+            if (yamlChallenge.getBoolean(challengeName + ".BoostPlayer.Enabled", false)) {
                 pointsBoostSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Points");
                 multiplierSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Multiplier");
                 minutesSinglePlayer = yamlChallenge.getInt(challengeName + ".BoostPlayer.Minutes");
             }
             String sneaking = (yamlChallenge.getString(challengeName + ".Sneaking") == null) ? "NOBODY" : yamlChallenge.getString(challengeName + ".Sneaking");
             String onGround = (yamlChallenge.getString(challengeName + ".OnGround") == null) ? "NOBODY" : yamlChallenge.getString(challengeName + ".OnGround");
-            ArrayList<String> quests = new ArrayList<>();
+            List<String> quests = new ArrayList<>();
             for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
                 quests.add(quest.replace("{prefix}", messages.get("Prefix")));
             }
             if (quests.isEmpty()) {
                 quests.add("Formatter:" + yamlChallenge.getString(challengeName + ".Strings.StringFormatter"));
             }
-            boolean keepInventory = yamlChallenge.getBoolean(challengeName + ".KeepInventory");
-            boolean deathInLand = yamlChallenge.getBoolean(challengeName + ".DeathInLand");
-            String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge");
-            if (itemChallenge.contains(";")) {
-                String[] x = itemChallenge.split(";");
-                if (Material.getMaterial(x[0]) == null) {
-                    Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + x[0] + " IN " + configname + " AT LINE: " + challengeName + ".ItemChallenge"));
-                    itemChallenge = "DIRT";
-                }
-            } else {
-                if (Material.getMaterial(itemChallenge) == null) {
-                    Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + itemChallenge + " IN " + configname + " AT LINE: " + challengeName + ".ItemChallenge"));
-                    itemChallenge = "DIRT";
-                }
-            }
+            boolean keepInventory = yamlChallenge.getBoolean(challengeName + ".KeepInventory", true);
+            boolean deathInLand = yamlChallenge.getBoolean(challengeName + ".DeathInLand", true);
+            String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge", "DIRT");
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
@@ -248,17 +259,21 @@ public class ConfigGestion {
             FileCreator.controlFiles("Event", listOfChallengesEventFiles, regenerationFilesEventChallenges, challengeRegenerationType);
         }
 
+        if (listOfChallengesEventFiles == null) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Challenge Files, please refresh all files!"));
+            return;
+        }
         for (File fileChallenge : listOfChallengesEventFiles) {
             String splits = "bho";
             String[] strings = splits.split(":");
-            String configname = "Challenges/Event/" + fileChallenge.getName();
+            String configName = "Challenges/Event/" + fileChallenge.getName();
             CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(fileChallenge);
-            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configname), strings);
+            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configName), strings);
 
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
-            ArrayList<String> worlds = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Worlds");
-            ArrayList<String> blocks = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Blocks");
+            List<String> worlds = yamlChallenge.getStringList(challengeName + ".Worlds");
+            List<String> blocks = yamlChallenge.getStringList(challengeName + ".Blocks");
             if (blocks.contains("RANDOM")) {
                 blocks.remove(blocks.size() - 1);
                 Collections.shuffle(blocks);
@@ -266,7 +281,7 @@ public class ConfigGestion {
                 blocks.clear();
                 blocks.add(block);
             }
-            ArrayList<String> blocksOnPlaced = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
+            List<String> blocksOnPlaced = yamlChallenge.getStringList(challengeName + ".BlocksOnPlaced");
             if (blocksOnPlaced.contains("RANDOM")) {
                 blocksOnPlaced.remove(blocksOnPlaced.size() - 1);
                 Collections.shuffle(blocksOnPlaced);
@@ -276,7 +291,7 @@ public class ConfigGestion {
             }
             String typeChallenge = yamlChallenge.getString(challengeName + ".TypeChallenge");
             String nameChallenge = yamlChallenge.getString(challengeName + ".NameChallenge");
-            String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End");
+            String endTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.End", "24:00");
             int end;
             if (endTimeChallenge.equalsIgnoreCase("Random")) {
                 Random random = new Random();
@@ -285,16 +300,16 @@ public class ConfigGestion {
             } else {
                 end = Integer.parseInt(endTimeChallenge.split(":")[0]);
             }
-            String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start");
+            String startTimeChallenge = yamlChallenge.getString(challengeName + ".TimeSettings.Start", "00:00");
             int start;
             if (startTimeChallenge.equalsIgnoreCase("Random")) {
                 Random random = new Random();
                 start = random.nextInt(end) + 1;
                 startTimeChallenge = start + ":00";
             }
-            ArrayList<String> rewards = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Rewards");
-            ArrayList<String> title = new ArrayList<>(yamlChallenge.getStringList(challengeName + ".Title"));
-            ArrayList<String> items = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Items");
+            List<String> rewards = yamlChallenge.getStringList(challengeName + ".Rewards");
+            List<String> title = yamlChallenge.getStringList(challengeName + ".Title");
+            List<String> items = yamlChallenge.getStringList(challengeName + ".Items");
             if (items.contains("RANDOM")) {
                 items.remove(items.size() - 1);
                 Collections.shuffle(items);
@@ -302,7 +317,7 @@ public class ConfigGestion {
                 items.clear();
                 items.add(block);
             }
-            ArrayList<String> mobs = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Mobs");
+            List<String> mobs = yamlChallenge.getStringList(challengeName + ".Mobs");
             if (mobs.contains("RANDOM")) {
                 mobs.remove(mobs.size() - 1);
                 Collections.shuffle(mobs);
@@ -310,7 +325,7 @@ public class ConfigGestion {
                 mobs.clear();
                 mobs.add(block);
             }
-            ArrayList<String> itemsInHand = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".ItemsInHand");
+            List<String> itemsInHand = yamlChallenge.getStringList(challengeName + ".ItemsInHand");
             if (itemsInHand.contains("RANDOM")) {
                 itemsInHand.remove(itemsInHand.size() - 1);
                 Collections.shuffle(itemsInHand);
@@ -320,7 +335,7 @@ public class ConfigGestion {
             }
             double force = yamlChallenge.getDouble(challengeName + ".Force");
             double power = yamlChallenge.getDouble(challengeName + ".Power");
-            ArrayList<String> colors = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Colors");
+            List<String> colors = yamlChallenge.getStringList(challengeName + ".Colors");
             if (colors.contains("RANDOM")) {
                 colors.remove(colors.size() - 1);
                 Collections.shuffle(colors);
@@ -328,7 +343,7 @@ public class ConfigGestion {
                 colors.clear();
                 colors.add(block);
             }
-            ArrayList<String> causes = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Causes");
+            List<String> causes = yamlChallenge.getStringList(challengeName + ".Causes");
             if (causes.contains("RANDOM")) {
                 causes.remove(causes.size() - 1);
                 Collections.shuffle(causes);
@@ -336,7 +351,7 @@ public class ConfigGestion {
                 causes.clear();
                 causes.add(block);
             }
-            ArrayList<String> vehicles = (ArrayList<String>) yamlChallenge.getStringList(challengeName + ".Vehicles");
+            List<String> vehicles = yamlChallenge.getStringList(challengeName + ".Vehicles");
             if (vehicles.contains("RANDOM")) {
                 vehicles.remove(vehicles.size() - 1);
                 Collections.shuffle(vehicles);
@@ -368,7 +383,7 @@ public class ConfigGestion {
             String sneaking = (yamlChallenge.getString(challengeName + ".Sneaking") == null) ? "NOBODY" : yamlChallenge.getString(challengeName + ".Sneaking");
             String onGround = (yamlChallenge.getString(challengeName + ".OnGround") == null) ? "NOBODY" : yamlChallenge.getString(challengeName + ".OnGround");
 
-            ArrayList<String> quests = new ArrayList<>();
+            List<String> quests = new ArrayList<>();
             for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
                 quests.add(quest.replace("{prefix}", messages.get("Prefix")));
             }
@@ -377,19 +392,7 @@ public class ConfigGestion {
             }
             boolean keepInventory = yamlChallenge.getBoolean(challengeName + ".KeepInventory");
             boolean deathInLand = yamlChallenge.getBoolean(challengeName + ".DeathInLand");
-            String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge");
-            if (itemChallenge.contains(";")) {
-                String[] x = itemChallenge.split(";");
-                if (Material.getMaterial(x[0]) == null) {
-                    Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + x[0] + " IN " + configname + " AT LINE: " + challengeName + ".ItemChallenge"));
-                    itemChallenge = "DIRT";
-                }
-            } else {
-                if (Material.getMaterial(itemChallenge) == null) {
-                    Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + itemChallenge + " IN " + configname + " AT LINE: " + challengeName + ".ItemChallenge"));
-                    itemChallenge = "DIRT";
-                }
-            }
+            String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge", "DIRT");
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
                     multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
@@ -401,7 +404,7 @@ public class ConfigGestion {
         Main.instance.getServer().getConsoleSender().sendMessage("§a" + listOfChallengesEventFiles.length + " Event Challenges loaded!");
 
         numberOfRewardPlayer = file.getInt("Configuration.Top.NumberOfReward");
-        timeBrodcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
+        timeBroadcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         lockedInterface = file.getBoolean("Configuration.LockedInterface");
         database = file.getString("Configuration.Database");
         mySqlPrefix = file.getString("Configuration.MySql.Prefix");
@@ -421,20 +424,34 @@ public class ConfigGestion {
         pointsOnlinePoints = file.getInt("Configuration.Points.OnlinePoints.Point");
         minutesOnlinePoints = file.getInt("Configuration.Points.OnlinePoints.Minutes");
         minimumPoints = file.getInt("Configuration.Points.MinimumPoints");
-        ArrayList<String> lore = new ArrayList<>(file.getStringList("Configuration.CollectionChallengeItem.Lore"));
-        chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
+        List<String> lore = file.getStringList("Configuration.CollectionChallengeItem.Lore");
+        try {
+            chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
+        } catch (ExceptionInInitializerError ignore) {
+            Main.instance.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!"));
+        }
         pointsResume = file.getBoolean("Configuration.Points.PointsResume");
 
-        for (String nameInterface : file.getConfigurationSection("Interfaces").getKeys(false)) {
+        section = file.getConfigurationSection("Interfaces");
+        if (section == null) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Interfaces configuration section, please refresh the " + file.getName() + " file!"));
+            return;
+        }
+        for (String nameInterface : section.getKeys(false)) {
             String title = file.getString("Interfaces." + nameInterface + "..Title");
             String openSound = file.getString("Interfaces." + nameInterface + ".OpenSound");
-            ArrayList<String> slots = new ArrayList<>();
-            ArrayList<String> contaSlots = new ArrayList<>();
+            List<String> slots = new ArrayList<>();
+            List<String> contaSlots = new ArrayList<>();
 
-            HashMap<String, ItemConfig> itemsConfig = new HashMap<>();
-            for (String nameItem : file.getConfigurationSection("Interfaces." + nameInterface + ".Items").getKeys(false)) {
+            Map<String, ItemConfig> itemsConfig = new HashMap<>();
+            section = file.getConfigurationSection("Interfaces." + nameInterface + ".Items");
+            if (section == null) {
+                Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Interfaces configuration section, please refresh the " + file.getName() + " file!"));
+                return;
+            }
+            for (String nameItem : section.getKeys(false)) {
                 String letter = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Letter");
-                String type = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                String type = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Type", "DIRT");
                 if (type.contains(";")) {
                     String[] x = type.split(";");
                     if (Material.getMaterial(x[0]) == null) {
@@ -450,8 +467,7 @@ public class ConfigGestion {
                 String name = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Name");
                 String texture = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Texture");
                 String soundClick = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".SoundClick");
-                ArrayList<String> loreItem = new ArrayList<String>(file.getStringList("Interfaces." + nameInterface + ".Items." + nameItem + ".Lore"));
-                ItemConfig item = new ItemConfig(nameItem, name, type, texture, loreItem, soundClick);
+                ItemConfig item = new ItemConfig(nameItem, name, type, texture, file.getStringList("Interfaces." + nameInterface + ".Items." + nameItem + ".Lore"), soundClick);
                 itemsConfig.put(letter, item);
             }
 
@@ -478,68 +494,44 @@ public class ConfigGestion {
 
     }
 
-    public HashMap<String, Boolean> getDebug() {
+    public Map<String, Boolean> getDebug() {
         return debug;
     }
 
-    public void setDebug(HashMap<String, Boolean> debug) {
+    public void setDebug(Map<String, Boolean> debug) {
         this.debug = debug;
     }
 
-    public HashMap<String, String> getMessages() {
+    public Map<String, String> getMessages() {
         return messages;
     }
 
-    public void setMessages(HashMap<String, String> messages) {
-        this.messages = messages;
-    }
-
-    public HashMap<String, Challenge> getChallenges() {
+    public Map<String, Challenge> getChallenges() {
         return challenges;
     }
 
-    public void setChallenges(HashMap<String, Challenge> challenges) {
+    public void setChallenges(Map<String, Challenge> challenges) {
         this.challenges = challenges;
     }
 
-    public int getTimeBrodcastMessageTitle() {
-        return timeBrodcastMessageTitle;
+    public int getTimeBroadcastMessageTitle() {
+        return timeBroadcastMessageTitle;
     }
 
-    public void setTimeBrodcastMessageTitle(int timeBrodcastMessageTitle) {
-        this.timeBrodcastMessageTitle = timeBrodcastMessageTitle;
-    }
-
-    public HashMap<String, Boolean> getHooks() {
+    public Map<String, Boolean> getHooks() {
         return hooks;
-    }
-
-    public void setHooks(HashMap<String, Boolean> hooks) {
-        this.hooks = hooks;
     }
 
     public boolean isActiveOnlinePoints() {
         return activeOnlinePoints;
     }
 
-    public void setActiveOnlinePoints(boolean activeOnlinePoints) {
-        this.activeOnlinePoints = activeOnlinePoints;
-    }
-
     public int getPointsOnlinePoints() {
         return pointsOnlinePoints;
     }
 
-    public void setPointsOnlinePoints(int pointsOnlinePoints) {
-        this.pointsOnlinePoints = pointsOnlinePoints;
-    }
-
     public int getMinutesOnlinePoints() {
         return minutesOnlinePoints;
-    }
-
-    public void setMinutesOnlinePoints(int minutesOnlinePoints) {
-        this.minutesOnlinePoints = minutesOnlinePoints;
     }
 
     public String getDatabase() {
@@ -554,48 +546,24 @@ public class ConfigGestion {
         return yesterdayTop;
     }
 
-    public void setYesterdayTop(boolean yesterdayTop) {
-        this.yesterdayTop = yesterdayTop;
-    }
-
     public boolean isResetPointsAtNewChallenge() {
         return resetPointsAtNewChallenge;
-    }
-
-    public void setResetPointsAtNewChallenge(boolean resetPointsAtNewChallenge) {
-        this.resetPointsAtNewChallenge = resetPointsAtNewChallenge;
     }
 
     public ItemStack getChestCollection() {
         return chestCollection;
     }
 
-    public void setChestCollection(ItemStack chestCollection) {
-        this.chestCollection = chestCollection;
-    }
-
     public boolean isBackupEnabled() {
         return backupEnabled;
-    }
-
-    public void setBackupEnabled(boolean backupEnabled) {
-        this.backupEnabled = backupEnabled;
     }
 
     public int getNumberOfFilesInFolderForBackup() {
         return numberOfFilesInFolderForBackup;
     }
 
-    public void setNumberOfFilesInFolderForBackup(int numberOfFilesInFolderForBackup) {
-        this.numberOfFilesInFolderForBackup = numberOfFilesInFolderForBackup;
-    }
-
     public String getMySqlPrefix() {
         return mySqlPrefix;
-    }
-
-    public void setMySqlPrefix(String mySqlPrefix) {
-        this.mySqlPrefix = mySqlPrefix;
     }
 
     public int getNumber() {
@@ -618,119 +586,60 @@ public class ConfigGestion {
         return challengeGeneration;
     }
 
-    public void setChallengeGeneration(String challengeGeneration) {
-        this.challengeGeneration = challengeGeneration;
-    }
-
     public Tasks getTasks() {
         return tasks;
-    }
-
-    public void setTasks(Tasks tasks) {
-        this.tasks = tasks;
     }
 
     public boolean isPointsResume() {
         return pointsResume;
     }
 
-    public void setPointsResume(boolean pointsResume) {
-        this.pointsResume = pointsResume;
-    }
-
-    public ArrayList<String> getControlIfChallengeExist() {
+    public List<String> getControlIfChallengeExist() {
         return controlIfChallengeExist;
     }
 
-    public void setControlIfChallengeExist(ArrayList<String> controlIfChallengeExist) {
-        this.controlIfChallengeExist = controlIfChallengeExist;
-    }
-
-    public HashMap<String, Interface> getInterfaces() {
+    public Map<String, Interface> getInterfaces() {
         return interfaces;
     }
 
-    public void setInterfaces(HashMap<String, Interface> interfaces) {
-        this.interfaces = interfaces;
-    }
-
-    public HashMap<String, Challenge> getChallengesEvent() {
+    public Map<String, Challenge> getChallengesEvent() {
         return challengesEvent;
-    }
-
-    public void setChallengesEvent(HashMap<String, Challenge> challengesEvent) {
-        this.challengesEvent = challengesEvent;
     }
 
     public boolean isRankingReward() {
         return rankingReward;
     }
 
-    public void setRankingReward(boolean rankingReward) {
-        this.rankingReward = rankingReward;
-    }
-
     public int getNumberOfRewardPlayer() {
         return numberOfRewardPlayer;
-    }
-
-    public void setNumberOfRewardPlayer(int numberOfRewardPlayer) {
-        this.numberOfRewardPlayer = numberOfRewardPlayer;
     }
 
     public boolean isRandomReward() {
         return randomReward;
     }
 
-    public void setRandomReward(boolean randomReward) {
-        this.randomReward = randomReward;
-    }
-
     public boolean isLockedInterface() {
         return lockedInterface;
-    }
-
-    public void setLockedInterface(boolean lockedInterface) {
-        this.lockedInterface = lockedInterface;
     }
 
     public int getMinimumPoints() {
         return minimumPoints;
     }
 
-    public void setMinimumPoints(int minimumPoints) {
-        this.minimumPoints = minimumPoints;
-    }
-
     public int getNumberOfTop() {
         return numberOfTop;
-    }
-
-    public void setNumberOfTop(int numberOfTop) {
-        this.numberOfTop = numberOfTop;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

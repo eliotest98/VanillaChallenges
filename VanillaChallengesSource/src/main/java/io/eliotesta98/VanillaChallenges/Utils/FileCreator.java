@@ -4,14 +4,14 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FileCreator {
 
     private static final ArrayList<String> files = new ArrayList<>();
 
-    public static void addFiles(HashMap<String, Boolean> hooks) {
+    public static void addFiles(Map<String, Boolean> hooks) {
         files.add("BlockBreaker.yml");
         files.add("BlockPlacer.yml");
         files.add("Cooker.yml");
@@ -75,7 +75,7 @@ public class FileCreator {
         }
     }
 
-    public static void controlFiles(String folder, File[] folderFiles, ArrayList<String> otherFiles, String blacklistOrWhitelist) {
+    public static void controlFiles(String folder, File[] folderFiles, List<String> otherFiles, String blacklistOrWhitelist) {
 
         // Carico la lista dei file
         ArrayList<String> copyFiles = new ArrayList<>(files);

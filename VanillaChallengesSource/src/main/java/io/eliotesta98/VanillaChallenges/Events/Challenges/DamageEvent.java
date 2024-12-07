@@ -10,17 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class DamageEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DamageEvent");
-    private final ArrayList<String> causes = Main.instance.getDailyChallenge().getCauses();
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("DamageEvent");
+    private final List<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDamage(org.bukkit.event.entity.EntityDamageEvent e) {

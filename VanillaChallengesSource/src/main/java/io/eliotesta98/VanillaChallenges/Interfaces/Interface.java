@@ -5,30 +5,31 @@ import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Interface {
 
-    private String title, soundOpen, nameInterface, nameInterfaceToOpen, nameInterfaceToReturn;
-    private ArrayList<String> slots = new ArrayList<>();
-    private HashMap<String, ItemConfig> itemsConfig = new HashMap<String, ItemConfig>();
+    private final String soundOpen, nameInterface, nameInterfaceToOpen, nameInterfaceToReturn;
+    private String title;
+    private List<String> slots;
+    private final Map<String, ItemConfig> itemsConfig;
     private boolean debug;
-    private int sizeModificableSlot;
-    private HashMap<String, Inventory> interfacesOpened = new HashMap<>();
+    private final int sizeModificableSlot;
+    private final Map<String, Inventory> interfacesOpened = new HashMap<>();
 
-    public Interface(String title, String soundOpen, ArrayList<String> slots, HashMap<String, ItemConfig> itemsConfig, boolean debug, int sizeModificableSlot, String nameInterface, String nameInterfaceToOpen, String nameInterfaceToReturn) {
+    public Interface(String title, String soundOpen, List<String> slots, Map<String, ItemConfig> itemsConfig, boolean debug, int sizeModificableSlot, String nameInterface, String nameInterfaceToOpen, String nameInterfaceToReturn) {
         this.title = title;
         this.soundOpen = soundOpen;
-        this.itemsConfig.putAll(itemsConfig);
+        this.itemsConfig = itemsConfig;
         this.debug = debug;
         this.sizeModificableSlot = sizeModificableSlot;
-        this.slots.addAll(slots);
+        this.slots = slots;
         this.nameInterface = nameInterface;
         this.nameInterfaceToOpen = nameInterfaceToOpen;
         this.nameInterfaceToReturn = nameInterfaceToReturn;
@@ -42,15 +43,7 @@ public class Interface {
         this.title = title;
     }
 
-    public String getSoundOpen() {
-        return soundOpen;
-    }
-
-    public void setSoundOpen(String soundOpen) {
-        this.soundOpen = soundOpen;
-    }
-
-    public ArrayList<String> getSlots() {
+    public List<String> getSlots() {
         return slots;
     }
 
@@ -58,12 +51,8 @@ public class Interface {
         this.slots = slots;
     }
 
-    public HashMap<String, ItemConfig> getItemsConfig() {
+    public Map<String, ItemConfig> getItemsConfig() {
         return itemsConfig;
-    }
-
-    public void setItemsConfig(HashMap<String, ItemConfig> itemsConfig) {
-        this.itemsConfig = itemsConfig;
     }
 
     public boolean isDebug() {
@@ -78,32 +67,12 @@ public class Interface {
         return sizeModificableSlot;
     }
 
-    public void setSizeModificableSlot(int sizeModificableSlot) {
-        this.sizeModificableSlot = sizeModificableSlot;
-    }
-
-    public String getNameInterface() {
-        return nameInterface;
-    }
-
-    public void setNameInterface(String nameInterface) {
-        this.nameInterface = nameInterface;
-    }
-
     public String getNameInterfaceToOpen() {
         return nameInterfaceToOpen;
     }
 
-    public void setNameInterfaceToOpen(String nameInterfaceToOpen) {
-        this.nameInterfaceToOpen = nameInterfaceToOpen;
-    }
-
     public String getNameInterfaceToReturn() {
         return nameInterfaceToReturn;
-    }
-
-    public void setNameInterfaceToReturn(String nameInterfaceToReturn) {
-        this.nameInterfaceToReturn = nameInterfaceToReturn;
     }
 
     public void removeInventory(String playerName) {
@@ -130,7 +99,7 @@ public class Interface {
         int slotModificable = items.size() - sizeModificableSlot;
         interfacesOpened.put(p.getName(), inventory);
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
-            boolean lock = Main.instance.getConfigGestion().isLockedInterface();
+            boolean lock = Main.instance.getConfigGesture().isLockedInterface();
             int countItems = 0;
             for (int i = 0; i < slots.size(); i++) {// scorro gli slot
                 String slot = slots.get(i);// prendo lo slot
@@ -138,9 +107,9 @@ public class Interface {
                     if (items.size() > countItems) {
                         if (items.get(countItems) instanceof Challenge) {
                             Challenge challenge = (Challenge) items.get(countItems);
-                            Challenge challengeComplete = Main.instance.getConfigGestion().getChallenges().get(challenge.getChallengeName());
+                            Challenge challengeComplete = Main.instance.getConfigGesture().getChallenges().get(challenge.getChallengeName());
                             if (challenge.getChallengeName().contains("Event_")) {
-                                challengeComplete = Main.instance.getConfigGestion().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
+                                challengeComplete = Main.instance.getConfigGesture().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
                             }
                             if (!lock) {
                                 inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, numberOfPage,

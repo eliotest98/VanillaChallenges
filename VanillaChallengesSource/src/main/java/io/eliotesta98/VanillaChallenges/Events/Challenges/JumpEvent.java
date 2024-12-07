@@ -10,14 +10,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
-
 public class JumpEvent implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils("JumpEvent");
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("JumpEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("JumpEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {

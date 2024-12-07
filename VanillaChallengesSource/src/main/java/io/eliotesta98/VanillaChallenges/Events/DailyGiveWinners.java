@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -19,9 +18,9 @@ import java.util.ArrayList;
 public class DailyGiveWinners implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils("DailyGiveRewardEvent");
-    private final boolean debug = Main.instance.getConfigGestion().getDebug().get("DailyGiveRewardEvent");
-    private static final String challengeReward = Main.instance.getConfigGestion().getMessages().get("ChallengeReward");
-    private static final String prefix = Main.instance.getConfigGestion().getMessages().get("Prefix");
+    private final boolean debug = Main.instance.getConfigGesture().getDebug().get("DailyGiveRewardEvent");
+    private static final String challengeReward = Main.instance.getConfigGesture().getMessages().get("ChallengeReward");
+    private static final String prefix = Main.instance.getConfigGesture().getMessages().get("Prefix");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDailyGiveRewards(PlayerJoinEvent e) {

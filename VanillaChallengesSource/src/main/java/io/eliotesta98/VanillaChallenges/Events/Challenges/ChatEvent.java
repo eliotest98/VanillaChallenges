@@ -12,21 +12,20 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitTask;
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ChatEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ChatEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ChatEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final ArrayList<String> quests = Main.instance.getDailyChallenge().getQuests();
+    private final List<String> quests = Main.instance.getDailyChallenge().getQuests();
     private String word = "";
     private String quest = "";
-    private final String message = Main.instance.getConfigGestion().getMessages().get("ChatWord");
-    private final String correctAnswer = Main.instance.getConfigGestion().getMessages().get("CorrectAnswer");
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final String message = Main.instance.getConfigGesture().getMessages().get("ChatWord");
+    private final String correctAnswer = Main.instance.getConfigGesture().getMessages().get("CorrectAnswer");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
 
     public ChatEvent() {
@@ -100,7 +99,7 @@ public class ChatEvent implements Listener {
                 }
             }
         }, 0, time);
-        Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "ChatEvent", false);
+        Main.instance.getConfigGesture().getTasks().addExternalTasks(task, "ChatEvent", false);
     }
 
     public void generateWord() {

@@ -16,17 +16,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerLeashEntityEvent;
-import java.util.ArrayList;
 
 public class LeashEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("LeashEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("LeashEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
-    private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
-    private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
+    private final boolean griefPreventionEnabled = Main.instance.getConfigGesture().getHooks().get("GriefPrevention");
+    private final boolean landsEnabled = Main.instance.getConfigGesture().getHooks().get("Lands");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean worldGuardEnabled = Main.instance.getConfigGesture().getHooks().get("WorldGuard");
     private boolean ok = false;
 
     @EventHandler(priority = EventPriority.NORMAL)

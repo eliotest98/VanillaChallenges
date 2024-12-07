@@ -12,10 +12,10 @@ import org.bukkit.event.Listener;
 public class ExpCollector implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ExpCollectorEvent");
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ExpCollectorEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean prevention = Main.instance.getDailyChallenge().isKeepInventory();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeath(org.bukkit.event.entity.PlayerDeathEvent e) {
