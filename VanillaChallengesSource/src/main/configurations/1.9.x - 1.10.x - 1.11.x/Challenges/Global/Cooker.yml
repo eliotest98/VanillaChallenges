@@ -1,16 +1,21 @@
 Cooker:
   TypeChallenge: 'CookerChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '5:00'
-    # How long do you want the challenge to last in hours ?
+    # How long do you want the challenge to last in hours?
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Items you want cook for challenge, if you want all items set []
+  # Items you want to cook for the challenge, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # How many points you want give at cook?
   Point: 1

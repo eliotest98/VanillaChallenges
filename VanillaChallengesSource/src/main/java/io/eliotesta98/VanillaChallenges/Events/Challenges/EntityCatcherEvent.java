@@ -28,6 +28,7 @@ public class EntityCatcherEvent implements Listener {
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
     private boolean ok = false;
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityBurn(EntityCombustByEntityEvent e) {
         debugUtils = new DebugUtils(e);
@@ -43,13 +44,7 @@ public class EntityCatcherEvent implements Listener {
         }
 
         final Player player = (Player) e.getEntity();
-        final String itemInMainHand;
-        if (Main.version113) {
-            itemInMainHand = player.getInventory().getItemInMainHand().getType().toString();
-        } else {
-            itemInMainHand = player.getInventory().getItemInHand().getType().toString();
-        }
-
+        final String itemInMainHand = player.getInventory().getItemInHand().getType().toString();
         final boolean sneakingPlayer = player.isSneaking();
         final Location location = player.getLocation();
         final World world = player.getWorld();
@@ -115,19 +110,19 @@ public class EntityCatcherEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isMob(mobCaught, debugActive, debugUtils, tempo)) {
+            if (Controls.isMob(mobCaught, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
+            if (Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 

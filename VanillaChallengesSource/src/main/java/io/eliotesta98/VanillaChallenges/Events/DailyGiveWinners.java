@@ -37,6 +37,7 @@ public class DailyGiveWinners implements Listener {
         getRewardsAtPlayers(e.getPlayer(), winners);
     }
 
+    @SuppressWarnings("deprecation")
     public static void getRewardsAtPlayers(Player player, ArrayList<DailyWinner> winners) {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             for (int i = 0; i < winners.size(); i++) {

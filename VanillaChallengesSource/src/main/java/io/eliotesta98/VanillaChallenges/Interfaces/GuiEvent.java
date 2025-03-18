@@ -15,7 +15,6 @@ import java.util.List;
 
 public class GuiEvent implements Listener {
 
-    private final List<Player> clicked = new ArrayList<>();
     private final boolean debugGui = Main.instance.getConfigGesture().getDebug().get("ClickGui");
 
     @EventHandler
@@ -34,11 +33,11 @@ public class GuiEvent implements Listener {
         }
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
     @EventHandler
     public void onClose(final InventoryCloseEvent inventoryCloseEvent) {
         try {
             if (inventoryCloseEvent.getPlayer() instanceof Player) {
-                this.clicked.remove(inventoryCloseEvent.getPlayer());
                 if (inventoryCloseEvent.getInventory().getHolder() instanceof VanillaChallengesInterfaceHolder) {
                     int count = 0;
                     NBTItem nbtItem = null;
@@ -72,6 +71,7 @@ public class GuiEvent implements Listener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onClick(final InventoryClickEvent inventoryClickEvent) {
         DebugUtils debug = new DebugUtils("Gui");
@@ -79,7 +79,6 @@ public class GuiEvent implements Listener {
         if (inventoryClickEvent.getWhoClicked() instanceof Player) {
             final Player player = (Player) inventoryClickEvent.getWhoClicked();
             final Inventory inv = inventoryClickEvent.getClickedInventory();
-            clicked.add(player);
             if (inv == null || !inv.getType().equals(InventoryType.CHEST)) {
                 if (debugGui) {
                     debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
@@ -123,7 +122,7 @@ public class GuiEvent implements Listener {
                         debug.debug();
                     }
                     boolean isItem113 = false;
-                    if (!Main.version113) {
+                    if (Main.version113) {
                         if (configItem.equalsIgnoreCase(currentItem) ||
                                 configItem.equalsIgnoreCase(currentItem + "-" + durability)) {
                             isItem113 = true;

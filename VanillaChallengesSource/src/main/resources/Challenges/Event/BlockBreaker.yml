@@ -9,7 +9,7 @@ BlockBreaker:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Blocks you want break for challenge, if you want all blocks set []
+  # Blocks you want break for the challenge, if you want all blocks set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

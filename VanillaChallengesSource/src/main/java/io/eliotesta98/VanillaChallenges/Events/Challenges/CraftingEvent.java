@@ -10,14 +10,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CraftingEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("CraftItemEvent");
-    private final List<String> itemsCrafting = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
@@ -49,17 +45,11 @@ public class CraftingEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!itemsCrafting.isEmpty() && !itemsCrafting.contains(recipePlayer)) {
-                if (debugActive) {
-                    debugUtils.addLine("RecipePlayer= " + recipePlayer);
-                    debugUtils.addLine("RecipeConfig= " + itemsCrafting);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isItem(recipePlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

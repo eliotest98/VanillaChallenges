@@ -16,7 +16,7 @@ EntityCatcher:
   #       - COBBLESTONE
   #       - RANDOM
   ItemsInHand: []
-  # Mobs you want for challenge, if you want all mobs set []
+  # Mobs you want for the challenge, if you want all mobs set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

@@ -37,7 +37,7 @@ public class ItemCollector implements Listener {
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     // timer del controllo punti
-    int number = 20 * 60 * 2;
+    final int number = 20 * 60 * 2;
 
     private final HashMap<String, Location> chestLocation = new HashMap<>();
 
@@ -68,6 +68,7 @@ public class ItemCollector implements Listener {
         });
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(org.bukkit.event.block.BlockPlaceEvent e) {
         long tempo = System.currentTimeMillis();
@@ -177,7 +178,7 @@ public class ItemCollector implements Listener {
                                             }
                                         }
 
-                                        if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+                                        if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                                             return;
                                         }
 

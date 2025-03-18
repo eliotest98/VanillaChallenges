@@ -9,15 +9,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class HarvestEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("HarvestEvent");
-    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
@@ -52,21 +49,15 @@ public class HarvestEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if(!items.isEmpty() && !items.contains(blockHarvested)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockHarvestedByPlayer= " + blockHarvested);
-                    debugUtils.addLine("BlockHarvestedConfig= " + items);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isItem(blockHarvested, debugActive, debugUtils, tempo)) {
                 return;
             }
 

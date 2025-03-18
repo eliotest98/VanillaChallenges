@@ -13,7 +13,7 @@ Harvester:
   Point: 1
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # Items you want to harvest for challenge, if you want all items set []
+  # Items you want to harvest for the challenge, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

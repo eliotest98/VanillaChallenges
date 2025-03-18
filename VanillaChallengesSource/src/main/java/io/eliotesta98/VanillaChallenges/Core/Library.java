@@ -51,17 +51,18 @@ public final class Library {
 
     /**
      * Loads this library, returning true if loading was successful,
-     * false if minimum/maximum Java or Minecraft version not met
+     * false if a minimum/maximum Java or Minecraft version not met
      *
-     * @return
+     * @return boolean
      */
+    @SuppressWarnings("SameReturnValue")
     public boolean load() {
 
         try {
             final File libraries = new File(Bukkit.getWorldContainer(), "libraries");
             final File file = new File(libraries, this.groupId.replace(".", "/") + "/" + this.artifactId.replace(".", "/") + "/" + this.version + "/" + this.artifactId + "-" + this.version + ".jar");
 
-            // Download file from repository to our disk
+            // Download the file from the repository to our disk
             if (!file.exists()) {
                 file.getParentFile().mkdirs();
 
@@ -92,11 +93,12 @@ public final class Library {
     /**
      * Get a declared class method
      *
-     * @param clazz
-     * @param methodName
-     * @param args
-     * @return
+     * @param clazz a
+     * @param methodName a
+     * @param args a
+     * @return Method
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     public static Method getDeclaredMethod(Class<?> clazz, final String methodName, Class<?>... args) throws Exception {
         final Class<?> originalClass = clazz;
 
@@ -120,17 +122,19 @@ public final class Library {
 
 
     /**
-     * Invoke a non static method
+     * Invoke a non-static method
      *
-     * @param <T>
-     * @param method
-     * @param instance
-     * @param params
-     * @return
+     * @param <T> a
+     * @param method a
+     * @param instance a
+     * @param params a
+     * @return ?
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     public static <T> T invoke(final Method method, final Object instance, final Object... params) throws Exception {
 
         try {
+            //noinspection unchecked
             return (T) method.invoke(instance, params);
 
         } catch (final ReflectiveOperationException ex) {
@@ -142,7 +146,7 @@ public final class Library {
     /**
      * Return the groupId:artifactId:version as string
      *
-     * @return
+     * @return String
      */
     public String getName() {
         return this.groupId + ":" + this.artifactId + ":" + this.version;
@@ -151,7 +155,7 @@ public final class Library {
     /**
      * See {@link #getName()}
      *
-     * @return
+     * @return String
      */
     @Override
     public String toString() {
@@ -169,8 +173,8 @@ public final class Library {
      *
      * The path syntax is as follows: "groupId:artifactId:version" such as "org.jsoup:jsoup:1.14.3"
      *
-     * @param path
-     * @return
+     * @param path a
+     * @return Library
      */
     public static Library fromMavenRepo(String path) {
         final String[] split = path.split("\\:");
@@ -183,10 +187,10 @@ public final class Library {
      *
      * Use this if your favorite library is found at: https://mvnrepository.com/repos/central
      *
-     * @param groupId
-     * @param artifactId
-     * @param version
-     * @return
+     * @param groupId a
+     * @param artifactId a
+     * @param version a
+     * @return Library
      */
     public static Library fromMavenRepo(String groupId, String artifactId, String version) {
         final String jarPath = "https://repo1.maven.org/maven2/" + groupId.replace(".", "/") + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".jar";
@@ -201,11 +205,11 @@ public final class Library {
      * we use "https://repo1.maven.org/maven2/{groupId}/{artifactId}/{version}/{artifactId}-{version}.jar"
      * but in reality this could potentially be whatever such as yourdomain.com/yourlibrary.jar
      *
-     * @param groupId
-     * @param artifactId
-     * @param version
-     * @param jarPath
-     * @return
+     * @param groupId a
+     * @param artifactId a
+     * @param version a
+     * @param jarPath a
+     * @return Library
      */
     public static Library fromPath(String groupId, String artifactId, String version, String jarPath) {
         return new Library(groupId, artifactId, version, jarPath);

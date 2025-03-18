@@ -9,20 +9,17 @@ import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class MoveEvent implements Listener {
 
     private final HashMap<String, Double> distances = new HashMap<>();
     private DebugUtils debugUtils;
-    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("MoveEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
         debugUtils = new DebugUtils(e);
@@ -42,13 +39,7 @@ public class MoveEvent implements Listener {
         final Location to = e.getTo();
         final String materialFrom = from.getBlock().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
         final String materialTo = to.getBlock().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
-        String playerMaterialInHand;
-        if(Main.version113) {
-            playerMaterialInHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
-        } else {
-            playerMaterialInHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
-        }
-        String finalPlayerMaterialInHand = playerMaterialInHand;
+        String playerMaterialInHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("PlayerMoving= " + playerName);
@@ -69,25 +60,19 @@ public class MoveEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!items.isEmpty() && !items.contains(finalPlayerMaterialInHand)) {
-                if (debugActive) {
-                    debugUtils.addLine("PlayerMaterialInHand= " + finalPlayerMaterialInHand);
-                    debugUtils.addLine("ConfigMaterialInHand= " + items);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isItem(playerMaterialInHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isBlock(materialFrom, debugActive, debugUtils, tempo)) {
+            if (Controls.isBlock(materialFrom, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isBlock(materialTo, debugActive, debugUtils, tempo)) {
+            if (Controls.isBlock(materialTo, debugActive, debugUtils, tempo)) {
                 return;
             }
 

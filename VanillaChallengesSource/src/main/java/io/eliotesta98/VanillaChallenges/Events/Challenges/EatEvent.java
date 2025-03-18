@@ -9,18 +9,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class EatEvent implements Listener {
 
     private final HashMap<String, Integer> foodLevels = new HashMap<>();
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("EatEvent");
-    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onFoodLevelChange(org.bukkit.event.entity.FoodLevelChangeEvent e) {
         debugUtils = new DebugUtils(e);
@@ -28,13 +26,7 @@ public class EatEvent implements Listener {
         final String playerName = e.getEntity().getName();
         final String worldName = e.getEntity().getWorld().getName();
         final int foodLevel = e.getFoodLevel();
-        ItemStack itemUsedByPlayer;
-        if (Main.version113) {
-            itemUsedByPlayer = e.getItem();
-        } else {
-            itemUsedByPlayer = e.getEntity().getInventory().getItemInHand();
-        }
-        ItemStack finalItemUsedByPlayer = itemUsedByPlayer;
+        ItemStack itemUsedByPlayer = e.getEntity().getInventory().getItemInHand();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("PlayerEating= " + playerName);
@@ -43,30 +35,19 @@ public class EatEvent implements Listener {
                 foodLevels.put(playerName, Math.min(foodLevel, 20));
                 Main.instance.getDailyChallenge().increment(playerName, Math.abs(point));
             } else {
-                if (finalItemUsedByPlayer != null) {
-                    int number = foodLevel - foodLevels.get(playerName);
-                    foodLevels.remove(playerName);
-                    foodLevels.put(playerName, Math.min(foodLevel, 20));
+                int number = foodLevel - foodLevels.get(playerName);
+                foodLevels.remove(playerName);
+                foodLevels.put(playerName, Math.min(foodLevel, 20));
 
-                    if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
-                        return;
-                    }
-
-                    if (!items.isEmpty() && !items.contains(finalItemUsedByPlayer.getType().toString())) {
-                        if (debugActive) {
-                            debugUtils.addLine("ItemConsumedByPlayer= " + finalItemUsedByPlayer);
-                            debugUtils.addLine("ItemConsumedConfig= " + items);
-                            debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                            debugUtils.debug();
-                        }
-                        return;
-                    }
-                    Main.instance.getDailyChallenge().increment(playerName, (long) number * Math.abs(point));
-                } else {
-                    foodLevels.remove(playerName);
-                    foodLevels.put(playerName, foodLevel);
-                    Main.instance.getDailyChallenge().increment(playerName, Math.abs(point));
+                if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+                    return;
                 }
+
+                if (Controls.isItem(itemUsedByPlayer.getType().toString(), debugActive, debugUtils, tempo)) {
+                    return;
+                }
+
+                Main.instance.getDailyChallenge().increment(playerName, (long) number * Math.abs(point));
             }
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

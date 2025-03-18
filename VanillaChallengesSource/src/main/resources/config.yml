@@ -14,7 +14,7 @@ Configuration:
 
   # Points Gesture
   Points:
-    # If you want reset the player points at the end of every challenge
+    # If you want to reset the player points at the end of every challenge
     ResetPointsAtNewChallenge: false
 
     # If you want resume points without zero (Ex 1.000 = 1k)
@@ -29,7 +29,7 @@ Configuration:
       # Every time you want player remain online for give points
       Minutes: 10
 
-    # Minimum points for give rewards (-1 for disable)
+    # Minimum points for give rewards (-1 for disabling)
     MinimumPoints: 0
 
 
@@ -47,11 +47,11 @@ Configuration:
 
 
   Top:
-    # if you want yesterday top with broadcast and commands
+    # if you want top yesterday with broadcast and commands
     YesterdayTop: false
     # if you want a reward for each place in the ranking
     RankingReward: false
-    # if you want give a random reward (ATTENTION if you use RankingReward this features is false of default)
+    # if you want to give a random reward (ATTENTION if you use RankingReward this features is false of default)
     RandomReward: false
     # how many players you want reward?
     NumberOfReward: 3
@@ -67,8 +67,9 @@ Configuration:
     SuperiorSkyblock2: false
 
 
-  # If you want use H2, MySql or .yml file for data storage (write H2, MySql or Yaml)
+  # If you want to use H2, MySql or .yml file for data storage (write H2, MySql or Yaml)
   Database: 'H2'
+
 
   # These configurations work only for MySql database
   MySql:
@@ -77,17 +78,20 @@ Configuration:
     Password: "eliotesta98"
     Prefix: ""
 
+
   Backup:
     Enabled: true
     NumberOfFilesInFolder: 4
 
 
-  # If you want to obfuscate subsequent challenges in the interface
+
+  # If you want to obfuscate the following challenges in the interface
   LockedInterface: false
 
-  # If you want not regenerate a file of specific challenge or list of files of challenges you want regenerate
+
+  # If you want to not regenerate a file of a specific challenge or a list of challenges files
   ChallengeRegeneration:
-    # What you want? Blacklist or Whitelist?
+    # What do you want? Blacklist or Whitelist?
     Type: "Blacklist"
     # Global Challenges
     Globals:
@@ -189,7 +193,7 @@ Messages:
     Points: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
     Reload: '   &e/vc &6<reload> &7command reload Plugin'
     Reward: '   &e/vc &6<reward> &7for receive reward of win'
-    # if you want a file default duration or time use 0
+    # if you want a file default duration or time, use 0
     Schedule: '   &e/vc &6<schedule> <add|remove> <challenge|random> &7for add or remove a challenge from schedule'
     Top: '   &e/vc &6<top> [yesterday] &7for see the top 3'
     Restore: '   &e/vc &6<restore> [file] &7Allows you to restore a H2Database from backup file or see the list of backup files'

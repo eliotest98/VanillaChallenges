@@ -57,11 +57,11 @@ public class BreedEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(finalWorldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(finalWorldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isMob(mobBreded, debugActive, debugUtils, tempo)) {
+            if (Controls.isMob(mobBreded, debugActive, debugUtils, tempo)) {
                 return;
             }
 

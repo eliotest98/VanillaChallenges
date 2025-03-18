@@ -9,7 +9,7 @@ Consumer:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Items you want to consume for challenge, if you want all items set []
+  # Items you want to consume for the challenge, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
@@ -18,7 +18,7 @@ Consumer:
   Items: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # How many points you want give at consume?
+  # How many points you want give at consuming?
   Point: 1
   # if you want a multiplier based on all players
   Boost:

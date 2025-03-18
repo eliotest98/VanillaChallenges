@@ -11,11 +11,11 @@ Leasher:
   Worlds: []
   # How many points you want give at move?
   Point: 1
-  # Mobs you want for challenge, if you want all mobs set []
-  # add RANDOM at the end of list for select only one item random from list
-  # Ex. Items:
-  #       - DIRT
-  #       - COBBLESTONE
+  # Mobs you want to leash for the challenge, if you want all mobs set []
+  # add RANDOM at the end of list for select only one mob random from list
+  # Ex. Mobs:
+  #       - SHEEP
+  #       - COW
   #       - RANDOM
   Mobs: []
   # Able or disable Sneak when place Es. true or false or NOBODY

@@ -11,13 +11,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import java.util.HashMap;
-import java.util.List;
 
 public class ColorSheepEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ColorSheepEvent");
-    private final List<String> colors = Main.instance.getDailyChallenge().getColors();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
@@ -52,27 +50,19 @@ public class ColorSheepEvent implements Listener {
                     }
                 }
 
-                if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+                if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     return;
                 }
 
-                if (!Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
+                if (Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
                     return;
                 }
 
-                if (!colors.isEmpty() && !colors.contains(colorPlayer)) {
-                    if (debugActive) {
-                        debugUtils.addLine("ConfigColor= " + colors);
-                        debugUtils.addLine("PlayerColorg= " + colorPlayer);
-                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug();
-                    }
+                if (Controls.isColor(colorPlayer, debugActive, debugUtils, tempo)) {
                     return;
                 }
                 Main.instance.getDailyChallenge().increment(playerName, point);
                 if (debugActive) {
-                    debugUtils.addLine("ConfigColor= " + colors);
-                    debugUtils.addLine("PlayerColorg= " + colorPlayer);
                     debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                     debugUtils.debug();
                 }
@@ -96,23 +86,18 @@ public class ColorSheepEvent implements Listener {
                     debugUtils.addLine("PlayerColoring= " + playerName);
                 }
 
-                if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+                if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     return;
                 }
 
-                if (!Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
+                if (Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
                     return;
                 }
 
-                if (!colors.isEmpty() && !colors.contains(colorPlayer)) {
-                    if (debugActive) {
-                        debugUtils.addLine("ConfigColor= " + colors);
-                        debugUtils.addLine("PlayerColor= " + colorPlayer);
-                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug();
-                    }
+                if (Controls.isColor(colorPlayer, debugActive, debugUtils, tempo)) {
                     return;
                 }
+
                 Main.instance.getDailyChallenge().increment(playerName, point);
                 if (debugActive) {
                     debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

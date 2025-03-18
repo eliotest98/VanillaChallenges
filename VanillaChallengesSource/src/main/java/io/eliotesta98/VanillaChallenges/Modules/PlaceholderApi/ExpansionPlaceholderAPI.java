@@ -8,6 +8,8 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
@@ -25,17 +27,17 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
     }
 
     @Override
-    public String getAuthor() {
+    public @NotNull String getAuthor() {
         return ChatColor.translateAlternateColorCodes('&', "&celiotesta98 &e:3");
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "vanillachallenges";
     }
 
     @Override
-    public String getVersion() {
+    public @NotNull String getVersion() {
         return ChatColor.translateAlternateColorCodes('&', "&f" + Main.instance.getDescription().getVersion());
     }
 
@@ -50,7 +52,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(final Player p, final String identifier) {
+    public String onPlaceholderRequest(final Player p, final @NotNull String identifier) {
         if (p == null) {
             return "Player not found";
         }
@@ -73,7 +75,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_dailychallenge_top_name_#% # = number
         if (identifier.contains("dailychallenge_top_name_")) {
             String number = identifier.replace("dailychallenge_top_name_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
@@ -92,7 +94,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_dailychallenge_top_points_#% # = number
         if (identifier.contains("dailychallenge_top_points_")) {
             String number = identifier.replace("dailychallenge_top_points_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
@@ -120,9 +122,9 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         if (identifier.equalsIgnoreCase("dailychallenge_boost_points_remain")) {
             if (!Main.instance.getDailyChallenge().isActive()) {
                 long pointsRemain = Main.instance.getDailyChallenge().getPointsBoost() - Main.instance.getDailyChallenge().getCountPointsChallenge();
-                return MoneyUtils.transform(pointsRemain) + "";
+                return MoneyUtils.transform(pointsRemain);
             } else {
-                return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoost()) + "";
+                return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoost());
             }
         }
         // %vanillachallenges_dailychallenge_boost_multiplier_single_player%
@@ -140,16 +142,16 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
                     long pointsRemain = Main.instance.getDailyChallenge().getBoostSinglePlayers().get(p.getName());
                     return pointsRemain + "";
                 } else {
-                    return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoostSinglePlayer()) + "";
+                    return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoostSinglePlayer());
                 }
             } else {
-                return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoostSinglePlayer()) + "";
+                return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoostSinglePlayer());
             }
         }
         // %vanillachallenges_top_victories_name_#% # = number
         if (identifier.contains("top_victories_name_")) {
             String number = identifier.replace("top_victories_name_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
@@ -167,7 +169,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_top_victories_points_#% # = number
         if (identifier.contains("top_victories_points_")) {
             String number = identifier.replace("top_victories_points_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
@@ -186,7 +188,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_top_first_place_name_#% # = number
         if(identifier.contains("top_first_place_name_")) {
             String number = identifier.replace("top_first_place_name_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
@@ -196,7 +198,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
                 numberTop = 1;
             }
             try {
-                return Main.db.getTopFirstPlace().get(numberTop - 1).getPlayerName() + "";
+                return Main.db.getTopFirstPlace().get(numberTop - 1).getPlayerName();
             } catch (IndexOutOfBoundsException exception) {
                 return "0";
             }
@@ -205,7 +207,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_top_first_place_points_#% # = number
         if(identifier.contains("top_first_place_points_")) {
             String number = identifier.replace("top_first_place_points_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
@@ -224,7 +226,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_top_second_place_name_#% # = number
         if(identifier.contains("top_second_place_name_")) {
             String number = identifier.replace("top_second_place_name_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
@@ -234,7 +236,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
                 numberTop = 1;
             }
             try {
-                return Main.db.getTopSecondPlace().get(numberTop - 1).getPlayerName() + "";
+                return Main.db.getTopSecondPlace().get(numberTop - 1).getPlayerName();
             } catch (IndexOutOfBoundsException exception) {
                 return "0";
             }
@@ -243,7 +245,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_top_second_place_points_#% # = number
         if(identifier.contains("top_second_place_points_")) {
             String number = identifier.replace("top_second_place_points_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
@@ -262,7 +264,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_top_third_place_name_#% # = number
         if(identifier.contains("top_third_place_name_")) {
             String number = identifier.replace("top_third_place_name_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {
@@ -272,7 +274,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
                 numberTop = 1;
             }
             try {
-                return Main.db.getTopThirdPlace().get(numberTop - 1).getPlayerName() + "";
+                return Main.db.getTopThirdPlace().get(numberTop - 1).getPlayerName();
             } catch (IndexOutOfBoundsException exception) {
                 return "0";
             }
@@ -281,7 +283,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         // %vanillachallenges_top_third_place_points_#% # = number
         if(identifier.contains("top_third_place_points_")) {
             String number = identifier.replace("top_third_place_points_", "");
-            int numberTop = 1;
+            int numberTop;
             try {
                 numberTop = Integer.parseInt(number);
             } catch (Exception ex) {

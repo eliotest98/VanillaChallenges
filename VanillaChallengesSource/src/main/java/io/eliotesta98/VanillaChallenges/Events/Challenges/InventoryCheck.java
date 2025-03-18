@@ -7,7 +7,7 @@ import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class InventoryCheck {
@@ -50,7 +50,7 @@ public class InventoryCheck {
                     }
                 }
 
-                if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+                if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     continue;
                 }
 

@@ -59,7 +59,7 @@ public class ChatEvent implements Listener {
             }
         }
 
-        if (!Controls.isWorldEnable(world, debugActive, debugUtils, tempo)) {
+        if (Controls.isWorldEnable(world, debugActive, debugUtils, tempo)) {
             return;
         }
 
@@ -73,6 +73,7 @@ public class ChatEvent implements Listener {
             }
             word = "";
         }
+
         if (debugActive) {
             debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
             debugUtils.debug();

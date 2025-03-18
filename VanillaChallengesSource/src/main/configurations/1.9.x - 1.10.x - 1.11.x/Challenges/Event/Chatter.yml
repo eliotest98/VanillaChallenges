@@ -1,22 +1,22 @@
 Chatter:
   TypeChallenge: 'ChatChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '5:00'
-    # How long do you want the challenge to last in hours ?
+    # How long do you want the challenge to last in hours?
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Words you want for the challenge, PS. if Quests is empty ([]) the challenge use StringFormatter also use Quests
+  # Words you want for the challenge, P.S. if Quests is empty ([]) the challenge use StringFormatter
   Strings:
     # What quests and response do you want? # Format of quests: Quest:Answer Ex. Where is the name of plugin?:VanillaChallenge
     Quests: []
     # What letters do you want the word to consist of?
     StringFormatter: 'abcdefghijklmnopqrstuvywxz0123456789'
-  # How many points you want give at character?
+  # How many points do you want give at character?
   Point: 1
   # if you want a multiplier based on all players
   Boost:

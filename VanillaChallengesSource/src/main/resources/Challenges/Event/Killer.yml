@@ -9,11 +9,11 @@ Killer:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Mobs you want to kill for challenge, if you want all mobs set []
-  # add RANDOM at the end of list for select only one item random from list
-  # Ex. Items:
-  #       - DIRT
-  #       - COBBLESTONE
+  # Mobs you want to kill for the challenge, if you want all mobs set []
+  # add RANDOM at the end of list for select only one mob random from list
+  # Ex. Mobs:
+  #       - CREEPER
+  #       - SPIDER
   #       - RANDOM
   Mobs: []
   # Able or disable Sneak when place Es. true or false or NOBODY

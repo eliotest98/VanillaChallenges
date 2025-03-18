@@ -9,7 +9,7 @@ Dier:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Causes you want to damage for challenge, if you want all causes write []
+  # Causes you want to damage for the challenge, if you want all causes set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
@@ -23,7 +23,7 @@ Dier:
   #       - COBBLESTONE
   #       - RANDOM
   ItemsInHand: []
-  # Type of items in inventory for death (P.S. if the player have one in list is ok), if you want all items write []
+  # Type of items in inventory for death (P.S. if the player has one in the list is ok), if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
@@ -32,14 +32,14 @@ Dier:
   Items: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # Able or disable death with Lands. (If a true the player must die in his own land, otherwise he can die anywhere)
-  # ATTENTION! For activate this function you can use Lands Plugin and activate it in config.yml
+  # Able or disable death with Lands. (If it is true, the player must die in his own land, otherwise he can die anywhere)
+  # ATTENTION! To activate this function, you can use the Land Plugin and activate it in config.yml
   DeathInLand: false
   # How many points you want give at death?
   Point: 1
   # If you want keepInventory for this challenge
   KeepInventory: false
-  # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)
+  # Number of slots you want employed to receive points (min = 0, max all inventory, -1 for disabling)
   Number: -1
   # if you want a multiplier based on all players
   Boost:

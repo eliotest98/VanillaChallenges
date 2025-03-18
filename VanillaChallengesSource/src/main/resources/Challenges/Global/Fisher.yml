@@ -1,6 +1,6 @@
 Fisher:
   TypeChallenge: 'FishingChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   # If you want a random start or end set 'Random'
@@ -11,7 +11,7 @@ Fisher:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Items you want to fish for challenge, if you want all items write []
+  # Items you want to fish for the challenge, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

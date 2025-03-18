@@ -74,6 +74,7 @@ public class ReloadUtils {
     /**
      * Loads and enables a plugin.
      */
+    @SuppressWarnings({"CallToPrintStackTrace", "unchecked"})
     public static void load(String name) {
         Plugin target = null;
         boolean paperLoaded = false;
@@ -110,7 +111,7 @@ public class ReloadUtils {
 
             paperLoaded = true;
         } catch (Exception ignore) {
-        } // Paper most likely not loaded
+        } // For Paper most likely not loaded
 
         if (!paperLoaded) {
             try {
@@ -125,9 +126,7 @@ public class ReloadUtils {
         }
 
         Plugin finalTarget = target;
-        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugins()[0], () -> {
-            loadCommands(finalTarget);
-        }, 10L);
+        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugins()[0], () -> loadCommands(finalTarget), 10L);
     }
 
     public static List<Map.Entry<String, Command>> getCommandsFromPlugin(Plugin plugin) {
@@ -185,6 +184,7 @@ public class ReloadUtils {
         load(Main.instance.getName());
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "unchecked"})
     public static void unload(String plName) {
         Map<String, Object> lookupNames = null;
         List<Plugin> pluginList = null;
@@ -459,6 +459,7 @@ public class ReloadUtils {
         System.gc();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void setKnownCommands(Map<String, Command> knownCommands) {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
@@ -494,6 +495,7 @@ public class ReloadUtils {
         }
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "unchecked"})
     public static Map<String, Command> getKnownCommands() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
@@ -534,6 +536,7 @@ public class ReloadUtils {
         return knownCommands;
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "JavaReflectionInvocation"})
     public static void wrap(Command command, String alias) {
         try {
             Class.forName("com.mojang.brigadier.CommandDispatcher");
@@ -627,6 +630,7 @@ public class ReloadUtils {
         }
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "JavaReflectionMemberAccess"})
     public static void unwrap(String command) {
         try {
             Class.forName("com.mojang.brigadier.CommandDispatcher");
@@ -671,7 +675,6 @@ public class ReloadUtils {
         try {
             bField = Class.forName("net.minecraft.server" + (nmsVers? nms : ".") + "CommandDispatcher").getDeclaredField("b");
             bField.setAccessible(true);
-            ;
         } catch (Exception e) {
             try {
                 Class<?> clazz = Class.forName("net.minecraft.commands.CommandDispatcher");
@@ -715,6 +718,7 @@ public class ReloadUtils {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void sync() {
         Method syncCommandsMethod;
         try {

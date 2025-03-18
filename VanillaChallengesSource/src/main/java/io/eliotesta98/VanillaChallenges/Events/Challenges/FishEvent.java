@@ -9,14 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FishEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("FishEvent");
-    private final List<String> fish = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
@@ -56,23 +52,18 @@ public class FishEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if(!fish.isEmpty() && !fish.contains(fishCaugh)) {
-                if (debugActive) {
-                    debugUtils.addLine("FishCaughByPlayer= " + fishCaugh);
-                    debugUtils.addLine("FishCaughConfig= " + fish);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isItem(fishCaugh, debugActive, debugUtils, tempo)) {
                 return;
             }
+
             Main.instance.getDailyChallenge().increment(playerName, point);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

@@ -1,6 +1,6 @@
 ExpCollector:
   TypeChallenge: 'CollectorExpChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   # If you want a random start or end set 'Random'
@@ -15,7 +15,7 @@ ExpCollector:
   Sneaking: 'NOBODY'
   # How many points you want give at exp point?
   Point: 1
-  # If you want keepInventory for this challenge (ATTENTION! There is a prevention for exp refill from death)
+  # If you want keepInventory for this challenge (ATTENTION! There is prevention for exp refill from death)
   KeepInventory: false
   # if you want a multiplier based on all players
   Boost:

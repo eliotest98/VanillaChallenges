@@ -11,13 +11,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import java.util.HashMap;
-import java.util.List;
 
 public class HealthRegenEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("HealthRegenEvent");
-    private final List<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final HashMap<String, Double> playersRegen = new HashMap<>();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
@@ -61,17 +59,11 @@ public class HealthRegenEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!causes.isEmpty() && !causes.contains(reason.toString())) {
-                if (debugActive) {
-                    debugUtils.addLine("CausePlayer= " + reason);
-                    debugUtils.addLine("CauseConfig= " + causes);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isCause(reason.toString(), debugActive, debugUtils, tempo)) {
                 return;
             }
 

@@ -7,28 +7,23 @@ import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlo
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import java.util.Arrays;
-import java.util.List;
 
 public class DyeEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("DyeEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final List<String> items = Main.instance.getDailyChallenge().getItems();
-    private final List<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final boolean keepInventory = Main.instance.getDailyChallenge().isKeepInventory();
     private final boolean deathInLand = Main.instance.getDailyChallenge().isDeathInLand();
     private final boolean landsEnabled = Main.instance.getConfigGesture().getHooks().get("Lands");
     private final int numberOfSlots = Main.instance.getDailyChallenge().getNumber();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDeath(org.bukkit.event.entity.PlayerDeathEvent e) {
         debugUtils = new DebugUtils(e);
@@ -37,36 +32,18 @@ public class DyeEvent implements Listener {
         String worldName = e.getEntity().getWorld().getName();
         String causePlayer = e.getEntity().getLastDamageCause().getCause().toString();
         Location playerLocation = e.getEntity().getLocation();
+
         boolean sneakingPlayer = e.getEntity().isSneaking();
         final PlayerInventory inventory = e.getEntity().getInventory();
-        String itemInHandPlayer;
-        if (Main.version113) {
-            itemInHandPlayer = e.getEntity().getInventory().getItemInMainHand().getType().toString();
-        } else {
-            itemInHandPlayer = e.getEntity().getInventory().getItemInHand().getType().toString();
-        }
+        String itemInHandPlayer = e.getEntity().getInventory().getItemInHand().getType().toString();
         if (keepInventory) {
             e.setKeepInventory(true);
         }
-        if (!items.isEmpty()) {
-            boolean itemok = false;
-            for (String itemName : items) {
-                ItemStack itemStack = new ItemStack(Material.getMaterial(itemName));
-                if (inventory.contains(itemStack)) {
-                    itemok = true;
-                    break;
-                }
-            }
-            if (!itemok) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemsListPlayer= " + Arrays.toString(inventory.getContents()));
-                    debugUtils.addLine("ItemConfig= " + items);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
-                return;
-            }
+
+        if (!Controls.isItemInInventory(inventory, debugActive, debugUtils, tempo)) {
+            return;
         }
+
         int sizeInventory = 0;
         if (numberOfSlots != -1) {
             for (int i = 0; i < inventory.getStorageContents().length; i++) {
@@ -80,6 +57,7 @@ public class DyeEvent implements Listener {
             if (debugActive) {
                 debugUtils.addLine("PlayerDye= " + playerName);
             }
+
 
             if (deathInLand && landsEnabled) {
                 if (LandsUtils.isTrusted(playerLocation, playerName)) {
@@ -111,25 +89,19 @@ public class DyeEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!causes.isEmpty() && !causes.contains(causePlayer)) {
-                if (debugActive) {
-                    debugUtils.addLine("CausePlayer= " + causePlayer);
-                    debugUtils.addLine("CauseConfig= " + causes);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isCause(causePlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isItemInHand(itemInHandPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isItemInHand(itemInHandPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
@@ -146,7 +118,7 @@ public class DyeEvent implements Listener {
             Main.instance.getDailyChallenge().increment(playerName, point);
         });
 
-        /*
+        /*TODO
         System.out.println(e.getEntity().getSaturation());
         System.out.println(e.getEntity().isSprinting());
         System.out.println(e.getEntity().isInWater());

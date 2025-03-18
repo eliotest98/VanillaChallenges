@@ -16,20 +16,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockReceiveGameEvent;
-import java.util.List;
 
 public class GameBlockEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("BlockReceiveGameEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final List<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final boolean landsEnabled = Main.instance.getConfigGesture().getHooks().get("Lands");
     private final boolean worldGuardEnabled = Main.instance.getConfigGesture().getHooks().get("WorldGuard");
     private final boolean griefPreventionEnabled = Main.instance.getConfigGesture().getHooks().get("GriefPrevention");
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
     private boolean ok = false;
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockGame(BlockReceiveGameEvent e) {
         debugUtils = new DebugUtils(e);
@@ -46,13 +45,8 @@ public class GameBlockEvent implements Listener {
 
         final Player player = (Player) e.getEntity();
         final String blockBreaking = e.getBlock().getType().toString();
-        final String itemInMainHand;
+        final String itemInMainHand = player.getInventory().getItemInHand().getType().toString();
         final String detection = e.getEvent().getKey().getKey();
-        if (Main.version113) {
-            itemInMainHand = player.getInventory().getItemInMainHand().getType().toString();
-        } else {
-            itemInMainHand = player.getInventory().getItemInHand().getType().toString();
-        }
         final boolean sneakingPlayer = player.isSneaking();
         final Location location = player.getLocation();
         final World world = player.getWorld();
@@ -118,29 +112,23 @@ public class GameBlockEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!causes.isEmpty() && !causes.contains(detection)) {
-                if (debugActive) {
-                    debugUtils.addLine("CausePlayer= " + detection);
-                    debugUtils.addLine("CauseConfig= " + causes);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isCause(detection, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isBlock(blockBreaking, debugActive, debugUtils, tempo)) {
+            if (Controls.isBlock(blockBreaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
+            if (Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 

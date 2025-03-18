@@ -46,11 +46,11 @@ public class PlayerShearsEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 

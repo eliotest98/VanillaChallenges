@@ -54,7 +54,7 @@ public class VanillaChallengesAPI {
     /**
      * Returns the gui name of Daily Challenge Selected.
      *
-     * @return the gui name of challenge.
+     * @return the gui name of the challenge.
      */
     public static String getDailyChallengeGuiName() {
         DebugUtils debug = new DebugUtils("API");
@@ -70,7 +70,7 @@ public class VanillaChallengesAPI {
     /**
      * Returns the gui item of Daily Challenge Selected.
      *
-     * @return the gui item of challenge.
+     * @return the gui item of the challenge.
      */
     public static String getDailyChallengeGuiItem() {
         DebugUtils debug = new DebugUtils("API");
@@ -86,7 +86,7 @@ public class VanillaChallengesAPI {
     /**
      * Returns the time remaining of Daily Challenge Selected.
      *
-     * @return the time remaining of challenge.
+     * @return the time remaining of the challenge.
      */
     public static int getDailyChallengeTime() {
         DebugUtils debug = new DebugUtils("API");
@@ -141,7 +141,7 @@ public class VanillaChallengesAPI {
 
     /**
      * Add VanillaChallenges points at specific player.<br>
-     * If you want to remove points see removePoints method.
+     * If you search for how to remove points, see removePoints method.
      *
      * @param playerName name of player
      * @param points     points you want give at player <br>
@@ -153,7 +153,7 @@ public class VanillaChallengesAPI {
 
     /**
      * Remove VanillaChallenges points at specific player.<br>
-     * If you want to remove points see removePoints method.
+     * If you search for how to remove points, see removePoints method.
      *
      * @param playerName name of player
      * @param points     points you want give at player

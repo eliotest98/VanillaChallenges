@@ -16,7 +16,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import io.eliotesta98.VanillaChallenges.Core.Main;
-
+import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.*;
 
@@ -69,7 +69,7 @@ public class Commands implements CommandExecutor {
     private final boolean randomReward = Main.instance.getConfigGesture().isRandomReward();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!(sender instanceof Player)) {
             Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
                 DebugUtils debug = new DebugUtils("Commands");
@@ -634,7 +634,7 @@ public class Commands implements CommandExecutor {
                     sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;
                     while (!top.isEmpty()) {
-                        sender.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+                        sender.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
                         top.remove(0);
                         i++;
                     }
@@ -1305,7 +1305,7 @@ public class Commands implements CommandExecutor {
                     p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;
                     while (!top.isEmpty()) {
-                        p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+                        p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
                         top.remove(0);
                         i++;
                     }

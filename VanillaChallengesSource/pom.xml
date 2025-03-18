@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.eliotesta98.VanillaChallenges</groupId>
     <artifactId>VanillaChallengesSource</artifactId>
-    <version>1.7.2</version>
+    <version>1.7.3</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8
@@ -153,6 +153,13 @@
         </repository>
     </repositories>
     <dependencies>
+        <!--  Spigot  -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
         <!--  h2  -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -164,13 +171,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--  Spigot  -->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--  GameProfile  -->
@@ -260,9 +260,9 @@
         <dependency>
             <groupId>io.eliotesta98</groupId>
             <artifactId>Tombs</artifactId>
-            <version>1.0.11</version>
+            <version>1.1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Tombs 1.0.11.jar</systemPath>
+            <systemPath>${project.basedir}/lib/TombsApi-1.1.jar</systemPath>
         </dependency>
         <!-- WorldGuard -->
         <dependency>
@@ -308,6 +308,12 @@
             <artifactId>brigadier</artifactId>
             <version>1.0.18</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

@@ -1,16 +1,21 @@
 Killer:
   TypeChallenge: 'KillChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '5:00'
-    # How long do you want the challenge to last in hours ?
+    # How long do you want the challenge to last in hours?
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Mobs you want to kill for challenge, if you want all mobs set []
+  # Mobs you want to kill for the challenge, if you want all mobs set []
+  # add RANDOM at the end of list for select only one mob random from list
+  # Ex. Mobs:
+  #       - CREEPER
+  #       - SPIDER
+  #       - RANDOM
   Mobs: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'

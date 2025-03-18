@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 public class BlockBreakEvent implements Listener {
 
@@ -28,17 +27,13 @@ public class BlockBreakEvent implements Listener {
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
     private boolean ok = false;
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockBreakEvent e) {
         debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         final String blockBreaking = e.getBlock().getType().toString();
-        final String itemInMainHand;
-        if (Main.version113) {
-            itemInMainHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
-        } else {
-            itemInMainHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
-        }
+        final String itemInMainHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
         final Player player = e.getPlayer();
         final boolean sneakingPlayer = e.getPlayer().isSneaking();
         final Location location = e.getPlayer().getLocation();
@@ -104,19 +99,19 @@ public class BlockBreakEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isBlock(blockBreaking, debugActive, debugUtils, tempo)) {
+            if (Controls.isBlock(blockBreaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
+            if (Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 

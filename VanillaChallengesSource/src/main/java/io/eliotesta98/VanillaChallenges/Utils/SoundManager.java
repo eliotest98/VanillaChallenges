@@ -7,6 +7,7 @@ import org.bukkit.*;
 import java.lang.reflect.Method;
 
 public class SoundManager {
+    @SuppressWarnings("CallToPrintStackTrace")
     public void playSound(final CommandSender commandSender, final String sound, final float n, final float n2) {
         Sound _sound = this.getSound(sound);
         if (_sound == null) {
@@ -24,6 +25,7 @@ public class SoundManager {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void playSound(final Player player, final String sound, final float n, final float n2) {
         Sound _sound = this.getSound(sound);
         if (_sound == null) {
@@ -38,6 +40,7 @@ public class SoundManager {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void playSound(final Location location, final String sound, final float n, final float n2) {
         Sound _sound = this.getSound(sound);
         if (_sound == null) {
@@ -52,6 +55,7 @@ public class SoundManager {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private Sound getSound(final String sound) {
         try {
             // Get the `valueOf` method from the `Sound` class with String as its parameter

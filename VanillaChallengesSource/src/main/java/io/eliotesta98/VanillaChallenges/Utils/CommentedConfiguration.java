@@ -6,7 +6,7 @@ package io.eliotesta98.VanillaChallenges.Utils;
  *
  *     You may use the resource and/or modify it - but not
  *     claiming it as your own work. You are not allowed
- *     to remove this message, unless being permitted by
+ *     to remove this message unless being permitted by
  *     the developer of the resource.
  *
  *     Spigot: https://www.spigotmc.org/resources/authors/ome_r.25629/
@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -67,8 +68,8 @@ public final class CommentedConfiguration extends YamlConfiguration {
      * @param file            The file to save changes into if there are any.
      * @param resource        The resource to sync with. Can be provided by JavaPlugin#getResource
      * @param ignoredSections An array of sections that will be ignored, and won't get updated
-     *                        if they are already exist in the config. If they are not in the
-     *                        config, they will be synced with the resource's config.
+     *                        if they already exist in the config.
+     *                        If they are not in the config, they will be synced with the resource's config.
      */
     public void syncWithConfig(File file, InputStream resource, String... ignoredSections) throws IOException {
         if (creationFailure) return;
@@ -137,8 +138,8 @@ public final class CommentedConfiguration extends YamlConfiguration {
      * @throws InvalidConfigurationException if the contents are invalid.
      */
     @Override
-    public void loadFromString(String contents) throws InvalidConfigurationException {
-        //Load data of the base yaml (keys and values).
+    public void loadFromString(@NotNull String contents) throws InvalidConfigurationException {
+        //Load data of the base YAML (keys and values).
         super.loadFromString(contents);
 
         //Parse the contents into lines.
@@ -181,7 +182,8 @@ public final class CommentedConfiguration extends YamlConfiguration {
      * @return A string that contains all the data, ready to be written into a file.
      */
     @Override
-    public String saveToString() {
+    @SuppressWarnings("deprecation")
+    public @NotNull String saveToString() {
         //First, we set headers to null - as we will handle all comments, including headers, in this method.
         this.options().header(null);
 
@@ -258,7 +260,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
                 changed = true;
             }
 
-            //Checking if there is a valid comment for the path, and also making sure the comments are not the same.
+            //Checking if there is a valid comment for the path, and also making sure the comments are different.
             if (commentedConfig.containsComment(path) && !commentedConfig.getComment(path).equals(getComment(path))) {
                 //Saving the comment of the key into the config.
                 setComment(path, commentedConfig.getComment(path));
@@ -293,7 +295,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
      * @param file The file to load the config from.
      * @return A new instance of CommentedConfiguration contains all the data (keys, values and comments).
      */
-    public static CommentedConfiguration loadConfiguration(File file) {
+    public static @NotNull CommentedConfiguration loadConfiguration(@NotNull File file) {
         try {
             FileInputStream stream = new FileInputStream(file);
             return loadConfiguration(new InputStreamReader(stream, StandardCharsets.UTF_8));
@@ -319,7 +321,8 @@ public final class CommentedConfiguration extends YamlConfiguration {
      * @param reader The reader to load the config from.
      * @return A new instance of CommentedConfiguration contains all the data (keys, values and comments).
      */
-    public static CommentedConfiguration loadConfiguration(Reader reader) {
+    @SuppressWarnings("CallToPrintStackTrace")
+    public static @NotNull CommentedConfiguration loadConfiguration(@NotNull Reader reader) {
         //Creating a blank instance of the config.
         CommentedConfiguration config = new CommentedConfiguration();
 
@@ -361,6 +364,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
      * @param currentSection  The last known section.
      * @return The full path of the line.
      */
+    @SuppressWarnings("StatementWithEmptyBody")
     private static String getSectionPath(CommentedConfiguration commentedConfig, String line, String currentSection) {
         //Removing all spaces and getting the name of the section.
         String newSection = line.trim().split(": ")[0];
@@ -378,12 +382,12 @@ public final class CommentedConfiguration extends YamlConfiguration {
             newSection = currentSection + "." + newSection;
         }
 
-        //Looking for the parent of the the new section.
+        //Looking for the parent of the new section.
         else {
             String parentSection = currentSection;
 
             /*Getting the parent of the new section. The loop will stop in one of the following situations:
-            1) The parent is empty - which means we have no where to go, as that's the root section.
+            1) The parent is empty - which means we have nowhere to go, as that's the root section.
             2) The config contains a valid path that was built with <parent-section>.<new-section>.*/
             while (!parentSection.isEmpty() &&
                     !commentedConfig.contains((parentSection = getParentPath(parentSection)) + "." + newSection)) ;
@@ -444,7 +448,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
     }
 
     /**
-     * Parsing a section into a list that contains all of it's keys and their values without changing their order.
+     * Parsing a section into a list that contains all of its keys and their values without changing their order.
      *
      * @param section The section to convert.
      * @return A list that contains all the keys and their values.

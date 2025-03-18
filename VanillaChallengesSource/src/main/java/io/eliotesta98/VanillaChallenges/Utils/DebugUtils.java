@@ -56,7 +56,7 @@ public class DebugUtils {
     }
 
     public void removeAll() {
-        this.lines.removeAll(this.lines);
+        this.lines.clear();
     }
 
     public void debug() {

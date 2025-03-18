@@ -9,14 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ItemBreakEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ItemBreakEvent");
-    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
@@ -50,21 +46,15 @@ public class ItemBreakEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(playerSneaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if(!items.isEmpty() && !items.contains(brokenItemByPlayer)) {
-                if (debugActive) {
-                    debugUtils.addLine("BlockHarvestedByPlayer= " + brokenItemByPlayer);
-                    debugUtils.addLine("BlockHarvestedConfig= " + items);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isItem(brokenItemByPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

@@ -39,7 +39,7 @@ public class Challenge {
     private String onGround = "NOBODY";
     private boolean keepInventory = false;
     // timer del salvataggio punti
-    int timeNumber = 20 * 60;
+    final int timeNumber = 20 * 60;
     private BukkitTask task, boostingTask;
     int point = 1;
     private int pointsBoost = 0;
@@ -253,7 +253,7 @@ public class Challenge {
     }
 
     public void incrementCommands(String playerName, long amount) {
-        if (!Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
+        if (Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
             return;
         }
         if (Main.instance.getConfigGesture().getTasks().getIfTaskSaving("SavePoints")
@@ -288,7 +288,7 @@ public class Challenge {
     }
 
     public void increment(String playerName, long amount) {
-        if (!Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
+        if (Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
             return;
         }
         if (Main.instance.getConfigGesture().getTasks().getIfTaskSaving("SavePoints")

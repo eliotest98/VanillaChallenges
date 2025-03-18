@@ -9,7 +9,7 @@ EggThrower:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # if you want count spawn chicken write CHICKEN, if you not want count chicken set [] (1 point at throw)
+  # If you want count spawn chicken write CHICKEN, if you not want count chicken, set [] (1 point at throw)
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

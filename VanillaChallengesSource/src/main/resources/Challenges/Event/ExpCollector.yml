@@ -13,7 +13,7 @@ ExpCollector:
   Sneaking: 'NOBODY'
   # How many points you want give at exp point?
   Point: 1
-  # If you want keepInventory for this challenge (ATTENTION! There is a prevention for exp refill from death)
+  # If you want keepInventory for this challenge (ATTENTION! There is prevention for exp refill from death)
   KeepInventory: false
   # if you want a multiplier based on all players
   Boost:

@@ -9,7 +9,7 @@ Cooker:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Items you want cook for challenge, if you want all items set []
+  # Items you want to cook for the challenge, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

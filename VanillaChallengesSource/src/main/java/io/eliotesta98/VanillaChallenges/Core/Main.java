@@ -10,6 +10,7 @@ import io.eliotesta98.VanillaChallenges.Modules.CubeGenerator.CubeGeneratorEvent
 import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
 import io.eliotesta98.VanillaChallenges.Modules.PlaceholderApi.ExpansionPlaceholderAPI;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Events;
+import jdk.internal.net.http.common.Log;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
@@ -90,14 +91,14 @@ public class Main extends JavaPlugin {
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.logError(e);
                 Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create config.yml!");
             } finally {
                 if (inputStream != null) {
                     try {
                         inputStream.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.logError(e);
                     }
                 }
                 if (outputStream != null) {
@@ -105,7 +106,7 @@ public class Main extends JavaPlugin {
                         // outputStream.flush();
                         outputStream.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.logError(e);
                     }
 
                 }
@@ -124,12 +125,12 @@ public class Main extends JavaPlugin {
             String[] strings = splits.split(":");
             cfg.syncWithConfig(configFile, this.getResource(configName), strings);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.logError(e);
         }
         try {
             config = new ConfigGesture(YamlConfiguration.loadConfiguration(configFile));
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.logError(e);
         }
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
         getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
@@ -198,10 +199,10 @@ public class Main extends JavaPlugin {
         if (getConfigGesture().getDatabase().equalsIgnoreCase("H2")) {
             try {
                 db = new H2Database(getDataFolder().getAbsolutePath());
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 getServer().getConsoleSender().sendMessage("§cTry to restore the database");
                 restoreDatabase();
-                ex.printStackTrace();
+                Log.logError(e);
                 return;
             }
         } else if (getConfigGesture().getDatabase().equalsIgnoreCase("MySql")) {

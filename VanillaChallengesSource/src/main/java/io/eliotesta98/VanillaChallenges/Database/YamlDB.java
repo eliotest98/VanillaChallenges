@@ -33,6 +33,7 @@ public class YamlDB implements Database {
         initialize("");
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void initialize(String AbsolutePath) {
         configFile = new File(Main.instance.getDataFolder(), "database.yml");
@@ -131,6 +132,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void backupDb(int numberOfFiles) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
@@ -196,6 +198,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void saveTopYesterday(List<Challenger> newTopYesterday) {
         for (Challenger challenger : newTopYesterday) {
@@ -208,6 +211,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void removeTopYesterday() {
         for (Challenger challenger : topYesterday) {
@@ -235,6 +239,7 @@ public class YamlDB implements Database {
         return false;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void saveChallenges() {
         for (Challenge challenge : challenges) {
             file.set("Challenges." + challenge.getChallengeName(), challenge.getTimeChallenge());
@@ -301,7 +306,7 @@ public class YamlDB implements Database {
         List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGesture().getNumberOfRewardPlayer());
         int i = 1;
         while (!top.isEmpty()) {
-            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
             top.remove(0);
             i++;
         }
@@ -316,6 +321,7 @@ public class YamlDB implements Database {
         return stats;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertPlayerStat(PlayerStats playerStats) {
         file.set("Statistic." + playerStats.getPlayerName() + ".NumberVictories", playerStats.getNumberOfVictories());
@@ -329,6 +335,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void deletePlayerStatWithPlayerName(String playerName) {
         file.set("Statistic." + playerName, null);
@@ -353,6 +360,7 @@ public class YamlDB implements Database {
         insertPlayerStat(playerStats);
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void deleteChallengeWithName(String challengeName) {
         file.set("Challenges." + challengeName, null);
@@ -363,6 +371,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void updateChallenge(String nomeChallenge, int number) {
         file.set("Challenges." + nomeChallenge, number);
@@ -373,6 +382,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void updateChallenger(String playerName, long value) {
         file.set("Points." + playerName, (int) value);
@@ -383,6 +393,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void insertChallengerEvent(String playerName, long value) {
         file.set("PointsLastChallenge." + playerName, (int) value);
         try {
@@ -392,6 +403,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertChallenger(String playerName, long value) {
         playerPoints.add(new Challenger(playerName, (int) value));
@@ -403,6 +415,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void clearChallengesFromFile() {
         file.set("Challenges", null);
@@ -413,6 +426,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void clearStats() {
         file.set("Statistic", null);
@@ -433,6 +447,7 @@ public class YamlDB implements Database {
         return false;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertChallenge(String challengeName, int time) {
         file.set("Challenges." + challengeName, time);
@@ -482,6 +497,7 @@ public class YamlDB implements Database {
         return false;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void clearChallengersOldPoints() {
         file.set("PointsLastChallenge", null);
         oldPoints.clear();
@@ -492,6 +508,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void clearChallengers() {
         file.set("Points", null);
@@ -503,6 +520,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void deleteDailyWinnerWithId(int id) {
         file.set("DailyWinners." + id, null);
@@ -555,6 +573,7 @@ public class YamlDB implements Database {
         return top;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertDailyWinner(DailyWinner dailyWinner) {
         file.set("DailyWinners." + dailyWinner.getId() + ".PlayerName", dailyWinner.getPlayerName());
@@ -567,6 +586,7 @@ public class YamlDB implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertChallengeEvent(String challengeName, int time) {
         Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challengeName);

@@ -1,31 +1,46 @@
 Dier:
   TypeChallenge: 'DyerChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '5:00'
-    # How long do you want the challenge to last in hours ?
+    # How long do you want the challenge to last in hours?
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Causes you want to damage for challenge, if you want all causes write []
+  # Causes you want for the challenge, if you want all causes set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Causes: []
   # Type of item in main hand for death, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   ItemsInHand: []
-  # Type of items in inventory for death (P.S. if the player have one in list is ok), if you want all items write []
+  # Type of items in inventory for death (P.S. if the player has one in the list is ok), if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # Able or disable death with Lands. (If a true the player must die in his own land, otherwise he can die anywhere)
-  # ATTENTION! For activate this function you can use Lands Plugin and activate it in config.yml
+  # Able or disable death with Lands. (If set true, the player must die in his own land, otherwise he can die anywhere)
+  # ATTENTION! To activate this feature, you have to use the Lands Plugin and activate it in config.yml
   DeathInLand: false
   # How many points you want give at death?
   Point: 1
   # If you want keepInventory for this challenge
   KeepInventory: false
-  # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)
+  # Number of slots you want employed for give the points (min = 0, max all inventory, -1 for disabled)
   Number: -1
   # if you want a multiplier based on all players
   Boost:

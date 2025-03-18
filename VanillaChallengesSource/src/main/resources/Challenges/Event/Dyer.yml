@@ -9,7 +9,7 @@ Dyer:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Colors you want use for challenge, if you want all colors set []
+  # Colors you want use for the challenge, if you want all colors set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

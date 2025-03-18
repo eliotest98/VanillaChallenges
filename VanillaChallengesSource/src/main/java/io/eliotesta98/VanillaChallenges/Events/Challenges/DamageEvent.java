@@ -10,13 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import java.util.List;
 
 public class DamageEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("DamageEvent");
-    private final List<String> causes = Main.instance.getDailyChallenge().getCauses();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
@@ -50,17 +48,11 @@ public class DamageEvent implements Listener {
                     }
                 }
 
-                if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+                if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     return;
                 }
 
-                if (!causes.isEmpty() && !causes.contains(causePlayer)) {
-                    if (debugActive) {
-                        debugUtils.addLine("CausePlayer= " + causePlayer);
-                        debugUtils.addLine("CauseConfig= " + causes);
-                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug();
-                    }
+                if (Controls.isCause(causePlayer, debugActive, debugUtils, tempo)) {
                     return;
                 }
 

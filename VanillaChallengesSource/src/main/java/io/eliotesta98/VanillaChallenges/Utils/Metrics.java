@@ -60,6 +60,7 @@ public class Metrics {
      * @param serviceId The id of the service. It can be found at <a
      *     href="https://bstats.org/what-is-my-plugin-id">What is my plugin id?</a>
      */
+    @SuppressWarnings("deprecation")
     public Metrics(JavaPlugin plugin, int serviceId) {
         this.plugin = plugin;
         // Get the config file
@@ -812,10 +813,10 @@ public class Metrics {
         }
 
         /**
-         * Escapes the given string like stated in https://www.ietf.org/rfc/rfc4627.txt.
+         * escapes the given string like stated in https://www.ietf.org/rfc/rfc4627.txt.
          *
          * <p>This method escapes only the necessary characters '"', '\'. and '\u0000' - '\u001F'.
-         * Compact escapes are not used (e.g., '\n' is escaped as "\u000a" and not as "\n").
+         * compact escapes are not used (e.g., '\n' is escaped as "\u000a" and not as "\n").
          *
          * @param value The value to escape.
          * @return The escaped value.

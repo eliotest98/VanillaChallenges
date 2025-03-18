@@ -11,11 +11,11 @@ AFK:
   Worlds: []
   # How many points you want give if respect condition?
   Point: 10
-  # Number of slots you want employed for receive points (min = 0, max all inventory, -1 to disabled)
+  # Number of slots you want employed to receive points (min = 0, max all inventory, -1 for disabling)
   Number: 10
   # Every x minutes you want check condition
   Minutes: 2
-  # Items you want checked (P.S. if the player have one in list is ok) ([] for all items)
+  # Items you want checked (P. S. if the player have one in list is ok) ([] for all items)
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

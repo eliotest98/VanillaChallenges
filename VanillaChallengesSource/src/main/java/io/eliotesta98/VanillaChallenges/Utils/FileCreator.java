@@ -1,7 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,21 +59,6 @@ public class FileCreator {
         }
     }
 
-    public static void controlFiles(String folder, File[] folderFiles) {
-        ArrayList<String> copyFiles = new ArrayList<>(files);
-        for (File file : folderFiles) {
-            String fileName = file.getName();
-            copyFiles.remove(fileName);
-        }
-        if (!copyFiles.isEmpty()) {
-            for (String file : copyFiles) {
-                createFileChallenges(folder, file);
-            }
-            Main.instance.getServer().getConsoleSender().sendMessage("§e" + copyFiles.size() + " " + folder + " Challenges recreated!");
-            Main.instance.getServer().getConsoleSender().sendMessage("§ePlease not delete files! Disable the challenge in the configuration file!");
-        }
-    }
-
     public static void controlFiles(String folder, File[] folderFiles, List<String> otherFiles, String blacklistOrWhitelist) {
 
         // Carico la lista dei file
@@ -117,6 +101,7 @@ public class FileCreator {
         Main.instance.getServer().getConsoleSender().sendMessage("§a" + files.size() + " " + folder + " Challenges created!");
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void createFileChallenges(String folder, String fileName) {
 
         File newFile = new File(Main.instance.getDataFolder() +
@@ -133,14 +118,18 @@ public class FileCreator {
                 // write the inputStream to a FileOutputStream
                 outputStream = new FileOutputStream(newFile);
 
-                int read = 0;
+                int read;
                 byte[] bytes = new byte[1024];
+
+                if (inputStream == null) {
+                    return;
+                }
 
                 while ((read = inputStream.read(bytes)) != -1) {
                     outputStream.write(bytes, 0, read);
                 }
 
-            } catch (IOException e) {
+            } catch (IOException ignore) {
 
             } finally {
                 if (inputStream != null) {

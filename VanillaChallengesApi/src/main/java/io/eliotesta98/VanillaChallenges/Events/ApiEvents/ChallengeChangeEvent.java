@@ -4,7 +4,7 @@ import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import org.bukkit.event.*;
 
 /**
- * This Event is invoked when challenge is finished or forced to finish <br>
+ * This Event is invoked when the challenge is finished or forced to finish <br>
  *
  * @see org.bukkit.event.Cancellable
  * @see org.bukkit.event.Listener
@@ -26,6 +26,7 @@ public class ChallengeChangeEvent extends Event implements Cancellable, Listener
     }
 
     // Spigot request
+    @SuppressWarnings("NullableProblems")
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;

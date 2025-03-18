@@ -16,6 +16,7 @@ public class Database {
     private final FileConfiguration file;
     private final File configFile;
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public Database() {
         this.configFile = new File(Main.instance.getDataFolder(), "itemCollectorDb.yml");
 
@@ -44,6 +45,7 @@ public class Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void insertChest(String playerName, Location location) {
         file.set("Chest." + playerName, location.getWorld().getName() + "\\" + location.getBlockX() + "\\" + location.getBlockY() + "\\" + location.getBlockZ());
         try {
@@ -58,6 +60,7 @@ public class Database {
         insertChest(playerName, chestLocation);
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void deleteChest(String playerName) {
         file.set("Chest." + playerName, null);
         try {

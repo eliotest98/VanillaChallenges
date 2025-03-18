@@ -1,12 +1,12 @@
 ExpCollector:
   TypeChallenge: 'CollectorExpChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '5:00'
-    # How long do you want the challenge to last in hours ?
+    # How long do you want the challenge to last in hours?
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
@@ -14,7 +14,7 @@ ExpCollector:
   Sneaking: 'NOBODY'
   # How many points you want give at exp point?
   Point: 1
-  # If you want keepInventory for this challenge (ATTENTION! There is a prevention for exp refill from death)
+  # If you want keepInventory for this challenge (ATTENTION! There is prevention for exp refill from death)
   KeepInventory: false
   # if you want a multiplier based on all players
   Boost:

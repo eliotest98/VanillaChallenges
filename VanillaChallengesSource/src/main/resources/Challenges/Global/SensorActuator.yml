@@ -1,6 +1,6 @@
 SensorActuator:
   TypeChallenge: 'SensorChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   # If you want a random start or end set 'Random'
@@ -13,7 +13,7 @@ SensorActuator:
   Worlds: []
   # How many points you want give at shoot?
   Point: 1
-  # Blocks you want for challenge, if you want all blocks set []
+  # Blocks you want for the challenge, if you want all blocks set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
@@ -31,7 +31,7 @@ SensorActuator:
   ItemsInHand: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # Causes you want for challenge, if you want all causes write []
+  # Causes you want for the challenge, if you want all causes write []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

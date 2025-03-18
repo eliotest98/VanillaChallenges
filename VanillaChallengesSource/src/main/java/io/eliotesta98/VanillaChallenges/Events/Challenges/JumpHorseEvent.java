@@ -13,7 +13,6 @@ public class JumpHorseEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("JumpHorseEvent");
-    private final double power = Main.instance.getDailyChallenge().getPower();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
@@ -51,19 +50,14 @@ public class JumpHorseEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if(power != 0.0 && powerJump < power) {
-                if (debugActive) {
-                    debugUtils.addLine("PowerJumpByPlayer= " + powerJump);
-                    debugUtils.addLine("PowerJumpConfig= " + power);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isPower(powerJump, debugActive, debugUtils, tempo)) {
                 return;
             }
+
             Main.instance.getDailyChallenge().increment(playerName, point);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

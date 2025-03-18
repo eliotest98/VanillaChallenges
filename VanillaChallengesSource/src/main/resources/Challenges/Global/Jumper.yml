@@ -1,6 +1,6 @@
 Jumper:
   TypeChallenge: 'JumpChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   # If you want a random start or end set 'Random'

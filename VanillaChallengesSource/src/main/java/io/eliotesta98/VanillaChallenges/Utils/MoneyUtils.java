@@ -18,7 +18,7 @@ public class MoneyUtils {
             }
             //100000 - 999999
             if (size == 6) {
-                return transform.charAt(0) + "" + transform.charAt(1) + "" + transform.charAt(2) + "K";
+                return transform.charAt(0) + "" + transform.charAt(1) + transform.charAt(2) + "K";
             }
             //1000000 - 9999999
             if (size == 7) {
@@ -30,7 +30,7 @@ public class MoneyUtils {
             }
             //100000000 - 999999999
             if (size == 9) {
-                return transform.charAt(0) + "" + transform.charAt(1) + "" + transform.charAt(2) + "M";
+                return transform.charAt(0) + "" + transform.charAt(1) + transform.charAt(2) + "M";
             }
             return transform;
         } else {

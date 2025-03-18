@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import java.util.HashMap;
-import java.util.List;
 
 public class VehicleMoveEvent implements Listener {
 
@@ -19,7 +18,6 @@ public class VehicleMoveEvent implements Listener {
     private final DebugUtils debugUtils = new DebugUtils("VehicleMoveEvent");
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("VehicleMoveEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final List<String> vehicles = Main.instance.getDailyChallenge().getVehicle();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -60,17 +58,11 @@ public class VehicleMoveEvent implements Listener {
                     }
                 }
 
-                if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+                if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     return;
                 }
 
-                if(!vehicles.isEmpty() && !vehicles.contains(playerVehicle.getType().toString())) {
-                    if (debugActive) {
-                        debugUtils.addLine("VehicleConfig= " + vehicles);
-                        debugUtils.addLine("VehiclePlayer= " + playerVehicle.getType());
-                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                        debugUtils.debug();
-                    }
+                if (!Controls.isVehicle(playerVehicle.getType().toString(), debugActive, debugUtils, tempo)) {
                     return;
                 }
 

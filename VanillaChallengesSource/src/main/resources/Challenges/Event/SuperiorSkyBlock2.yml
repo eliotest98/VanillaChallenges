@@ -7,7 +7,7 @@ SuperiorSkyBlock2:
     Start: '05:00'
     # What time do you want the challenge to end?
     End: '24:00'
-  # How many points you want give at water source absorbing?
+  # How many points you want give for each mission?
   Point: 1
   # if you want a multiplier based on all players
   Boost:

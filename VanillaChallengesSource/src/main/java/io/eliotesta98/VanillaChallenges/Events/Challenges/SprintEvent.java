@@ -10,10 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class SprintEvent implements Listener {
 
@@ -21,27 +18,21 @@ public class SprintEvent implements Listener {
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("SprintEvent");
     private final HashMap<String, Boolean> players = new HashMap<>();
     private final HashMap<String, Double> distances = new HashMap<>();
-    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSprint(PlayerToggleSprintEvent e) {
         debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
         final String blockWalk = e.getPlayer().getLocation().subtract(0, 1, 0).getBlock().getType().toString();
-        String itemInHand;
-        if(Main.version113) {
-            itemInHand = e.getPlayer().getInventory().getItemInMainHand().getType().toString();
-        } else {
-            itemInHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
-        }
+        String itemInHand = e.getPlayer().getInventory().getItemInHand().getType().toString();
         final String worldName = e.getPlayer().getWorld().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
                 debugUtils.addLine("ToggledSprintPlayer= " + e.getPlayer().getName());
                 debugUtils.addLine("BlockStepOnPlayer= " + blockWalk);
-                debugUtils.addLine("ItemInHandConfig= " + items);
                 debugUtils.addLine("ItemInHandPlayer= " + itemInHand);
             }
 
@@ -60,21 +51,15 @@ public class SprintEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if(!items.isEmpty() && !items.contains(itemInHand)) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemInHandConfig= " + items);
-                    debugUtils.addLine("ItemInHandPlayer= " + itemInHand);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isItem(itemInHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isBlock(blockWalk, debugActive, debugUtils, tempo)) {
+            if (Controls.isBlock(blockWalk, debugActive, debugUtils, tempo)) {
                 return;
             }
 

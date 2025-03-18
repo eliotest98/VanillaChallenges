@@ -107,11 +107,11 @@ public class PrimeEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

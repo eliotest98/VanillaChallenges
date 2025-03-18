@@ -21,6 +21,7 @@ public class ChallengeChangeEvent extends Event implements Cancellable, Listener
     }
 
     // Spigot request
+    @SuppressWarnings("NullableProblems")
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;

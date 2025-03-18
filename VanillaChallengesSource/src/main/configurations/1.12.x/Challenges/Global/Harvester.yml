@@ -1,12 +1,12 @@
 Harvester:
   TypeChallenge: 'HarvestChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: false
   # Time settings
   TimeSettings:
     # What time do you want the challenge to start?
     Start: '5:00'
-    # How long do you want the challenge to last in hours ?
+    # How long do you want the challenge to last in hours?
     Time: 24
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
@@ -14,7 +14,12 @@ Harvester:
   Point: 1
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # Items you want to harvest for challenge, if you want all items set []
+  # Items you want to harvest for the challenge, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
   Items: []
   # if you want a multiplier based on all players
   Boost:

@@ -9,14 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ItemConsumeEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ItemConsumeEvent");
-    private final List<String> itemsConsume = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
@@ -48,21 +44,15 @@ public class ItemConsumeEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if(!itemsConsume.isEmpty() && itemsConsume.contains(itemConsumingByPlayer)) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemConsumeByPlayer= " + itemConsumingByPlayer);
-                    debugUtils.addLine("itemConsumeConfig= " + itemsConsume);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isItem(itemConsumingByPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 

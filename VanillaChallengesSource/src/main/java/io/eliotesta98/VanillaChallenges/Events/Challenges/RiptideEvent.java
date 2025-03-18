@@ -44,11 +44,11 @@ public class RiptideEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            Main.instance.getDailyChallenge().increment(player.getName(), (long) point);
+            Main.instance.getDailyChallenge().increment(player.getName(), point);
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
                 debugUtils.debug();

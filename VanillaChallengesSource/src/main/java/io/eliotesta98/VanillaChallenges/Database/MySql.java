@@ -30,6 +30,7 @@ public class MySql implements Database {
         prefix = Main.instance.getConfigGesture().getMySqlPrefix();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void initialize(String AbsolutePath) {
         instance = this;
@@ -67,10 +68,11 @@ public class MySql implements Database {
         }
     }
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() {
         return connection;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void createConnection(final String absolutePath) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -134,6 +136,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertChallengeEvent(String challengeName, int time) {
         try {
@@ -153,6 +156,7 @@ public class MySql implements Database {
         clearChallengesFromFile();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void deleteChallengeWithName(String challengeName) {
         try {
@@ -179,6 +183,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void disconnect() {
         if (connection != null) {
@@ -191,6 +196,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public ArrayList<PlayerStats> getAllPlayerStats() {
         ArrayList<PlayerStats> stats = new ArrayList<>();
@@ -214,6 +220,7 @@ public class MySql implements Database {
         return stats;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertPlayerStat(PlayerStats playerStats) {
         try {
@@ -233,6 +240,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void deletePlayerStatWithPlayerName(String playerName) {
         try {
@@ -259,6 +267,7 @@ public class MySql implements Database {
         insertPlayerStat(playerStats);
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public ArrayList<Challenger> getAllChallengersTopYesterday() {
         ArrayList<Challenger> points = new ArrayList<>();
@@ -280,16 +289,16 @@ public class MySql implements Database {
         return points;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public boolean isPresent(String playerName) {
         ResultSet resultSet;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT `PlayerName` FROM " + prefix + "Challenger WHERE `PlayerName` ='" + playerName + "'");
             resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                return true;
-            }
+            boolean result = resultSet.next();
             preparedStatement.close();
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             ReloadUtils.reload();
@@ -297,6 +306,7 @@ public class MySql implements Database {
         return false;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void updateChallenger(String playerName, long points) {
         try {
@@ -310,6 +320,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertChallenger(String playerName, long points) {
         try {
@@ -342,6 +353,7 @@ public class MySql implements Database {
         insertDailyWinner(dailyWinner);
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void removeTopYesterday() {
         PreparedStatement preparedStatement;
@@ -366,6 +378,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void insertChallengerTopYesterday(String playerName, long point) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -388,6 +401,7 @@ public class MySql implements Database {
         return 0;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void backupDb(int numberOfBackupedFile) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
@@ -447,6 +461,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public ArrayList<Challenger> getAllChallengers() {
         ArrayList<Challenger> points = new ArrayList<>();
         ResultSet resultSet;
@@ -467,6 +482,7 @@ public class MySql implements Database {
         return points;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertDailyWinner(DailyWinner dailyWinner) {
         try {
@@ -485,6 +501,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void clearChallengers() {
         PreparedStatement preparedStatement;
@@ -502,6 +519,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void updateChallenge(String nomeChallenge, int timeResume) {
         try {
@@ -515,6 +533,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public ArrayList<DailyWinner> getAllDailyWinners() {
         ArrayList<DailyWinner> dailyWinners = new ArrayList<>();
@@ -538,6 +557,7 @@ public class MySql implements Database {
         return dailyWinners;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void deleteDailyWinnerWithId(int id) {
         try {
@@ -551,6 +571,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public PlayerStats getStatsPlayer(String playerName) {
         ResultSet resultSet;
@@ -573,6 +594,7 @@ public class MySql implements Database {
         return playerStats;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public ArrayList<PlayerStats> getTopVictories() {
         ArrayList<PlayerStats> stats = new ArrayList<>();
@@ -597,6 +619,7 @@ public class MySql implements Database {
         return stats;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public ArrayList<PlayerStats> getTopFirstPlace() {
         ArrayList<PlayerStats> stats = new ArrayList<>();
@@ -621,6 +644,7 @@ public class MySql implements Database {
         return stats;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public ArrayList<PlayerStats> getTopSecondPlace() {
         ArrayList<PlayerStats> stats = new ArrayList<>();
@@ -645,6 +669,7 @@ public class MySql implements Database {
         return stats;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public ArrayList<PlayerStats> getTopThirdPlace() {
         ArrayList<PlayerStats> stats = new ArrayList<>();
@@ -679,6 +704,7 @@ public class MySql implements Database {
         clearStats();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void clearDailyWinners() {
         PreparedStatement preparedStatement;
         try {
@@ -695,6 +721,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void clearChallengersOld() {
         PreparedStatement preparedStatement;
         try {
@@ -724,6 +751,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public ArrayList<Challenge> getAllChallenges() {
         ArrayList<Challenge> challengeDBS = new ArrayList<>();
@@ -756,6 +784,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void clearChallenges() {
         PreparedStatement preparedStatement;
         try {
@@ -773,6 +802,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void clearStats() {
         PreparedStatement preparedStatement;
@@ -790,6 +820,7 @@ public class MySql implements Database {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public boolean isPlayerHaveStats(String playerName) {
         ResultSet resultSet;
@@ -805,6 +836,7 @@ public class MySql implements Database {
         return false;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public void insertChallenge(String challengeName, int timeResume) {
         try {
@@ -838,6 +870,7 @@ public class MySql implements Database {
         clearChallengers();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void insertChallengerEvent(String playerName, long points) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -865,6 +898,7 @@ public class MySql implements Database {
         clearChallengersOld();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public ArrayList<Challenger> getAllOldChallengers() {
         ArrayList<Challenger> points = new ArrayList<>();
@@ -885,16 +919,16 @@ public class MySql implements Database {
         return points;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public boolean isChallengePresent(String challengeName) {
         ResultSet resultSet;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "Challenge WHERE `NomeChallenge`='" + challengeName + "'");
             resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                return true;
-            }
+            boolean result = resultSet.next();
             preparedStatement.close();
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             ReloadUtils.reload();

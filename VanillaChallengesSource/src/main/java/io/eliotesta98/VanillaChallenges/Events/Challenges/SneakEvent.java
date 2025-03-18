@@ -9,17 +9,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SneakEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("SneakEvent");
-    private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSneak(org.bukkit.event.player.PlayerToggleSneakEvent e) {
         debugUtils = new DebugUtils(e);
@@ -48,21 +45,15 @@ public class SneakEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if(!items.isEmpty() && !items.contains(itemInHand)) {
-                if (debugActive) {
-                    debugUtils.addLine("ItemInHandConfig= " + items);
-                    debugUtils.addLine("ItemInHandPlayer= " + itemInHand);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (Controls.isItem(itemInHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isBlock(blockWalk, debugActive, debugUtils, tempo)) {
+            if (Controls.isBlock(blockWalk, debugActive, debugUtils, tempo)) {
                 return;
             }
 

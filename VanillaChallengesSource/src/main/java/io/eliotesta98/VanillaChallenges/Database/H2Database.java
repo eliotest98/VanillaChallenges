@@ -61,6 +61,7 @@ public class H2Database implements Database {
             preparedStatement.close();
         } catch (SQLException e) {
             Main.instance.getServer().getConsoleSender().sendMessage("§cError Database not connected!");
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             Main.instance.onDisable();
         }
@@ -122,7 +123,7 @@ public class H2Database implements Database {
         List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGesture().getNumberOfRewardPlayer());
         int i = 1;
         while (!top.isEmpty()) {
-            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+            Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
             top.remove(0);
             i++;
         }
@@ -151,6 +152,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -168,6 +170,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -186,6 +189,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -202,6 +206,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -219,6 +224,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -236,6 +242,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -275,6 +282,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         return stats;
@@ -290,6 +298,7 @@ public class H2Database implements Database {
             preparedStatement.close();
             return result;
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         return false;
@@ -312,6 +321,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         return playerStats;
@@ -335,6 +345,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         Collections.reverse(stats);
@@ -359,6 +370,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         Collections.reverse(stats);
@@ -383,6 +395,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         Collections.reverse(stats);
@@ -407,6 +420,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         Collections.reverse(stats);
@@ -428,6 +442,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -440,6 +455,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -475,6 +491,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -494,6 +511,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -507,6 +525,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -540,6 +559,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -554,6 +574,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -572,6 +593,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -591,6 +613,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -636,6 +659,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         return points;
@@ -647,11 +671,11 @@ public class H2Database implements Database {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Challenge WHERE `NomeChallenge`='" + challengeName + "'");
             resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                return true;
-            }
+            boolean result = resultSet.next();
             preparedStatement.close();
+            return result;
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -666,6 +690,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -685,6 +710,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -697,11 +723,11 @@ public class H2Database implements Database {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT `PlayerName` FROM Challenger WHERE `PlayerName` ='" + playerName + "'");
             resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                return true;
-            }
+            boolean result = resultSet.next();
             preparedStatement.close();
+            return result;
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -715,6 +741,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -732,6 +759,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -750,6 +778,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -763,6 +792,7 @@ public class H2Database implements Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -783,6 +813,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -801,6 +832,7 @@ public class H2Database implements Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
             ReloadUtils.reload();
         }
@@ -841,6 +873,7 @@ public class H2Database implements Database {
                                     }
                                 }
                             } catch (ParseException e) {
+                                //noinspection CallToPrintStackTrace
                                 e.printStackTrace();
                             }
                         }
@@ -865,6 +898,7 @@ public class H2Database implements Database {
                 }
                 file.save(configFile);
             } catch (IOException e) {
+                //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
         }
@@ -886,17 +920,19 @@ public class H2Database implements Database {
         try {
             Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         try {
             connection = DriverManager.
                     getConnection("jdbc:h2:" + absolutePath + File.separator + "vanillachallenges;mode=MySQL;");
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() {
         return connection;
     }
 
@@ -905,6 +941,7 @@ public class H2Database implements Database {
         try {
             connection.close();
         } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         instance = null;

@@ -1,6 +1,6 @@
 BoatMove:
   TypeChallenge: 'VehicleMoveChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   # If you want a random start or end set 'Random'
@@ -13,7 +13,7 @@ BoatMove:
   Worlds: []
   # How many points you want give for movement?
   Point: 1
-  # What vehicle you want use the player? [] for all Vehicle
+  # Which vehicle do you want the player to use? For all Vehicle set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

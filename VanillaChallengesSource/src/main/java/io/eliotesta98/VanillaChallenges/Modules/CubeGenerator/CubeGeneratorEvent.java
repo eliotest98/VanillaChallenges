@@ -40,19 +40,19 @@ public class CubeGeneratorEvent implements Listener {
                 return;
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isBlock(blockBreaking, debugActive, debugUtils, tempo)) {
+            if (Controls.isBlock(blockBreaking, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
+            if (Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
                 return;
             }
 

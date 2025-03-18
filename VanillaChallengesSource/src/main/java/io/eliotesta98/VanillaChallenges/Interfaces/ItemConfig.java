@@ -34,6 +34,7 @@ public class ItemConfig {
         this.nameItemConfig = nameItemConfig;
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
     public ItemStack createItemConfig(String currentInterface, int pageNumber, String nbt, int positionItem) {
         ItemStack item;
         if (nbt.split(";").length >= 17) {
@@ -64,7 +65,7 @@ public class ItemConfig {
                 } catch (NoSuchMethodError | MalformedURLException ignored) {
                     GameProfile profile = new GameProfile(UUID.randomUUID(), "");
                     profile.getProperties().put("textures", new Property("textures", texture));
-                    Field profileField = null;
+                    Field profileField;
                     try {
                         profileField = meta.getClass().getDeclaredField("profile");
                         profileField.setAccessible(true);
@@ -176,8 +177,8 @@ public class ItemConfig {
                             String[] descriptions = nbt.split(";")[8].split(",");
                             for (String s : descriptions) {
                                 String[] rigo = s.split(":");
-                                String aDescription = "";
-                                String aNumber = "";
+                                String aDescription;
+                                String aNumber;
                                 if (rigo.length == 3) {
                                     aDescription = rigo[1].substring(1);
                                     aNumber = rigo[2];

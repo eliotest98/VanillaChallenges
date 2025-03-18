@@ -34,7 +34,7 @@ public class Tasks {
     }
 
     public boolean isChallengeStart() {
-        return challengeStart;
+        return !challengeStart;
     }
 
     private final static Pattern hexPattern = Pattern.compile("\\{block[0-9]\\}");
@@ -45,7 +45,7 @@ public class Tasks {
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
             saving.replace("Broadcast", true);
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (!Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
+                if (Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
                     break;
                 }
                 Main.instance.getDailyChallenge().message(p);
@@ -60,7 +60,7 @@ public class Tasks {
                 }
                 int i = 1;
                 while (!top.isEmpty()) {
-                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", "" + MoneyUtils.transform(top.get(0).getPoints()))));
+                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
                     top.remove(0);
                     i++;
                 }
@@ -106,6 +106,7 @@ public class Tasks {
             final int endHour = Integer.parseInt(endSplit[0]);
             final int endMinutes = Integer.parseInt(endSplit[1]);
 
+            @SuppressWarnings("CallToPrintStackTrace")
             @Override
             public void run() {
                 saving.replace("CheckStartDay", true);

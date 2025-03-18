@@ -56,6 +56,7 @@ public class BlockPlaceEvent implements Listener {
                 }
                 return;
             }
+
             if (landsEnabled) {
                 if (LandsUtils.isTrusted(location, player.getName())) {
                     if (debugActive) {
@@ -70,6 +71,7 @@ public class BlockPlaceEvent implements Listener {
                     return;
                 }
             }
+
             if (worldGuardEnabled) {
                 if (WorldGuardUtils.isARagion(world, location)) {
                     if (debugActive) {
@@ -96,15 +98,15 @@ public class BlockPlaceEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!Controls.isBlock(materialBlockPlaced, debugActive, debugUtils, tempo)) {
+            if (Controls.isBlock(materialBlockPlaced, debugActive, debugUtils, tempo)) {
                 return;
             }
 

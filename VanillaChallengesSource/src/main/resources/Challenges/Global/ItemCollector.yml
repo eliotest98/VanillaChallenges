@@ -1,6 +1,6 @@
 ItemCollector:
   TypeChallenge: 'ItemCollectionChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   # If you want a random start or end set 'Random'
@@ -11,9 +11,9 @@ ItemCollector:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # How many points you want give at character?
+  # How many points do you want give at item?
   Point: 1
-  # Items you want to harvest for challenge, if you want all items set []
+  # Items you want to collect for the challenge, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

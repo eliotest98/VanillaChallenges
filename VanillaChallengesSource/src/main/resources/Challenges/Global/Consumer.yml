@@ -1,6 +1,6 @@
 Consumer:
   TypeChallenge: 'ConsumeChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   # If you want a random start or end set 'Random'
@@ -11,7 +11,7 @@ Consumer:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Items you want to consume for challenge, if you want all items set []
+  # Items you want to consume for the challenge, if you want all items set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
@@ -20,7 +20,7 @@ Consumer:
   Items: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # How many points you want give at consume?
+  # How many points do you want give at consuming?
   Point: 1
   # if you want a multiplier based on all players
   Boost:

@@ -14,8 +14,6 @@ public class ShootArrowEvent implements Listener {
 
     private DebugUtils debugUtils;
     private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ShootArrowEvent");
-    private final double force = Main.instance.getDailyChallenge().getForce();
-    private final String onGround = Main.instance.getDailyChallenge().getOnGround();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
@@ -47,27 +45,15 @@ public class ShootArrowEvent implements Listener {
                 }
             }
 
-            if (!Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+            if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (!onGround.equalsIgnoreCase("NOBODY") && Boolean.getBoolean(onGround) != onGroundPlayer) {
-                if (debugActive) {
-                    debugUtils.addLine("OnGroundConfig= " + onGround);
-                    debugUtils.addLine("OnGroundPlayer= " + onGroundPlayer);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isOnGround(onGroundPlayer, debugActive, debugUtils, tempo)) {
                 return;
             }
 
-            if (force != 0.0 && forceShoot < force) {
-                if (debugActive) {
-                    debugUtils.addLine("ForceShootByPlayer= " + forceShoot);
-                    debugUtils.addLine("ForceShootConfig= " + force);
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (!Controls.isForce(forceShoot, debugActive, debugUtils, tempo)) {
                 return;
             }
 

@@ -1,6 +1,6 @@
 JumperHorse:
   TypeChallenge: 'JumpWithHorseChallenge'
-  # if you want to enable or disable challenge
+  # if you want to enable or disable the challenge
   Enabled: true
   # Time settings
   # If you want a random start or end set 'Random'
@@ -11,7 +11,7 @@ JumperHorse:
     End: '24:00'
   # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Power you want to apply for jump with horse in challenge, if you want to disable use 0.0
+  # Power you want to apply for jump with horse for the challenge, if you want to disable use 0.0
   Power: 0.3
   # How many points you want give at jump?
   Point: 1

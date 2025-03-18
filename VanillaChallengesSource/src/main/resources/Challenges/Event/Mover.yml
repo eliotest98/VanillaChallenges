@@ -11,7 +11,7 @@ Mover:
   Worlds: []
   # How many points you want give at move?
   Point: 1
-  # Blocks you want break for challenge, if you want all blocks set []
+  # Blocks you want stepped on for the challenge, if you want all blocks set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT

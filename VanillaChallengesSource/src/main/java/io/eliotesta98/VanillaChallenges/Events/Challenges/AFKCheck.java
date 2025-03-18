@@ -8,8 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,7 +52,7 @@ public class AFKCheck {
                     continue;
                 }
 
-                if (!Controls.isWorldEnable(p.getWorld().getName(), debugActive, debugUtils, tempo)) {
+                if (Controls.isWorldEnable(p.getWorld().getName(), debugActive, debugUtils, tempo)) {
                     continue;
                 }
 
