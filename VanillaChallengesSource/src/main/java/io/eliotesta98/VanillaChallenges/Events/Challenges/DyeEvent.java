@@ -40,7 +40,7 @@ public class DyeEvent implements Listener {
             e.setKeepInventory(true);
         }
 
-        if (!Controls.isItemInInventory(inventory, debugActive, debugUtils, tempo)) {
+        if (Controls.isItemInInventory(inventory, debugActive, debugUtils, tempo)) {
             return;
         }
 

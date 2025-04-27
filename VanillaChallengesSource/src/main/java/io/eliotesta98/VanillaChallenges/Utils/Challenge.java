@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -198,9 +199,8 @@ public class Challenge {
     }
 
     public void setPlayers(List<Challenger> challengers) {
-        while (!challengers.isEmpty()) {
-            players.put(challengers.get(0).getNomePlayer(), challengers.get(0).getPoints());
-            challengers.remove(0);
+        for (Challenger challenger : challengers) {
+            players.put(challenger.getNomePlayer(), challenger.getPoints());
         }
     }
 
@@ -507,7 +507,7 @@ public class Challenge {
         }
         return challenger;
     }
-    
+
     public boolean isMinimumPointsReached() {
         long count = 0;
         for (long number : Collections.unmodifiableMap(players).values()) {
@@ -728,7 +728,7 @@ public class Challenge {
                     startBoostSinglePlayers.remove(playerName);
                     if (tasksSinglePlayers.containsKey(playerName)) {
                         BukkitTask task = tasksSinglePlayers.get(playerName);
-                        if(task != null) {
+                        if (task != null) {
                             task.cancel();
                         }
                     }

@@ -7,10 +7,15 @@ import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class VehicleMoveEvent implements Listener {
 
@@ -21,28 +26,30 @@ public class VehicleMoveEvent implements Listener {
     private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
+    public void onMove(org.bukkit.event.vehicle.VehicleMoveEvent e) {
         long tempo = System.currentTimeMillis();
-        if (e.getTo() == null) {
-            if (debugActive) {
-                debugUtils.addLine("EndLocation= null");
-                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                debugUtils.debug();
+        List<String> players = new ArrayList<>();
+        if (Main.version113) {
+            for (Entity entity : e.getVehicle().getPassengers()) {
+                if (entity instanceof Player) {
+                    players.add(entity.getName());
+                }
             }
-            return;
+        } else {
+            Entity entity = e.getVehicle().getPassenger();
+            if (entity instanceof Player) {
+                players.add(entity.getName());
+            }
         }
-        final String playerName = e.getPlayer().getName();
         final Location from = e.getFrom();
         final Location to = e.getTo();
-        final Entity playerVehicle = e.getPlayer().getVehicle();
-        final String worldName = e.getPlayer().getWorld().getName();
+        final Entity playerVehicle = e.getVehicle();
+        final String worldName = playerVehicle.getWorld().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             if (debugActive) {
-                debugUtils.addLine("PlayerMoving= " + playerName);
+                debugUtils.addLine("PlayersMoving= " + Arrays.toString(players.toArray()));
             }
-
-            if (playerVehicle != null) {
-
+            for (String playerName : players) {
                 if (superiorSkyBlock2Enabled) {
                     if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(playerName))) {
                         if (debugActive) {
@@ -77,11 +84,11 @@ public class VehicleMoveEvent implements Listener {
                 } else {
                     distances.replace(playerName, newDouble);
                 }
+            }
 
-                if (debugActive) {
-                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
-                    debugUtils.debug();
-                }
+            if (debugActive) {
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
             }
         });
     }

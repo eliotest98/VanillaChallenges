@@ -12,8 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class DailyGiveWinners implements Listener {
 
@@ -25,7 +24,7 @@ public class DailyGiveWinners implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDailyGiveRewards(PlayerJoinEvent e) {
         long tempo = System.currentTimeMillis();
-        ArrayList<DailyWinner> winners = Main.db.getAllDailyWinners();
+        List<DailyWinner> winners = Main.db.getDailyWinners();
         if (winners.isEmpty()) {
             stopEvent();
             if (debug) {
@@ -38,7 +37,7 @@ public class DailyGiveWinners implements Listener {
     }
 
     @SuppressWarnings("deprecation")
-    public static void getRewardsAtPlayers(Player player, ArrayList<DailyWinner> winners) {
+    public static void getRewardsAtPlayers(Player player, List<DailyWinner> winners) {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
             for (int i = 0; i < winners.size(); i++) {
                 if (winners.get(i).getPlayerName().equalsIgnoreCase(player.getName())) {
@@ -99,7 +98,6 @@ public class DailyGiveWinners implements Listener {
                             winners.remove(number);
                         });
                     }
-                    break;
                 }
             }
         });

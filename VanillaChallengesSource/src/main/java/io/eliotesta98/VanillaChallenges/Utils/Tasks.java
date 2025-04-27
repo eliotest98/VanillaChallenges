@@ -51,7 +51,7 @@ public class Tasks {
                 Main.instance.getDailyChallenge().message(p);
                 List<Challenger> top;
                 if (Main.instance.getConfigGesture().isYesterdayTop()) {
-                    top = Main.db.getAllChallengersTopYesterday();
+                    top = Main.db.getTopYesterday();
                 } else {
                     top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
                 }

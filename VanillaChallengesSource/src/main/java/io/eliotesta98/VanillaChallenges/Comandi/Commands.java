@@ -134,7 +134,7 @@ public class Commands implements CommandExecutor {
                         return;
                     }
                     if (args[1].equalsIgnoreCase("stop")) {
-                        if (!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (!Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -184,7 +184,7 @@ public class Commands implements CommandExecutor {
                                     }
                                 }
                             }
-                            Main.db.deleteChallengeWithName(Main.db.getAllChallenges().get(0).getChallengeName());
+                            Main.db.deleteChallengeWithName(Main.db.getChallenges().get(0).getChallengeName());
                             Main.db.resumeOldPoints();
                             ReloadUtils.reload();
                         });
@@ -193,7 +193,7 @@ public class Commands implements CommandExecutor {
                             debug.debug();
                         }
                     } else if (args[1].equalsIgnoreCase("random")) {
-                        if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -224,7 +224,7 @@ public class Commands implements CommandExecutor {
                             debug.debug();
                         }
                     } else if (Main.instance.getConfigGesture().getChallengesEvent().get(args[1]) != null) {
-                        if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -367,7 +367,7 @@ public class Commands implements CommandExecutor {
                         return;
                     }
 
-                    if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                    if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
                         sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -481,7 +481,7 @@ public class Commands implements CommandExecutor {
                             sender.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
                         } else {
                             if (args[2].equalsIgnoreCase("random")) {
-                                ArrayList<Challenge> scheduledChallenges = Main.db.getAllChallenges();
+                                List<Challenge> scheduledChallenges = Main.db.getChallenges();
                                 ArrayList<Challenge> remainChallenges = new ArrayList<>();
                                 boolean find;
                                 for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGesture().getChallenges().entrySet()) {
@@ -522,7 +522,7 @@ public class Commands implements CommandExecutor {
                     } else if (args[1].equalsIgnoreCase("remove")) {
                         if (challenge1 == null) {
                             StringBuilder send = new StringBuilder("\n");
-                            for (Challenge challenge : Main.db.getAllChallenges()) {
+                            for (Challenge challenge : Main.db.getChallenges()) {
                                 send.append(challengeOfList.replace("{challenge}", challenge.getChallengeName())).append("\n");
                             }
                             sender.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
@@ -624,12 +624,12 @@ public class Commands implements CommandExecutor {
                     List<Challenger> top = new ArrayList<>();
                     if (args.length == 1) {
                         if (Main.instance.getConfigGesture().isYesterdayTop()) {
-                            top = Main.db.getAllChallengersTopYesterday();
+                            top = Main.db.getTopYesterday();
                         } else {
                             top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
                         }
                     } else if (args[1].equalsIgnoreCase("yesterday")) {
-                        top = Main.db.getAllChallengersTopYesterday();
+                        top = Main.db.getTopYesterday();
                     }
                     sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;
@@ -788,7 +788,7 @@ public class Commands implements CommandExecutor {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                         int size = Main.instance.getConfigGesture().getInterfaces().get("Challenges").getSizeModificableSlot();
                         ArrayList<Challenge> challenges = new ArrayList<>();
-                        for (Challenge challenge : Main.db.getAllChallenges()) {
+                        for (Challenge challenge : Main.db.getChallenges()) {
                             if (challenges.size() < size) {
                                 challenges.add(challenge);
                             }
@@ -813,7 +813,7 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                    if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
                         sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -932,7 +932,7 @@ public class Commands implements CommandExecutor {
                             sender.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
                         } else {
                             if (args[2].equalsIgnoreCase("random")) {
-                                ArrayList<Challenge> scheduledChallenges = Main.db.getAllChallenges();
+                                List<Challenge> scheduledChallenges = Main.db.getChallenges();
                                 ArrayList<Challenge> remainChallenges = new ArrayList<>();
                                 boolean find;
                                 for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGesture().getChallenges().entrySet()) {
@@ -981,7 +981,7 @@ public class Commands implements CommandExecutor {
                         }
                         if (challenge1 == null) {
                             StringBuilder send = new StringBuilder("\n");
-                            for (Challenge challenge : Main.db.getAllChallenges()) {
+                            for (Challenge challenge : Main.db.getChallenges()) {
                                 send.append(challengeOfList.replace("{challenge}", challenge.getChallengeName())).append("\n");
                             }
                             p.sendMessage(ColorUtils.applyColor(challengeList.replace("{challengeList}", send.toString())));
@@ -1104,7 +1104,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        if (!Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (!Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
                             p.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1154,7 +1154,7 @@ public class Commands implements CommandExecutor {
                                     }
                                 }
                             }
-                            Main.db.deleteChallengeWithName(Main.db.getAllChallenges().get(0).getChallengeName());
+                            Main.db.deleteChallengeWithName(Main.db.getChallenges().get(0).getChallengeName());
                             Main.db.resumeOldPoints();
                             ReloadUtils.reload();
                         });
@@ -1163,7 +1163,7 @@ public class Commands implements CommandExecutor {
                             debug.debug();
                         }
                     } else if (args[1].equalsIgnoreCase("random")) {
-                        if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
                             p.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1202,7 +1202,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        if (Main.db.getAllChallenges().get(0).getChallengeName().contains("Event_")) {
+                        if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
                             p.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1257,7 +1257,7 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    ArrayList<DailyWinner> winners = Main.db.getAllDailyWinners();
+                    List<DailyWinner> winners = Main.db.getDailyWinners();
                     if (winners.isEmpty()) {
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1287,7 +1287,7 @@ public class Commands implements CommandExecutor {
                     List<Challenger> top = new ArrayList<>();
                     if (args.length == 1) {
                         if (Main.instance.getConfigGesture().isYesterdayTop()) {
-                            top = Main.db.getAllChallengersTopYesterday();
+                            top = Main.db.getTopYesterday();
                         } else {
                             top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
                         }
@@ -1300,7 +1300,7 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        top = Main.db.getAllChallengersTopYesterday();
+                        top = Main.db.getTopYesterday();
                     }
                     p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;

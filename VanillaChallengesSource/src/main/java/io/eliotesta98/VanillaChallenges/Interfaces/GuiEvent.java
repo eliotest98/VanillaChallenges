@@ -136,7 +136,7 @@ public class GuiEvent implements Listener {
                             int count = 1;
                             int number = Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getSizeModificableSlot();
                             if (pageNumber != 1) {
-                                for (Challenge entry : Main.db.getAllChallenges()) {
+                                for (Challenge entry : Main.db.getChallenges()) {
                                     if (limit < count && number > 0) {
                                         challenges.add(entry);
                                         number--;
@@ -144,7 +144,7 @@ public class GuiEvent implements Listener {
                                     count++;
                                 }
                             } else {
-                                for (Challenge entry : Main.db.getAllChallenges()) {
+                                for (Challenge entry : Main.db.getChallenges()) {
                                     if (number != 0) {
                                         challenges.add(entry);
                                     } else {
@@ -167,7 +167,7 @@ public class GuiEvent implements Listener {
                             int limit = (pageNumber - 1) * Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getSizeModificableSlot();
                             int count = 1;
                             int number = Main.instance.getConfigGesture().getInterfaces().get(typeInterface).getSizeModificableSlot();
-                            for (Challenge entry : Main.db.getAllChallenges()) {
+                            for (Challenge entry : Main.db.getChallenges()) {
                                 if (limit < count && number > 0) {
                                     challenges.add(entry);
                                     number--;

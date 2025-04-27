@@ -11,15 +11,20 @@ import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
 import io.eliotesta98.VanillaChallenges.Modules.PlaceholderApi.ExpansionPlaceholderAPI;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Events;
 import jdk.internal.net.http.common.Log;
+import jdk.jfr.internal.LogLevel;
+import jdk.jfr.internal.LogTag;
+import jdk.jfr.internal.Logger;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.bukkit.*;
 
 public class Main extends JavaPlugin {
@@ -202,11 +207,17 @@ public class Main extends JavaPlugin {
             } catch (Exception e) {
                 getServer().getConsoleSender().sendMessage("§cTry to restore the database");
                 restoreDatabase();
-                Log.logError(e);
+                Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
                 return;
             }
         } else if (getConfigGesture().getDatabase().equalsIgnoreCase("MySql")) {
-            db = new MySql(config.getUrl());
+            try {
+                db = new MySql(config.getUrl());
+            } catch (SQLException e) {
+                Main.instance.getServer().getConsoleSender().sendMessage("§cError Database not connected!");
+                Log.logError(e.getMessage());
+                Main.instance.onDisable();
+            }
         } else {
             db = new YamlDB();
         }

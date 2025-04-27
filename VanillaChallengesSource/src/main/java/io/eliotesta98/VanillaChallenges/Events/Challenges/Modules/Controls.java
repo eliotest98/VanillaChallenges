@@ -75,18 +75,18 @@ public class Controls {
                     String[] itemSplit = item.split(":");
                     Material material = Material.getMaterial(itemSplit[0]);
                     if (material == null) {
-                        return false;
+                        return true;
                     }
                     itemStack = new ItemStack(material, 1, Short.parseShort(itemSplit[1]));
                 } else {
                     Material material = Material.getMaterial(item);
                     if (material == null) {
-                        return false;
+                        return true;
                     }
                     itemStack = new ItemStack(material);
                 }
                 if (playerInventory.contains(itemStack)) {
-                    return true;
+                    return false;
                 }
             }
         }
