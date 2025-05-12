@@ -59,9 +59,8 @@ public class Tasks {
                     p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                 }
                 int i = 1;
-                while (!top.isEmpty()) {
-                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
-                    top.remove(0);
+                for (Challenger challenger : top) {
+                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints()))));
                     i++;
                 }
                 if (Main.instance.getConfigGesture().getMinimumPoints() != -1) {
@@ -125,7 +124,8 @@ public class Tasks {
                                 Main.instance.getConfigGesture().isResetPointsAtNewChallenge(),
                                 Main.instance.getConfigGesture().isRankingReward(),
                                 Main.instance.getConfigGesture().isRandomReward(),
-                                Main.instance.getConfigGesture().getNumberOfRewardPlayer());
+                                Main.instance.getConfigGesture().getNumberOfRewardPlayer(),
+                                Main.instance.getConfigGesture().getNumberOfTop());
                         challengeStart = true;
                     } else {
                         challengeStart = false;
@@ -139,7 +139,7 @@ public class Tasks {
         tasks.add(checkStart);
     }
 
-    public void checkDay(long time, boolean resetPoints, boolean rankingReward, boolean randomReward, int numberOfRewardedPlayer) {
+    public void checkDay(long time, boolean resetPoints, boolean rankingReward, boolean randomReward, int numberOfRewardedPlayer, int numberOfTop) {
         saving.put("CheckDay", false);
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new Runnable() {
             boolean firstTime = true;
@@ -167,7 +167,7 @@ public class Tasks {
 
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
-                        Main.db.saveTopYesterday(topPlayers);
+                        Main.db.saveTopYesterday(Main.instance.getDailyChallenge().getTopPlayers(numberOfTop));
                         if (Main.instance.getDailyChallenge().getTypeChallenge().equalsIgnoreCase("ItemCollectionChallenge")) {
                             ItemCollector.deleteDb();
                         }

@@ -13,7 +13,6 @@ import jdk.jfr.internal.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
@@ -529,7 +528,6 @@ public abstract class Database {
         }
     }
 
-    // TODO da vedere cosa aggiungere all'array se necessario
     public void insertChallenge(String challengeName, int timeResume) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -555,16 +553,15 @@ public abstract class Database {
     public void loadPlayersPoints() {
         Main.instance.getDailyChallenge().setPlayers(playerPoints);
         Main.instance.getDailyChallenge().savePoints();
-        List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGesture().getNumberOfRewardPlayer());
+        List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGesture().getNumberOfTop());
         int i = 1;
-        while (!top.isEmpty()) {
+        for (Challenger challenger: top) {
             Bukkit.getConsoleSender().sendMessage(
                     ColorUtils.applyColor(
                             Main.instance.getConfigGesture().getMessages().get("topPlayers" + i)
                                     .replace("{number}", "" + i)
-                                    .replace("{player}", top.get(0).getNomePlayer())
-                                    .replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
-            top.removeFirst();
+                                    .replace("{player}", challenger.getNomePlayer())
+                                    .replace("{points}", MoneyUtils.transform(challenger.getPoints()))));
             i++;
         }
     }
@@ -686,21 +683,23 @@ public abstract class Database {
     }
 
     public void updatePlayerStat(PlayerStats playerStats) {
-        List<PlayerStats> stats = new ArrayList<>(this.stats);
-        while (!stats.isEmpty()) {
-            if (stats.get(0).getPlayerName().equalsIgnoreCase(playerStats.getPlayerName())) {
-                deletePlayerStatWithPlayerName(stats.get(0).getPlayerName());
+        for (PlayerStats playerStats1: stats) {
+            if (playerStats1.getPlayerName().equalsIgnoreCase(playerStats.getPlayerName())) {
+                deletePlayerStatWithPlayerName(playerStats1.getPlayerName());
                 insertPlayerStat(playerStats);
                 return;
             }
-            stats.removeFirst();
         }
         insertPlayerStat(playerStats);
     }
 
     public PlayerStats getStatsPlayer(String playerName) {
-        Optional<PlayerStats> player = stats.stream().findFirst().filter((PlayerStats playerStats) -> playerStats.getPlayerName().equalsIgnoreCase(playerName));
-        return player.orElse(null);
+        for(PlayerStats playerStats: stats) {
+            if(playerStats.getPlayerName().equalsIgnoreCase(playerName)) {
+                return playerStats;
+            }
+        }
+        return null;
     }
 
     public List<PlayerStats> getTopVictories() {

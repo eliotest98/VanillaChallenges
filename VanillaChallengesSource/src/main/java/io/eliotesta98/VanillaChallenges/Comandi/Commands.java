@@ -17,6 +17,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.*;
 
@@ -147,7 +148,7 @@ public class Commands implements CommandExecutor {
                             List<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
 
                             Main.db.removeTopYesterday();
-                            Main.db.saveTopYesterday(topPlayers);
+                            Main.db.saveTopYesterday(Main.instance.getDailyChallenge().getTopPlayers(numberOfTop));
                             if (Main.instance.getConfigGesture().isBackupEnabled()) {
                                 Main.db.backupDb(Main.instance.getConfigGesture().getNumberOfFilesInFolderForBackup());
                             }
@@ -391,7 +392,7 @@ public class Commands implements CommandExecutor {
                         List<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
-                        Main.db.saveTopYesterday(topPlayers);
+                        Main.db.saveTopYesterday(Main.instance.getDailyChallenge().getTopPlayers(numberOfTop));
                         if (Main.instance.getDailyChallenge().getTypeChallenge().equalsIgnoreCase("ItemCollectionChallenge")) {
                             ItemCollector.deleteDb();
                         }
@@ -633,9 +634,8 @@ public class Commands implements CommandExecutor {
                     }
                     sender.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;
-                    while (!top.isEmpty()) {
-                        sender.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
-                        top.remove(0);
+                    for (Challenger challenger : top) {
+                        sender.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints()))));
                         i++;
                     }
                     if (debugCommand) {
@@ -835,7 +835,7 @@ public class Commands implements CommandExecutor {
                         List<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
                         Main.db.deleteChallengeWithName(Main.instance.getDailyChallenge().getChallengeName());
                         Main.db.removeTopYesterday();
-                        Main.db.saveTopYesterday(topPlayers);
+                        Main.db.saveTopYesterday(Main.instance.getDailyChallenge().getTopPlayers(numberOfTop));
                         if (Main.instance.getDailyChallenge().getTypeChallenge().equalsIgnoreCase("ItemCollectionChallenge")) {
                             ItemCollector.deleteDb();
                         }
@@ -1117,7 +1117,7 @@ public class Commands implements CommandExecutor {
                             List<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
 
                             Main.db.removeTopYesterday();
-                            Main.db.saveTopYesterday(topPlayers);
+                            Main.db.saveTopYesterday(Main.instance.getDailyChallenge().getTopPlayers(numberOfTop));
                             if (Main.instance.getConfigGesture().isBackupEnabled()) {
                                 Main.db.backupDb(Main.instance.getConfigGesture().getNumberOfFilesInFolderForBackup());
                             }
@@ -1258,13 +1258,12 @@ public class Commands implements CommandExecutor {
                         return;
                     }
                     List<DailyWinner> winners = Main.db.getDailyWinners();
-                    if (winners.isEmpty()) {
-                        if (debugCommand) {
-                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                            debug.debug();
-                        }
-                    } else {
+                    if (!winners.isEmpty()) {
                         DailyGiveWinners.getRewardsAtPlayers(p, winners);
+                    }
+                    if (debugCommand) {
+                        debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                        debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("top")) {
                     // controllo se ha il permesso
@@ -1304,9 +1303,8 @@ public class Commands implements CommandExecutor {
                     }
                     p.sendMessage(ColorUtils.applyColor(actuallyInTop));
                     int i = 1;
-                    while (!top.isEmpty()) {
-                        p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", top.get(0).getNomePlayer()).replace("{points}", MoneyUtils.transform(top.get(0).getPoints()))));
-                        top.remove(0);
+                    for (Challenger challenger : top) {
+                        p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints()))));
                         i++;
                     }
                     if (debugCommand) {
