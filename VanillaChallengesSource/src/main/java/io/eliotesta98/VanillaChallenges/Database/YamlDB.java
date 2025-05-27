@@ -5,19 +5,17 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
-import jdk.jfr.internal.LogLevel;
-import jdk.jfr.internal.LogTag;
-import jdk.jfr.internal.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
 
 public class YamlDB extends Database {
 
     private FileConfiguration file;
     private File configFile;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(YamlDB.class.getName());
 
     public YamlDB() {
         initialize();
@@ -32,7 +30,7 @@ public class YamlDB extends Database {
             try {
                 create = configFile.createNewFile();
             } catch (IOException e) {
-                Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+                logger.log(Level.WARNING, e.getMessage());
             }
             if (create) {
                 file = YamlConfiguration.loadConfiguration(configFile);
@@ -306,7 +304,7 @@ public class YamlDB extends Database {
         try {
             file.save(configFile);
         } catch (IOException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 

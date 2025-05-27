@@ -7,9 +7,6 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
-import jdk.jfr.internal.LogLevel;
-import jdk.jfr.internal.LogTag;
-import jdk.jfr.internal.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
+import java.util.logging.Level;
 
 public abstract class Database {
 
@@ -31,6 +29,7 @@ public abstract class Database {
     private final List<PlayerStats> stats = new ArrayList<>();
     private String prefix = "";
     private Connection connection;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Database.class.getName());
 
     public abstract void createConnection(String absolutePath);
 
@@ -62,7 +61,7 @@ public abstract class Database {
             preparedStatement.close();
         } catch (SQLException e) {
             Main.instance.getServer().getConsoleSender().sendMessage("§cError Database not connected!");
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
             Main.instance.onDisable();
         }
         selectAllChallenges();
@@ -179,7 +178,7 @@ public abstract class Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -199,7 +198,7 @@ public abstract class Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -216,7 +215,7 @@ public abstract class Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -235,7 +234,7 @@ public abstract class Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -252,7 +251,7 @@ public abstract class Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -269,7 +268,7 @@ public abstract class Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -302,7 +301,7 @@ public abstract class Database {
                                     }
                                 }
                             } catch (ParseException e) {
-                                Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+                                logger.log(Level.WARNING, e.getMessage());
                             }
                         }
                         folder.listFiles()[number].delete();
@@ -332,7 +331,7 @@ public abstract class Database {
                 }
                 file.save(configFile);
             } catch (IOException e) {
-                Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+                logger.log(Level.WARNING, e.getMessage());
             }
         }
     }
@@ -343,7 +342,7 @@ public abstract class Database {
                 connection.close();
                 connection = null;
             } catch (SQLException e) {
-                Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+                logger.log(Level.WARNING, e.getMessage());
             }
         }
     }
@@ -425,20 +424,21 @@ public abstract class Database {
                 throw new SQLException("Insert failed, no rows affected.");
             }
             preparedStatement.close();
+            Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challengeName);
+            challenge.setChallengeName("Event_" + challengeName);
+            challenge.setTimeChallenge(time);
+            addChallenge(challenge, 0);
             clearChallengesFromFile();
+            for (Challenge challenge1 : getChallenges()) {
+                insertChallenge(challenge1.getChallengeName(), challenge1.getTimeChallenge());
+            }
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
     public void clearChallengesFromFile() {
-        List<Challenge> challenges = this.challenges;
-        challenges.add(0, challenges.get(challenges.size() - 1));
-        challenges.remove(challenges.size() - 1);
         clearChallenges();
-        for (Challenge challenge : challenges) {
-            insertChallenge(challenge.getChallengeName(), challenge.getTimeChallenge());
-        }
     }
 
     public void clearChallenges() {
@@ -452,9 +452,8 @@ public abstract class Database {
                     "CREATE TABLE IF NOT EXISTS " + prefix + "Challenge (`NomeChallenge` VARCHAR(100) NOT NULL PRIMARY KEY, `TimeResume` INT(15) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
-            challenges.clear();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -471,7 +470,7 @@ public abstract class Database {
             preparedStatement.close();
             oldPoints.clear();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -483,7 +482,7 @@ public abstract class Database {
             preparedStatement.close();
             removeChallenge(challengeName);
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -500,7 +499,7 @@ public abstract class Database {
             preparedStatement.close();
             addPlayerPoints(new Challenger(playerName, points));
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -512,7 +511,7 @@ public abstract class Database {
             preparedStatement.close();
             updateChallengeTime(challengeName, timeResume);
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -540,7 +539,7 @@ public abstract class Database {
             }
             preparedStatement.close();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -582,7 +581,7 @@ public abstract class Database {
             preparedStatement.close();
             playerPoints.clear();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -613,7 +612,7 @@ public abstract class Database {
             preparedStatement.close();
             oldPoints.add(new Challenger(playerName, points));
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -625,7 +624,7 @@ public abstract class Database {
             preparedStatement.close();
             removePlayer(nomePlayer);
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -637,7 +636,7 @@ public abstract class Database {
             preparedStatement.close();
             updatePlayer(playerName, points);
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -666,7 +665,7 @@ public abstract class Database {
             preparedStatement.close();
             addStat(playerStats);
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -678,7 +677,7 @@ public abstract class Database {
             preparedStatement.close();
             removeStat(playerName);
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -743,7 +742,7 @@ public abstract class Database {
             preparedStatement.close();
             stats.clear();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -765,7 +764,7 @@ public abstract class Database {
             preparedStatement.close();
             topYesterday.clear();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -788,7 +787,7 @@ public abstract class Database {
             preparedStatement.close();
             addTopYesterday(new Challenger(playerName, points));
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -814,7 +813,7 @@ public abstract class Database {
             preparedStatement.close();
             addDailyWinner(dailyWinner);
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -826,7 +825,7 @@ public abstract class Database {
             preparedStatement.close();
             removeDailyWinner(id);
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -842,7 +841,7 @@ public abstract class Database {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
-            Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 

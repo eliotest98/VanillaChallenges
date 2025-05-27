@@ -31,3 +31,4 @@ data-canonical-src="https://badges.spiget.org/rating/SpigotRating-green-101426.s
 <img src="https://badges.spiget.org/resources/version/SpigotVersion-green-101426.svg" alt="Spigot Version" 
 data-canonical-src="https://badges.spiget.org/version/SpigotVersion-green-101426.svg">
 </a>
+<img alt="Modrinth Game Versions" src="https://img.shields.io/modrinth/game-versions/EiVDclto">

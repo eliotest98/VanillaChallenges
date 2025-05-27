@@ -6,6 +6,7 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Events.ApiEvents.ChallengeChangeEvent;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector.ItemCollector;
+import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -239,7 +240,15 @@ public class Tasks {
                             Main.db.clearChallengers();
                             Main.instance.getDailyChallenge().clearPlayers();
                         }
-                        ReloadUtils.reload();
+                        if (Main.challengeSelected) {
+                            Main.instance.getDailyChallenge().clearPlayers();
+                            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                interfaces.getValue().closeAllInventories();
+                            }
+                        }
+                        Main.instance.unregisterCurrentListener();
+                        Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                        Main.instance.pluginStartingProcess();
                     });
                 } else {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> Main.db.updateChallenge(Main.instance.getDailyChallenge().getChallengeName(), Main.instance.getDailyChallenge().getTimeChallenge()));

@@ -11,9 +11,8 @@ import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
 import io.eliotesta98.VanillaChallenges.Modules.PlaceholderApi.ExpansionPlaceholderAPI;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Events;
 import jdk.internal.net.http.common.Log;
-import jdk.jfr.internal.LogLevel;
-import jdk.jfr.internal.LogTag;
-import jdk.jfr.internal.Logger;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
@@ -24,6 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.*;
 
@@ -36,6 +36,8 @@ public class Main extends JavaPlugin {
     public static Database db;
     public static boolean challengeSelected = true;
     public static boolean version113 = true;
+    public static Listener currentListener = null;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
 
     @Override
     public void onLoad() {
@@ -207,7 +209,7 @@ public class Main extends JavaPlugin {
             } catch (Exception e) {
                 getServer().getConsoleSender().sendMessage("§cTry to restore the database");
                 restoreDatabase();
-                Logger.log(LogTag.JFR, LogLevel.ERROR, e.getMessage());
+                logger.log(Level.WARNING, e.getMessage());
                 return;
             }
         } else if (getConfigGesture().getDatabase().equalsIgnoreCase("MySql")) {
@@ -227,118 +229,11 @@ public class Main extends JavaPlugin {
                 getServer().getConsoleSender().sendMessage(ChatColor.RED + "New Update available for VanillaChallenges!");
             }
         });
-        // control if challenges is on db but is disabled on config
-        db.controlIfChallengeExist(config.getControlIfChallengeExist());
-        // select a challenge
-        String typeChallenge = db.insertDailyChallenges();
-        if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new BlockPlaceEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("BlockBreakChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new BlockBreakEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("CraftingChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new CraftingEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("CookerChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new FurnaceBurnEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("ConsumeChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new ItemConsumeEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("CollectorExpChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new ExpCollector(), this);
-        } else if (typeChallenge.equalsIgnoreCase("KillChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new KillMobEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("BreedChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new BreedEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("FeedChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new EatEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("ShootChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new ShootArrowEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("JumpWithHorseChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new JumpHorseEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("ColorSheepChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new ColorSheepEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("RaidChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new RaidEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("FishingChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new FishEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("SprintChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new SprintEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("MoveChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new MoveEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("DamageChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new DamageEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("SneakChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new SneakEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("ItemBreakChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new ItemBreakEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("SpongeAbsorbChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new SpongeAbsorbeEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("HarvestChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new HarvestEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("EggThrowerChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new EggThrowEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("EnchantChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new EnchantEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("ChatChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new ChatEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("ItemCollectionChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new ItemCollector(), this);
-        } else if (typeChallenge.equalsIgnoreCase("InventoryConditionChallenge")) {
-            new InventoryCheck();
-        } else if (typeChallenge.equalsIgnoreCase("VehicleMoveChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new VehicleMoveEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("JumpChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new JumpEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("DyerChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new DyeEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("CubeGeneratorChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new CubeGeneratorEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("DropperChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new DropperEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("HealthChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new HealthRegenEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("AFKChallenge")) {
-            new AFKCheck();
-        } else if (typeChallenge.equalsIgnoreCase("MissionChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new SuperiorSkyBlock2Events(), this);
-        } else if (typeChallenge.equalsIgnoreCase("SensorChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new GameBlockEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("PrimerChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new PrimeEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("FireCatcherChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new FireCatcher(), this);
-        } else if (typeChallenge.equalsIgnoreCase("EntityCatcherChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new EntityCatcherEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("LeashChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new LeashEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("SleepChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new SleepEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("WoolCutterChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new PlayerShearsEvent(), this);
-        } else if (typeChallenge.equalsIgnoreCase("RiptideChallenge")) {
-            Bukkit.getServer().getPluginManager().registerEvents(new RiptideEvent(), this);
-        } else {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
-            challengeSelected = false;
-        }
 
-        if (challengeSelected) {
-            Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
-            Bukkit.getServer().getPluginManager().registerEvents(new GuiEvent(), this);
-            db.loadPlayersPoints();
-            config.getTasks().checkStartDay();
-            if (config.getTimeBroadcastMessageTitle() != 0) {
-                config.getTasks().broadcast(((long) config.getTimeBroadcastMessageTitle() * 60 * 20)
-                        , config.getMessages().get("ActuallyInTop")
-                        , config.getMessages().get("PointsEveryMinutes")
-                        , config.getMessages().get("PointsRemainForBoosting")
-                        , config.getMessages().get("PointsRemainForBoostingSinglePlayer")
-                        , config.getNumberOfTop()
-                        , config.getMessages().get("PointsRemainForReward")
-                );
-            }
-            if (config.isActiveOnlinePoints()) {
-                config.getTasks().onlinePoints(config.getMinutesOnlinePoints(), config.getPointsOnlinePoints());
-            }
-        }
+        Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new GuiEvent(), this);
+
+        pluginStartingProcess();
 
         getCommand("vanillachallenges").setExecutor(new Commands());
         if (config.getDebug().get("Enabled")) {
@@ -421,5 +316,134 @@ public class Main extends JavaPlugin {
             return;
         }
         ReloadUtils.reload();
+    }
+
+    public void pluginStartingProcess() {
+        // control if challenges is on db but is disabled on config
+        db.controlIfChallengeExist(config.getControlIfChallengeExist());
+        // select a challenge
+        String typeChallenge = db.insertDailyChallenges();
+        // reset of variable for a new Challenge
+        challengeSelected = true;
+        if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
+            currentListener = new BlockPlaceEvent();
+        } else if (typeChallenge.equalsIgnoreCase("BlockBreakChallenge")) {
+            currentListener = new BlockBreakEvent();
+        } else if (typeChallenge.equalsIgnoreCase("CraftingChallenge")) {
+            currentListener = new CraftingEvent();
+        } else if (typeChallenge.equalsIgnoreCase("CookerChallenge")) {
+            currentListener = new FurnaceBurnEvent();
+        } else if (typeChallenge.equalsIgnoreCase("ConsumeChallenge")) {
+            currentListener = new ItemConsumeEvent();
+        } else if (typeChallenge.equalsIgnoreCase("CollectorExpChallenge")) {
+            currentListener = new ExpCollector();
+        } else if (typeChallenge.equalsIgnoreCase("KillChallenge")) {
+            currentListener = new KillMobEvent();
+        } else if (typeChallenge.equalsIgnoreCase("BreedChallenge")) {
+            currentListener = new BreedEvent();
+        } else if (typeChallenge.equalsIgnoreCase("FeedChallenge")) {
+            currentListener = new EatEvent();
+        } else if (typeChallenge.equalsIgnoreCase("ShootChallenge")) {
+            currentListener = new ShootArrowEvent();
+        } else if (typeChallenge.equalsIgnoreCase("JumpWithHorseChallenge")) {
+            currentListener = new JumpHorseEvent();
+        } else if (typeChallenge.equalsIgnoreCase("ColorSheepChallenge")) {
+            currentListener = new ColorSheepEvent();
+        } else if (typeChallenge.equalsIgnoreCase("RaidChallenge")) {
+            currentListener = new RaidEvent();
+        } else if (typeChallenge.equalsIgnoreCase("FishingChallenge")) {
+            currentListener = new FishEvent();
+        } else if (typeChallenge.equalsIgnoreCase("SprintChallenge")) {
+            currentListener = new SprintEvent();
+        } else if (typeChallenge.equalsIgnoreCase("MoveChallenge")) {
+            currentListener = new MoveEvent();
+        } else if (typeChallenge.equalsIgnoreCase("DamageChallenge")) {
+            currentListener = new DamageEvent();
+        } else if (typeChallenge.equalsIgnoreCase("SneakChallenge")) {
+            currentListener = new SneakEvent();
+        } else if (typeChallenge.equalsIgnoreCase("ItemBreakChallenge")) {
+            currentListener = new ItemBreakEvent();
+        } else if (typeChallenge.equalsIgnoreCase("SpongeAbsorbChallenge")) {
+            currentListener = new SpongeAbsorbeEvent();
+        } else if (typeChallenge.equalsIgnoreCase("HarvestChallenge")) {
+            currentListener = new HarvestEvent();
+        } else if (typeChallenge.equalsIgnoreCase("EggThrowerChallenge")) {
+            currentListener = new EggThrowEvent();
+        } else if (typeChallenge.equalsIgnoreCase("EnchantChallenge")) {
+            currentListener = new EnchantEvent();
+        } else if (typeChallenge.equalsIgnoreCase("ChatChallenge")) {
+            currentListener = new ChatEvent();
+        } else if (typeChallenge.equalsIgnoreCase("ItemCollectionChallenge")) {
+            currentListener = new ItemCollector();
+        } else if (typeChallenge.equalsIgnoreCase("InventoryConditionChallenge")) {
+            new InventoryCheck();
+        } else if (typeChallenge.equalsIgnoreCase("VehicleMoveChallenge")) {
+            currentListener = new VehicleMoveEvent();
+        } else if (typeChallenge.equalsIgnoreCase("JumpChallenge")) {
+            currentListener = new JumpEvent();
+        } else if (typeChallenge.equalsIgnoreCase("DyerChallenge")) {
+            currentListener = new DyeEvent();
+        } else if (typeChallenge.equalsIgnoreCase("CubeGeneratorChallenge")) {
+            currentListener = new CubeGeneratorEvent();
+        } else if (typeChallenge.equalsIgnoreCase("DropperChallenge")) {
+            currentListener = new DropperEvent();
+        } else if (typeChallenge.equalsIgnoreCase("HealthChallenge")) {
+            currentListener = new HealthRegenEvent();
+        } else if (typeChallenge.equalsIgnoreCase("AFKChallenge")) {
+            new AFKCheck();
+        } else if (typeChallenge.equalsIgnoreCase("MissionChallenge")) {
+            currentListener = new SuperiorSkyBlock2Events();
+        } else if (typeChallenge.equalsIgnoreCase("SensorChallenge")) {
+            currentListener = new GameBlockEvent();
+        } else if (typeChallenge.equalsIgnoreCase("PrimerChallenge")) {
+            currentListener = new PrimeEvent();
+        } else if (typeChallenge.equalsIgnoreCase("FireCatcherChallenge")) {
+            currentListener = new FireCatcher();
+        } else if (typeChallenge.equalsIgnoreCase("EntityCatcherChallenge")) {
+            currentListener = new EntityCatcherEvent();
+        } else if (typeChallenge.equalsIgnoreCase("LeashChallenge")) {
+            currentListener = new LeashEvent();
+        } else if (typeChallenge.equalsIgnoreCase("SleepChallenge")) {
+            currentListener = new SleepEvent();
+        } else if (typeChallenge.equalsIgnoreCase("WoolCutterChallenge")) {
+            currentListener = new PlayerShearsEvent();
+        } else if (typeChallenge.equalsIgnoreCase("RiptideChallenge")) {
+            currentListener = new RiptideEvent();
+        } else if (typeChallenge.equalsIgnoreCase("nessuno")) {
+            challengeSelected = false;
+        }
+
+        boolean skipCheck = typeChallenge.equalsIgnoreCase("AFKChallenge");
+        if (typeChallenge.equalsIgnoreCase("InventoryConditionChallenge")) {
+            skipCheck = true;
+        }
+        if (!skipCheck && currentListener == null) {
+            challengeSelected = false;
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+        } else {
+            Bukkit.getServer().getPluginManager().registerEvents(currentListener, this);
+        }
+
+        if (challengeSelected) {
+            db.loadPlayersPoints();
+            config.getTasks().checkStartDay();
+            if (config.getTimeBroadcastMessageTitle() != 0) {
+                config.getTasks().broadcast(((long) config.getTimeBroadcastMessageTitle() * 60 * 20)
+                        , config.getMessages().get("ActuallyInTop")
+                        , config.getMessages().get("PointsEveryMinutes")
+                        , config.getMessages().get("PointsRemainForBoosting")
+                        , config.getMessages().get("PointsRemainForBoostingSinglePlayer")
+                        , config.getNumberOfTop()
+                        , config.getMessages().get("PointsRemainForReward")
+                );
+            }
+            if (config.isActiveOnlinePoints()) {
+                config.getTasks().onlinePoints(config.getMinutesOnlinePoints(), config.getPointsOnlinePoints());
+            }
+        }
+    }
+
+    public void unregisterCurrentListener() {
+        HandlerList.unregisterAll(currentListener);
     }
 }

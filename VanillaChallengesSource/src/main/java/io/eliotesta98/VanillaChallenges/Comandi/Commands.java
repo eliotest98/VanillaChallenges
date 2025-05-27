@@ -7,6 +7,7 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Events.ApiEvents.ChallengeChangeEvent;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector.ItemCollector;
 import io.eliotesta98.VanillaChallenges.Events.DailyGiveWinners;
+import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -75,14 +76,6 @@ public class Commands implements CommandExecutor {
             Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
                 DebugUtils debug = new DebugUtils("Commands");
                 long tempo = System.currentTimeMillis();
-                if (!Main.challengeSelected) {
-                    sender.sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
-                    if (debugCommand) {
-                        debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug();
-                    }
-                    return;
-                }
                 if (!command.getName().equalsIgnoreCase("vanillachallenges")) {// comando se esiste
                     sender.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                     if (debugCommand) {
@@ -111,6 +104,14 @@ public class Commands implements CommandExecutor {
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("add")) {
+                    if (!Main.challengeSelected) {
+                        sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (args.length == 1 || args.length == 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
                         if (debugCommand) {
@@ -135,7 +136,16 @@ public class Commands implements CommandExecutor {
                         return;
                     }
                     if (args[1].equalsIgnoreCase("stop")) {
-                        if (!Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
+                        List<Challenge> challenges = Main.db.getChallenges();
+                        if (!challenges.isEmpty() && !challenges.get(0).getChallengeName().contains("Event_")) {
+                            sender.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug();
+                            }
+                            return;
+                        }
+                        if(challenges.isEmpty()) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -144,9 +154,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-
                             List<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
-
                             Main.db.removeTopYesterday();
                             Main.db.saveTopYesterday(Main.instance.getDailyChallenge().getTopPlayers(numberOfTop));
                             if (Main.instance.getConfigGesture().isBackupEnabled()) {
@@ -187,14 +195,23 @@ public class Commands implements CommandExecutor {
                             }
                             Main.db.deleteChallengeWithName(Main.db.getChallenges().get(0).getChallengeName());
                             Main.db.resumeOldPoints();
-                            ReloadUtils.reload();
+                            if (Main.challengeSelected) {
+                                Main.instance.getDailyChallenge().clearPlayers();
+                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                    interfaces.getValue().closeAllInventories();
+                                }
+                            }
+                            Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                            Main.instance.unregisterCurrentListener();
+                            Main.instance.pluginStartingProcess();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug();
                         }
                     } else if (args[1].equalsIgnoreCase("random")) {
-                        if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
+                        List<Challenge> challenges = Main.db.getChallenges();
+                        if (!challenges.isEmpty() && challenges.get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -203,7 +220,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         Random random = new Random();
-                        int sizeChallenges = random.nextInt(Main.instance.getConfigGesture().getChallengesEvent().size());
+                        int sizeChallenges = random.nextInt(Main.instance.getConfigGesture().getChallengesEvent().size() - 1);
                         int i = 0;
                         Challenge challengeSelected = null;
                         for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGesture().getChallengesEvent().entrySet()) {
@@ -217,15 +234,24 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(finalChallengeSelected.getChallengeName(),
                                     finalChallengeSelected.getTimeChallenge());
-                            Main.db.saveOldPointsForChallengeEvents();
-                            ReloadUtils.reload();
+                            if (Main.challengeSelected) {
+                                Main.db.saveOldPointsForChallengeEvents();
+                                Main.instance.getDailyChallenge().clearPlayers();
+                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                    interfaces.getValue().closeAllInventories();
+                                }
+                            }
+                            Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                            Main.instance.unregisterCurrentListener();
+                            Main.instance.pluginStartingProcess();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug();
                         }
                     } else if (Main.instance.getConfigGesture().getChallengesEvent().get(args[1]) != null) {
-                        if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
+                        List<Challenge> challenges = Main.db.getChallenges();
+                        if (!challenges.isEmpty() && challenges.get(0).getChallengeName().contains("Event_")) {
                             sender.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -235,9 +261,17 @@ public class Commands implements CommandExecutor {
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(args[1],
-                                    Main.instance.getConfigGesture().getChallenges().get(args[1]).getTimeChallenge());
-                            Main.db.saveOldPointsForChallengeEvents();
-                            ReloadUtils.reload();
+                                    Main.instance.getConfigGesture().getChallengesEvent().get(args[1]).getTimeChallenge());
+                            if (Main.challengeSelected) {
+                                Main.db.saveOldPointsForChallengeEvents();
+                                Main.instance.getDailyChallenge().clearPlayers();
+                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                    interfaces.getValue().closeAllInventories();
+                                }
+                            }
+                            Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                            Main.instance.unregisterCurrentListener();
+                            Main.instance.pluginStartingProcess();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -311,12 +345,28 @@ public class Commands implements CommandExecutor {
                         }
                     }
                     sender.sendMessage(ColorUtils.applyColor(succesfullyRestored));
-                    ReloadUtils.reload();
+                    if (Main.challengeSelected) {
+                        Main.instance.getDailyChallenge().clearPlayers();
+                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                            interfaces.getValue().closeAllInventories();
+                        }
+                    }
+                    Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                    Main.instance.unregisterCurrentListener();
+                    Main.instance.pluginStartingProcess();
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("remove")) {
+                    if (!Main.challengeSelected) {
+                        sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (args.length == 1 || args.length == 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcEconomyChallenge));
                         if (debugCommand) {
@@ -332,6 +382,14 @@ public class Commands implements CommandExecutor {
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("challenge")) {
+                    if (!Main.challengeSelected) {
+                        sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (args.length != 1) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcChallenge));
                         if (debugCommand) {
@@ -356,9 +414,25 @@ public class Commands implements CommandExecutor {
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                         Main.db.clearAll();
-                        ReloadUtils.reload();
+                        if (Main.challengeSelected) {
+                            Main.instance.getDailyChallenge().clearPlayers();
+                            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                interfaces.getValue().closeAllInventories();
+                            }
+                        }
+                        Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                        Main.instance.unregisterCurrentListener();
+                        Main.instance.pluginStartingProcess();
                     });
                 } else if (args[0].equalsIgnoreCase("next")) {
+                    if (!Main.challengeSelected) {
+                        sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (args.length != 1) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcNextHelp));
                         if (debugCommand) {
@@ -456,13 +530,29 @@ public class Commands implements CommandExecutor {
                             Main.db.clearChallengers();
                             Main.instance.getDailyChallenge().clearPlayers();
                         }
-                        ReloadUtils.reload();
+                        Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                        if (Main.challengeSelected) {
+                            Main.instance.getDailyChallenge().clearPlayers();
+                            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                interfaces.getValue().closeAllInventories();
+                            }
+                        }
+                        Main.instance.unregisterCurrentListener();
+                        Main.instance.pluginStartingProcess();
                     });
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("schedule")) {
+                    if (!Main.challengeSelected) {
+                        sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (args.length != 3) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcSchedule));
                         if (debugCommand) {
@@ -514,9 +604,18 @@ public class Commands implements CommandExecutor {
                             } else {
                                 Challenge finalChallenge = challenge1;
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                                    Main.db.addChallenge(finalChallenge);
                                     Main.db.insertChallenge(finalChallenge.getChallengeName(), finalChallenge.getTimeChallenge());
                                     sender.sendMessage(ColorUtils.applyColor(addSuccess));
-                                    ReloadUtils.reload();
+                                    if (Main.challengeSelected) {
+                                        Main.instance.getDailyChallenge().clearPlayers();
+                                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                            interfaces.getValue().closeAllInventories();
+                                        }
+                                    }
+                                    Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                                    Main.instance.unregisterCurrentListener();
+                                    Main.instance.pluginStartingProcess();
                                 });
                             }
                         }
@@ -534,7 +633,15 @@ public class Commands implements CommandExecutor {
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                                     Main.db.deleteChallengeWithName(args[2]);
                                     sender.sendMessage(ColorUtils.applyColor(removeSuccess));
-                                    ReloadUtils.reload();
+                                    if (Main.challengeSelected) {
+                                        Main.instance.getDailyChallenge().clearPlayers();
+                                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                            interfaces.getValue().closeAllInventories();
+                                        }
+                                    }
+                                    Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                                    Main.instance.unregisterCurrentListener();
+                                    Main.instance.pluginStartingProcess();
                                 });
                             }
                         }
@@ -565,6 +672,14 @@ public class Commands implements CommandExecutor {
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("points")) {
+                    if (!Main.challengeSelected) {
+                        sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (args.length > 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcReloadHelp));
                         if (debugCommand) {
@@ -614,6 +729,14 @@ public class Commands implements CommandExecutor {
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("top")) {
+                    if (!Main.challengeSelected) {
+                        sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (args.length > 2) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcTopHelp));
                         if (debugCommand) {
@@ -671,14 +794,6 @@ public class Commands implements CommandExecutor {
                 final Player p = (Player) sender;
                 DebugUtils debug = new DebugUtils("Commands");
                 long tempo = System.currentTimeMillis();
-                if (!Main.challengeSelected) {
-                    p.sendMessage(ChatColor.RED + "No DailyChallenge selected control the configurations files and restart the plugin!");
-                    if (debugCommand) {
-                        debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
-                        debug.debug();
-                    }
-                    return;
-                }
                 if (!command.getName().equalsIgnoreCase("vanillachallenges")) {// comando se esiste
                     p.sendMessage(ColorUtils.applyColor(errorCommandNotFound));
                     if (debugCommand) {
@@ -726,6 +841,14 @@ public class Commands implements CommandExecutor {
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("challenge")) {
+                    if (!Main.challengeSelected) {
+                        p.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (!p.hasPermission("vc.challenge.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
@@ -766,9 +889,25 @@ public class Commands implements CommandExecutor {
                     }
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                         Main.db.clearAll();
-                        ReloadUtils.reload();
+                        if (Main.challengeSelected) {
+                            Main.instance.getDailyChallenge().clearPlayers();
+                            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                interfaces.getValue().closeAllInventories();
+                            }
+                        }
+                        Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                        Main.instance.unregisterCurrentListener();
+                        Main.instance.pluginStartingProcess();
                     });
                 } else if (args[0].equalsIgnoreCase("list")) {
+                    if (!Main.challengeSelected) {
+                        p.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (!p.hasPermission("vc.list.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
@@ -797,6 +936,14 @@ public class Commands implements CommandExecutor {
                                 challenges, p, 1);
                     });
                 } else if (args[0].equalsIgnoreCase("next")) {
+                    if (!Main.challengeSelected) {
+                        p.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (!p.hasPermission("vc.next.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
                         if (debugCommand) {
@@ -899,13 +1046,29 @@ public class Commands implements CommandExecutor {
                             Main.db.clearChallengers();
                             Main.instance.getDailyChallenge().clearPlayers();
                         }
-                        ReloadUtils.reload();
+                        Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                        if (Main.challengeSelected) {
+                            Main.instance.getDailyChallenge().clearPlayers();
+                            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                interfaces.getValue().closeAllInventories();
+                            }
+                        }
+                        Main.instance.unregisterCurrentListener();
+                        Main.instance.pluginStartingProcess();
                     });
                     if (debugCommand) {
                         debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("schedule")) {
+                    if (!Main.challengeSelected) {
+                        p.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     if (args.length != 3) {
                         sender.sendMessage(ColorUtils.applyColor(commandVcSchedule));
                         if (debugCommand) {
@@ -964,9 +1127,18 @@ public class Commands implements CommandExecutor {
                             } else {
                                 Challenge finalChallenge = challenge1;
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                                    Main.db.addChallenge(finalChallenge);
                                     Main.db.insertChallenge(finalChallenge.getChallengeName(), finalChallenge.getTimeChallenge());
                                     sender.sendMessage(ColorUtils.applyColor(addSuccess));
-                                    ReloadUtils.reload();
+                                    if (Main.challengeSelected) {
+                                        Main.instance.getDailyChallenge().clearPlayers();
+                                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                            interfaces.getValue().closeAllInventories();
+                                        }
+                                    }
+                                    Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                                    Main.instance.unregisterCurrentListener();
+                                    Main.instance.pluginStartingProcess();
                                 });
                             }
                         }
@@ -992,7 +1164,15 @@ public class Commands implements CommandExecutor {
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                                     Main.db.deleteChallengeWithName(args[2]);
                                     p.sendMessage(ColorUtils.applyColor(removeSuccess));
-                                    ReloadUtils.reload();
+                                    if (Main.challengeSelected) {
+                                        Main.instance.getDailyChallenge().clearPlayers();
+                                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                            interfaces.getValue().closeAllInventories();
+                                        }
+                                    }
+                                    Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                                    Main.instance.unregisterCurrentListener();
+                                    Main.instance.pluginStartingProcess();
                                 });
                             }
                         }
@@ -1050,6 +1230,14 @@ public class Commands implements CommandExecutor {
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("points")) {
+                    if (!Main.challengeSelected) {
+                        p.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     // controllo se ha il permesso
                     if (!p.hasPermission("vc.points.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));
@@ -1104,7 +1292,16 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        if (!Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
+                        List<Challenge> challenges = Main.db.getChallenges();
+                        if (!challenges.isEmpty() && !challenges.get(0).getChallengeName().contains("Event_")) {
+                            p.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
+                            if (debugCommand) {
+                                debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                                debug.debug();
+                            }
+                            return;
+                        }
+                        if(challenges.isEmpty()) {
                             p.sendMessage(ColorUtils.applyColor(alreadyStopEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1113,9 +1310,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-
                             List<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfPlayerRewarded);
-
                             Main.db.removeTopYesterday();
                             Main.db.saveTopYesterday(Main.instance.getDailyChallenge().getTopPlayers(numberOfTop));
                             if (Main.instance.getConfigGesture().isBackupEnabled()) {
@@ -1156,14 +1351,23 @@ public class Commands implements CommandExecutor {
                             }
                             Main.db.deleteChallengeWithName(Main.db.getChallenges().get(0).getChallengeName());
                             Main.db.resumeOldPoints();
-                            ReloadUtils.reload();
+                            if (Main.challengeSelected) {
+                                Main.instance.getDailyChallenge().clearPlayers();
+                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                    interfaces.getValue().closeAllInventories();
+                                }
+                            }
+                            Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                            Main.instance.unregisterCurrentListener();
+                            Main.instance.pluginStartingProcess();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug();
                         }
                     } else if (args[1].equalsIgnoreCase("random")) {
-                        if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
+                        List<Challenge> challenges = Main.db.getChallenges();
+                        if (!challenges.isEmpty() && challenges.get(0).getChallengeName().contains("Event_")) {
                             p.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1172,7 +1376,7 @@ public class Commands implements CommandExecutor {
                             return;
                         }
                         Random random = new Random();
-                        int sizeChallenges = random.nextInt(Main.instance.getConfigGesture().getChallengesEvent().size());
+                        int sizeChallenges = random.nextInt(Main.instance.getConfigGesture().getChallengesEvent().size() - 1);
                         int i = 0;
                         Challenge challengeSelected = null;
                         for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGesture().getChallengesEvent().entrySet()) {
@@ -1186,8 +1390,16 @@ public class Commands implements CommandExecutor {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(finalChallengeSelected.getChallengeName(),
                                     finalChallengeSelected.getTimeChallenge());
-                            Main.db.saveOldPointsForChallengeEvents();
-                            ReloadUtils.reload();
+                            if (Main.challengeSelected) {
+                                Main.db.saveOldPointsForChallengeEvents();
+                                Main.instance.getDailyChallenge().clearPlayers();
+                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                    interfaces.getValue().closeAllInventories();
+                                }
+                            }
+                            Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                            Main.instance.unregisterCurrentListener();
+                            Main.instance.pluginStartingProcess();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1202,7 +1414,8 @@ public class Commands implements CommandExecutor {
                             }
                             return;
                         }
-                        if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
+                        List<Challenge> challenges = Main.db.getChallenges();
+                        if (!challenges.isEmpty() && challenges.get(0).getChallengeName().contains("Event_")) {
                             p.sendMessage(ColorUtils.applyColor(alreadyStartEvent));
                             if (debugCommand) {
                                 debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1212,9 +1425,17 @@ public class Commands implements CommandExecutor {
                         }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(args[1],
-                                    Main.instance.getConfigGesture().getChallenges().get(args[1]).getTimeChallenge());
-                            Main.db.saveOldPointsForChallengeEvents();
-                            ReloadUtils.reload();
+                                    Main.instance.getConfigGesture().getChallengesEvent().get(args[1]).getTimeChallenge());
+                            if (Main.challengeSelected) {
+                                Main.db.saveOldPointsForChallengeEvents();
+                                Main.instance.getDailyChallenge().clearPlayers();
+                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                    interfaces.getValue().closeAllInventories();
+                                }
+                            }
+                            Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                            Main.instance.unregisterCurrentListener();
+                            Main.instance.pluginStartingProcess();
                         });
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
@@ -1266,6 +1487,14 @@ public class Commands implements CommandExecutor {
                         debug.debug();
                     }
                 } else if (args[0].equalsIgnoreCase("top")) {
+                    if (!Main.challengeSelected) {
+                        p.sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+                        if (debugCommand) {
+                            debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
+                            debug.debug();
+                        }
+                        return;
+                    }
                     // controllo se ha il permesso
                     if (!p.hasPermission("vc.top.command")) {
                         p.sendMessage(ColorUtils.applyColor(errorNoPerms));

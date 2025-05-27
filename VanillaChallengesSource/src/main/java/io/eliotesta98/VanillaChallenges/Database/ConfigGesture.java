@@ -249,7 +249,7 @@ public class ConfigGesture {
             challenges.put(challengeName, challenge);
         }
 
-        Main.instance.getServer().getConsoleSender().sendMessage("§a" + listOfChallengesGlobalFiles.length + " Global Challenges loaded!");
+        Main.instance.getServer().getConsoleSender().sendMessage("§a" + challenges.size() + " Global Challenges loaded!");
 
         if (folderCreate) {
             FileCreator.createAllFiles("Event");
@@ -401,7 +401,7 @@ public class ConfigGesture {
             challengesEvent.put(challengeName, challenge);
         }
 
-        Main.instance.getServer().getConsoleSender().sendMessage("§a" + listOfChallengesEventFiles.length + " Event Challenges loaded!");
+        Main.instance.getServer().getConsoleSender().sendMessage("§a" + challengesEvent.size() + " Event Challenges loaded!");
 
         numberOfRewardPlayer = file.getInt("Configuration.Top.NumberOfReward");
         timeBroadcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
