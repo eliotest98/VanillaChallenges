@@ -1,10 +1,10 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector;
 
+import com.HeroxWar.HeroxCore.MessageGesture;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
-import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -89,7 +89,7 @@ public class ItemCollector implements Listener {
                         chestLocation.replace(e.getPlayer().getName(), chestLocation.get(e.getPlayer().getName()), e.getBlockPlaced().getLocation());
                     } else {
                         e.setCancelled(true);
-                        e.getPlayer().sendMessage(ColorUtils.applyColor(errorAlreadyPlacedChest));
+                        MessageGesture.sendMessage(e.getPlayer(), errorAlreadyPlacedChest);
                     }
                 }
             }
@@ -224,7 +224,7 @@ public class ItemCollector implements Listener {
                 if(location.getValue().getWorld() == null) {
                     Player player = Bukkit.getPlayer(location.getKey());
                     if(player != null && player.isOnline()) {
-                        player.sendMessage(ColorUtils.applyColor(caseBroken));
+                        MessageGesture.sendMessage(player,caseBroken);
                         db.deleteChest(player.getName());
                         chestBroken.add(location.getKey());
                         player.getInventory().addItem(Main.instance.getConfigGesture().getChestCollection());

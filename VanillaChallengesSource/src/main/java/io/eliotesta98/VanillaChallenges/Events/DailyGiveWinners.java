@@ -1,8 +1,8 @@
 package io.eliotesta98.VanillaChallenges.Events;
 
+import com.HeroxWar.HeroxCore.MessageGesture;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
-import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -60,7 +60,7 @@ public class DailyGiveWinners implements Listener {
                             try {
                                 String[] splitItem = reward[0].split("-");
                                 item = new ItemStack(Material.getMaterial(splitItem[0]), 1, Short.parseShort(splitItem[1]));
-                                player.sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", reward[1]).replace("{item}", splitItem[0] + "-" + splitItem[1])));
+                                MessageGesture.sendMessage(player,challengeReward.replace("{number}", reward[1]).replace("{item}", splitItem[0] + "-" + splitItem[1]));
                             } catch (IllegalArgumentException exception) {
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                                     Main.db.deleteDailyWinnerWithId(winner.getId());
@@ -70,7 +70,7 @@ public class DailyGiveWinners implements Listener {
                         } else {
                             try {
                                 item = new ItemStack(Material.getMaterial(reward[0]));
-                                player.sendMessage(ColorUtils.applyColor(challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0])));
+                                MessageGesture.sendMessage(player,challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0]));
                             } catch (IllegalArgumentException exception) {
                                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                                     Main.db.deleteDailyWinnerWithId(winner.getId());
@@ -83,7 +83,7 @@ public class DailyGiveWinners implements Listener {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             if (player.getInventory().firstEmpty() != -1) {
                                 player.getInventory().addItem(finalItem);
-                                Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor(prefix + "&6Winner: " + player.getName() + " has received his reward: " + finalItem));
+                                MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + finalItem);
                                 Main.db.deleteDailyWinnerWithId(winner.getId());
                             }
                         });
@@ -108,7 +108,7 @@ public class DailyGiveWinners implements Listener {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
                             String commandRefact = finalCommandRefactor.replace("%player%", player.getName());
                             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandRefact);
-                            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor(prefix + "&6Winner: " + player.getName() + " has received his reward: " + commandRefact));
+                            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + commandRefact);
                             Main.db.deleteDailyWinnerWithId(winner.getId());
                         });
                     }

@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import com.HeroxWar.HeroxCore.MessageGesture;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
 import io.eliotesta98.VanillaChallenges.Core.Main;
@@ -35,7 +36,7 @@ public class ConfigGesture {
 
         ConfigurationSection section = file.getConfigurationSection("Debug");
         if (section == null) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Debug configuration section, please refresh the " + file.getName() + " file!"));
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Debug configuration section, please refresh the " + file.getName() + " file!");
             return;
         }
         for (String event : section.getKeys(false)) {
@@ -43,7 +44,7 @@ public class ConfigGesture {
         }
         section = file.getConfigurationSection("Messages");
         if (section == null) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Messages configuration section, please refresh the " + file.getName() + " file!"));
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Messages configuration section, please refresh the " + file.getName() + " file!");
             return;
         }
         for (String message : section.getKeys(false)) {
@@ -52,7 +53,7 @@ public class ConfigGesture {
                     || message.equalsIgnoreCase("Points")) {
                 section = file.getConfigurationSection("Messages." + message);
                 if (section == null) {
-                    Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Messages configuration section, please refresh the " + file.getName() + " file!"));
+                    MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Messages configuration section, please refresh the " + file.getName() + " file!");
                     return;
                 }
                 for (String command : section.getKeys(false)) {
@@ -75,7 +76,7 @@ public class ConfigGesture {
         }
         section = file.getConfigurationSection("Configuration.Hooks");
         if (section == null) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Hooks configuration section, please refresh the " + file.getName() + " file!"));
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Hooks configuration section, please refresh the " + file.getName() + " file!");
             return;
         }
         for (String hook : section.getKeys(false)) {
@@ -105,7 +106,7 @@ public class ConfigGesture {
         }
 
         if (listOfChallengesGlobalFiles == null) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Challenge Files, please refresh all files!"));
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Challenge Files, please refresh all files!");
             return;
         }
         for (File fileChallenge : listOfChallengesGlobalFiles) {
@@ -260,7 +261,7 @@ public class ConfigGesture {
         }
 
         if (listOfChallengesEventFiles == null) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Challenge Files, please refresh all files!"));
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Challenge Files, please refresh all files!");
             return;
         }
         for (File fileChallenge : listOfChallengesEventFiles) {
@@ -428,13 +429,13 @@ public class ConfigGesture {
         try {
             chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
         } catch (ExceptionInInitializerError ignore) {
-            Main.instance.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!"));
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!");
         }
         pointsResume = file.getBoolean("Configuration.Points.PointsResume");
 
         section = file.getConfigurationSection("Interfaces");
         if (section == null) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Interfaces configuration section, please refresh the " + file.getName() + " file!"));
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Interfaces configuration section, please refresh the " + file.getName() + " file!");
             return;
         }
         for (String nameInterface : section.getKeys(false)) {
@@ -446,7 +447,7 @@ public class ConfigGesture {
             Map<String, ItemConfig> itemsConfig = new HashMap<>();
             section = file.getConfigurationSection("Interfaces." + nameInterface + ".Items");
             if (section == null) {
-                Bukkit.getServer().getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR with Interfaces configuration section, please refresh the " + file.getName() + " file!"));
+                MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Interfaces configuration section, please refresh the " + file.getName() + " file!");
                 return;
             }
             for (String nameItem : section.getKeys(false)) {
@@ -455,12 +456,12 @@ public class ConfigGesture {
                 if (type.contains(";")) {
                     String[] x = type.split(";");
                     if (Material.getMaterial(x[0]) == null) {
-                        Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type"));
+                        MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
                         type = "DIRT";
                     }
                 } else {
                     if (Material.getMaterial(type) == null) {
-                        Bukkit.getConsoleSender().sendMessage(ColorUtils.applyColor("&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type"));
+                        MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
                         type = "DIRT";
                     }
                 }

@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
+import com.HeroxWar.HeroxCore.MessageGesture;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import org.bukkit.Bukkit;
@@ -736,7 +737,7 @@ public class Challenge {
                 }
                 Player p = Bukkit.getPlayer(playerName);
                 if (p != null) {
-                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("BoostMessageSinglePlayer").replace("{number}", multiplierSinglePlayer + "").replace("{minutes}", number + "")));
+                    MessageGesture.sendMessage(p,Main.instance.getConfigGesture().getMessages().get("BoostMessageSinglePlayer").replace("{number}", multiplierSinglePlayer + "").replace("{minutes}", number + ""));
                 }
             }
         }, 0, timeNumber);
@@ -766,7 +767,7 @@ public class Challenge {
                     boostingTask.cancel();
                 }
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("BoostMessage").replace("{number}", multiplier + "").replace("{minutes}", number + "")));
+                    MessageGesture.sendMessage(p,Main.instance.getConfigGesture().getMessages().get("BoostMessage").replace("{number}", multiplier + "").replace("{minutes}", number + ""));
                 }
             }
         }, 0, timeNumber);
@@ -787,7 +788,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{blockOnPlaced" + number + "}", "&cDELETE PLACEHOLDER"));
-                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {blockOnPlaced" + number + "}"));
+                    MessageGesture.sendMessage(sender,"&c&o&lERROR WITH PLACEHOLDER {blockOnPlaced" + number + "}");
                 }
             }
             Matcher matcherBlock = blockPattern.matcher(title.get(i));
@@ -801,7 +802,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{block" + number + "}", "&cDELETE PLACEHOLDER"));
-                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {block" + number + "}"));
+                    MessageGesture.sendMessage(sender,"&c&o&lERROR WITH PLACEHOLDER {block" + number + "}");
                 }
             }
             Matcher matcherWorld = worldPattern.matcher(title.get(i));
@@ -815,7 +816,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{world" + number + "}", "&cDELETE PLACEHOLDER"));
-                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {world" + number + "}"));
+                    MessageGesture.sendMessage(sender,"&c&o&lERROR WITH PLACEHOLDER {world" + number + "}");
                 }
             }
             Matcher matcherItem = itemPattern.matcher(title.get(i));
@@ -829,7 +830,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{item" + number + "}", "&cDELETE PLACEHOLDER"));
-                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {item" + number + "}"));
+                    MessageGesture.sendMessage(sender,"&c&o&lERROR WITH PLACEHOLDER {item" + number + "}");
                 }
             }
             Matcher matcherItemInHand = itemInHandPattern.matcher(title.get(i));
@@ -843,7 +844,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{itemInHand" + number + "}", "&cDELETE PLACEHOLDER"));
-                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {itemInHand" + number + "}"));
+                    MessageGesture.sendMessage(sender,"&c&o&lERROR WITH PLACEHOLDER {itemInHand" + number + "}");
                 }
             }
             Matcher matcherVehicle = vehiclePattern.matcher(title.get(i));
@@ -857,7 +858,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{vehicle" + number + "}", "&cDELETE PLACEHOLDER"));
-                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {vehicle" + number + "}"));
+                    MessageGesture.sendMessage(sender,"&c&o&lERROR WITH PLACEHOLDER {vehicle" + number + "}");
                 }
             }
             Matcher causeVehicle = causePattern.matcher(title.get(i));
@@ -871,7 +872,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{cause" + number + "}", "&cDELETE PLACEHOLDER"));
-                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {cause" + number + "}"));
+                    MessageGesture.sendMessage(sender,"&c&o&lERROR WITH PLACEHOLDER {cause" + number + "}");
                 }
             }
             Matcher matcherColor = colorPattern.matcher(title.get(i));
@@ -885,7 +886,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{color" + number + "}", "&cDELETE PLACEHOLDER"));
-                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {color" + number + "}"));
+                    MessageGesture.sendMessage(sender,"&c&o&lERROR WITH PLACEHOLDER {color" + number + "}");
                 }
             }
             Matcher matcherMob = mobPattern.matcher(title.get(i));
@@ -899,12 +900,12 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{mob" + number + "}", "&cDELETE PLACEHOLDER"));
-                    sender.sendMessage(ColorUtils.applyColor("&c&o&lERROR WITH PLACEHOLDER {mob" + number + "}"));
+                    MessageGesture.sendMessage(sender,"&c&o&lERROR WITH PLACEHOLDER {mob" + number + "}");
                 }
             }
         }
         for (String s : title) {
-            sender.sendMessage(ColorUtils.applyColor(s
+            MessageGesture.sendMessage(sender,s
                     .replace("{hours}", Main.instance.getDailyChallenge().getTimeChallenge() + "")
                     .replace("{points}", point + "")
                     .replace("{slots}", number + "")
@@ -915,7 +916,7 @@ public class Challenge {
                     .replace("{power}", power + "")
                     .replace("{onGround}", onGround)
                     .replace("{keepInventory}", keepInventory + "")
-            ));
+            );
         }
     }
 }

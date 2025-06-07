@@ -1,9 +1,9 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges;
 
+import com.HeroxWar.HeroxCore.MessageGesture;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
-import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -66,7 +66,7 @@ public class ChatEvent implements Listener {
         if (e.getMessage().equalsIgnoreCase(word)) {
             Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), (long) point * word.length());
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendMessage(ColorUtils.applyColor(correctAnswer.replace("{player}", e.getPlayer().getName())));
+                MessageGesture.sendMessage(p,correctAnswer.replace("{player}", e.getPlayer().getName()));
             }
             if (debugActive) {
                 debugUtils.addLine("add " + (point * word.length()) + " points at " + e.getPlayer().getName());
@@ -94,9 +94,9 @@ public class ChatEvent implements Listener {
             generateWord();
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!quest.equalsIgnoreCase("")) {
-                    p.sendMessage(ColorUtils.applyColor(quest));
+                    MessageGesture.sendMessage(p,quest);
                 } else {
-                    p.sendMessage(ColorUtils.applyColor(message.replace("{points}", (word.length() * point) + "").replace("{word}", word)));
+                    MessageGesture.sendMessage(p,message.replace("{points}", (word.length() * point) + "").replace("{word}", word));
                 }
             }
         }, 0, time);

@@ -1,11 +1,11 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import com.HeroxWar.HeroxCore.MessageGesture;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
-import io.eliotesta98.VanillaChallenges.Utils.ColorUtils;
 import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -555,12 +555,10 @@ public abstract class Database {
         List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGesture().getNumberOfTop());
         int i = 1;
         for (Challenger challenger: top) {
-            Bukkit.getConsoleSender().sendMessage(
-                    ColorUtils.applyColor(
-                            Main.instance.getConfigGesture().getMessages().get("topPlayers" + i)
-                                    .replace("{number}", "" + i)
-                                    .replace("{player}", challenger.getNomePlayer())
-                                    .replace("{points}", MoneyUtils.transform(challenger.getPoints()))));
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),Main.instance.getConfigGesture().getMessages().get("topPlayers" + i)
+                    .replace("{number}", "" + i)
+                    .replace("{player}", challenger.getNomePlayer())
+                    .replace("{points}", MoneyUtils.transform(challenger.getPoints())));
             i++;
         }
     }

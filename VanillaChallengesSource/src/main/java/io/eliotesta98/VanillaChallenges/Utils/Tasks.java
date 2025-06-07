@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
+import com.HeroxWar.HeroxCore.MessageGesture;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
@@ -57,34 +58,34 @@ public class Tasks {
                     top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
                 }
                 if (!top.isEmpty()) {
-                    p.sendMessage(ColorUtils.applyColor(actuallyInTop));
+                    MessageGesture.sendMessage(p,actuallyInTop);
                 }
                 int i = 1;
                 for (Challenger challenger : top) {
-                    p.sendMessage(ColorUtils.applyColor(Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints()))));
+                    MessageGesture.sendMessage(p,Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints())));
                     i++;
                 }
                 if (Main.instance.getConfigGesture().getMinimumPoints() != -1) {
                     if (!Main.instance.getDailyChallenge().isMinimumPointsReached()) {
-                        p.sendMessage(ColorUtils.applyColor(pointsRemainForReward.replace("{points}", Main.instance.getDailyChallenge().getPointsRemain() + "")));
+                        MessageGesture.sendMessage(p,pointsRemainForReward.replace("{points}", Main.instance.getDailyChallenge().getPointsRemain() + ""));
                     } else {
-                        p.sendMessage(ColorUtils.applyColor(pointsRemainForReward.replace("{points}", "0")));
+                        MessageGesture.sendMessage(p,pointsRemainForReward.replace("{points}", "0"));
                     }
                 }
                 if (Main.instance.getDailyChallenge().getMin10PlayersPoints().get(p.getName()) != null) {
                     String minutes = ((time / 60) / 20) + "";
-                    p.sendMessage(ColorUtils.applyColor(pointsEveryMinutes.replace("{points}", MoneyUtils.transform(Main.instance.getDailyChallenge().getMin10PlayersPoints().get(p.getName()))).replace("{minutes}", minutes)));
+                    MessageGesture.sendMessage(p,pointsEveryMinutes.replace("{points}", MoneyUtils.transform(Main.instance.getDailyChallenge().getMin10PlayersPoints().get(p.getName()))).replace("{minutes}", minutes));
                 }
                 if (!Main.instance.getDailyChallenge().isActive()) {
                     long pointsRemain = Main.instance.getDailyChallenge().getPointsBoost() - Main.instance.getDailyChallenge().getCountPointsChallenge();
                     if (pointsRemain > 0) {
-                        p.sendMessage(ColorUtils.applyColor(pointsRemainForBoosting.replace("{points}", pointsRemain + "")));
+                        MessageGesture.sendMessage(p,pointsRemainForBoosting.replace("{points}", pointsRemain + ""));
                     }
                 }
                 if (!Main.instance.getDailyChallenge().isActiveSingleBoost(p.getName())) {
                     long pointsRemain = Main.instance.getDailyChallenge().getPointsBoostSinglePlayer() - Main.instance.getDailyChallenge().getCountPointsChallengeSinglePlayer(p.getName());
                     if (pointsRemain > 0) {
-                        p.sendMessage(ColorUtils.applyColor(pointsRemainForBoostingSinglePlayer.replace("{points}", pointsRemain + "")));
+                        MessageGesture.sendMessage(p,pointsRemainForBoostingSinglePlayer.replace("{points}", pointsRemain + ""));
                     }
                 }
             }

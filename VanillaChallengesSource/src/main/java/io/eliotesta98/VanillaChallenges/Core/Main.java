@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Core;
 
+import com.HeroxWar.HeroxCore.ReloadGesture;
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.*;
@@ -29,7 +30,6 @@ import org.bukkit.*;
 
 public class Main extends JavaPlugin {
     public static Main instance;
-    public SoundManager SoundManager;
     private ConfigGesture config;
     private Challenge dailyChallenge;
     public static ExpansionPlaceholderAPI EPAPI;
@@ -63,8 +63,6 @@ public class Main extends JavaPlugin {
                         "§a                                                                                       |_____|              \n"
                         + "§a  \r\n" + "§a  \r\n" + "§e  Version " + getDescription().getVersion() + " \r\n"
                         + "§e© Developed by §feliotesta98 & xSavior_of_God §ewith §4<3 \r\n \r\n \r\n");
-
-        SoundManager = new SoundManager();
 
         if (getServer().getVersion().contains("1.8") || getServer().getVersion().contains("1.9") ||
                 getServer().getVersion().contains("1.10") || getServer().getVersion().contains("1.11") ||
@@ -315,7 +313,7 @@ public class Main extends JavaPlugin {
             onDisable();
             return;
         }
-        ReloadUtils.reload();
+        ReloadGesture.reload(instance.getName());
     }
 
     public void pluginStartingProcess() {
@@ -325,6 +323,7 @@ public class Main extends JavaPlugin {
         String typeChallenge = db.insertDailyChallenges();
         // reset of variable for a new Challenge
         challengeSelected = true;
+        boolean skipCheck = false;
         if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
             currentListener = new BlockPlaceEvent();
         } else if (typeChallenge.equalsIgnoreCase("BlockBreakChallenge")) {
@@ -377,6 +376,7 @@ public class Main extends JavaPlugin {
             currentListener = new ItemCollector();
         } else if (typeChallenge.equalsIgnoreCase("InventoryConditionChallenge")) {
             new InventoryCheck();
+            skipCheck = true;
         } else if (typeChallenge.equalsIgnoreCase("VehicleMoveChallenge")) {
             currentListener = new VehicleMoveEvent();
         } else if (typeChallenge.equalsIgnoreCase("JumpChallenge")) {
@@ -391,6 +391,7 @@ public class Main extends JavaPlugin {
             currentListener = new HealthRegenEvent();
         } else if (typeChallenge.equalsIgnoreCase("AFKChallenge")) {
             new AFKCheck();
+            skipCheck = true;
         } else if (typeChallenge.equalsIgnoreCase("MissionChallenge")) {
             currentListener = new SuperiorSkyBlock2Events();
         } else if (typeChallenge.equalsIgnoreCase("SensorChallenge")) {
@@ -409,15 +410,13 @@ public class Main extends JavaPlugin {
             currentListener = new PlayerShearsEvent();
         } else if (typeChallenge.equalsIgnoreCase("RiptideChallenge")) {
             currentListener = new RiptideEvent();
-        } else if (typeChallenge.equalsIgnoreCase("nessuno")) {
+        } else {
             challengeSelected = false;
         }
 
-        boolean skipCheck = typeChallenge.equalsIgnoreCase("AFKChallenge");
-        if (typeChallenge.equalsIgnoreCase("InventoryConditionChallenge")) {
-            skipCheck = true;
-        }
-        if (!skipCheck && currentListener == null) {
+        if (skipCheck) {
+            challengeSelected = true;
+        } else if (currentListener == null) {
             challengeSelected = false;
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
         } else {

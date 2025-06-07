@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Interfaces;
 
+import com.HeroxWar.HeroxCore.SoundGesture.SoundType;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
@@ -15,17 +16,18 @@ import java.util.Map;
 
 public class Interface {
 
-    private final String soundOpen, nameInterface, nameInterfaceToOpen, nameInterfaceToReturn;
+    private final String nameInterface, nameInterfaceToOpen, nameInterfaceToReturn;
     private String title;
     private List<String> slots;
     private final Map<String, ItemConfig> itemsConfig;
     private boolean debug;
     private final int sizeModificableSlot;
     private final Map<String, Inventory> interfacesOpened = new HashMap<>();
+    private final SoundType soundOpen;
 
     public Interface(String title, String soundOpen, List<String> slots, Map<String, ItemConfig> itemsConfig, boolean debug, int sizeModificableSlot, String nameInterface, String nameInterfaceToOpen, String nameInterfaceToReturn) {
         this.title = title;
-        this.soundOpen = soundOpen;
+        this.soundOpen = new SoundType(soundOpen, 50, 1.0);
         this.itemsConfig = itemsConfig;
         this.debug = debug;
         this.sizeModificableSlot = sizeModificableSlot;
@@ -203,7 +205,7 @@ public class Interface {
                     inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, 0, "", i));
                 }
             }
-            Main.instance.SoundManager.playSound(p, soundOpen, 15.0f, 10.0f);
+            soundOpen.playSound(p);
         });
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> p.openInventory(inventory));
         if (this.debug) {
