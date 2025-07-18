@@ -25,7 +25,7 @@ public class ConfigGesture {
     private final Map<String, Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, rankingReward, yesterdayTop, resetPointsAtNewChallenge,
             backupEnabled, pointsResume, lockedInterface, randomReward = false;
-    private String challengeGeneration, url, username, password, mySqlPrefix, database;
+    private String challengeGeneration, url, username, password, mySqlPrefix, database, permissionPointsGive;
     private int timeBroadcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup,
             numberOfRewardPlayer, minimumPoints, number, time, numberOfTop;
     private ItemStack chestCollection;
@@ -414,6 +414,7 @@ public class ConfigGesture {
         password = file.getString("Configuration.MySql.Password");
         resetPointsAtNewChallenge = file.getBoolean("Configuration.Points.ResetPointsAtNewChallenge");
         activeOnlinePoints = file.getBoolean("Configuration.Points.OnlinePoints.Enabled");
+        permissionPointsGive = file.getString("Configuration.Points.Permission");
         yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
         rankingReward = file.getBoolean("Configuration.Top.RankingReward");
         if (!rankingReward) {
@@ -643,4 +644,7 @@ public class ConfigGesture {
         return password;
     }
 
+    public String getPermissionPointsGive() {
+        return permissionPointsGive;
+    }
 }

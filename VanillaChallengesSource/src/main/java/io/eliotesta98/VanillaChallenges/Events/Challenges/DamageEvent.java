@@ -48,6 +48,10 @@ public class DamageEvent implements Listener {
                     }
                 }
 
+                if(!Controls.hasPermission(playerName)) {
+                    return;
+                }
+
                 if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     return;
                 }

@@ -86,6 +86,10 @@ public class ColorSheepEvent implements Listener {
                     debugUtils.addLine("PlayerColoring= " + playerName);
                 }
 
+                if(!Controls.hasPermission(playerName)) {
+                    return;
+                }
+
                 if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     return;
                 }

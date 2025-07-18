@@ -64,6 +64,10 @@ public class MoveEvent implements Listener {
                 return;
             }
 
+            if(!Controls.hasPermission(playerName)) {
+                return;
+            }
+
             if (Controls.isItem(playerMaterialInHand, debugActive, debugUtils, tempo)) {
                 return;
             }

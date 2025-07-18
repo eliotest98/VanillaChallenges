@@ -9,16 +9,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Challenge {
 
-    private final Map<String, Long> players = new HashMap<>();
-    private final Map<String, Long> min10PlayersPoints = new HashMap<>();
-    private final Map<String, Long> boostSinglePlayers = new HashMap<>();
-    private final Map<String, Boolean> startBoostSinglePlayers = new HashMap<>();
-    private final Map<String, BukkitTask> tasksSinglePlayers = new HashMap<>();
+    private final Map<String, Long> players = new ConcurrentHashMap<>();
+    private final Map<String, Long> min10PlayersPoints = new ConcurrentHashMap<>();
+    private final Map<String, Long> boostSinglePlayers = new ConcurrentHashMap<>();
+    private final Map<String, Boolean> startBoostSinglePlayers = new ConcurrentHashMap<>();
+    private final Map<String, BukkitTask> tasksSinglePlayers = new ConcurrentHashMap<>();
     private List<String> worlds = new ArrayList<>();
     private String challengeName = "nessuna";
     private String itemChallenge = "BEDROCK";
@@ -59,8 +60,6 @@ public class Challenge {
     private String sneaking = "NOBODY";
     private List<String> quests = new ArrayList<>();
     int minutes = 1;
-
-    private final Map<String, Long> tempPoints = new HashMap<>();
 
     private final static Pattern blockOnPlacedPattern = Pattern.compile("\\{blockOnPlaced[0-9]}");
     private final static Pattern blockPattern = Pattern.compile("\\{block[0-9]}");
@@ -257,106 +256,16 @@ public class Challenge {
         if (Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
             return;
         }
-        if (Main.instance.getConfigGesture().getTasks().getIfTaskSaving("SavePoints")
-                || Main.instance.getConfigGesture().getTasks().getIfTaskSaving("CheckDay")
-                || Main.instance.getConfigGesture().getTasks().getIfTaskSaving("Broadcast")) {
-            if (!tempPoints.containsKey(playerName)) {
-                tempPoints.put(playerName, amount);
-            } else {
-                tempPoints.replace(playerName, tempPoints.get(playerName) + amount);
-            }
-            return;
-        } else {
-            if (!tempPoints.isEmpty()) {
-                for (Map.Entry<String, Long> points : tempPoints.entrySet()) {
-                    String playerTemp = points.getKey();
-                    long pointTemp = points.getValue();
-                    if (!players.containsKey(playerTemp)) {
-                        players.put(playerTemp, pointTemp);
-                    } else {
-                        players.replace(playerTemp, players.get(playerTemp) + pointTemp);
-                    }
-                }
-                tempPoints.clear();
-            }
-        }
         if (!players.containsKey(playerName)) {
             players.put(playerName, amount);
         } else {
             players.replace(playerName, players.get(playerName) + amount);
         }
-
     }
 
     public void increment(String playerName, long amount) {
         if (Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
             return;
-        }
-        if (Main.instance.getConfigGesture().getTasks().getIfTaskSaving("SavePoints")
-                || Main.instance.getConfigGesture().getTasks().getIfTaskSaving("CheckDay")
-                || Main.instance.getConfigGesture().getTasks().getIfTaskSaving("Broadcast")) {
-            if (!tempPoints.containsKey(playerName)) {
-                tempPoints.put(playerName, amount);
-            } else {
-                tempPoints.replace(playerName, tempPoints.get(playerName) + amount);
-            }
-            return;
-        } else {
-            if (!tempPoints.isEmpty()) {
-                for (Map.Entry<String, Long> points : tempPoints.entrySet()) {
-                    String playerTemp = points.getKey();
-                    long pointTemp = points.getValue();
-                    if (!startBoostSinglePlayers.containsKey(playerTemp)) {
-                        startBoostSinglePlayers.put(playerTemp, false);
-                    }
-                    if (startBoost || startBoostSinglePlayers.get(playerTemp)) {
-                        if (startBoost) {
-                            if (!players.containsKey(playerTemp)) {
-                                players.put(playerTemp, pointTemp * multiplier);
-                            } else {
-                                players.replace(playerTemp, players.get(playerTemp) + (pointTemp * multiplier));
-                            }
-                            if (!min10PlayersPoints.containsKey(playerTemp)) {
-                                min10PlayersPoints.put(playerTemp, pointTemp * multiplier);
-                            } else {
-                                min10PlayersPoints.replace(playerTemp, min10PlayersPoints.get(playerTemp) + (pointTemp * multiplier));
-                            }
-                        }
-                        if (startBoostSinglePlayers.get(playerTemp)) {
-                            if (!players.containsKey(playerTemp)) {
-                                players.put(playerTemp, pointTemp * multiplierSinglePlayer);
-                            } else {
-                                players.replace(playerTemp, players.get(playerTemp) + (pointTemp * multiplierSinglePlayer));
-                            }
-                            if (!min10PlayersPoints.containsKey(playerTemp)) {
-                                min10PlayersPoints.put(playerTemp, pointTemp * multiplierSinglePlayer);
-                            } else {
-                                min10PlayersPoints.replace(playerTemp, min10PlayersPoints.get(playerTemp) + (pointTemp * multiplierSinglePlayer));
-                            }
-                        }
-                    } else {
-                        countPointsChallenge = countPointsChallenge + pointTemp;
-                        if (!players.containsKey(playerTemp)) {
-                            players.put(playerTemp, pointTemp);
-                        } else {
-                            players.replace(playerTemp, players.get(playerTemp) + pointTemp);
-                        }
-                        if (!min10PlayersPoints.containsKey(playerTemp)) {
-                            min10PlayersPoints.put(playerTemp, pointTemp);
-                        } else {
-                            min10PlayersPoints.replace(playerTemp, min10PlayersPoints.get(playerTemp) + pointTemp);
-                        }
-                        if (!boostSinglePlayers.containsKey(playerTemp)) {
-                            boostSinglePlayers.put(playerTemp, pointTemp);
-                        } else {
-                            boostSinglePlayers.replace(playerTemp, boostSinglePlayers.get(playerTemp) + pointTemp);
-                        }
-                        checkPointsMultiplier();
-                        checkPointsMultiplierSinglePlayer(playerTemp);
-                    }
-                }
-                tempPoints.clear();
-            }
         }
         if (!startBoostSinglePlayers.containsKey(playerName)) {
             startBoostSinglePlayers.put(playerName, false);
@@ -703,7 +612,6 @@ public class Challenge {
                 ", sneaking='" + sneaking + '\'' +
                 ", quests=" + quests +
                 ", minutes=" + minutes +
-                ", tempPoints=" + tempPoints +
                 '}';
     }
 

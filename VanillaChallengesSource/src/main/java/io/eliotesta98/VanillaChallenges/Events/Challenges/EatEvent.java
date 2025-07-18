@@ -39,6 +39,10 @@ public class EatEvent implements Listener {
                 foodLevels.remove(playerName);
                 foodLevels.put(playerName, Math.min(foodLevel, 20));
 
+                if(!Controls.hasPermission(playerName)) {
+                    return;
+                }
+
                 if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     return;
                 }

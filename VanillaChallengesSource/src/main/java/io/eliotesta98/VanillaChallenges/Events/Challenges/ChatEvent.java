@@ -59,6 +59,10 @@ public class ChatEvent implements Listener {
             }
         }
 
+        if(!Controls.hasPermission(playerName)) {
+            return;
+        }
+
         if (Controls.isWorldEnable(world, debugActive, debugUtils, tempo)) {
             return;
         }

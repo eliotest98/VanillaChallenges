@@ -57,6 +57,10 @@ public class BreedEvent implements Listener {
                 }
             }
 
+            if(!Controls.hasPermission(playerName)) {
+                return;
+            }
+
             if (Controls.isWorldEnable(finalWorldName, debugActive, debugUtils, tempo)) {
                 return;
             }

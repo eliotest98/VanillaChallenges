@@ -52,6 +52,10 @@ public class RaidEvent implements Listener {
                     }
                 }
 
+                if(!Controls.hasPermission(winner.getName())) {
+                    return;
+                }
+
                 if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     return;
                 }

@@ -2,7 +2,9 @@ package io.eliotesta98.VanillaChallenges.Events.Challenges.Modules;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,6 +25,7 @@ public class Controls {
     private static final String onGround = Main.instance.getDailyChallenge().getOnGround();
     private static final double force = Main.instance.getDailyChallenge().getForce();
     private static final double power = Main.instance.getDailyChallenge().getPower();
+    private static final String permission = Main.instance.getConfigGesture().getPermissionPointsGive();
 
     public static boolean isWorldEnable(String worldName, boolean debugActive, DebugUtils debugUtils, long tempo) {
         if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
@@ -236,6 +239,14 @@ public class Controls {
             return false;
         } else {
             return true;
+        }
+    }
+
+    public static boolean hasPermission(String playerName) {
+        if (permission.equalsIgnoreCase("")) {
+            return true;
+        } else {
+            return Bukkit.getPlayer(playerName).hasPermission(permission);
         }
     }
 }

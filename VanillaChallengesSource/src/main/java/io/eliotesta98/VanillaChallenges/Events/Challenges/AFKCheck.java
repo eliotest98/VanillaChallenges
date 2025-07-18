@@ -52,6 +52,10 @@ public class AFKCheck {
                     continue;
                 }
 
+                if(!Controls.hasPermission(p.getName())) {
+                    continue;
+                }
+
                 if (Controls.isWorldEnable(p.getWorld().getName(), debugActive, debugUtils, tempo)) {
                     continue;
                 }

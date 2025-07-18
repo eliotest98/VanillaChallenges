@@ -51,6 +51,10 @@ public class SprintEvent implements Listener {
                 }
             }
 
+            if(!Controls.hasPermission(e.getPlayer().getName())) {
+                return;
+            }
+
             if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }

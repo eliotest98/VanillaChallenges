@@ -54,7 +54,7 @@ public class ItemCollector implements Listener {
         final Inventory playerInventory = e.getPlayer().getInventory();
         final String playerName = e.getPlayer().getName();
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
-            if (chestLocation.get(playerName) == null && playerInventory.firstEmpty() != -1) {
+            if (chestLocation.get(playerName) == null && playerInventory.firstEmpty() != -1 && Controls.hasPermission(playerName)) {
                 if (debugActive) {
                     debugUtils.addLine("PlayerJoinName = " + playerName);
                 }
@@ -146,6 +146,9 @@ public class ItemCollector implements Listener {
                     if (debugActive) {
                         debugUtils.addLine("Player Name = " + player.getName());
                     }
+                    if (Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
+                        return;
+                    }
                     if (chestLocation.get(player.getName()) != null) {
                         Location location = chestLocation.get(player.getName());
                         if (location.getWorld() != null && location.getBlock().getType() == Main.instance.getConfigGesture().getChestCollection().getType()) {
@@ -221,10 +224,10 @@ public class ItemCollector implements Listener {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.instance, () -> {
             ArrayList<String> chestBroken = new ArrayList<>();
             for (Map.Entry<String, Location> location : chestLocation.entrySet()) {
-                if(location.getValue().getWorld() == null) {
+                if (location.getValue().getWorld() == null) {
                     Player player = Bukkit.getPlayer(location.getKey());
-                    if(player != null && player.isOnline()) {
-                        MessageGesture.sendMessage(player,caseBroken);
+                    if (player != null && player.isOnline()) {
+                        MessageGesture.sendMessage(player, caseBroken);
                         db.deleteChest(player.getName());
                         chestBroken.add(location.getKey());
                         player.getInventory().addItem(Main.instance.getConfigGesture().getChestCollection());
@@ -233,8 +236,8 @@ public class ItemCollector implements Listener {
                     db.updateChest(location.getKey(), location.getValue());
                 }
             }
-            if(!chestBroken.isEmpty()) {
-                for(String playerName: chestBroken) {
+            if (!chestBroken.isEmpty()) {
+                for (String playerName : chestBroken) {
                     chestLocation.remove(playerName);
                 }
             }

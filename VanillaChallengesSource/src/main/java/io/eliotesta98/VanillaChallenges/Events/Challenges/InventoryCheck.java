@@ -50,6 +50,10 @@ public class InventoryCheck {
                     }
                 }
 
+                if(!Controls.hasPermission(p.getName())) {
+                    return;
+                }
+
                 if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                     continue;
                 }

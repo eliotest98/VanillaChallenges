@@ -32,6 +32,10 @@ Configuration:
     # Minimum points for give rewards (-1 for disabling)
     MinimumPoints: 0
 
+    # This gesture is for give points at player only if the player have the permission configured
+    # P.S. Empty -> Disabled
+    Permission: ''
+
 
   # Chest for ItemCollectionChallenge
   CollectionChallengeItem:

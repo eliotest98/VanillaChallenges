@@ -7,6 +7,7 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Events.ApiEvents.ChallengeChangeEvent;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector.ItemCollector;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -58,34 +59,34 @@ public class Tasks {
                     top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
                 }
                 if (!top.isEmpty()) {
-                    MessageGesture.sendMessage(p,actuallyInTop);
+                    MessageGesture.sendMessage(p, actuallyInTop);
                 }
                 int i = 1;
                 for (Challenger challenger : top) {
-                    MessageGesture.sendMessage(p,Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints())));
+                    MessageGesture.sendMessage(p, Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints())));
                     i++;
                 }
                 if (Main.instance.getConfigGesture().getMinimumPoints() != -1) {
                     if (!Main.instance.getDailyChallenge().isMinimumPointsReached()) {
-                        MessageGesture.sendMessage(p,pointsRemainForReward.replace("{points}", Main.instance.getDailyChallenge().getPointsRemain() + ""));
+                        MessageGesture.sendMessage(p, pointsRemainForReward.replace("{points}", Main.instance.getDailyChallenge().getPointsRemain() + ""));
                     } else {
-                        MessageGesture.sendMessage(p,pointsRemainForReward.replace("{points}", "0"));
+                        MessageGesture.sendMessage(p, pointsRemainForReward.replace("{points}", "0"));
                     }
                 }
                 if (Main.instance.getDailyChallenge().getMin10PlayersPoints().get(p.getName()) != null) {
                     String minutes = ((time / 60) / 20) + "";
-                    MessageGesture.sendMessage(p,pointsEveryMinutes.replace("{points}", MoneyUtils.transform(Main.instance.getDailyChallenge().getMin10PlayersPoints().get(p.getName()))).replace("{minutes}", minutes));
+                    MessageGesture.sendMessage(p, pointsEveryMinutes.replace("{points}", MoneyUtils.transform(Main.instance.getDailyChallenge().getMin10PlayersPoints().get(p.getName()))).replace("{minutes}", minutes));
                 }
                 if (!Main.instance.getDailyChallenge().isActive()) {
                     long pointsRemain = Main.instance.getDailyChallenge().getPointsBoost() - Main.instance.getDailyChallenge().getCountPointsChallenge();
                     if (pointsRemain > 0) {
-                        MessageGesture.sendMessage(p,pointsRemainForBoosting.replace("{points}", pointsRemain + ""));
+                        MessageGesture.sendMessage(p, pointsRemainForBoosting.replace("{points}", pointsRemain + ""));
                     }
                 }
                 if (!Main.instance.getDailyChallenge().isActiveSingleBoost(p.getName())) {
                     long pointsRemain = Main.instance.getDailyChallenge().getPointsBoostSinglePlayer() - Main.instance.getDailyChallenge().getCountPointsChallengeSinglePlayer(p.getName());
                     if (pointsRemain > 0) {
-                        MessageGesture.sendMessage(p,pointsRemainForBoostingSinglePlayer.replace("{points}", pointsRemain + ""));
+                        MessageGesture.sendMessage(p, pointsRemainForBoostingSinglePlayer.replace("{points}", pointsRemain + ""));
                     }
                 }
             }
@@ -269,6 +270,9 @@ public class Tasks {
                     minutesOnlinePlayer.put(p.getName(), 0);
                 } else {
                     if (minutesOnlinePlayer.get(p.getName()) == minutes) {
+                        if (!Controls.hasPermission(p.getName())) {
+                            return;
+                        }
                         Main.instance.getDailyChallenge().increment(p.getName(), point);
                         minutesOnlinePlayer.replace(p.getName(), 0);
                     } else {

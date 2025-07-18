@@ -44,6 +44,10 @@ public class RiptideEvent implements Listener {
                 }
             }
 
+            if(!Controls.hasPermission(player.getName())) {
+                return;
+            }
+
             if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
                 return;
             }

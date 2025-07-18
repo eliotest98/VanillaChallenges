@@ -112,6 +112,10 @@ public class GameBlockEvent implements Listener {
                 }
             }
 
+            if(!Controls.hasPermission(player.getName())) {
+                return;
+            }
+
             if (Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
                 return;
             }
