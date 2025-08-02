@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Core;
 
+import com.HeroxWar.HeroxCore.CommentedConfiguration;
 import com.HeroxWar.HeroxCore.ReloadGesture;
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
@@ -18,7 +19,6 @@ import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Utils.*;
-
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -64,10 +64,8 @@ public class Main extends JavaPlugin {
                         + "§a  \r\n" + "§a  \r\n" + "§e  Version " + getDescription().getVersion() + " \r\n"
                         + "§e© Developed by §feliotesta98 & xSavior_of_God §ewith §4<3 \r\n \r\n \r\n");
 
-        if (getServer().getVersion().contains("1.8") || getServer().getVersion().contains("1.9") ||
-                getServer().getVersion().contains("1.10") || getServer().getVersion().contains("1.11") ||
-                getServer().getVersion().contains("1.12")) {
-            version113 = false;
+        version113 = !getServer().getVersion().matches(".*\\b1\\.(8|9|1[0-2])\\b.*");
+        if (!version113) {
             this.getServer().getConsoleSender().sendMessage("§6Server version registered < 1.13");
         } else {
             this.getServer().getConsoleSender().sendMessage("§6Server version registered > 1.12");
@@ -280,11 +278,7 @@ public class Main extends JavaPlugin {
     private void loadLibraries() {
         final List<Library> libraries = new ArrayList<>();
 
-        boolean oldVersion = getServer().getVersion().contains("1.8") || getServer().getVersion().contains("1.9")
-                || getServer().getVersion().contains("1.10") || getServer().getVersion().contains("1.11")
-                || getServer().getVersion().contains("1.12") || getServer().getVersion().contains("1.13")
-                || getServer().getVersion().contains("1.14") || getServer().getVersion().contains("1.15")
-                || getServer().getVersion().contains("1.16");
+        boolean oldVersion = getServer().getVersion().matches(".*\\b1\\.(8|9|1[0-6])\\b.*");
 
         if (oldVersion) {
             Bukkit.getConsoleSender().sendMessage("Loading legacy libraries...");

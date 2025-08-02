@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import com.HeroxWar.HeroxCore.CommentedConfiguration;
 import com.HeroxWar.HeroxCore.MessageGesture;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
