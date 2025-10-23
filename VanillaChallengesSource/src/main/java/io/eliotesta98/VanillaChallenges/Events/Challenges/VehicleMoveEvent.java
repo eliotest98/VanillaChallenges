@@ -29,7 +29,7 @@ public class VehicleMoveEvent implements Listener {
     public void onMove(org.bukkit.event.vehicle.VehicleMoveEvent e) {
         long tempo = System.currentTimeMillis();
         List<String> players = new ArrayList<>();
-        if (Main.version113) {
+        if (!Main.version.isInRange(8, 12)) {
             for (Entity entity : e.getVehicle().getPassengers()) {
                 if (entity instanceof Player) {
                     players.add(entity.getName());
@@ -65,7 +65,7 @@ public class VehicleMoveEvent implements Listener {
                     }
                 }
 
-                if(!Controls.hasPermission(playerName)) {
+                if (!Controls.hasPermission(playerName)) {
                     return;
                 }
 

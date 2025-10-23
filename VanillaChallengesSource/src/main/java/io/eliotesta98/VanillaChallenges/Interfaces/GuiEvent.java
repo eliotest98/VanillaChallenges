@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,7 +123,7 @@ public class GuiEvent implements Listener {
                         debug.debug();
                     }
                     boolean isItem113 = false;
-                    if (Main.version113) {
+                    if (!Main.version.isInRange(8, 12)) {
                         if (configItem.equalsIgnoreCase(currentItem) ||
                                 configItem.equalsIgnoreCase(currentItem + "-" + durability)) {
                             isItem113 = true;

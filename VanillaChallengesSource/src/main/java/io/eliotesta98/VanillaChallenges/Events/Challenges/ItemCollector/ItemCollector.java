@@ -118,7 +118,7 @@ public class ItemCollector implements Listener {
                         debugUtils.addLine("location block = " + block.getLocation());
                     }
                     //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
-                    if (Main.version113) {
+                    if (!Main.version.isInRange(8, 12)) {
                         e.setDropItems(false);
                     } else {
                         e.setCancelled(true);
@@ -188,7 +188,7 @@ public class ItemCollector implements Listener {
                                         if (items.isEmpty()) {
                                             Main.instance.getDailyChallenge().increment(player.getName(), (long) point * amount);
                                             //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
-                                            if (Main.version113) {
+                                            if (!Main.version.isInRange(8, 12)) {
                                                 itemInv.setAmount(0);
                                             } else {
                                                 chest.getInventory().removeItem(itemInv);
@@ -197,7 +197,7 @@ public class ItemCollector implements Listener {
                                             if (items.contains(itemInv.getType().toString())) {
                                                 Main.instance.getDailyChallenge().increment(player.getName(), (long) point * amount);
                                                 //TODO da testare se in > 1.13 funziona l'else in modo da mettere tutto su un rigo
-                                                if (Main.version113) {
+                                                if (!Main.version.isInRange(8, 12)) {
                                                     itemInv.setAmount(0);
                                                 } else {
                                                     chest.getInventory().removeItem(itemInv);

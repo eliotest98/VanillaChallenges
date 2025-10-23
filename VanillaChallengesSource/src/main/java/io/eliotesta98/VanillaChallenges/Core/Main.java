@@ -2,6 +2,7 @@ package io.eliotesta98.VanillaChallenges.Core;
 
 import com.HeroxWar.HeroxCore.CommentedConfiguration;
 import com.HeroxWar.HeroxCore.ReloadGesture;
+import com.HeroxWar.HeroxCore.Utils.Version;
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.*;
@@ -35,13 +36,14 @@ public class Main extends JavaPlugin {
     public static ExpansionPlaceholderAPI EPAPI;
     public static Database db;
     public static boolean challengeSelected = true;
-    public static boolean version113 = true;
     public static Listener currentListener = null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
+    public static Version version;
 
     @Override
     public void onLoad() {
         instance = this;
+        version = new Version();
         // Load libraries where Spigot does not do this automatically
         loadLibraries();
     }
@@ -64,8 +66,7 @@ public class Main extends JavaPlugin {
                         + "§a  \r\n" + "§a  \r\n" + "§e  Version " + getDescription().getVersion() + " \r\n"
                         + "§e© Developed by §feliotesta98 & xSavior_of_God §ewith §4<3 \r\n \r\n \r\n");
 
-        version113 = !getServer().getVersion().matches(".*\\b1\\.(8|9|1[0-2])\\b.*");
-        if (!version113) {
+        if (version.isInRange(8,12)) {
             this.getServer().getConsoleSender().sendMessage("§6Server version registered < 1.13");
         } else {
             this.getServer().getConsoleSender().sendMessage("§6Server version registered > 1.12");

@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+
 import java.util.HashMap;
 
 public class ColorSheepEvent implements Listener {
@@ -86,7 +87,7 @@ public class ColorSheepEvent implements Listener {
                     debugUtils.addLine("PlayerColoring= " + playerName);
                 }
 
-                if(!Controls.hasPermission(playerName)) {
+                if (!Controls.hasPermission(playerName)) {
                     return;
                 }
 
@@ -113,7 +114,7 @@ public class ColorSheepEvent implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onRightClickSheep(PlayerInteractEntityEvent playerInteractEvent) {
-        if (Main.version113) {
+        if (!Main.version.isInRange(8, 12)) {
             return;
         }
         if (playerInteractEvent.getRightClicked().toString().equalsIgnoreCase("CraftSheep")) {
