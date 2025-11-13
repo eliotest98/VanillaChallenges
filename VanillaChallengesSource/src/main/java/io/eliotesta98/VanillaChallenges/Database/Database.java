@@ -361,23 +361,25 @@ public abstract class Database {
     public String insertDailyChallenges() {
         int count = 1;
         if (challenges.isEmpty()) {
-            String nome = "nessuno";
+            String nome = "nobody";
             List<String> keys = new ArrayList<>(Main.instance.getConfigGesture().getChallenges().keySet());
-            if (Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Random")) {
+            String schedulerType = Main.instance.getConfigGesture().getChallengeGeneration();
+            if (schedulerType.equalsIgnoreCase("Random")) {
                 Collections.shuffle(keys);
-            } else if (Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Single")) {
+            } else if (schedulerType.equalsIgnoreCase("Single")) {
                 Collections.shuffle(keys);
                 Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(keys.get(0));
                 return challenge.getChallengeName();
-            }
-            for (String key : keys) {
-                Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(key);
-                if (count == 1) {
-                    Main.instance.setDailyChallenge(challenge);
-                    nome = challenge.getTypeChallenge();
+            } else if(schedulerType.equalsIgnoreCase("Normal")) {
+                for (String key : keys) {
+                    Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(key);
+                    if (count == 1) {
+                        Main.instance.setDailyChallenge(challenge);
+                        nome = challenge.getTypeChallenge();
+                    }
+                    challenges.add(challenge);
+                    count++;
                 }
-                challenges.add(challenge);
-                count++;
             }
             saveChallenges();
             return nome;
@@ -401,7 +403,7 @@ public abstract class Database {
                     return Main.instance.getDailyChallenge().getTypeChallenge();
                 }
             }
-            return "nessuno";
+            return "nobody";
         }
     }
 

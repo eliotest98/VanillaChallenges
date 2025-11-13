@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Utils.*;
+
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class Main extends JavaPlugin {
                         + "§a  \r\n" + "§a  \r\n" + "§e  Version " + getDescription().getVersion() + " \r\n"
                         + "§e© Developed by §feliotesta98 & xSavior_of_God §ewith §4<3 \r\n \r\n \r\n");
 
-        if (version.isInRange(8,12)) {
+        if (version.isInRange(8, 12)) {
             this.getServer().getConsoleSender().sendMessage("§6Server version registered < 1.13");
         } else {
             this.getServer().getConsoleSender().sendMessage("§6Server version registered > 1.12");
@@ -279,7 +280,7 @@ public class Main extends JavaPlugin {
     private void loadLibraries() {
         final List<Library> libraries = new ArrayList<>();
 
-        boolean oldVersion = getServer().getVersion().matches(".*\\b1\\.(8|9|1[0-6])\\b.*");
+        boolean oldVersion = version.isInRange(8, 16);
 
         if (oldVersion) {
             Bukkit.getConsoleSender().sendMessage("Loading legacy libraries...");
