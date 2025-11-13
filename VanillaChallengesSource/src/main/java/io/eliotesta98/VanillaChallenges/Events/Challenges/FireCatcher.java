@@ -1,0 +1,135 @@
+package io.eliotesta98.VanillaChallenges.Events.Challenges;
+
+import io.eliotesta98.VanillaChallenges.Core.Main;
+import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
+import io.eliotesta98.VanillaChallenges.Modules.GriefPrevention.GriefPreventionUtils;
+import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
+import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Utils;
+import io.eliotesta98.VanillaChallenges.Modules.WorldGuard.WorldGuardUtils;
+import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCombustByBlockEvent;
+
+public class FireCatcher implements Listener {
+
+    private DebugUtils debugUtils;
+    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("EntityCombustByBlockEvent");
+    private final int point = Main.instance.getDailyChallenge().getPoint();
+    private final boolean landsEnabled = Main.instance.getConfigGesture().getHooks().get("Lands");
+    private final boolean worldGuardEnabled = Main.instance.getConfigGesture().getHooks().get("WorldGuard");
+    private final boolean griefPreventionEnabled = Main.instance.getConfigGesture().getHooks().get("GriefPrevention");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private boolean ok = false;
+
+    @SuppressWarnings("deprecation")
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onBlockBurn(EntityCombustByBlockEvent e) {
+        debugUtils = new DebugUtils(e);
+        long tempo = System.currentTimeMillis();
+
+        if (!(e.getEntity() instanceof Player)){
+            if (debugActive) {
+                debugUtils.addLine("This Entity is not a Player");
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+            return;
+        }
+
+        final Player player = (Player) e.getEntity();
+        final String itemInMainHand = player.getInventory().getItemInHand().getType().toString();
+        final boolean sneakingPlayer = player.isSneaking();
+        final Location location = player.getLocation();
+        final World world = player.getWorld();
+        final Block block = location.getBlock();
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            if (debugActive) {
+                debugUtils.addLine("PlayerBreaking= " + player.getName());
+            }
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                if (griefPreventionEnabled) {
+                    ok = GriefPreventionUtils.isReasonOk(player, block, e);
+                }
+            });
+            if (ok) {
+                ok = false;
+                if (debugActive) {
+                    debugUtils.addLine("Player is not trusted at Claim");
+                    debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                    debugUtils.debug();
+                }
+                return;
+            }
+
+            if (landsEnabled) {
+                if (LandsUtils.isTrusted(location, player.getName())) {
+                    if (debugActive) {
+                        debugUtils.addLine("Player is trusted at Land");
+                    }
+                } else {
+                    if (debugActive) {
+                        debugUtils.addLine("Player is not trusted at Land");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
+                    }
+                    return;
+                }
+            }
+
+            if (worldGuardEnabled) {
+                if (WorldGuardUtils.isARagion(world, location)) {
+                    if (debugActive) {
+                        debugUtils.addLine("Player is in a region");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
+                    }
+                    return;
+                }
+            }
+
+            if (superiorSkyBlock2Enabled) {
+                if (SuperiorSkyBlock2Utils.isInsideIsland(SuperiorSkyBlock2Utils.getSuperiorPlayer(player.getName()))) {
+                    if (debugActive) {
+                        debugUtils.addLine("Player is inside his own island");
+                    }
+                } else {
+                    if (debugActive) {
+                        debugUtils.addLine("Player isn't inside his own island");
+                        debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                        debugUtils.debug();
+                    }
+                    return;
+                }
+            }
+
+            if(!Controls.hasPermission(player.getName())) {
+                return;
+            }
+
+            if (Controls.isWorldEnable(world.getName(), debugActive, debugUtils, tempo)) {
+                return;
+            }
+
+            if (Controls.isSneaking(sneakingPlayer, debugActive, debugUtils, tempo)) {
+                return;
+            }
+
+            if (Controls.isItemInHand(itemInMainHand, debugActive, debugUtils, tempo)) {
+                return;
+            }
+
+            Main.instance.getDailyChallenge().increment(player.getName(), point);
+            if (debugActive) {
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+        });
+    }
+}

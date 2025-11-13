@@ -1,0 +1,81 @@
+Consumer:
+  TypeChallenge: 'ConsumeChallenge'
+  # if you want to enable or disable the challenge
+  Enabled: true
+  # Time settings
+  # If you want a random start or end set 'Random'
+  TimeSettings:
+    # What time do you want the challenge to start?
+    Start: '05:00'
+    # What time do you want the challenge to end?
+    End: '24:00'
+  # Worlds where you want the challenge to work, if you want all worlds set []
+  Worlds: []
+  # Items you want to consume for the challenge, if you want all items set []
+  # add RANDOM at the end of list for select only one item random from list
+  # Ex. Items:
+  #       - DIRT
+  #       - COBBLESTONE
+  #       - RANDOM
+  Items: []
+  # Able or disable Sneak when place Es. true or false or NOBODY
+  Sneaking: 'NOBODY'
+  # How many points do you want give at consuming?
+  Point: 1
+  # if you want a multiplier based on all players
+  Boost:
+    Enabled: false
+    #Number you want reached for give the multiplier
+    Points: 10000
+    # Multiplier you want give when reached the number
+    Multiplier: 2
+    # For how many minutes you want give the multiplier?
+    Minutes: 10
+  # if you want a multiplier based on a single player
+  BoostPlayer:
+    Enabled: false
+    # Number you want reached for give the multiplier
+    Points: 5000
+    # Multiplier you want give when reached the number
+    Multiplier: 4
+    # For how many minutes you want give the multiplier?
+    Minutes: 2
+  # Name of Challenge
+  NameChallenge: "&7Consume Challenge"
+  # item representing challenge
+  ItemChallenge: 'DIAMOND_BOOTS'
+  # Title challenge
+  # Placeholder List:
+  #  - {challengeName}
+  #  - {block#} where # is a number (start with 1) Ex. {block1}
+  #  - {blockOnPlaced#} where # is a number (start with 1) Ex. {blockOnPlaced1}
+  #  - {points}
+  #  - {minutes}
+  #  - {slots}
+  #  - {sneaking}
+  #  - {world#} where # is a number (start with 1) Ex. {world1}
+  #  - {item#} where # is a number (start with 1) Ex. {item1}
+  #  - {itemInHand#} where # is a number (start with 1) Ex. {itemInHand1}
+  #  - {vehicle#} where # is a number (start with 1) Ex. {vehicle1}
+  #  - {cause#} where # is a number (start with 1) Ex. {cause1}
+  #  - {color#} where # is a number (start with 1) Ex. {color1}
+  #  - {mob#} where # is a number (start with 1) Ex. {mob1}
+  #  - {force}
+  #  - {power}
+  #  - {onGround}
+  #  - {keepInventory}
+  Title:
+    - '&8'
+    - '&8██&b███&8███&b██'
+    - '&8█&b██&8████&b███              {challengeName}'
+    - '&b██&6█&8███&b███&8█'
+    - '&b█&8██&6█&8█&b███&8██    &7Consume any item for receive {points} point'
+    - '&b█&8███&6██&b█&8███    &7{hours} hours to the end of the challenge'
+    - '&8████&6██&8████'
+    - '&8███&6█&8██&6█&8███'
+    - '&8██&6█&8████&6█&8██'
+    - '&8'
+  # Reward in blocks EX: IRON_INGOT:16 Type:Quantity
+  # Reward with command EX: [command]:give %player% TNT 1
+  Rewards:
+    - 'WITHER_SKELETON_SKULL:1'

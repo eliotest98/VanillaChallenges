@@ -1,0 +1,297 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #    
+#                                                                                               #
+#                                     Vanilla Challenges                                        #
+#                                   Created by eliotesta98                                      #
+#                                                                                               #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #   
+
+Configuration:
+
+  # Random: if you want random generation of Challenges
+  # Normal: if you want basic plugin schedule
+  # Single: if you want a single random challenge generated
+  ChallengeGeneration: 'Normal'
+
+  # Points Gesture
+  Points:
+    # If you want to reset the player points at the end of every challenge
+    ResetPointsAtNewChallenge: false
+
+    # If you want resume points without zero (Ex 1.000 = 1k)
+    PointsResume: true
+
+    # Points if remain online for x minutes
+    OnlinePoints:
+      # If You want this feature
+      Enabled: false
+      # Point at minutes
+      Point: 10
+      # Every time you want player remain online for give points
+      Minutes: 10
+
+    # Minimum points for give rewards (-1 for disabling)
+    MinimumPoints: 0
+
+
+  # Chest for ItemCollectionChallenge
+  CollectionChallengeItem:
+    Type: CHEST
+    Name: "&7Chest Collector"
+    Lore:
+      - "&7Place this chest and use it for collect items"
+
+
+  BroadcastMessage:
+    # time in minutes 0 to disabled
+    TimeTitleChallenges: 10
+
+
+  Top:
+    # if you want top yesterday with broadcast and commands
+    YesterdayTop: false
+    # if you want a reward for each place in the ranking
+    RankingReward: false
+    # if you want to give a random reward (ATTENTION if you use RankingReward this features is false of default)
+    RandomReward: false
+    # how many players you want reward?
+    NumberOfReward: 3
+
+
+  Hooks:
+    PlaceholderAPI: false
+    CubeGenerator: false
+    WorldGuard: false
+    Lands: false
+    GriefPrevention: false
+    Tombs: false
+    SuperiorSkyblock2: false
+    
+
+  # If you want to use H2, MySql or .yml file for data storage (write H2, MySql or Yaml)
+  Database: 'H2'
+
+
+  # These configurations work only for MySql database
+  MySql:
+    Url: "jdbc:mysql://localhost:3306/vanillachallenges"
+    Username: "eliotesta98"
+    Password: "eliotesta98"
+    Prefix: ""
+
+
+  Backup:
+    Enabled: true
+    NumberOfFilesInFolder: 4
+
+
+
+  # If you want to obfuscate the following challenges in the interface
+  LockedInterface: false
+
+
+  # If you want to not regenerate a file of a specific challenge or a list of challenges files
+  ChallengeRegeneration:
+    # What do you want? Blacklist or Whitelist?
+    Type: "Blacklist"
+    # Global Challenges
+    Globals:
+      - "FileName"
+    # Event Challenges
+    Events:
+      - "FileName"
+
+
+Interfaces:
+  Challenges:
+    Title: "&aChallenges"
+    OpenSound: ENTITY_ENDERDRAGON_AMBIENT  # ENDERDRAGON_WINGS <1.13
+    Slots:
+      - 'bbbbbbbbb'
+      - 'bhhhhhhhb'
+      - 'bhhhhhhhb'
+      - 'bhhhhhhhb'
+      - 'bhhhhhhhb'
+      - 'bbblbrbbb'
+    Items:
+      Challenge:
+        Letter: 'h'
+        Name: '&a{challengeName}'
+        Type: 'SKULL_ITEM-3'
+        Texture: '' # set to '' to disable
+        Lore:
+          - '&7&oTime Duration: &f{time}'
+          - '&7&oDescription: &f{challengeDescription}'
+          - '&7&oPoints: &f{challengePoint}'
+          - '&7&oWords: {words}.&f * {word}'
+          - '&7&oRewards: {rewards}.&f * {reward} x {number}'
+          - '&7&oBlocks: {challengeBlocks}.&f * {block}'
+          - '&7&oItems in hand: {challengeItemsInHand}.&f * {item}'
+          - '&7&oSneaking: &f{challengeSneaking}'
+          - '&7&oBlocks On Place: {challengeBlocksOnPlane}.&f * {block}'
+          - '&7&oVehicles: {challengeVehicles}.&f * {vehicle}'
+          - '&7&oMobs: {challengeMobs}.&f * {mob}'
+          - '&7&oItems: {challengeItems}.&f * {item}'
+          - '&7&oCauses: {challengeCauses}.&f * {cause}'
+          - '&7&oColors: {challengeColors}.&f * {color}'
+        SoundClick: ''
+      Border:
+        Letter: 'b'
+        Name: " "
+        Type: 'STAINED_GLASS_PANE-7' # STAINED_GLASS_PANE;7 <1.13
+        Texture: '' # set to '' to disable
+        Lore: [ ]
+        SoundClick: ''
+      LeftPage:
+        Letter: 'l'
+        Type: 'SKULL_ITEM-3'
+        Name: '&6&lPage {number}'
+        Texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWVkNzg4MjI1NzYzMTdiMDQ4ZWVhOTIyMjdjZDg1ZjdhZmNjNDQxNDhkY2I4MzI3MzNiYWNjYjhlYjU2ZmExIn19fQ=='
+        SoundClick: ''
+        Lore: [ ]
+      RightPage:
+        Letter: 'r'
+        Type: 'SKULL_ITEM-3'
+        Name: '&6&lPage {number}'
+        Texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzE1NDQ1ZGExNmZhYjY3ZmNkODI3ZjcxYmFlOWMxZDJmOTBjNzNlYjJjMWJkMWVmOGQ4Mzk2Y2Q4ZTgifX19'
+        SoundClick: ''
+        Lore: [ ]
+      Locked:
+        Letter: 'h1'
+        Name: '&a{challengeName}'
+        Type: 'PLAYER_HEAD'
+        Texture: '' # set to '' to disable
+        Lore:
+          - '&7&oTime Duration: &f{time}'
+          - '&7&oDescription: &f{challengeDescription}'
+          - '&7&oPoints: &f{challengePoint}'
+          - '&7&oWords: {words}.&f * {word}'
+          - '&7&oRewards: {rewards}.&f * {reward} x {number}'
+          - '&7&oBlocks: {challengeBlocks}.&f * {block}'
+          - '&7&oItems in hand: {challengeItemsInHand}.&f * {item}'
+          - '&7&oSneaking: &f{challengeSneaking}'
+          - '&7&oBlocks On Place: {challengeBlocksOnPlane}.&f * {block}'
+          - '&7&oVehicles: {challengeVehicles}.&f * {vehicle}'
+          - '&7&oMobs: {challengeMobs}.&f * {mob}'
+          - '&7&oItems: {challengeItems}.&f * {item}'
+          - '&7&oCauses: {challengeCauses}.&f * {cause}'
+          - '&7&oColors: {challengeColors}.&f * {color}'
+        SoundClick: ''
+
+# Messages
+Messages:
+  Prefix: '&eVanillaChallenges &r'
+  Commands:
+    Footer: '&7(&7&l(&c&l!&7&l)&7) &9[] optional value, <> required'
+    Reload: '   &e/vc &6<reload> &7command reload Plugin'
+    Next: '   &e/vc &6<next> &7go to the next challenge'
+    Top: '   &e/vc &6<top> &7for see the top 3'
+    Points: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
+    Clear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
+    Challenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
+    Economy: '   &e/vc &6<add|remove> <playername> <points> &7for add or remove points of a player'
+    Reward: '   &e/vc &6<reward> &7for receive reward of win'
+    List: '   &e/vc &6<list> &7for see the list of Challenges'
+    Event: '   &e/vc &6<event> <stop|challenge> &7for start a challenge event'
+  Errors:
+    YouAreNotAPlayer: '{prefix}&cYou are not a player'
+    CommandNotFound: '{prefix}&cCommand not found'
+    NoPerms: '{prefix}&cInsufficient permission'
+    AlreadyPlacedChest: '{prefix}&7You already placed a chest for Collection Item Challenge'
+    AlreadyStartEvent: '{prefix}&cYou already start a Challenge Event! If you want stop it write vc <event> <stop>'
+    AlreadyStopEvent: '{prefix}&cYou already stopped the Challenge Event! If you want start a new Challenge write vc <event> <challenge>'
+  PointsInfo: '{prefix}&e{player} &7have &b{number}&7 points'
+  ActuallyInTop: '{prefix}&7Actually in top there are:'
+  TopPlayers:
+    - '&6{number}° &e{player}&7 with &b{points}&7 points'
+    - '&7{number}° &e{player}&7 with &b{points}&7 points'
+    - '&8{number}° &e{player}&7 with &b{points}&7 points'
+  PointsEveryMinutes: '{prefix}&7You collect &b{points}&7 points in &e{minutes}&7 minutes'
+  ChallengeReward: '{prefix}&7You complete the challenge and arrive at top 3 players, receive x&b{number}&7 of &e{item}'
+  BoostMessage: '{prefix}&5Start boosting!&7 You have &bx{number}&7 points for &e{minutes}&7 minutes'
+  BoostMessageSinglePlayer: '{prefix}&5Start personal boosting!&7Only you have &bx{number}&7 points for &e{minutes}&7 minutes'
+  PointsRemainForBoosting: '{prefix}&7Remain &b{points}&7 points for start next boost!'
+  PointsRemainForBoostingSinglePlayer: '{prefix}&7Remain &b{points}&7 points for start next personal boost!'
+  ChatWord: '{prefix}&7Write this word for receive &b{points}&7 points: &5{word}'
+  CorrectAnswer: '{prefix}&e{player} &7write the correct answer!'
+  PointsAdd: '{prefix}&b{points} &7points added at &e{player}'
+  PointsRemove: '{prefix}&b{points} &7points removed at &e{player}'
+  ChallengeList: '{prefix}&bList of Challenges:{challengeList}'
+  ChallengeofList: '&b{challenge}'
+
+Debug:
+  # Commands debug
+  Commands: false
+  # Click Gui of Interfaces debug
+  ClickGui: false
+  # Block Place Event debug
+  BlockPlaceEvent: false
+  # Block Break Event debug
+  BlockBreakEvent: false
+  # Daily Give Reward Event debug
+  DailyGiveRewardEvent: false
+  # Craft Item Event debug
+  CraftItemEvent: false
+  # Furnace Cook Event debug
+  FurnaceCookEvent: false
+  # Item Consume Event debug
+  ItemConsumeEvent: false
+  # Exp Collector Event debug
+  ExpCollectorEvent: false
+  # Kill Event debug
+  KillEvent: false
+  # Breed Event debug
+  BreedEvent: false
+  # Feed Event debug
+  FeedEvent: false
+  # Shoot Arrow Event debug
+  ShootArrowEvent: false
+  # Jump Horse Event debug
+  JumpHorseEvent: false
+  # Color Sheep Event debug
+  ColorSheepEvent: false
+  # Raid Event debug
+  RaidEvent: false
+  # Fish Event debug
+  FishEvent: false
+  # Eat Event debug
+  EatEvent: false
+  # Sprint Event debug
+  SprintEvent: false
+  # Move Event debug
+  MoveEvent: false
+  # Damage Event debug
+  DamageEvent: false
+  # Sneak Event debug
+  SneakEvent: false
+  # Item Break Event debug
+  ItemBreakEvent: false
+  # Sponge Absorb Event debug
+  SpongeAbsorbEvent: false
+  # Harvest Event debug
+  HarvestEvent: false
+  # Egg Event debug
+  EggThrowEvent: false
+  # Enchant Item Event debug
+  EnchantItemEvent: false
+  # Chat Event debug
+  ChatEvent: false
+  # Item Collector Event debug
+  ItemCollector: false
+  # Inventory Challenge Event debug
+  Inventory: false
+  # Vehicle Move Challenge Event debug
+  VehicleMoveEvent: false
+  # Jump Challenge Event debug
+  JumpEvent: false
+  # Dropper Challenge Event debug
+  DropperEvent: false
+  # Dye Challenge Event debug
+  DyeEvent: false
+  # Healt Regen Event debug
+  HealthRegenEvent: false
+  # Online Point give debug
+  OnlinePoint: false
+  # Enabled debug
+  Enabled: false
+  # Disabled debug
+  Disabled: false

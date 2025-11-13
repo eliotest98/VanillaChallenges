@@ -1,0 +1,65 @@
+name: VanillaChallenges
+version: maven-version-number
+main: io.eliotesta98.VanillaChallenges.Core.Main
+api-version: 1.13
+authors: [ eliotesta98 ]
+softdepend: [ PlaceholderAPI, CubeGenerator, Tombs, WorldGuard, Lands ]
+
+libraries:
+  - com.googlecode.json-simple:json-simple:1.1.1
+  - com.h2database:h2:2.2.220
+
+legacy-libraries:
+  - com.googlecode.json-simple:json-simple:1.1.1
+  - com.h2database:h2:2.2.220
+
+depend: [ ]
+commands:
+  vanillachallenges:
+    aliases: [ vc ]
+permissions:
+  vc.reload.command:
+    description: for /vc reload
+    default: op
+  vc.help.command:
+    description: for /vc help
+    default: op
+  vc.next.command:
+    description: for /vc next
+    default: op
+  vc.top.command:
+    description: for /vc top
+    default: op
+  vc.top.yesterday.command:
+    description: for /vc top yesterday
+    default: op
+  vc.points.command:
+    description: for /vc points
+    default: op
+  vc.points.player.command:
+    description: for /vc points [playerName]
+    default: op
+  vc.clear.command:
+    description: for /vc clear
+    default: op
+  vc.challenge.command:
+    description: for /vc challenge
+    deafult: op
+  vc.reward.command:
+    description: for /vc reward
+    default: op
+  vc.list.command:
+    description: for /vc list
+    default: op
+  vc.event.start.command:
+    description: for /vc event challenge
+    default: op
+  vc.event.stop.command:
+    description: for /vc event stop
+    default: op
+  vc.schedule.add.command:
+    description: for /vc schedule add challenge
+    default: op
+  vc.schedule.remove.command:
+    description: for /vc schedule remove challenge
+    default: op
