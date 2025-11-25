@@ -1,7 +1,9 @@
 package io.eliotesta98.VanillaChallenges.Core;
 
 import com.HeroxWar.HeroxCore.CommentedConfiguration;
+import com.HeroxWar.HeroxCore.MessageGesture;
 import com.HeroxWar.HeroxCore.ReloadGesture;
+import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import com.HeroxWar.HeroxCore.Utils.Version;
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
@@ -133,7 +135,7 @@ public class Main extends JavaPlugin {
             Log.logError(e);
         }
         try {
-            config = new ConfigGesture(YamlConfiguration.loadConfiguration(configFile));
+            config = new ConfigGesture(configFile);
         } catch (IOException e) {
             Log.logError(e);
         }
@@ -315,11 +317,21 @@ public class Main extends JavaPlugin {
     public void pluginStartingProcess() {
         // control if challenges is on db but is disabled on config
         db.controlIfChallengeExist(config.getControlIfChallengeExist());
-        // select a challenge
-        String typeChallenge = db.insertDailyChallenges();
+        // control of peacefullTime
+        boolean peacefullTime = db.checkPeacefulTime();
+        // default selection is no challenge
+        String typeChallenge = "nobody";
         // reset of variable for a new Challenge
         challengeSelected = true;
         boolean skipCheck = false;
+        // if the peacefulTime is finish
+        if (!peacefullTime) {
+            // select a challenge
+            typeChallenge = db.insertDailyChallenges();
+        } else {
+            config.getTasks().peacefulTimeTask();
+        }
+
         if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
             currentListener = new BlockPlaceEvent();
         } else if (typeChallenge.equalsIgnoreCase("BlockBreakChallenge")) {
@@ -414,7 +426,19 @@ public class Main extends JavaPlugin {
             challengeSelected = true;
         } else if (currentListener == null) {
             challengeSelected = false;
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected, if you use the plugin without a scheduling ignore this error, otherwise check the configurations files and restart the plugin!");
+            if (!peacefullTime) {
+                if (!config.getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                } else {
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                }
+            } else {
+                Time time = Main.db.getPeacefulTime();
+                MessageGesture.sendMessage(Bukkit.getConsoleSender(), config.getMessages().get("Cooldown")
+                        .replace("{hours}", time.getHours() + "")
+                        .replace("{minutes}", time.getMinutes() + "")
+                        .replace("{seconds}", time.getSeconds() + ""));
+            }
         } else {
             Bukkit.getServer().getPluginManager().registerEvents(currentListener, this);
         }

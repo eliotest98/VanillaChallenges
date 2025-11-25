@@ -2,6 +2,7 @@ package io.eliotesta98.VanillaChallenges.Database;
 
 import com.HeroxWar.HeroxCore.CommentedConfiguration;
 import com.HeroxWar.HeroxCore.MessageGesture;
+import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
 import io.eliotesta98.VanillaChallenges.Core.Main;
@@ -28,42 +29,47 @@ public class ConfigGesture {
             backupEnabled, pointsResume, lockedInterface, randomReward = false;
     private String challengeGeneration, url, username, password, mySqlPrefix, database, permissionPointsGive;
     private int timeBroadcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup,
-            numberOfRewardPlayer, minimumPoints, number, time, numberOfTop;
+            numberOfRewardPlayer, minimumPoints, number, numberOfTop;
     private ItemStack chestCollection;
     private final Tasks tasks = new Tasks();
     private final List<String> controlIfChallengeExist = new ArrayList<>();
+    private Time cooldown;
 
-    public ConfigGesture(FileConfiguration file) throws IOException {
+    private final FileConfiguration fileConfiguration;
+    private final File file;
 
-        ConfigurationSection section = file.getConfigurationSection("Debug");
+    public ConfigGesture(File file) throws IOException {
+        this.file = file;
+        fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        ConfigurationSection section = fileConfiguration.getConfigurationSection("Debug");
         if (section == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Debug configuration section, please refresh the " + file.getName() + " file!");
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Debug configuration section, please refresh the " + file.getName() + " file!");
             return;
         }
         for (String event : section.getKeys(false)) {
-            debug.put(event, file.getBoolean("Debug." + event));
+            debug.put(event, fileConfiguration.getBoolean("Debug." + event));
         }
-        section = file.getConfigurationSection("Messages");
+        section = fileConfiguration.getConfigurationSection("Messages");
         if (section == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Messages configuration section, please refresh the " + file.getName() + " file!");
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Messages configuration section, please refresh the " + fileConfiguration.getName() + " file!");
             return;
         }
         for (String message : section.getKeys(false)) {
             if (message.equalsIgnoreCase("Commands") || message.equalsIgnoreCase("Errors")
                     || message.equalsIgnoreCase("Success") || message.equalsIgnoreCase("Lists")
                     || message.equalsIgnoreCase("Points")) {
-                section = file.getConfigurationSection("Messages." + message);
+                section = fileConfiguration.getConfigurationSection("Messages." + message);
                 if (section == null) {
-                    MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Messages configuration section, please refresh the " + file.getName() + " file!");
+                    MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Messages configuration section, please refresh the " + fileConfiguration.getName() + " file!");
                     return;
                 }
                 for (String command : section.getKeys(false)) {
-                    messages.put(message + "." + command, file.getString("Messages." + message + "." + command, "").replace("{prefix}", messages.get("Prefix")));
+                    messages.put(message + "." + command, fileConfiguration.getString("Messages." + message + "." + command, "").replace("{prefix}", messages.get("Prefix")));
                 }
             } else if (message.equalsIgnoreCase("Prefix")) {
-                messages.put(message, file.getString("Messages." + message));
+                messages.put(message, fileConfiguration.getString("Messages." + message));
             } else if (message.equalsIgnoreCase("TopPlayers")) {
-                List<String> topMessages = file.getStringList("Messages.TopPlayers");
+                List<String> topMessages = fileConfiguration.getStringList("Messages.TopPlayers");
                 numberOfTop = topMessages.size();
                 int i = 1;
                 while (!topMessages.isEmpty()) {
@@ -72,21 +78,40 @@ public class ConfigGesture {
                     i++;
                 }
             } else {
-                messages.put(message, file.getString("Messages." + message, "").replace("{prefix}", messages.get("Prefix")));
+                messages.put(message, fileConfiguration.getString("Messages." + message, "").replace("{prefix}", messages.get("Prefix")));
             }
         }
-        section = file.getConfigurationSection("Configuration.Hooks");
+        section = fileConfiguration.getConfigurationSection("Configuration.Hooks");
         if (section == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Hooks configuration section, please refresh the " + file.getName() + " file!");
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Hooks configuration section, please refresh the " + fileConfiguration.getName() + " file!");
             return;
         }
         for (String hook : section.getKeys(false)) {
-            hooks.put(hook, file.getBoolean("Configuration.Hooks." + hook));
+            hooks.put(hook, fileConfiguration.getBoolean("Configuration.Hooks." + hook));
         }
 
-        String challengeRegenerationType = file.getString("Configuration.ChallengeRegeneration.Type", "Blacklist");
-        List<String> regenerationFilesGlobalChallenges = file.getStringList("Configuration.ChallengeRegeneration.Globals");
-        List<String> regenerationFilesEventChallenges = file.getStringList("Configuration.ChallengeRegeneration.Events");
+        String challengeRegenerationType = fileConfiguration.getString("Configuration.ChallengeRegeneration.Type", "Blacklist");
+        List<String> regenerationFilesGlobalChallenges = fileConfiguration.getStringList("Configuration.ChallengeRegeneration.Globals");
+        List<String> regenerationFilesEventChallenges = fileConfiguration.getStringList("Configuration.ChallengeRegeneration.Events");
+
+        String cooldown = fileConfiguration.getString("Configuration.Cooldown", "0t");
+        String typeTime = cooldown.charAt(cooldown.length() - 1) + "";
+        int time = Integer.parseInt(cooldown.replace(typeTime, ""));
+
+        switch (typeTime) {
+            case "s":
+                this.cooldown = new Time(0, 0, 0, time, ':');
+                break;
+            case "m":
+                this.cooldown = new Time(0, 0, time, 0, ':');
+                break;
+            case "h":
+                this.cooldown = new Time(0, time, 0, 0, ':');
+                break;
+            default:
+                this.cooldown = new Time(time, ':');
+                break;
+        }
 
         FileCreator.addFiles(hooks);
 
@@ -107,7 +132,7 @@ public class ConfigGesture {
         }
 
         if (listOfChallengesGlobalFiles == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Challenge Files, please refresh all files!");
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
             return;
         }
         for (File fileChallenge : listOfChallengesGlobalFiles) {
@@ -159,6 +184,7 @@ public class ConfigGesture {
                 start = random.nextInt(end) + 1;
                 startTimeChallenge = start + ":00";
             }
+            String challengeDuration = yamlChallenge.getString(challengeName + ".TimeSettings.Time", "0h");
             List<String> rewards = yamlChallenge.getStringList(challengeName + ".Rewards");
             List<String> title = yamlChallenge.getStringList(challengeName + ".Title");
             List<String> items = yamlChallenge.getStringList(challengeName + ".Items");
@@ -213,7 +239,6 @@ public class ConfigGesture {
             }
             int point = yamlChallenge.getInt(challengeName + ".Point");
             int number = yamlChallenge.getInt(challengeName + ".Number");
-            int time = yamlChallenge.getInt(challengeName + ".Time");
             int minutes = yamlChallenge.getInt(challengeName + ".Minutes");
             int pointsBoost = 0;
             int multiplier = 1;
@@ -245,7 +270,7 @@ public class ConfigGesture {
             String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge", "DIRT");
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
-                    multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
+                    multiplier, boostMinutes, number, challengeDuration, vehicles, sneaking, onGround,
                     pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, endTimeChallenge,
                     challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds, itemChallenge);
             challenges.put(challengeName, challenge);
@@ -262,7 +287,7 @@ public class ConfigGesture {
         }
 
         if (listOfChallengesEventFiles == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Challenge Files, please refresh all files!");
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
             return;
         }
         for (File fileChallenge : listOfChallengesEventFiles) {
@@ -309,6 +334,7 @@ public class ConfigGesture {
                 start = random.nextInt(end) + 1;
                 startTimeChallenge = start + ":00";
             }
+            String challengeDuration = yamlChallenge.getString(challengeName + ".TimeSettings.Time", "0h");
             List<String> rewards = yamlChallenge.getStringList(challengeName + ".Rewards");
             List<String> title = yamlChallenge.getStringList(challengeName + ".Title");
             List<String> items = yamlChallenge.getStringList(challengeName + ".Items");
@@ -363,7 +389,6 @@ public class ConfigGesture {
             }
             int point = yamlChallenge.getInt(challengeName + ".Point");
             int number = yamlChallenge.getInt(challengeName + ".Number");
-            int time = yamlChallenge.getInt(challengeName + ".Time");
             int minutes = yamlChallenge.getInt(challengeName + ".Minutes");
             int pointsBoost = 0;
             int multiplier = 1;
@@ -397,7 +422,7 @@ public class ConfigGesture {
             String itemChallenge = yamlChallenge.getString(challengeName + ".ItemChallenge", "DIRT");
             Challenge challenge = new Challenge(nameChallenge, blocks, blocksOnPlaced, typeChallenge, rewards,
                     title, items, itemsInHand, mobs, force, power, colors, causes, point, pointsBoost,
-                    multiplier, boostMinutes, number, time, vehicles, sneaking, onGround,
+                    multiplier, boostMinutes, number, challengeDuration, vehicles, sneaking, onGround,
                     pointsBoostSinglePlayer, multiplierSinglePlayer, minutesSinglePlayer, endTimeChallenge,
                     challengeName, quests, minutes, startTimeChallenge, keepInventory, deathInLand, worlds, itemChallenge);
             challengesEvent.put(challengeName, challenge);
@@ -405,76 +430,76 @@ public class ConfigGesture {
 
         Main.instance.getServer().getConsoleSender().sendMessage("§a" + challengesEvent.size() + " Event Challenges loaded!");
 
-        numberOfRewardPlayer = file.getInt("Configuration.Top.NumberOfReward");
-        timeBroadcastMessageTitle = file.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
-        lockedInterface = file.getBoolean("Configuration.LockedInterface");
-        database = file.getString("Configuration.Database");
-        mySqlPrefix = file.getString("Configuration.MySql.Prefix");
-        url = file.getString("Configuration.MySql.Url");
-        username = file.getString("Configuration.MySql.Username");
-        password = file.getString("Configuration.MySql.Password");
-        resetPointsAtNewChallenge = file.getBoolean("Configuration.Points.ResetPointsAtNewChallenge");
-        activeOnlinePoints = file.getBoolean("Configuration.Points.OnlinePoints.Enabled");
-        permissionPointsGive = file.getString("Configuration.Points.Permission");
-        yesterdayTop = file.getBoolean("Configuration.Top.YesterdayTop");
-        rankingReward = file.getBoolean("Configuration.Top.RankingReward");
+        numberOfRewardPlayer = fileConfiguration.getInt("Configuration.Top.NumberOfReward");
+        timeBroadcastMessageTitle = fileConfiguration.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
+        lockedInterface = fileConfiguration.getBoolean("Configuration.LockedInterface");
+        database = fileConfiguration.getString("Configuration.Database");
+        mySqlPrefix = fileConfiguration.getString("Configuration.MySql.Prefix");
+        url = fileConfiguration.getString("Configuration.MySql.Url");
+        username = fileConfiguration.getString("Configuration.MySql.Username");
+        password = fileConfiguration.getString("Configuration.MySql.Password");
+        resetPointsAtNewChallenge = fileConfiguration.getBoolean("Configuration.Points.ResetPointsAtNewChallenge");
+        activeOnlinePoints = fileConfiguration.getBoolean("Configuration.Points.OnlinePoints.Enabled");
+        permissionPointsGive = fileConfiguration.getString("Configuration.Points.Permission");
+        yesterdayTop = fileConfiguration.getBoolean("Configuration.Top.YesterdayTop");
+        rankingReward = fileConfiguration.getBoolean("Configuration.Top.RankingReward");
         if (!rankingReward) {
-            randomReward = file.getBoolean("Configuration.Top.RandomReward");
+            randomReward = fileConfiguration.getBoolean("Configuration.Top.RandomReward");
         }
-        backupEnabled = file.getBoolean("Configuration.Backup.Enabled");
-        challengeGeneration = file.getString("Configuration.ChallengeGeneration");
-        numberOfFilesInFolderForBackup = file.getInt("Configuration.Backup.NumberOfFilesInFolder");
-        pointsOnlinePoints = file.getInt("Configuration.Points.OnlinePoints.Point");
-        minutesOnlinePoints = file.getInt("Configuration.Points.OnlinePoints.Minutes");
-        minimumPoints = file.getInt("Configuration.Points.MinimumPoints");
-        List<String> lore = file.getStringList("Configuration.CollectionChallengeItem.Lore");
+        backupEnabled = fileConfiguration.getBoolean("Configuration.Backup.Enabled");
+        challengeGeneration = fileConfiguration.getString("Configuration.ChallengeGeneration");
+        numberOfFilesInFolderForBackup = fileConfiguration.getInt("Configuration.Backup.NumberOfFilesInFolder");
+        pointsOnlinePoints = fileConfiguration.getInt("Configuration.Points.OnlinePoints.Point");
+        minutesOnlinePoints = fileConfiguration.getInt("Configuration.Points.OnlinePoints.Minutes");
+        minimumPoints = fileConfiguration.getInt("Configuration.Points.MinimumPoints");
+        List<String> lore = fileConfiguration.getStringList("Configuration.CollectionChallengeItem.Lore");
         try {
-            chestCollection = ItemUtils.getChest(file.getString("Configuration.CollectionChallengeItem.Type"), file.getString("Configuration.CollectionChallengeItem.Name"), lore);
+            chestCollection = ItemUtils.getChest(fileConfiguration.getString("Configuration.CollectionChallengeItem.Type"), fileConfiguration.getString("Configuration.CollectionChallengeItem.Name"), lore);
         } catch (ExceptionInInitializerError ignore) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!");
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!");
         }
-        pointsResume = file.getBoolean("Configuration.Points.PointsResume");
+        pointsResume = fileConfiguration.getBoolean("Configuration.Points.PointsResume");
 
-        section = file.getConfigurationSection("Interfaces");
+        section = fileConfiguration.getConfigurationSection("Interfaces");
         if (section == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Interfaces configuration section, please refresh the " + file.getName() + " file!");
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
             return;
         }
         for (String nameInterface : section.getKeys(false)) {
-            String title = file.getString("Interfaces." + nameInterface + "..Title");
-            String openSound = file.getString("Interfaces." + nameInterface + ".OpenSound");
+            String title = fileConfiguration.getString("Interfaces." + nameInterface + "..Title");
+            String openSound = fileConfiguration.getString("Interfaces." + nameInterface + ".OpenSound");
             List<String> slots = new ArrayList<>();
             List<String> contaSlots = new ArrayList<>();
 
             Map<String, ItemConfig> itemsConfig = new HashMap<>();
-            section = file.getConfigurationSection("Interfaces." + nameInterface + ".Items");
+            section = fileConfiguration.getConfigurationSection("Interfaces." + nameInterface + ".Items");
             if (section == null) {
-                MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR with Interfaces configuration section, please refresh the " + file.getName() + " file!");
+                MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
                 return;
             }
             for (String nameItem : section.getKeys(false)) {
-                String letter = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Letter");
-                String type = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Type", "DIRT");
+                String letter = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Letter");
+                String type = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Type", "DIRT");
                 if (type.contains(";")) {
                     String[] x = type.split(";");
                     if (Material.getMaterial(x[0]) == null) {
-                        MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                        MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
                         type = "DIRT";
                     }
                 } else {
                     if (Material.getMaterial(type) == null) {
-                        MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),"&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                        MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
                         type = "DIRT";
                     }
                 }
-                String name = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Name");
-                String texture = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Texture");
-                String soundClick = file.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".SoundClick");
-                ItemConfig item = new ItemConfig(nameItem, name, type, texture, file.getStringList("Interfaces." + nameInterface + ".Items." + nameItem + ".Lore"), soundClick);
+                String name = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Name");
+                String texture = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Texture");
+                String soundClick = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".SoundClick");
+                ItemConfig item = new ItemConfig(nameItem, name, type, texture, fileConfiguration.getStringList("Interfaces." + nameInterface + ".Items." + nameItem + ".Lore"), soundClick);
                 itemsConfig.put(letter, item);
             }
 
-            file.getStringList("Interfaces." + nameInterface + ".Slots").forEach(value -> {
+            fileConfiguration.getStringList("Interfaces." + nameInterface + ".Slots").forEach(value -> {
                 for (int i = 0; i < value.length(); i++) {
                     for (Map.Entry<String, ItemConfig> itemConfig : itemsConfig.entrySet()) {
                         if (itemConfig.getKey().equalsIgnoreCase(value.charAt(i) + "") && itemConfig.getValue().getNameItemConfig().equalsIgnoreCase("Challenge")) {
@@ -577,14 +602,6 @@ public class ConfigGesture {
         this.number = number;
     }
 
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
     public String getChallengeGeneration() {
         return challengeGeneration;
     }
@@ -647,5 +664,23 @@ public class ConfigGesture {
 
     public String getPermissionPointsGive() {
         return permissionPointsGive;
+    }
+
+    public Time getCooldown() {
+        return cooldown;
+    }
+
+    public void setChallengeGeneration(String challengeGeneration) {
+        this.challengeGeneration = challengeGeneration;
+        fileConfiguration.set("Configuration.ChallengeGeneration", challengeGeneration);
+        saveFile();
+    }
+
+    public void saveFile() {
+        try {
+            fileConfiguration.save(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

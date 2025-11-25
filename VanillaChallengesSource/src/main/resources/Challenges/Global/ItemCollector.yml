@@ -9,7 +9,16 @@ ItemCollector:
     Start: '05:00'
     # What time do you want the challenge to end?
     End: '24:00'
-  # Worlds where you want the challenge to work, if you want all worlds set []
+    # How much time you want for this challenge?
+    # Possible values are:
+    # - {time}t (ticks)
+    # - {time}s (seconds)
+    # - {time}m (minutes)
+    # - {time}h (seconds)
+    # where {time} is a number
+    # P.S. if you don't set this value the plugin calculate it with Start and End values
+    # For Ex. 24:00-05:00 = 19h
+    Time: '0h'  # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # How many points do you want give at item?
   Point: 1
@@ -70,7 +79,7 @@ ItemCollector:
     - '&b█&8██&6█&8█&b███&8██  &7Collect items in a chest for receive points'
     - '&b█&8███&6██&b█&8███               &7({points} point at item)'
     - '&8████&6██&8████   &cAttention!&7 you lose all items in the chest'
-    - '&8███&6█&8██&6█&8███     &7{hours} hours to the end of the challenge'
+    - '&8███&6█&8██&6█&8███     &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8██&6█&8████&6█&8██'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity

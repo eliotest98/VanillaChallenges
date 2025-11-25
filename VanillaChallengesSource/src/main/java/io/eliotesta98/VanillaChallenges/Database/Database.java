@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
 import com.HeroxWar.HeroxCore.MessageGesture;
+import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
@@ -10,6 +11,7 @@ import io.eliotesta98.VanillaChallenges.Utils.MoneyUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
@@ -27,6 +29,7 @@ public abstract class Database {
     private final List<Challenger> topYesterday = new ArrayList<>();
     private final List<Challenger> oldPoints = new ArrayList<>();
     private final List<PlayerStats> stats = new ArrayList<>();
+    private Time peacefulTime = null;
     private String prefix = "";
     private Connection connection;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Database.class.getName());
@@ -59,6 +62,10 @@ public abstract class Database {
                     "CREATE TABLE IF NOT EXISTS " + prefix + "Statistic (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `NumberVictories` INT(10) NOT NULL, `NumberFirstPlace` INT(10) NOT NULL, `NumberSecondPlace` INT(10) NOT NULL, `NumberThirdPlace` INT(10) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "PeacefulTime (`ID` INT(1) NOT NULL AUTO_INCREMENT PRIMARY KEY, `Time` INT(100) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             Main.instance.getServer().getConsoleSender().sendMessage("§cError Database not connected!");
             logger.log(Level.WARNING, e.getMessage());
@@ -70,6 +77,7 @@ public abstract class Database {
         selectAllDailyWinners();
         selectAllChallengersTopYesterday();
         selectAllOldChallengers();
+        loadPeacefulTime();
     }
 
     public void setConnection(Connection connection) {
@@ -108,12 +116,20 @@ public abstract class Database {
         return dailyWinners;
     }
 
+    public Time getPeacefulTime() {
+        return peacefulTime;
+    }
+
     public void addPlayerPoints(Challenger challenger) {
         this.playerPoints.add(challenger);
     }
 
     public void addChallenge(Challenge challenge) {
         this.challenges.add(challenge);
+    }
+
+    public void setPeacefulTime(Time time) {
+        this.peacefulTime = time;
     }
 
     public void addChallenge(Challenge challenge, int index) {
@@ -157,10 +173,10 @@ public abstract class Database {
         addPlayerPoints(new Challenger(playerName, points));
     }
 
-    public void updateChallengeTime(String challengeName, int time) {
+    public void updateChallengeTime(String challengeName, long timeRemain) {
         for (Challenge challenge : challenges) {
             if (challenge.getChallengeName().equalsIgnoreCase(challengeName)) {
-                challenge.setTimeChallenge(time);
+                challenge.setTimeChallenge(new Time(timeRemain, ':'));
             }
         }
     }
@@ -172,7 +188,12 @@ public abstract class Database {
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 final Challenge challengeDB = new Challenge();
-                challengeDB.setTimeChallenge(resultSet.getInt("TimeResume"));
+                // TODO to remove (this is for servers with hours configured Ex. 19)
+                long timeResume = resultSet.getInt("TimeResume");
+                if (timeResume < 1000) {
+                    timeResume = timeResume * 60 * 60 * 1000;
+                }
+                challengeDB.setTimeChallenge(new Time(timeResume, ':'));
                 challengeDB.setChallengeName(resultSet.getString("NomeChallenge"));
                 challenges.add(challengeDB);
             }
@@ -272,6 +293,42 @@ public abstract class Database {
         }
     }
 
+    public void loadPeacefulTime() {
+        ResultSet resultSet;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + prefix + "PeacefulTime");
+            resultSet = preparedStatement.executeQuery();
+            int time = -1;
+            while (resultSet.next()) {
+                time = resultSet.getInt("Time");
+            }
+            if (time == -1) {
+                insertPeacefulTime(new Time(0, ':'));
+            } else {
+                peacefulTime = new Time((long) time, ':');
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+    public void insertPeacefulTime(Time time) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO " + prefix + "PeacefulTime (Time) VALUES ('"
+                            + time.getMilliseconds() + "')");
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Insert failed, no rows affected.");
+            }
+            preparedStatement.close();
+            setPeacefulTime(time);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
     public void backupDb(int numberOfFiles) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -313,7 +370,7 @@ public abstract class Database {
                     file.set("Points." + playerPoint.getNomePlayer(), playerPoint.getPoints());
                 }
                 for (Challenge challenge : challenges) {
-                    file.set("Challenges." + challenge.getChallengeName(), challenge.getTimeChallenge());
+                    file.set("Challenges." + challenge.getChallengeName(), challenge.getTimeChallenge().getMilliseconds());
                 }
                 for (DailyWinner dailyWinner : dailyWinners) {
                     file.set("DailyWinners." + dailyWinner.getId() + ".PlayerName", dailyWinner.getPlayerName());
@@ -354,23 +411,28 @@ public abstract class Database {
         clearDailyWinners();
         removeTopYesterday();
         clearStats();
+        clearPeacefulTime();
     }
 
     // Challenges Querys
 
     public String insertDailyChallenges() {
         int count = 1;
+        String schedulerType = Main.instance.getConfigGesture().getChallengeGeneration();
+        List<String> keys = new ArrayList<>(Main.instance.getConfigGesture().getChallenges().keySet());
         if (challenges.isEmpty()) {
             String nome = "nobody";
-            List<String> keys = new ArrayList<>(Main.instance.getConfigGesture().getChallenges().keySet());
-            String schedulerType = Main.instance.getConfigGesture().getChallengeGeneration();
             if (schedulerType.equalsIgnoreCase("Random")) {
                 Collections.shuffle(keys);
+                Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(keys.get(0));
+                Main.instance.setDailyChallenge(challenge);
+                nome = challenge.getTypeChallenge();
             } else if (schedulerType.equalsIgnoreCase("Single")) {
                 Collections.shuffle(keys);
                 Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(keys.get(0));
-                return challenge.getChallengeName();
-            } else if(schedulerType.equalsIgnoreCase("Normal")) {
+                Main.instance.setDailyChallenge(challenge);
+                return challenge.getTypeChallenge();
+            } else if (schedulerType.equalsIgnoreCase("Normal")) {
                 for (String key : keys) {
                     Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(key);
                     if (count == 1) {
@@ -380,12 +442,29 @@ public abstract class Database {
                     challenges.add(challenge);
                     count++;
                 }
+            } else if (schedulerType.equalsIgnoreCase("Nothing")) {
+                clearChallenges();
+                return nome;
             }
             saveChallenges();
             return nome;
         } else {
+            if (schedulerType.equalsIgnoreCase("Single")) {
+                challenges.clear();
+                clearChallenges();
+                Collections.shuffle(keys);
+                Challenge challenge = Main.instance.getConfigGesture().getChallenges().get(keys.get(0));
+                Main.instance.setDailyChallenge(challenge);
+                return challenge.getTypeChallenge();
+            } else if (schedulerType.equalsIgnoreCase("Nothing")) {
+                if (!checkIfEventChallenge()) {
+                    challenges.clear();
+                    clearChallenges();
+                    return "nobody";
+                }
+            }
             for (int i = 0; i < challenges.size(); i++) {
-                if (challenges.get(i).getTimeChallenge() <= 0) {
+                if (challenges.get(i).getTimeChallenge().getMilliseconds() <= 0) {
                     deleteChallengeWithName(challenges.get(i).getChallengeName());
                     challenges.remove(i);
                 } else {
@@ -410,29 +489,29 @@ public abstract class Database {
     // This method has been invoked when the database doesn't have any challenge scheduled
     public void saveChallenges() {
         for (Challenge challenge : challenges) {
-            insertChallenge(challenge.getChallengeName(), challenge.getTimeChallenge());
+            insertChallenge(challenge.getChallengeName(), challenge.getTimeChallenge().getMilliseconds());
         }
     }
 
     // This method has been invoked when from a command is invoked the adding of a new Event Challenge
-    public void insertChallengeEvent(String challengeName, int time) {
+    public void insertChallengeEvent(String challengeName, long timeResume) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO " + prefix + "Challenge (NomeChallenge,TimeResume) VALUES ('"
-                            + "Event_" + challengeName + "','" + time
+                            + "Event_" + challengeName + "','" + timeResume
                             + "')");
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Insert failed, no rows affected.");
             }
             preparedStatement.close();
-            Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challengeName);
+            Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challengeName).cloneChallenge();
             challenge.setChallengeName("Event_" + challengeName);
-            challenge.setTimeChallenge(time);
+            challenge.setTimeChallenge(new Time(timeResume, ':'));
             addChallenge(challenge, 0);
             clearChallengesFromFile();
             for (Challenge challenge1 : getChallenges()) {
-                insertChallenge(challenge1.getChallengeName(), challenge1.getTimeChallenge());
+                insertChallenge(challenge1.getChallengeName(), challenge1.getTimeChallenge().getMilliseconds());
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
@@ -505,13 +584,25 @@ public abstract class Database {
         }
     }
 
-    public void updateChallenge(String challengeName, int timeResume) {
+    public void updateChallenge(String challengeName, long timeResume) {
         try {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("UPDATE " + prefix + "Challenge SET TimeResume = '" + timeResume + "' WHERE NomeChallenge = '" + challengeName + "'");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             updateChallengeTime(challengeName, timeResume);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+    public void updatePeacefulTime(Time time) {
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("UPDATE " + prefix + "PeacefulTime SET Time = '" + time.getMilliseconds() + "' WHERE ID = '" + "1" + "'");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            setPeacefulTime(time);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -529,7 +620,11 @@ public abstract class Database {
         }
     }
 
-    public void insertChallenge(String challengeName, int timeResume) {
+    public boolean checkPeacefulTime() {
+        return peacefulTime.getMilliseconds() > 0;
+    }
+
+    public void insertChallenge(String challengeName, long timeResume) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO " + prefix + "Challenge (NomeChallenge,TimeResume) VALUES ('"
@@ -556,8 +651,8 @@ public abstract class Database {
         Main.instance.getDailyChallenge().savePoints();
         List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGesture().getNumberOfTop());
         int i = 1;
-        for (Challenger challenger: top) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),Main.instance.getConfigGesture().getMessages().get("topPlayers" + i)
+        for (Challenger challenger : top) {
+            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), Main.instance.getConfigGesture().getMessages().get("topPlayers" + i)
                     .replace("{number}", "" + i)
                     .replace("{player}", challenger.getNomePlayer())
                     .replace("{points}", MoneyUtils.transform(challenger.getPoints())));
@@ -682,7 +777,7 @@ public abstract class Database {
     }
 
     public void updatePlayerStat(PlayerStats playerStats) {
-        for (PlayerStats playerStats1: stats) {
+        for (PlayerStats playerStats1 : stats) {
             if (playerStats1.getPlayerName().equalsIgnoreCase(playerStats.getPlayerName())) {
                 deletePlayerStatWithPlayerName(playerStats1.getPlayerName());
                 insertPlayerStat(playerStats);
@@ -693,8 +788,8 @@ public abstract class Database {
     }
 
     public PlayerStats getStatsPlayer(String playerName) {
-        for(PlayerStats playerStats: stats) {
-            if(playerStats.getPlayerName().equalsIgnoreCase(playerName)) {
+        for (PlayerStats playerStats : stats) {
+            if (playerStats.getPlayerName().equalsIgnoreCase(playerName)) {
                 return playerStats;
             }
         }
@@ -738,6 +833,23 @@ public abstract class Database {
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS " + prefix + "Statistic (`PlayerName` VARCHAR(100) NOT NULL PRIMARY KEY, `NumberVictories` INT(10) NOT NULL, `NumberFirstPlace` INT(10) NOT NULL, `NumberSecondPlace` INT(10) NOT NULL, `NumberThirdPlace` INT(10) NOT NULL);");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            stats.clear();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+    public void clearPeacefulTime() {
+        PreparedStatement preparedStatement;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "DROP TABLE " + prefix + "PeacefulTime");
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS " + prefix + "PeacefulTime (`ID` INT(1) NOT NULL AUTO_INCREMENT PRIMARY KEY, `Time` INT(100) NOT NULL);");
             preparedStatement.executeUpdate();
             preparedStatement.close();
             stats.clear();
@@ -843,6 +955,10 @@ public abstract class Database {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
+    }
+
+    public boolean checkIfEventChallenge() {
+        return challenges.get(0).getChallengeName().contains("Event_");
     }
 
 }

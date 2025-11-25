@@ -54,7 +54,7 @@ InventoryControl:
     - '&bo&8oo&6o&8o&booo&8oo &7Stay with 10 employed slot for receive points'
     - '&bo&8ooo&6oo&bo&8ooo               &7(10 point every 2 minutes)'
     - '&8oooo&6oo&8oooo'
-    - '&8ooo&6o&8oo&6o&8ooo     &7{hours} hours to the end of the challenge'
+    - '&8ooo&6o&8oo&6o&8ooo     &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8oo&6o&8oooo&6o&8oo'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity

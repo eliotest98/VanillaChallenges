@@ -117,7 +117,7 @@ public class Interface {
                                 inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, numberOfPage,
                                         "vc.numberPage:" + (numberOfPage) +
                                                 ";vc.challengeName:" + challenge.getChallengeName() +
-                                                ";vc.challengeTime:" + challenge.getTimeChallenge() +
+                                                ";vc.challengeTime:" + challenge.getTimeChallenge().getTime() +
                                                 ";vc.challengeDescription:" + challengeComplete.getTitle() +
                                                 ";vc.challengePoint:" + challengeComplete.getPoint() +
                                                 ";vc.challengeItemsInHand:" + challengeComplete.getItemsInHand() +
@@ -138,7 +138,7 @@ public class Interface {
                                     inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, numberOfPage,
                                             "vc.numberPage:" + (numberOfPage) +
                                                     ";vc.challengeName:" + challenge.getChallengeName() +
-                                                    ";vc.challengeTime:" + challenge.getTimeChallenge() +
+                                                    ";vc.challengeTime:" + challenge.getTimeChallenge().getTime() +
                                                     ";vc.challengeDescription:" + challengeComplete.getTitle() +
                                                     ";vc.challengePoint:" + challengeComplete.getPoint() +
                                                     ";vc.challengeItemsInHand:" + challengeComplete.getItemsInHand() +
@@ -158,7 +158,7 @@ public class Interface {
                                     inventory.setItem(i, itemsConfig.get(slot.concat("" + 1)).createItemConfig(nameInterface, numberOfPage,
                                             "vc.numberPage:" + (numberOfPage) +
                                                     ";vc.challengeName:" + challenge.getChallengeName() +
-                                                    ";vc.challengeTime:" + challenge.getTimeChallenge() +
+                                                    ";vc.challengeTime:" + challenge.getTimeChallenge().getTime() +
                                                     ";vc.challengeDescription:" + challengeComplete.getTitle() +
                                                     ";vc.challengePoint:" + challengeComplete.getPoint() +
                                                     ";vc.challengeItemsInHand:" + challengeComplete.getItemsInHand() +

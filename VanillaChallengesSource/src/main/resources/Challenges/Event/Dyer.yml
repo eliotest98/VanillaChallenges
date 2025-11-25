@@ -7,7 +7,16 @@ Dyer:
     Start: '05:00'
     # What time do you want the challenge to end?
     End: '24:00'
-  # Worlds where you want the challenge to work, if you want all worlds set []
+    # How much time you want for this challenge?
+    # Possible values are:
+    # - {time}t (ticks)
+    # - {time}s (seconds)
+    # - {time}m (minutes)
+    # - {time}h (seconds)
+    # where {time} is a number
+    # P.S. if you don't set this value the plugin calculate it with Start and End values
+    # For Ex. 24:00-05:00 = 19h
+    Time: '0h'  # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # Colors you want use for the challenge, if you want all colors set []
   # add RANDOM at the end of list for select only one item random from list
@@ -69,7 +78,7 @@ Dyer:
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██        &7Color sheep with any color'
     - '&b█&8███&6██&b█&8███             &7({points} point for 1 sheep)'
-    - '&8████&6██&8████     &7{hours} hours to the end of the challenge'
+    - '&8████&6██&8████     &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8███&6█&8██&6█&8███'
     - '&8██&6█&8████&6█&8██'
     - '&8'

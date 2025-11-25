@@ -68,9 +68,29 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         if (identifier.contains("dailychallenge_displayName")) {
             return Main.instance.getDailyChallenge().getNameChallenge();
         }
-        // %vanillachallenges_dailychallenge_time%
-        if (identifier.contains("dailychallenge_time")) {
-            return Main.instance.getDailyChallenge().getTimeChallenge() + "";
+        // %vanillachallenges_dailychallenge_time_complete%
+        if (identifier.startsWith("dailychallenge_time_complete") && identifier.endsWith("dailychallenge_time_complete")) {
+            return Main.instance.getDailyChallenge().getTimeChallenge().getTime();
+        }
+        // %vanillachallenges_dailychallenge_time_without_zeros%
+        if (identifier.startsWith("dailychallenge_time_without_zeros") && identifier.endsWith("dailychallenge_time_without_zeros")) {
+            return Main.instance.getDailyChallenge().getTimeChallenge().getTimeWithoutZeros();
+        }
+        // %vanillachallenges_dailychallenge_time_seconds%
+        if (identifier.contains("dailychallenge_time_seconds")) {
+            return Main.instance.getDailyChallenge().getTimeChallenge().getSeconds() + "";
+        }
+        // %vanillachallenges_dailychallenge_time_minutes%
+        if (identifier.contains("dailychallenge_time_minutes")) {
+            return Main.instance.getDailyChallenge().getTimeChallenge().getMinutes() + "";
+        }
+        // %vanillachallenges_dailychallenge_time_hours%
+        if (identifier.contains("dailychallenge_time_hours")) {
+            return Main.instance.getDailyChallenge().getTimeChallenge().getHours() + "";
+        }
+        // %vanillachallenges_dailychallenge_active%
+        if (identifier.contains("dailychallenge_active")) {
+            return Main.challengeSelected + "";
         }
         // %vanillachallenges_dailychallenge_top_name_#% # = number
         if (identifier.contains("dailychallenge_top_name_")) {
@@ -186,7 +206,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
 
         // %vanillachallenges_top_first_place_name_#% # = number
-        if(identifier.contains("top_first_place_name_")) {
+        if (identifier.contains("top_first_place_name_")) {
             String number = identifier.replace("top_first_place_name_", "");
             int numberTop;
             try {
@@ -205,7 +225,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
 
         // %vanillachallenges_top_first_place_points_#% # = number
-        if(identifier.contains("top_first_place_points_")) {
+        if (identifier.contains("top_first_place_points_")) {
             String number = identifier.replace("top_first_place_points_", "");
             int numberTop;
             try {
@@ -224,7 +244,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
 
         // %vanillachallenges_top_second_place_name_#% # = number
-        if(identifier.contains("top_second_place_name_")) {
+        if (identifier.contains("top_second_place_name_")) {
             String number = identifier.replace("top_second_place_name_", "");
             int numberTop;
             try {
@@ -243,7 +263,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
 
         // %vanillachallenges_top_second_place_points_#% # = number
-        if(identifier.contains("top_second_place_points_")) {
+        if (identifier.contains("top_second_place_points_")) {
             String number = identifier.replace("top_second_place_points_", "");
             int numberTop;
             try {
@@ -262,7 +282,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
 
         // %vanillachallenges_top_third_place_name_#% # = number
-        if(identifier.contains("top_third_place_name_")) {
+        if (identifier.contains("top_third_place_name_")) {
             String number = identifier.replace("top_third_place_name_", "");
             int numberTop;
             try {
@@ -281,7 +301,7 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
 
         // %vanillachallenges_top_third_place_points_#% # = number
-        if(identifier.contains("top_third_place_points_")) {
+        if (identifier.contains("top_third_place_points_")) {
             String number = identifier.replace("top_third_place_points_", "");
             int numberTop;
             try {

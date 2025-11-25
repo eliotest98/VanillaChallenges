@@ -51,7 +51,7 @@ Harvester:
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██    &7Harvest blocks for receive points'
     - '&b█&8███&6██&b█&8███       &7(1 point for 1 item dropped)'
-    - '&8████&6██&8████   &7{hours} hours to the end of the challenge'
+    - '&8████&6██&8████   &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8███&6█&8██&6█&8███'
     - '&8██&6█&8████&6█&8██'
     - '&8'

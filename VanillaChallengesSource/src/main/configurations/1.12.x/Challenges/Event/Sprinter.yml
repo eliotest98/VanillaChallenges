@@ -50,7 +50,7 @@ Sprinter:
     - '&8█&b██&8████&b███                 &7Sprint Challenge'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██  &7Sprint and move for receive 1 point at block'
-    - '&b█&8███&6██&b█&8███      &7{hours} hours to the end of the challenge'
+    - '&b█&8███&6██&b█&8███      &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8████&6██&8████'
     - '&8███&6█&8██&6█&8███'
     - '&8██&6█&8████&6█&8██'

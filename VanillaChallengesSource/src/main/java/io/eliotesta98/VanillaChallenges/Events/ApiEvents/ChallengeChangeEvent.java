@@ -12,7 +12,7 @@ public class ChallengeChangeEvent extends Event implements Cancellable, Listener
     private final String reason;
     private final String currentChallengeName;
     private final String currentChallengeType;
-    private final int currentChallengeTime;
+    private final long currentChallengeTime;
     private boolean isCancelled;
 
     // Spigot request
@@ -44,7 +44,7 @@ public class ChallengeChangeEvent extends Event implements Cancellable, Listener
         this.isCancelled = false;
         this.reason = reason;
         this.currentChallengeName = challenge.getChallengeName();
-        this.currentChallengeTime = challenge.getTimeChallenge();
+        this.currentChallengeTime = challenge.getTimeChallenge().getMilliseconds();
         this.currentChallengeType = challenge.getTypeChallenge();
     }
 
@@ -60,7 +60,7 @@ public class ChallengeChangeEvent extends Event implements Cancellable, Listener
         return currentChallengeType;
     }
 
-    public int getCurrentChallengeTime() {
+    public long getCurrentChallengeTime() {
         return currentChallengeTime;
     }
 }

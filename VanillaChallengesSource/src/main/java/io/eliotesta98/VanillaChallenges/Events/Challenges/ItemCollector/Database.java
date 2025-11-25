@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class Database {
@@ -30,7 +31,7 @@ public class Database {
         file = YamlConfiguration.loadConfiguration(configFile);
     }
 
-    public void loadChests(HashMap<String, Location> chestLocations) {
+    public void loadChests(Map<String, Location> chestLocations) {
         if (!file.contains("Chest")) {
             return;
         }

@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
@@ -7,6 +8,7 @@ import io.eliotesta98.VanillaChallenges.Database.Objects.PlayerStats;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -35,6 +37,8 @@ public class YamlDB extends Database {
             if (create) {
                 file = YamlConfiguration.loadConfiguration(configFile);
             } else {
+                int peacefulTime = file.getInt("PeacefulTime", 0);
+                setPeacefulTime(new Time((long) peacefulTime, ':'));
                 for (String playerName : file.getConfigurationSection("Points").getKeys(false)) {
                     Challenger challenger = new Challenger(playerName, file.getInt("Points." + playerName));
                     addPlayerPoints(challenger);
@@ -46,7 +50,12 @@ public class YamlDB extends Database {
                 for (String challenge : file.getConfigurationSection("Challenges").getKeys(false)) {
                     Challenge challengeDB = new Challenge();
                     challengeDB.setChallengeName(challenge);
-                    challengeDB.setTimeChallenge(file.getInt("Challenges." + challenge));
+                    long timeResume = file.getInt("Challenges." + challenge);
+                    // TODO to remove (this is for servers with hours configured Ex. 19)
+                    if (timeResume < 1000) {
+                        timeResume = timeResume * 60 * 60 * 1000;
+                    }
+                    challengeDB.setTimeChallenge(new Time(timeResume, ':'));
                     addChallenge(challengeDB);
                 }
                 for (String number : file.getConfigurationSection("DailyWinners").getKeys(false)) {
@@ -73,6 +82,9 @@ public class YamlDB extends Database {
             }
         } else {
             file = YamlConfiguration.loadConfiguration(configFile);
+
+            int peacefulTime = file.getInt("PeacefulTime", 0);
+            setPeacefulTime(new Time((long) peacefulTime, ':'));
             if (file.getConfigurationSection("Points") != null) {
                 for (String playerName : file.getConfigurationSection("Points").getKeys(false)) {
                     Challenger challenger = new Challenger(playerName, file.getInt("Points." + playerName));
@@ -89,7 +101,12 @@ public class YamlDB extends Database {
                 for (String challenge : file.getConfigurationSection("Challenges").getKeys(false)) {
                     Challenge challengeDB = new Challenge();
                     challengeDB.setChallengeName(challenge);
-                    challengeDB.setTimeChallenge(file.getInt("Challenges." + challenge));
+                    long timeResume = file.getInt("Challenges." + challenge);
+                    // TODO to remove (this is for servers with hours configured Ex. 19)
+                    if (timeResume < 1000) {
+                        timeResume = timeResume * 60 * 60 * 1000;
+                    }
+                    challengeDB.setTimeChallenge(new Time(timeResume, ':'));
                     addChallenge(challengeDB);
                 }
             }
@@ -144,7 +161,7 @@ public class YamlDB extends Database {
     @Override
     public void saveChallenges() {
         for (Challenge challenge : getChallenges()) {
-            file.set("Challenges." + challenge.getChallengeName(), challenge.getTimeChallenge());
+            file.set("Challenges." + challenge.getChallengeName(), challenge.getTimeChallenge().getMilliseconds());
         }
         saveFile();
     }
@@ -164,6 +181,20 @@ public class YamlDB extends Database {
     }
 
     @Override
+    public void insertPeacefulTime(Time time) {
+        file.set("PeacefulTime", time.getMilliseconds());
+        setPeacefulTime(time);
+        saveFile();
+    }
+
+    @Override
+    public void updatePeacefulTime(Time time) {
+        file.set("PeacefulTime", time.getMilliseconds());
+        setPeacefulTime(time);
+        saveFile();
+    }
+
+    @Override
     public void deletePlayerStatWithPlayerName(String playerName) {
         file.set("Statistic." + playerName, null);
         removeStat(playerName);
@@ -178,9 +209,9 @@ public class YamlDB extends Database {
     }
 
     @Override
-    public void updateChallenge(String nomeChallenge, int number) {
-        file.set("Challenges." + nomeChallenge, number);
-        updateChallengeTime(nomeChallenge, number);
+    public void updateChallenge(String nomeChallenge, long timeRemain) {
+        file.set("Challenges." + nomeChallenge, timeRemain);
+        updateChallengeTime(nomeChallenge, timeRemain);
         saveFile();
     }
 
@@ -226,8 +257,8 @@ public class YamlDB extends Database {
     }
 
     @Override
-    public void insertChallenge(String challengeName, int time) {
-        file.set("Challenges." + challengeName, time);
+    public void insertChallenge(String challengeName, long timeResume) {
+        file.set("Challenges." + challengeName, timeResume);
         saveFile();
     }
 
@@ -267,6 +298,13 @@ public class YamlDB extends Database {
     }
 
     @Override
+    public void clearPeacefulTime() {
+        file.set("PeacefulTime", null);
+        setPeacefulTime(new Time(0, ':'));
+        saveFile();
+    }
+
+    @Override
     public void deleteDailyWinnerWithId(int id) {
         file.set("DailyWinners." + id, null);
         removeDailyWinner(id);
@@ -283,14 +321,14 @@ public class YamlDB extends Database {
     }
 
     @Override
-    public void insertChallengeEvent(String challengeName, int time) {
-        Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challengeName);
+    public void insertChallengeEvent(String challengeName, long timeResume) {
+        Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challengeName).cloneChallenge();
         challenge.setChallengeName("Event_" + challengeName);
-        challenge.setTimeChallenge(time);
+        challenge.setTimeChallenge(new Time(timeResume, ':'));
         addChallenge(challenge, 0);
         clearChallengesFromFile();
         for (Challenge challenge1 : getChallenges()) {
-            insertChallenge(challenge1.getChallengeName(), challenge1.getTimeChallenge());
+            insertChallenge(challenge1.getChallengeName(), challenge1.getTimeChallenge().getMilliseconds());
         }
         saveFile();
     }
