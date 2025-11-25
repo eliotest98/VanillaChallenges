@@ -7,7 +7,16 @@ InventoryControl:
     Start: '05:00'
     # What time do you want the challenge to end?
     End: '24:00'
-  # Worlds where you want the challenge to work, if you want all worlds set []
+    # How much time you want for this challenge?
+    # Possible values are:
+    # - {time}t (ticks)
+    # - {time}s (seconds)
+    # - {time}m (minutes)
+    # - {time}h (seconds)
+    # where {time} is a number
+    # P.S. if you don't set this value the plugin calculate it with Start and End values
+    # For Ex. 24:00-05:00 = 19h
+    Time: '0h'  # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
   # How many points you want give if respect condition?
   Point: 10
@@ -72,7 +81,7 @@ InventoryControl:
     - '&b█&8██&6█&8█&b███&8██ &7Stay with {slots} employed slots for receive points'
     - '&b█&8███&6██&b█&8███               &7({points} points every 2 minutes)'
     - '&8████&6██&8████'
-    - '&8███&6█&8██&6█&8███     &7{hours} hours to the end of the challenge'
+    - '&8███&6█&8██&6█&8███     &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8██&6█&8████&6█&8██'
     - '&8'
   # Reward in blocks EX: IRON_INGOT:16 Type:Quantity

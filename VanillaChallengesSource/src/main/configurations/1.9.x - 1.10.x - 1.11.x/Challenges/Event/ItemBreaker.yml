@@ -50,7 +50,7 @@ ItemBreaker:
     - '&8o&boo&8oooo&booo               &7Item Break Challenge'
     - '&boo&6o&8ooo&booo&8o'
     - '&bo&8oo&6o&8o&booo&8oo      &7Break an item for receive 1 point'
-    - '&bo&8ooo&6oo&bo&8ooo    &7{hours} hours to the end of the challenge'
+    - '&bo&8ooo&6oo&bo&8ooo    &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8oooo&6oo&8oooo'
     - '&8ooo&6o&8oo&6o&8ooo'
     - '&8oo&6o&8oooo&6o&8oo'

@@ -9,7 +9,16 @@ SuperiorSkyBlock2:
     Start: '05:00'
     # What time do you want the challenge to end?
     End: '24:00'
-  # How many points you want give for each mission?
+    # How much time you want for this challenge?
+    # Possible values are:
+    # - {time}t (ticks)
+    # - {time}s (seconds)
+    # - {time}m (minutes)
+    # - {time}h (seconds)
+    # where {time} is a number
+    # P.S. if you don't set this value the plugin calculate it with Start and End values
+    # For Ex. 24:00-05:00 = 19h
+    Time: '0h'  # How many points you want give for each mission?
   Point: 1
   # if you want a multiplier based on all players
   Boost:
@@ -60,7 +69,7 @@ SuperiorSkyBlock2:
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██  &7Complete missions for receive points'
     - '&b█&8███&6██&b█&8███         &7({points} point for 1 mission)'
-    - '&8████&6██&8████     &7{hours} hours to the end of the challenge'
+    - '&8████&6██&8████     &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8███&6█&8██&6█&8███'
     - '&8██&6█&8████&6█&8██'
     - '&8'

@@ -63,3 +63,24 @@ permissions:
   vc.schedule.remove.command:
     description: for /vc schedule remove challenge
     default: op
+  vc.schedule.disable.command:
+    description: for /vc schedule disable
+    default: op
+  vc.add.command:
+    description: for /vc add
+    default: op
+  vc.remove.command:
+    description: for /vc remove
+    default: op
+  vc.time.add.command:
+    description: for /vc time add
+    default: op
+  vc.time.remove.command:
+    description: for /vc time remove
+    default: op
+  vc.time.set.command:
+    description: for /vc time set
+    default: op
+  vc.time.remaining.command:
+    description: for /vc time set
+    default: op

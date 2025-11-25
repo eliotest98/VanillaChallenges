@@ -88,7 +88,7 @@ public class VanillaChallengesAPI {
      *
      * @return the time remaining of the challenge.
      */
-    public static int getDailyChallengeTime() {
+    public static String getDailyChallengeTime() {
         DebugUtils debug = new DebugUtils("API");
         long time = System.currentTimeMillis();
         if (isDebugEnabled) {
@@ -96,7 +96,7 @@ public class VanillaChallengesAPI {
             debug.addLine("API execution time= " + (System.currentTimeMillis() - time));
             debug.debug();
         }
-        return Main.instance.getDailyChallenge().getTimeChallenge();
+        return Main.instance.getDailyChallenge().getTimeChallenge().getTime();
     }
 
     /**

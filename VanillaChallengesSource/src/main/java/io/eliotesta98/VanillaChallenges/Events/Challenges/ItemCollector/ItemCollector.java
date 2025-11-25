@@ -19,11 +19,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ItemCollector implements Listener {
 
@@ -39,7 +38,7 @@ public class ItemCollector implements Listener {
     // timer del controllo punti
     final int number = 20 * 60 * 2;
 
-    private final HashMap<String, Location> chestLocation = new HashMap<>();
+    private final Map<String, Location> chestLocation = new ConcurrentHashMap<>();
 
     public ItemCollector() {
         controlChest();

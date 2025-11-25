@@ -1,15 +1,16 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #    
-#                                                                                               #
-#                                     Vanilla Challenges                                        #
-#                                   Created by eliotesta98                                      #
-#                                                                                               #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #   
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#                                                                                         #
+#                                 Vanilla Challenges                                      #
+#                        Created by eliotesta98 & xSavior_of_God                          #
+#                                                                                         #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 Configuration:
 
   # Random: if you want random generation of Challenges
   # Normal: if you want basic plugin schedule
   # Single: if you want a single random challenge generated
+  # Nothing: if you don''t want a scheduler
   ChallengeGeneration: 'Normal'
 
   # Points Gesture
@@ -88,7 +89,6 @@ Configuration:
     NumberOfFilesInFolder: 4
 
 
-
   # If you want to obfuscate the following challenges in the interface
   LockedInterface: false
 
@@ -103,6 +103,16 @@ Configuration:
     # Event Challenges
     Events:
       - "FileName"
+
+
+  # If you want a cooldown between challenges
+  # Possible values are:
+  # - {time}t (ticks)
+  # - {time}s (seconds)
+  # - {time}m (minutes)
+  # - {time}h (seconds)
+  # where {time} is a number
+  Cooldown: "0t"
 
 
 Interfaces:
@@ -190,15 +200,15 @@ Messages:
     Footer: '&7(&7&l(&c&l!&7&l)&7) &9[] optional value, <> required'
     Economy: '   &e/vc &6<add|remove> <playerName> <points> &7for add or remove points of a player'
     Challenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
-    Clear: '   &e/vc &6<clear> &7for clear all Challenges and player Points'
-    Event: '   &e/vc &6<event> <stop|challenge|random> &7for start a challenge event'
+    Clear: '   &e/vc &6<clear> &7for clear all informations of databases and refresh'
+    Event: '   &e/vc &6<event> <stop|challenge|random> [time] &7for start or stop a challenge event'
     List: '   &e/vc &6<list> &7for see the list of Challenges'
-    Next: '   &e/vc &6<next> &7go to the next challenge'
+    Next: '   &e/vc &6<next> [skip] &7go to the next challenge and if you want skip the peaceful time'
     Points: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
     Reload: '   &e/vc &6<reload> &7command reload Plugin'
     Reward: '   &e/vc &6<reward> &7for receive reward of win'
-    # if you want a file default duration or time, use 0
-    Schedule: '   &e/vc &6<schedule> <add|remove> <challenge|random> &7for add or remove a challenge from schedule'
+    Schedule: '   &e/vc &6<schedule> <add|remove|disable> [[challenge|random] [time]] &7for add or remove a challenge from schedule or disable it'
+    Time: '   &e/vc &6<time> <add|remove|set|remaining> [time] &7for add, remove, set or see the time remaining of the challenge'
     Top: '   &e/vc &6<top> [yesterday] &7for see the top 3'
     Restore: '   &e/vc &6<restore> [file] &7Allows you to restore a H2Database from backup file or see the list of backup files'
 
@@ -212,11 +222,16 @@ Messages:
     CaseBroken: '{prefix}&7Your chest location is broken, please replace it'
     Schedule: '{prefix}&cYou cannot remove the current challenge from the schedule, if you want to remove it use the /vc <next> command'
     Add: '{prefix}&cYou cannot add this challenge because is already scheduled'
+    AlreadyDisable: '{prefix}&7You already disabled the schedule, if you want enable it configure it in config.yml and restart the plugin'
+    Time: '{prefix}&cThis value {value} is not valid! please use h,m or s. For example: 5m'
 
   Success:
     Add: '{prefix}&aSuccessfully scheduled this challenge'
     Remove: '{prefix}&aSuccessfully removed form schedule this challenge'
     Restored: '{prefix}&aSuccessfully restored database'
+    TimeAdd: '{prefix}&aSuccessfully add {time} at the current challenge, time remaining: &5{hours}h {minutes}m {seconds}s'
+    TimeRemove: '{prefix}&aSuccessfully remove {time} at the current challenge, time remaining: &5{hours}h {minutes}m {seconds}s'
+    TimeSet: '{prefix}&aSuccessfully set {time} at the current challenge'
 
   Lists:
     Files: '{prefix}&7Files List:'
@@ -243,6 +258,8 @@ Messages:
   PointsRemove: '{prefix}&b{points} &7points removed at &e{player}'
   ChallengeList: '{prefix}&bList of Challenges:{challengeList}'
   ChallengeofList: '&b{challenge}'
+  Cooldown: '{prefix}&b{hours}h {minutes}m {seconds}s &7until the start of the next challenge'
+  TimeRemaining: '{prefix}&b{hours}h {minutes}m {seconds}s &7until the finish of the challenge'
 
 Debug:
   # Commands debug
