@@ -18,6 +18,9 @@ public class LandsUtils {
     }
 
     public static Land getLandFromLocation(Location location) {
+        if (location == null) {
+            return null;
+        }
         return landsIntegration.getArea(location).getLand();
     }
 
