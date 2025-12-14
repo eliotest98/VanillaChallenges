@@ -61,7 +61,9 @@ public class SneakEvent implements Listener {
                 return;
             }
 
-            Main.instance.getDailyChallenge().increment(playerName, point);
+            if(e.isSneaking()) {
+                Main.instance.getDailyChallenge().increment(playerName, point);
+            }
 
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
