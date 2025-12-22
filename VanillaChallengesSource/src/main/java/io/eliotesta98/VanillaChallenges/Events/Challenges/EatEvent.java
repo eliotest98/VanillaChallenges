@@ -51,7 +51,7 @@ public class EatEvent implements Listener {
                     return;
                 }
 
-                Main.instance.getDailyChallenge().increment(playerName, (long) number * Math.abs(point));
+                Main.instance.getDailyChallenge().increment(playerName, Math.abs(number * Math.abs(point)));
             }
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
