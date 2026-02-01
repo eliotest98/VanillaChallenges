@@ -101,7 +101,7 @@ public class Interface {
         int slotModificable = items.size() - sizeModificableSlot;
         interfacesOpened.put(p.getName(), inventory);
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
-            boolean lock = Main.instance.getConfigGesture().isLockedInterface();
+            boolean lock = Main.instance.getConfigGestion().isLockedInterface();
             int countItems = 0;
             for (int i = 0; i < slots.size(); i++) {// scorro gli slot
                 String slot = slots.get(i);// prendo lo slot
@@ -109,9 +109,9 @@ public class Interface {
                     if (items.size() > countItems) {
                         if (items.get(countItems) instanceof Challenge) {
                             Challenge challenge = (Challenge) items.get(countItems);
-                            Challenge challengeComplete = Main.instance.getConfigGesture().getChallenges().get(challenge.getChallengeName());
+                            Challenge challengeComplete = Main.instance.getConfigGestion().getChallenges().get(challenge.getChallengeName());
                             if (challenge.getChallengeName().contains("Event_")) {
-                                challengeComplete = Main.instance.getConfigGesture().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
+                                challengeComplete = Main.instance.getConfigGestion().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
                             }
                             if (!lock) {
                                 inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nameInterface, numberOfPage,
@@ -207,7 +207,7 @@ public class Interface {
             }
             soundOpen.playSound(p);
         });
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> p.openInventory(inventory));
+        Bukkit.getScheduler().runTask(Main.instance, () -> p.openInventory(inventory));
         if (this.debug) {
             debug.addLine("execution time= " + (System.currentTimeMillis() - tempo));
             debug.debug();

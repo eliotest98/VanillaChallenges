@@ -4,7 +4,6 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,21 +11,46 @@ import java.util.List;
 
 public class Controls {
 
-    private static final List<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
-    private static final List<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
-    private static final List<String> items = Main.instance.getDailyChallenge().getItems();
-    private static final List<String> blocks = Main.instance.getDailyChallenge().getBlocks();
-    private static final List<String> blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
-    private static final List<String> mobs = Main.instance.getDailyChallenge().getMobs();
-    private static final List<String> causes = Main.instance.getDailyChallenge().getCauses();
-    private static final List<String> colors = Main.instance.getDailyChallenge().getColors();
-    private static final List<String> vehicles = Main.instance.getDailyChallenge().getVehicle();
-    private static final String sneaking = Main.instance.getDailyChallenge().getSneaking();
-    private static final String onGround = Main.instance.getDailyChallenge().getOnGround();
-    private static final double force = Main.instance.getDailyChallenge().getForce();
-    private static final double power = Main.instance.getDailyChallenge().getPower();
-    private static final String permission = Main.instance.getConfigGesture().getPermissionPointsGive();
+    private static List<String> worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+    private static List<String> itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
+    private static List<String> items = Main.instance.getDailyChallenge().getItems();
+    private static List<String> blocks = Main.instance.getDailyChallenge().getBlocks();
+    private static List<String> blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
+    private static List<String> mobs = Main.instance.getDailyChallenge().getMobs();
+    private static List<String> causes = Main.instance.getDailyChallenge().getCauses();
+    private static List<String> colors = Main.instance.getDailyChallenge().getColors();
+    private static List<String> vehicles = Main.instance.getDailyChallenge().getVehicle();
+    private static String sneaking = Main.instance.getDailyChallenge().getSneaking();
+    private static String onGround = Main.instance.getDailyChallenge().getOnGround();
+    private static double force = Main.instance.getDailyChallenge().getForce();
+    private static double power = Main.instance.getDailyChallenge().getPower();
+    private static String permission = Main.instance.getConfigGestion().getPermissionPointsGive();
 
+    static {
+        reload();
+    }
+
+    public static void reload() {
+        worldsEnabled = Main.instance.getDailyChallenge().getWorlds();
+        itemsInHand = Main.instance.getDailyChallenge().getItemsInHand();
+        items = Main.instance.getDailyChallenge().getItems();
+        blocks = Main.instance.getDailyChallenge().getBlocks();
+        blocksOnPlaced = Main.instance.getDailyChallenge().getBlocksOnPlace();
+        mobs = Main.instance.getDailyChallenge().getMobs();
+        causes = Main.instance.getDailyChallenge().getCauses();
+        colors = Main.instance.getDailyChallenge().getColors();
+        vehicles = Main.instance.getDailyChallenge().getVehicle();
+        sneaking = Main.instance.getDailyChallenge().getSneaking();
+        onGround = Main.instance.getDailyChallenge().getOnGround();
+        force = Main.instance.getDailyChallenge().getForce();
+        power = Main.instance.getDailyChallenge().getPower();
+        permission = Main.instance.getConfigGestion().getPermissionPointsGive();
+    }
+
+    // When true all checks in challenges return, in this way the points are not given.
+    // Ex. if (Controls.isWorldEnable(worldName, debugActive, debugUtils, tempo)) {
+    //          return;
+    //     }
     public static boolean isWorldEnable(String worldName, boolean debugActive, DebugUtils debugUtils, long tempo) {
         if (!worldsEnabled.isEmpty() && !worldsEnabled.contains(worldName)) {
             if (debugActive) {
@@ -201,7 +225,7 @@ public class Controls {
     }
 
     public static boolean isOnGround(boolean playerOnGround, boolean debugActive, DebugUtils debugUtils, long tempo) {
-        if (!onGround.equalsIgnoreCase("NOBODY") && Boolean.getBoolean(onGround) != playerOnGround) {
+        if (!onGround.equalsIgnoreCase("NOBODY") && Boolean.parseBoolean(onGround) != playerOnGround) {
             if (debugActive) {
                 debugUtils.addLine("OnGroundConfig= " + onGround);
                 debugUtils.addLine("OnGroundPlayer= " + playerOnGround);

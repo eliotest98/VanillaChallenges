@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
+import com.HeroxWar.HeroxCore.Gestion.Gestion;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import java.io.*;
 import java.util.ArrayList;
@@ -8,9 +9,10 @@ import java.util.Map;
 
 public class FileCreator {
 
-    private static final ArrayList<String> files = new ArrayList<>();
+    private static final List<String> files = new ArrayList<>();
 
     public static void addFiles(Map<String, Boolean> hooks) {
+        files.clear();
         files.add("BlockBreaker.yml");
         files.add("BlockPlacer.yml");
         files.add("Cooker.yml");
@@ -101,55 +103,20 @@ public class FileCreator {
         Main.instance.getServer().getConsoleSender().sendMessage("§a" + files.size() + " " + folder + " Challenges created!");
     }
 
-    @SuppressWarnings("CallToPrintStackTrace")
     public static void createFileChallenges(String folder, String fileName) {
+        Gestion gestion = new Gestion(Main.instance.getDataFolder() +
+                File.separator + "Challenges" + File.separator + folder, fileName);
+        gestion.createFile("Challenges" + File.separator + folder + File.separator + fileName, Main.instance, "");
+    }
 
-        File newFile = new File(Main.instance.getDataFolder() +
-                File.separator + "Challenges" + folder, fileName);
-
-        if (!newFile.exists()) {
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-            try {
-
-                Main.instance.saveResource("Challenges" + File.separator + folder + File.separator + fileName, false);
-                inputStream = Main.instance.getResource("Challenges" + File.separator + folder + File.separator + newFile.getName());
-
-                // write the inputStream to a FileOutputStream
-                outputStream = new FileOutputStream(newFile);
-
-                int read;
-                byte[] bytes = new byte[1024];
-
-                if (inputStream == null) {
-                    return;
-                }
-
-                while ((read = inputStream.read(bytes)) != -1) {
-                    outputStream.write(bytes, 0, read);
-                }
-
-            } catch (IOException ignore) {
-
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (outputStream != null) {
-                    try {
-                        // outputStream.flush();
-                        outputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
+    public static void deleteFiles(File[] files) {
+        for (File file: files) {
+            deleteFile(file);
         }
+    }
+
+    public static void deleteFile(File file) {
+        file.delete();
     }
 
 }

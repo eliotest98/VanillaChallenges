@@ -15,11 +15,11 @@ import java.util.HashMap;
 public class SprintEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("SprintEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SprintEvent");
     private final HashMap<String, Boolean> players = new HashMap<>();
     private final HashMap<String, Double> distances = new HashMap<>();
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)

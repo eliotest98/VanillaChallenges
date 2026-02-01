@@ -19,12 +19,12 @@ import org.bukkit.event.Listener;
 public class BlockBreakEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("BlockBreakEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockBreakEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean landsEnabled = Main.instance.getConfigGesture().getHooks().get("Lands");
-    private final boolean worldGuardEnabled = Main.instance.getConfigGesture().getHooks().get("WorldGuard");
-    private final boolean griefPreventionEnabled = Main.instance.getConfigGesture().getHooks().get("GriefPrevention");
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
+    private final boolean worldGuardEnabled = Main.instance.getConfigGestion().getHooks().get("WorldGuard");
+    private final boolean griefPreventionEnabled = Main.instance.getConfigGestion().getHooks().get("GriefPrevention");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
     private boolean ok = false;
 
     @SuppressWarnings("deprecation")
@@ -43,7 +43,7 @@ public class BlockBreakEvent implements Listener {
             if (debugActive) {
                 debugUtils.addLine("PlayerBreaking= " + player.getName());
             }
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+            Bukkit.getScheduler().runTask(Main.instance, () -> {
                 if (griefPreventionEnabled) {
                     ok = GriefPreventionUtils.isReasonOk(player, block, e);
                 }

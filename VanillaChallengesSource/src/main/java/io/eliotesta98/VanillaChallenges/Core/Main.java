@@ -1,9 +1,11 @@
 package io.eliotesta98.VanillaChallenges.Core;
 
-import com.HeroxWar.HeroxCore.CommentedConfiguration;
 import com.HeroxWar.HeroxCore.MessageGesture;
 import com.HeroxWar.HeroxCore.ReloadGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
+import com.HeroxWar.HeroxCore.Utils.Library;
+import com.HeroxWar.HeroxCore.Utils.Metrics;
+import com.HeroxWar.HeroxCore.Utils.UpdateChecker;
 import com.HeroxWar.HeroxCore.Utils.Version;
 import io.eliotesta98.VanillaChallenges.Database.*;
 import io.eliotesta98.VanillaChallenges.Events.*;
@@ -15,26 +17,23 @@ import io.eliotesta98.VanillaChallenges.Modules.CubeGenerator.CubeGeneratorEvent
 import io.eliotesta98.VanillaChallenges.Modules.Lands.LandsUtils;
 import io.eliotesta98.VanillaChallenges.Modules.PlaceholderApi.ExpansionPlaceholderAPI;
 import io.eliotesta98.VanillaChallenges.Modules.SuperiorSkyblock2.SuperiorSkyBlock2Events;
-import jdk.internal.net.http.common.Log;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
 import io.eliotesta98.VanillaChallenges.Comandi.Commands;
 import io.eliotesta98.VanillaChallenges.Utils.*;
-
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
 import org.bukkit.*;
 
 public class Main extends JavaPlugin {
     public static Main instance;
-    private ConfigGesture config;
+    private ConfigGestion config;
     private Challenge dailyChallenge;
     public static ExpansionPlaceholderAPI EPAPI;
     public static Database db;
@@ -55,10 +54,7 @@ public class Main extends JavaPlugin {
         DebugUtils debugSystem = new DebugUtils("Enabled");
         long tempo = System.currentTimeMillis();
 
-        // All you have to do is adding the following two lines in your onEnable method.
-        // You can find the plugin ids of your plugins on the page https://bstats.org/what-is-my-plugin-id
-        int pluginId = 17661; // <-- Replace with the id of your plugin!
-        new Metrics(this, pluginId);
+        new Metrics(this, 17661);
 
         getServer().getConsoleSender()
                 .sendMessage("\n\n\n§a ___ ___                __  __  __          ______  __            __  __                                    \n" +
@@ -77,133 +73,73 @@ public class Main extends JavaPlugin {
 
         this.getServer().getConsoleSender().sendMessage("§6Loading config...");
 
-        File configFile = new File(this.getDataFolder(), "config.yml");
+        config = new ConfigGestion(this.getDataFolder().getPath(), "config.yml");
 
-        if (!configFile.exists()) {
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-            try {
-
-                this.saveResource("config.yml", false);
-                inputStream = this.getResource("config.yml");
-
-                // write the inputStream to a FileOutputStream
-                outputStream = new FileOutputStream(configFile);
-
-                int read;
-                byte[] bytes = new byte[1024];
-
-                while ((read = inputStream.read(bytes)) != -1) {
-                    outputStream.write(bytes, 0, read);
-                }
-
-            } catch (IOException e) {
-                Log.logError(e);
-                Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create config.yml!");
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        Log.logError(e);
-                    }
-                }
-                if (outputStream != null) {
-                    try {
-                        // outputStream.flush();
-                        outputStream.close();
-                    } catch (IOException e) {
-                        Log.logError(e);
-                    }
-
-                }
-            }
-        }
-
-        CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(configFile);
-
-        try {
-            String configName;
-
-            configName = "config.yml";
-
-            //esempio
-            String splits = "bho";
-            String[] strings = splits.split(":");
-            cfg.syncWithConfig(configFile, this.getResource(configName), strings);
-        } catch (IOException e) {
-            Log.logError(e);
-        }
-        try {
-            config = new ConfigGesture(configFile);
-        } catch (IOException e) {
-            Log.logError(e);
-        }
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
-        getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+        getServer().getScheduler().runTask(this, () -> {
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                if (getConfigGesture().getHooks().get("PlaceholderAPI")) {
+                if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
                     Main.EPAPI = new ExpansionPlaceholderAPI().getInstance();
                     Main.EPAPI.register();
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fPlaceholderApi&a!"));
                 }
             } else {
-                getConfigGesture().getHooks().replace("PlaceholderAPI", false);
+                getConfigGestion().getHooks().replace("PlaceholderAPI", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("CubeGenerator")) {
-                if (getConfigGesture().getHooks().get("CubeGenerator")) {
+                if (getConfigGestion().getHooks().get("CubeGenerator")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fCubeGenerator&a!"));
                 }
             } else {
-                getConfigGesture().getHooks().replace("CubeGenerator", false);
+                getConfigGestion().getHooks().replace("CubeGenerator", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
-                if (getConfigGesture().getHooks().get("GriefPrevention")) {
+                if (getConfigGestion().getHooks().get("GriefPrevention")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fGriefPrevention&a!"));
                 }
             } else {
-                getConfigGesture().getHooks().replace("GriefPrevention", false);
+                getConfigGestion().getHooks().replace("GriefPrevention", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
-                if (getConfigGesture().getHooks().get("Tombs")) {
+                if (getConfigGestion().getHooks().get("Tombs")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fTombs&a!"));
                 }
             } else {
-                getConfigGesture().getHooks().replace("Tombs", false);
+                getConfigGestion().getHooks().replace("Tombs", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Lands")) {
-                if (getConfigGesture().getHooks().get("Lands")) {
+                if (getConfigGestion().getHooks().get("Lands")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
                     LandsUtils.setLandsIntegration();
                 }
             } else {
-                getConfigGesture().getHooks().replace("Lands", false);
+                getConfigGestion().getHooks().replace("Lands", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
-                if (getConfigGesture().getHooks().get("WorldGuard")) {
+                if (getConfigGestion().getHooks().get("WorldGuard")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fWorldGuard&a!"));
                 }
             } else {
-                getConfigGesture().getHooks().replace("WorldGuard", false);
+                getConfigGestion().getHooks().replace("WorldGuard", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("SuperiorSkyblock2")) {
-                if (getConfigGesture().getHooks().get("SuperiorSkyblock2")) {
+                if (getConfigGestion().getHooks().get("SuperiorSkyblock2")) {
                     Bukkit.getServer().getConsoleSender().sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fSuperiorSkyblock2&a!"));
                 }
             } else {
-                getConfigGesture().getHooks().replace("SuperiorSkyblock2", false);
+                getConfigGestion().getHooks().replace("SuperiorSkyblock2", false);
             }
         });
         getServer().getConsoleSender().sendMessage("§aConfiguration Loaded!");
         getServer().getConsoleSender().sendMessage("§6Connection to database!");
-        if (getConfigGesture().getDatabase().equalsIgnoreCase("H2")) {
+        if (getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
             try {
                 db = new H2Database(getDataFolder().getAbsolutePath());
             } catch (Exception e) {
@@ -212,12 +148,12 @@ public class Main extends JavaPlugin {
                 logger.log(Level.WARNING, e.getMessage());
                 return;
             }
-        } else if (getConfigGesture().getDatabase().equalsIgnoreCase("MySql")) {
+        } else if (getConfigGestion().getDatabase().equalsIgnoreCase("MySql")) {
             try {
                 db = new MySql(config.getUrl());
             } catch (SQLException e) {
                 Main.instance.getServer().getConsoleSender().sendMessage("§cError Database not connected!");
-                Log.logError(e.getMessage());
+                logger.log(Level.SEVERE, e.getMessage());
                 Main.instance.onDisable();
             }
         } else {
@@ -247,7 +183,7 @@ public class Main extends JavaPlugin {
         long tempo = System.currentTimeMillis();
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "VanillaChallenges has been disabled, §cBye bye! §e:(");
         config.getTasks().stopAllTasks();
-        if (getConfigGesture().getHooks().get("PlaceholderAPI")) {
+        if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
             try {
                 Main.EPAPI.getInstance().unregister();
             } catch (Exception ignore) {
@@ -256,7 +192,7 @@ public class Main extends JavaPlugin {
         if (challengeSelected) {
             dailyChallenge.clearPlayers();
             //close interfaces of interfaces
-            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
                 interfaces.getValue().closeAllInventories();
             }
         }
@@ -267,8 +203,12 @@ public class Main extends JavaPlugin {
         }
     }
 
-    public ConfigGesture getConfigGesture() {
+    public ConfigGestion getConfigGestion() {
         return config;
+    }
+
+    public void setConfigGestion(ConfigGestion config) {
+        this.config = config;
     }
 
     public Challenge getDailyChallenge() {
@@ -296,7 +236,7 @@ public class Main extends JavaPlugin {
             }
 
             for (final Library library : libraries)
-                library.load();
+                library.load(Main.class.getClassLoader());
             Bukkit.getConsoleSender().sendMessage("Legacy libraries loaded!");
         }
     }
@@ -323,6 +263,7 @@ public class Main extends JavaPlugin {
         String typeChallenge = "nobody";
         // reset of variable for a new Challenge
         challengeSelected = true;
+        currentListener = null;
         boolean skipCheck = false;
         // if the peacefulTime is finish
         if (!peacefullTime) {
@@ -427,11 +368,7 @@ public class Main extends JavaPlugin {
         } else if (currentListener == null) {
             challengeSelected = false;
             if (!peacefullTime) {
-                if (!config.getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
-                } else {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                }
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
             } else {
                 Time time = Main.db.getPeacefulTime();
                 MessageGesture.sendMessage(Bukkit.getConsoleSender(), config.getMessages().get("Cooldown")

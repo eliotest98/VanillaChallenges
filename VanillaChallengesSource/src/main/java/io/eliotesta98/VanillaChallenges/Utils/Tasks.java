@@ -24,7 +24,7 @@ public class Tasks {
     private BukkitTask peacefulTask = null;
 
     public void stopAllTasks() {
-        for (BukkitTask task : tasks) {
+        for (BukkitTask task : new ArrayList<>(tasks)) {
             if (task != null) {
                 task.cancel();
             }
@@ -35,16 +35,20 @@ public class Tasks {
         return !challengeStart;
     }
 
+    public void setChallengeStart(boolean challengeStart) {
+        this.challengeStart = challengeStart;
+    }
+
     public void broadcast(long time, String actuallyInTop, String pointsEveryMinutes, String pointsRemainForBoosting,
                           String pointsRemainForBoostingSinglePlayer, int numberOfTop, String pointsRemainForReward) {
         BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
+                if (Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
                     break;
                 }
                 Main.instance.getDailyChallenge().message(p);
                 List<Challenger> top;
-                if (Main.instance.getConfigGesture().isYesterdayTop()) {
+                if (Main.instance.getConfigGestion().isYesterdayTop()) {
                     top = new ArrayList<>(Main.db.getTopYesterday());
                 } else {
                     top = new ArrayList<>(Main.instance.getDailyChallenge().getTopPlayers(numberOfTop));
@@ -54,10 +58,10 @@ public class Tasks {
                 }
                 int i = 1;
                 for (Challenger challenger : top) {
-                    MessageGesture.sendMessage(p, Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints())));
+                    MessageGesture.sendMessage(p, Main.instance.getConfigGestion().getMessages().get("TopPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints())));
                     i++;
                 }
-                if (Main.instance.getConfigGesture().getMinimumPoints() != -1) {
+                if (Main.instance.getConfigGestion().getMinimumPoints() != -1) {
                     if (!Main.instance.getDailyChallenge().isMinimumPointsReached()) {
                         MessageGesture.sendMessage(p, pointsRemainForReward.replace("{points}", Main.instance.getDailyChallenge().getPointsRemain() + ""));
                     } else {
@@ -111,15 +115,15 @@ public class Tasks {
                     Date end = sdf.parse(endData);
                     Date start = sdf.parse(startData);
                     if (now.compareTo(start) > 0 && now.compareTo(end) < 0) {
-                        Main.instance.getConfigGesture().getTasks().checkDay(
-                                Main.instance.getConfigGesture().isResetPointsAtNewChallenge(),
-                                Main.instance.getConfigGesture().isRankingReward(),
-                                Main.instance.getConfigGesture().isRandomReward(),
-                                Main.instance.getConfigGesture().getNumberOfRewardPlayer(),
-                                Main.instance.getConfigGesture().getNumberOfTop());
-                        challengeStart = true;
+                        Main.instance.getConfigGestion().getTasks().checkDay(
+                                Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
+                                Main.instance.getConfigGestion().isRankingReward(),
+                                Main.instance.getConfigGestion().isRandomReward(),
+                                Main.instance.getConfigGestion().getNumberOfRewardPlayer(),
+                                Main.instance.getConfigGestion().getNumberOfTop());
+                        setChallengeStart(true);
                     } else {
-                        challengeStart = false;
+                        setChallengeStart(false);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();

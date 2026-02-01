@@ -13,12 +13,12 @@ import java.util.List;
 public class InventoryCheck {
 
     private final DebugUtils debugUtils = new DebugUtils("InventoryCheck");
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("Inventory");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("Inventory");
     private final int numberSlot = Main.instance.getDailyChallenge().getNumber();
     private final int timeTaskInMinute = Main.instance.getDailyChallenge().getMinutes();
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final List<String> items = Main.instance.getDailyChallenge().getItems();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     public InventoryCheck() {
         start();
@@ -93,6 +93,6 @@ public class InventoryCheck {
                 debugUtils.debug();
             }
         }, 0, (long) timeTaskInMinute * 60 * 20);
-        Main.instance.getConfigGesture().getTasks().addExternalTasks(task,"InventoryEvent",false);
+        Main.instance.getConfigGestion().getTasks().addExternalTasks(task,"InventoryEvent",false);
     }
 }

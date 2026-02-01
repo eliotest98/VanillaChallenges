@@ -18,9 +18,9 @@ import java.util.List;
 public class DailyGiveWinners implements Listener {
 
     private final DebugUtils debugUtils = new DebugUtils("DailyGiveRewardEvent");
-    private final boolean debug = Main.instance.getConfigGesture().getDebug().get("DailyGiveRewardEvent");
-    private static final String challengeReward = Main.instance.getConfigGesture().getMessages().get("ChallengeReward");
-    private static final String prefix = Main.instance.getConfigGesture().getMessages().get("Prefix");
+    private final boolean debug = Main.instance.getConfigGestion().getDebug().get("DailyGiveRewardEvent");
+    private static final String challengeReward = Main.instance.getConfigGestion().getMessages().get("ChallengeReward");
+    private static final String prefix = Main.instance.getConfigGestion().getMessages().get("Prefix");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDailyGiveRewards(PlayerJoinEvent e) {
@@ -47,7 +47,7 @@ public class DailyGiveWinners implements Listener {
                     // If there is not any winner
                     if (winner.getReward().equalsIgnoreCase("NOBODY")) {
                         give = false;
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                        Bukkit.getScheduler().runTask(Main.instance, () -> {
                             Main.db.deleteDailyWinnerWithId(winner.getId());
                         });
                     }
@@ -62,7 +62,7 @@ public class DailyGiveWinners implements Listener {
                                 item = new ItemStack(Material.getMaterial(splitItem[0]), 1, Short.parseShort(splitItem[1]));
                                 MessageGesture.sendMessage(player,challengeReward.replace("{number}", reward[1]).replace("{item}", splitItem[0] + "-" + splitItem[1]));
                             } catch (IllegalArgumentException exception) {
-                                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                                Bukkit.getScheduler().runTask(Main.instance, () -> {
                                     Main.db.deleteDailyWinnerWithId(winner.getId());
                                 });
                                 continue;
@@ -72,7 +72,7 @@ public class DailyGiveWinners implements Listener {
                                 item = new ItemStack(Material.getMaterial(reward[0]));
                                 MessageGesture.sendMessage(player,challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0]));
                             } catch (IllegalArgumentException exception) {
-                                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                                Bukkit.getScheduler().runTask(Main.instance, () -> {
                                     Main.db.deleteDailyWinnerWithId(winner.getId());
                                 });
                                 continue;
@@ -80,7 +80,7 @@ public class DailyGiveWinners implements Listener {
                         }
                         item.setAmount(Integer.parseInt(reward[1]));
                         ItemStack finalItem = item;
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                        Bukkit.getScheduler().runTask(Main.instance, () -> {
                             if (player.getInventory().firstEmpty() != -1) {
                                 player.getInventory().addItem(finalItem);
                                 MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + finalItem);
@@ -105,7 +105,7 @@ public class DailyGiveWinners implements Listener {
                             commandRefactor = new StringBuilder(reward[1]);
                         }
                         String finalCommandRefactor = commandRefactor.toString();
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                        Bukkit.getScheduler().runTask(Main.instance, () -> {
                             String commandRefact = finalCommandRefactor.replace("%player%", player.getName());
                             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandRefact);
                             MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + commandRefact);

@@ -15,7 +15,7 @@ public class EatEvent implements Listener {
 
     private final HashMap<String, Integer> foodLevels = new HashMap<>();
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("EatEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
 
     @SuppressWarnings("deprecation")

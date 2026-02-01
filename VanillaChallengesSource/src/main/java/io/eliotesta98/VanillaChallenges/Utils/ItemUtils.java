@@ -24,8 +24,12 @@ public class ItemUtils {
         }
         itemm.setLore(newLore);
         chest.setItemMeta(itemm);
-        NBTItem nbt = new NBTItem(chest);
-        nbt.setBoolean("vc.chest", true);
-        return nbt.getItem();
+        try {
+            NBTItem nbt = new NBTItem(chest);
+            nbt.setBoolean("vc.chest", true);
+            return nbt.getItem();
+        } catch (NoClassDefFoundError ignore) {
+            return chest;
+        }
     }
 }

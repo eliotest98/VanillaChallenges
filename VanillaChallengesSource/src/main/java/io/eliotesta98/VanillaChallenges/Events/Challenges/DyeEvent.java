@@ -15,13 +15,13 @@ import org.bukkit.inventory.PlayerInventory;
 public class DyeEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("DyeEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("DyeEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
     private final boolean keepInventory = Main.instance.getDailyChallenge().isKeepInventory();
     private final boolean deathInLand = Main.instance.getDailyChallenge().isDeathInLand();
-    private final boolean landsEnabled = Main.instance.getConfigGesture().getHooks().get("Lands");
+    private final boolean landsEnabled = Main.instance.getConfigGestion().getHooks().get("Lands");
     private final int numberOfSlots = Main.instance.getDailyChallenge().getNumber();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)

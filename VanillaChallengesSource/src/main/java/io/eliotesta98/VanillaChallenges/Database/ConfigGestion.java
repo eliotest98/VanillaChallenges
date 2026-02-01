@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
 import com.HeroxWar.HeroxCore.CommentedConfiguration;
+import com.HeroxWar.HeroxCore.Gestion.DefaultGestion;
 import com.HeroxWar.HeroxCore.MessageGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
@@ -13,17 +14,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-
 import java.io.*;
 import java.util.*;
 
-public class ConfigGesture {
+public class ConfigGestion extends DefaultGestion {
 
-    private Map<String, Boolean> debug = new HashMap<>();
-    private final Map<String, String> messages = new HashMap<>();
     private Map<String, Challenge> challenges = new HashMap<>();
     private final Map<String, Challenge> challengesEvent = new HashMap<>();
-    private final Map<String, Boolean> hooks = new HashMap<>();
     private final Map<String, Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, rankingReward, yesterdayTop, resetPointsAtNewChallenge,
             backupEnabled, pointsResume, lockedInterface, randomReward = false;
@@ -36,59 +33,17 @@ public class ConfigGesture {
     private Time cooldown;
 
     private final FileConfiguration fileConfiguration;
-    private final File file;
 
-    public ConfigGesture(File file) throws IOException {
-        this.file = file;
-        fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        ConfigurationSection section = fileConfiguration.getConfigurationSection("Debug");
-        if (section == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Debug configuration section, please refresh the " + file.getName() + " file!");
-            return;
+    public ConfigGestion(String path, String fileName) {
+        super(path, fileName, "VanillaChallenges", "bho");
+        fileConfiguration = this.getFileConfiguration();
+        this.defaultInformations();
+
+        numberOfTop = 1;
+        while (getMessages().containsKey("TopPlayers" + numberOfTop)) {
+            numberOfTop++;
         }
-        for (String event : section.getKeys(false)) {
-            debug.put(event, fileConfiguration.getBoolean("Debug." + event));
-        }
-        section = fileConfiguration.getConfigurationSection("Messages");
-        if (section == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Messages configuration section, please refresh the " + fileConfiguration.getName() + " file!");
-            return;
-        }
-        for (String message : section.getKeys(false)) {
-            if (message.equalsIgnoreCase("Commands") || message.equalsIgnoreCase("Errors")
-                    || message.equalsIgnoreCase("Success") || message.equalsIgnoreCase("Lists")
-                    || message.equalsIgnoreCase("Points")) {
-                section = fileConfiguration.getConfigurationSection("Messages." + message);
-                if (section == null) {
-                    MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Messages configuration section, please refresh the " + fileConfiguration.getName() + " file!");
-                    return;
-                }
-                for (String command : section.getKeys(false)) {
-                    messages.put(message + "." + command, fileConfiguration.getString("Messages." + message + "." + command, "").replace("{prefix}", messages.get("Prefix")));
-                }
-            } else if (message.equalsIgnoreCase("Prefix")) {
-                messages.put(message, fileConfiguration.getString("Messages." + message));
-            } else if (message.equalsIgnoreCase("TopPlayers")) {
-                List<String> topMessages = fileConfiguration.getStringList("Messages.TopPlayers");
-                numberOfTop = topMessages.size();
-                int i = 1;
-                while (!topMessages.isEmpty()) {
-                    messages.put("topPlayers" + i, topMessages.get(0));
-                    topMessages.remove(0);
-                    i++;
-                }
-            } else {
-                messages.put(message, fileConfiguration.getString("Messages." + message, "").replace("{prefix}", messages.get("Prefix")));
-            }
-        }
-        section = fileConfiguration.getConfigurationSection("Configuration.Hooks");
-        if (section == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Hooks configuration section, please refresh the " + fileConfiguration.getName() + " file!");
-            return;
-        }
-        for (String hook : section.getKeys(false)) {
-            hooks.put(hook, fileConfiguration.getBoolean("Configuration.Hooks." + hook));
-        }
+        numberOfTop--;
 
         String challengeRegenerationType = fileConfiguration.getString("Configuration.ChallengeRegeneration.Type", "Blacklist");
         List<String> regenerationFilesGlobalChallenges = fileConfiguration.getStringList("Configuration.ChallengeRegeneration.Globals");
@@ -113,7 +68,7 @@ public class ConfigGesture {
                 break;
         }
 
-        FileCreator.addFiles(hooks);
+        FileCreator.addFiles(getHooks());
 
         boolean folderCreate = new File(Main.instance.getDataFolder() +
                 File.separator + "Challenges").mkdir();
@@ -125,23 +80,18 @@ public class ConfigGesture {
 
         if (folderCreate) {
             FileCreator.createAllFiles("Global");
-            listOfChallengesGlobalFiles = new File(Main.instance.getDataFolder() +
-                    File.separator + "Challenges" + File.separator + "Global").listFiles();
         } else {
             FileCreator.controlFiles("Global", listOfChallengesGlobalFiles, regenerationFilesGlobalChallenges, challengeRegenerationType);
         }
+
+        listOfChallengesGlobalFiles = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges" + File.separator + "Global").listFiles();
 
         if (listOfChallengesGlobalFiles == null) {
             MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
             return;
         }
         for (File fileChallenge : listOfChallengesGlobalFiles) {
-            String splits = "bho";
-            String[] strings = splits.split(":");
-            String configName = "Challenges/Global/" + fileChallenge.getName();
-            CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(fileChallenge);
-            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configName), strings);
-
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
             boolean enabled = yamlChallenge.getBoolean(challengeName + ".Enabled");
@@ -260,7 +210,7 @@ public class ConfigGesture {
             String onGround = (yamlChallenge.getString(challengeName + ".OnGround") == null) ? "NOBODY" : yamlChallenge.getString(challengeName + ".OnGround");
             List<String> quests = new ArrayList<>();
             for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
-                quests.add(quest.replace("{prefix}", messages.get("Prefix")));
+                quests.add(quest.replace("{prefix}", getMessages().get("Prefix")));
             }
             if (quests.isEmpty()) {
                 quests.add("Formatter:" + yamlChallenge.getString(challengeName + ".Strings.StringFormatter"));
@@ -280,11 +230,12 @@ public class ConfigGesture {
 
         if (folderCreate) {
             FileCreator.createAllFiles("Event");
-            listOfChallengesEventFiles = new File(Main.instance.getDataFolder() +
-                    File.separator + "Challenges" + File.separator + "Event").listFiles();
         } else {
             FileCreator.controlFiles("Event", listOfChallengesEventFiles, regenerationFilesEventChallenges, challengeRegenerationType);
         }
+
+        listOfChallengesEventFiles = new File(Main.instance.getDataFolder() +
+                File.separator + "Challenges" + File.separator + "Event").listFiles();
 
         if (listOfChallengesEventFiles == null) {
             MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
@@ -295,7 +246,11 @@ public class ConfigGesture {
             String[] strings = splits.split(":");
             String configName = "Challenges/Event/" + fileChallenge.getName();
             CommentedConfiguration cfg = CommentedConfiguration.loadConfiguration(fileChallenge);
-            cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configName), strings);
+            try {
+                cfg.syncWithConfig(fileChallenge, Main.instance.getResource(configName), strings);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
             YamlConfiguration yamlChallenge = YamlConfiguration.loadConfiguration(fileChallenge);
             String challengeName = fileChallenge.getName().replace(".yml", "");
@@ -412,7 +367,7 @@ public class ConfigGesture {
 
             List<String> quests = new ArrayList<>();
             for (String quest : yamlChallenge.getStringList(challengeName + ".Strings.Quests")) {
-                quests.add(quest.replace("{prefix}", messages.get("Prefix")));
+                quests.add(quest.replace("{prefix}", getMessages().get("Prefix")));
             }
             if (quests.isEmpty()) {
                 quests.add("Formatter:" + yamlChallenge.getString(challengeName + ".Strings.StringFormatter"));
@@ -460,7 +415,7 @@ public class ConfigGesture {
         }
         pointsResume = fileConfiguration.getBoolean("Configuration.Points.PointsResume");
 
-        section = fileConfiguration.getConfigurationSection("Interfaces");
+        ConfigurationSection section = fileConfiguration.getConfigurationSection("Interfaces");
         if (section == null) {
             MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
             return;
@@ -514,24 +469,12 @@ public class ConfigGesture {
                 customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
                         contaSlots.size(), nameInterface, "", "Generator");
             } else {*/
-            customInterface = new Interface(title, openSound, slots, itemsConfig, debug.get("ClickGui"),
+            customInterface = new Interface(title, openSound, slots, itemsConfig, getDebug().get("ClickGui"),
                     contaSlots.size(), nameInterface, "", "");
             //}
             interfaces.put(nameInterface, customInterface);
         }
 
-    }
-
-    public Map<String, Boolean> getDebug() {
-        return debug;
-    }
-
-    public void setDebug(Map<String, Boolean> debug) {
-        this.debug = debug;
-    }
-
-    public Map<String, String> getMessages() {
-        return messages;
     }
 
     public Map<String, Challenge> getChallenges() {
@@ -546,12 +489,18 @@ public class ConfigGesture {
         return timeBroadcastMessageTitle;
     }
 
-    public Map<String, Boolean> getHooks() {
-        return hooks;
+    public void setTimeBroadcastMessageTitle(int timeBroadcastMessageTitle) {
+        this.timeBroadcastMessageTitle = timeBroadcastMessageTitle;
+        saveSection("Configuration.BroadcastMessage.TimeTitleChallenges", timeBroadcastMessageTitle);
     }
 
     public boolean isActiveOnlinePoints() {
         return activeOnlinePoints;
+    }
+
+    public void setActiveOnlinePoints(boolean activeOnlinePoints) {
+        this.activeOnlinePoints = activeOnlinePoints;
+        saveSection("Configuration.Points.OnlinePoints.Enabled", activeOnlinePoints);
     }
 
     public int getPointsOnlinePoints() {
@@ -568,6 +517,7 @@ public class ConfigGesture {
 
     public void setDatabase(String database) {
         this.database = database;
+        saveSection("Configuration.Database", database);
     }
 
     public boolean isYesterdayTop() {
@@ -584,6 +534,11 @@ public class ConfigGesture {
 
     public boolean isBackupEnabled() {
         return backupEnabled;
+    }
+
+    public void setBackupEnabled(boolean backupEnabled) {
+        this.backupEnabled = backupEnabled;
+        saveSection("Configuration.Backup.Enabled", backupEnabled);
     }
 
     public int getNumberOfFilesInFolderForBackup() {
@@ -646,6 +601,11 @@ public class ConfigGesture {
         return minimumPoints;
     }
 
+    public void setMinimumPoints(int minimumPoints) {
+        this.minimumPoints = minimumPoints;
+        saveSection("Configuration.Points.MinimumPoints", minimumPoints);
+    }
+
     public int getNumberOfTop() {
         return numberOfTop;
     }
@@ -666,21 +626,23 @@ public class ConfigGesture {
         return permissionPointsGive;
     }
 
+    public void setPermissionPointsGive(String permissionPointsGive) {
+        this.permissionPointsGive = permissionPointsGive;
+        saveSection("Configuration.Points.Permission", permissionPointsGive);
+    }
+
     public Time getCooldown() {
         return cooldown;
     }
 
-    public void setChallengeGeneration(String challengeGeneration) {
-        this.challengeGeneration = challengeGeneration;
-        fileConfiguration.set("Configuration.ChallengeGeneration", challengeGeneration);
-        saveFile();
+    public void setCooldown(Time cooldown) {
+        this.cooldown = cooldown;
+        long seconds = cooldown.getMilliseconds() / 1000;
+        saveSection("Configuration.Cooldown", seconds + "s");
     }
 
-    public void saveFile() {
-        try {
-            fileConfiguration.save(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void setChallengeGeneration(String challengeGeneration) {
+        this.challengeGeneration = challengeGeneration;
+        saveSection("Configuration.ChallengeGeneration", challengeGeneration);
     }
 }

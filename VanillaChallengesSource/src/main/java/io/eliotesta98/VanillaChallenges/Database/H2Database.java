@@ -9,7 +9,7 @@ public class H2Database extends Database {
     public static H2Database instance = null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(H2Database.class.getName());
 
-    public H2Database(String absolutePath) {
+    public H2Database(String absolutePath) throws SQLException {
         setPrefix("");
         createConnection(absolutePath);
         initialize();

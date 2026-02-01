@@ -12,9 +12,9 @@ import org.bukkit.event.Listener;
 public class KillMobEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("KillEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("KillEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onKillEvent(org.bukkit.event.entity.EntityDeathEvent e) {
