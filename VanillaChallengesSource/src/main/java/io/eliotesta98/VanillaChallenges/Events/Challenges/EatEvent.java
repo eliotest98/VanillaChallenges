@@ -15,7 +15,7 @@ public class EatEvent implements Listener {
 
     private final HashMap<String, Integer> foodLevels = new HashMap<>();
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("EatEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EatEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
 
     @SuppressWarnings("deprecation")
@@ -51,7 +51,7 @@ public class EatEvent implements Listener {
                     return;
                 }
 
-                Main.instance.getDailyChallenge().increment(playerName, (long) number * Math.abs(point));
+                Main.instance.getDailyChallenge().increment(playerName, Math.abs(number * Math.abs(point)));
             }
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

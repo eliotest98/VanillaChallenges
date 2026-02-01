@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 public class EggThrowEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("EggThrowEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("EggThrowEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEvent(PlayerEggThrowEvent e) {

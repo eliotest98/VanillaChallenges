@@ -12,9 +12,9 @@ import org.bukkit.event.Listener;
 public class SneakEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("SneakEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SneakEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.NORMAL)
@@ -61,7 +61,9 @@ public class SneakEvent implements Listener {
                 return;
             }
 
-            Main.instance.getDailyChallenge().increment(playerName, point);
+            if(e.isSneaking()) {
+                Main.instance.getDailyChallenge().increment(playerName, point);
+            }
 
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

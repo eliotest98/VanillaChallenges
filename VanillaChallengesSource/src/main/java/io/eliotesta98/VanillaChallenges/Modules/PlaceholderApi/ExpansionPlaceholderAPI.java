@@ -58,35 +58,67 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
         // %vanillachallenges_points%
         if (identifier.equalsIgnoreCase("points")) {
-            return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointFromPLayerName(p.getName()));
+            if (Main.challengeSelected) {
+                return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointFromPLayerName(p.getName()));
+            } else {
+                return "0";
+            }
         }
         // %vanillachallenges_dailychallenge_name%
         if (identifier.contains("dailychallenge_name")) {
-            return Main.instance.getDailyChallenge().getChallengeName();
+            if (Main.challengeSelected) {
+                return Main.instance.getDailyChallenge().getChallengeName();
+            } else {
+                return "Nobody";
+            }
         }
         // %vanillachallenges_dailychallenge_displayName%
         if (identifier.contains("dailychallenge_displayName")) {
-            return Main.instance.getDailyChallenge().getNameChallenge();
+            if (Main.challengeSelected) {
+                return Main.instance.getDailyChallenge().getNameChallenge();
+            } else {
+                return "Nobody";
+            }
         }
         // %vanillachallenges_dailychallenge_time_complete%
         if (identifier.startsWith("dailychallenge_time_complete") && identifier.endsWith("dailychallenge_time_complete")) {
-            return Main.instance.getDailyChallenge().getTimeChallenge().getTime();
+            if (Main.challengeSelected) {
+                return Main.instance.getDailyChallenge().getTimeChallenge().getTime();
+            } else {
+                return "0s";
+            }
         }
         // %vanillachallenges_dailychallenge_time_without_zeros%
         if (identifier.startsWith("dailychallenge_time_without_zeros") && identifier.endsWith("dailychallenge_time_without_zeros")) {
-            return Main.instance.getDailyChallenge().getTimeChallenge().getTimeWithoutZeros();
+            if (Main.challengeSelected) {
+                return Main.instance.getDailyChallenge().getTimeChallenge().getTimeWithoutZeros();
+            } else {
+                return "0s";
+            }
         }
         // %vanillachallenges_dailychallenge_time_seconds%
         if (identifier.contains("dailychallenge_time_seconds")) {
-            return Main.instance.getDailyChallenge().getTimeChallenge().getSeconds() + "";
+            if (Main.challengeSelected) {
+                return Main.instance.getDailyChallenge().getTimeChallenge().getSeconds() + "";
+            } else {
+                return "0s";
+            }
         }
         // %vanillachallenges_dailychallenge_time_minutes%
         if (identifier.contains("dailychallenge_time_minutes")) {
-            return Main.instance.getDailyChallenge().getTimeChallenge().getMinutes() + "";
+            if (Main.challengeSelected) {
+                return Main.instance.getDailyChallenge().getTimeChallenge().getMinutes() + "";
+            } else {
+                return "0m";
+            }
         }
         // %vanillachallenges_dailychallenge_time_hours%
         if (identifier.contains("dailychallenge_time_hours")) {
-            return Main.instance.getDailyChallenge().getTimeChallenge().getHours() + "";
+            if (Main.challengeSelected) {
+                return Main.instance.getDailyChallenge().getTimeChallenge().getHours() + "";
+            } else {
+                return "0h";
+            }
         }
         // %vanillachallenges_dailychallenge_active%
         if (identifier.contains("dailychallenge_active")) {
@@ -94,6 +126,9 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
         // %vanillachallenges_dailychallenge_top_name_#% # = number
         if (identifier.contains("dailychallenge_top_name_")) {
+            if (!Main.challengeSelected) {
+                return "Nobody";
+            }
             String number = identifier.replace("dailychallenge_top_name_", "");
             int numberTop;
             try {
@@ -113,6 +148,9 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
         // %vanillachallenges_dailychallenge_top_points_#% # = number
         if (identifier.contains("dailychallenge_top_points_")) {
+            if (!Main.challengeSelected) {
+                return "0";
+            }
             String number = identifier.replace("dailychallenge_top_points_", "");
             int numberTop;
             try {
@@ -127,19 +165,25 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
             if (top.size() >= numberTop) {
                 return MoneyUtils.transform(top.get(numberTop - 1).getPoints());
             } else {
-                return 0 + "";
+                return "0";
             }
         }
         // %vanillachallenges_dailychallenge_boost_multiplier%
         if (identifier.equalsIgnoreCase("dailychallenge_boost_multiplier")) {
+            if (!Main.challengeSelected) {
+                return "1";
+            }
             if (Main.instance.getDailyChallenge().isActive()) {
                 return Main.instance.getDailyChallenge().getMultiplier() + "";
             } else {
-                return 1 + "";
+                return "1";
             }
         }
         // %vanillachallenges_dailychallenge_boost_points_remain%
         if (identifier.equalsIgnoreCase("dailychallenge_boost_points_remain")) {
+            if (!Main.challengeSelected) {
+                return "0";
+            }
             if (!Main.instance.getDailyChallenge().isActive()) {
                 long pointsRemain = Main.instance.getDailyChallenge().getPointsBoost() - Main.instance.getDailyChallenge().getCountPointsChallenge();
                 return MoneyUtils.transform(pointsRemain);
@@ -149,14 +193,20 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
         }
         // %vanillachallenges_dailychallenge_boost_multiplier_single_player%
         if (identifier.contains("dailychallenge_boost_multiplier_single_player")) {
+            if (!Main.challengeSelected) {
+                return "1";
+            }
             if (Main.instance.getDailyChallenge().isActiveSingleBoost(p.getName())) {
                 return Main.instance.getDailyChallenge().getMultiplierSinglePlayer() + "";
             } else {
-                return 1 + "";
+                return "1";
             }
         }
         // %vanillachallenges_dailychallenge_boost_points_remain_single_player%
         if (identifier.contains("dailychallenge_boost_points_remain_single_player")) {
+            if (!Main.challengeSelected) {
+                return "0";
+            }
             if (!Main.instance.getDailyChallenge().isActiveSingleBoost(p.getName())) {
                 if (Main.instance.getDailyChallenge().getBoostSinglePlayers().containsKey(p.getName())) {
                     long pointsRemain = Main.instance.getDailyChallenge().getBoostSinglePlayers().get(p.getName());

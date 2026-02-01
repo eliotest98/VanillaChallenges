@@ -24,59 +24,59 @@ import java.util.*;
 
 public class Commands implements CommandExecutor {
 
-    private final String errorYouAreNotAPlayer = Main.instance.getConfigGesture().getMessages().get("Errors.YouAreNotAPlayer");
-    private final String errorCommandNotFound = Main.instance.getConfigGesture().getMessages().get("Errors.CommandNotFound");
-    private final String errorNoPerms = Main.instance.getConfigGesture().getMessages().get("Errors.NoPerms");
-    private final String alreadyStartEvent = Main.instance.getConfigGesture().getMessages().get("Errors.AlreadyStartEvent");
-    private final String alreadyStopEvent = Main.instance.getConfigGesture().getMessages().get("Errors.AlreadyStopEvent");
-    private final String scheduleError = Main.instance.getConfigGesture().getMessages().get("Errors.Schedule");
-    private final String addError = Main.instance.getConfigGesture().getMessages().get("Errors.Add");
-    private final String alreadyDisable = Main.instance.getConfigGesture().getMessages().get("Errors.AlreadyDisable");
-    private final String timeError = Main.instance.getConfigGesture().getMessages().get("Errors.Time");
+    private final String errorYouAreNotAPlayer = Main.instance.getConfigGestion().getMessages().get("Errors.YouAreNotAPlayer");
+    private final String errorCommandNotFound = Main.instance.getConfigGestion().getMessages().get("Errors.CommandNotFound");
+    private final String errorNoPerms = Main.instance.getConfigGestion().getMessages().get("Errors.NoPerms");
+    private final String alreadyStartEvent = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyStartEvent");
+    private final String alreadyStopEvent = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyStopEvent");
+    private final String scheduleError = Main.instance.getConfigGestion().getMessages().get("Errors.Schedule");
+    private final String addError = Main.instance.getConfigGestion().getMessages().get("Errors.Add");
+    private final String alreadyDisable = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyDisable");
+    private final String timeError = Main.instance.getConfigGestion().getMessages().get("Errors.Time");
 
-    private final String addSuccess = Main.instance.getConfigGesture().getMessages().get("Success.Add");
-    private final String removeSuccess = Main.instance.getConfigGesture().getMessages().get("Success.Remove");
-    private final String succesfullyRestored = Main.instance.getConfigGesture().getMessages().get("Success.Restored");
-    private final String timeRemove = Main.instance.getConfigGesture().getMessages().get("Success.TimeRemove");
-    private final String timeAdd = Main.instance.getConfigGesture().getMessages().get("Success.TimeAdd");
-    private final String timeSet = Main.instance.getConfigGesture().getMessages().get("Success.TimeSet");
+    private final String addSuccess = Main.instance.getConfigGestion().getMessages().get("Success.Add");
+    private final String removeSuccess = Main.instance.getConfigGestion().getMessages().get("Success.Remove");
+    private final String succesfullyRestored = Main.instance.getConfigGestion().getMessages().get("Success.Restored");
+    private final String timeRemove = Main.instance.getConfigGestion().getMessages().get("Success.TimeRemove");
+    private final String timeAdd = Main.instance.getConfigGestion().getMessages().get("Success.TimeAdd");
+    private final String timeSet = Main.instance.getConfigGestion().getMessages().get("Success.TimeSet");
 
-    private final String commandFooter = Main.instance.getConfigGesture().getMessages().get("Commands.Footer");
-    private final String commandVcReloadHelp = Main.instance.getConfigGesture().getMessages().get("Commands.Reload");
-    private final String commandVcNextHelp = Main.instance.getConfigGesture().getMessages().get("Commands.Next");
-    private final String commandVcPointsHelp = Main.instance.getConfigGesture().getMessages().get("Commands.Points");
-    private final String commandVcTopHelp = Main.instance.getConfigGesture().getMessages().get("Commands.Top");
-    private final String commandVcClear = Main.instance.getConfigGesture().getMessages().get("Commands.Clear");
-    private final String commandVcChallenge = Main.instance.getConfigGesture().getMessages().get("Commands.Challenge");
-    private final String commandVcEconomyChallenge = Main.instance.getConfigGesture().getMessages().get("Commands.Economy");
-    private final String commandVcReward = Main.instance.getConfigGesture().getMessages().get("Commands.Reward");
-    private final String commandVcList = Main.instance.getConfigGesture().getMessages().get("Commands.List");
-    private final String commandVcEvent = Main.instance.getConfigGesture().getMessages().get("Commands.Event");
-    private final String commandVcSchedule = Main.instance.getConfigGesture().getMessages().get("Commands.Schedule");
-    private final String commandVcRestore = Main.instance.getConfigGesture().getMessages().get("Commands.Restore");
-    private final String commandVcTime = Main.instance.getConfigGesture().getMessages().get("Commands.Time");
+    private final String commandFooter = Main.instance.getConfigGestion().getMessages().get("Commands.Footer");
+    private final String commandVcReloadHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Reload");
+    private final String commandVcNextHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Next");
+    private final String commandVcPointsHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Points");
+    private final String commandVcTopHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Top");
+    private final String commandVcClear = Main.instance.getConfigGestion().getMessages().get("Commands.Clear");
+    private final String commandVcChallenge = Main.instance.getConfigGestion().getMessages().get("Commands.Challenge");
+    private final String commandVcEconomyChallenge = Main.instance.getConfigGestion().getMessages().get("Commands.Economy");
+    private final String commandVcReward = Main.instance.getConfigGestion().getMessages().get("Commands.Reward");
+    private final String commandVcList = Main.instance.getConfigGestion().getMessages().get("Commands.List");
+    private final String commandVcEvent = Main.instance.getConfigGestion().getMessages().get("Commands.Event");
+    private final String commandVcSchedule = Main.instance.getConfigGestion().getMessages().get("Commands.Schedule");
+    private final String commandVcRestore = Main.instance.getConfigGestion().getMessages().get("Commands.Restore");
+    private final String commandVcTime = Main.instance.getConfigGestion().getMessages().get("Commands.Time");
 
-    private final String fileList = Main.instance.getConfigGesture().getMessages().get("Lists.Files");
-    private final String fileLine = Main.instance.getConfigGesture().getMessages().get("Lists.FilesLine");
+    private final String fileList = Main.instance.getConfigGestion().getMessages().get("Lists.Files");
+    private final String fileLine = Main.instance.getConfigGestion().getMessages().get("Lists.FilesLine");
 
-    private final String pointsInfo = Main.instance.getConfigGesture().getMessages().get("Points.Info");
-    private final String pointsPlayerPlaceholder = Main.instance.getConfigGesture().getMessages().get("Points.PlayerPlaceholder");
-    private final String actuallyInTop = Main.instance.getConfigGesture().getMessages().get("ActuallyInTop");
-    private final String pointsadd = Main.instance.getConfigGesture().getMessages().get("PointsAdd");
-    private final String pointsremove = Main.instance.getConfigGesture().getMessages().get("PointsRemove");
-    private final String timeRemaining = Main.instance.getConfigGesture().getMessages().get("TimeRemaining");
-    private final String cooldown = Main.instance.getConfigGesture().getMessages().get("Cooldown");
+    private final String pointsInfo = Main.instance.getConfigGestion().getMessages().get("Points.Info");
+    private final String pointsPlayerPlaceholder = Main.instance.getConfigGestion().getMessages().get("Points.PlayerPlaceholder");
+    private final String actuallyInTop = Main.instance.getConfigGestion().getMessages().get("ActuallyInTop");
+    private final String pointsadd = Main.instance.getConfigGestion().getMessages().get("PointsAdd");
+    private final String pointsremove = Main.instance.getConfigGestion().getMessages().get("PointsRemove");
+    private final String timeRemaining = Main.instance.getConfigGestion().getMessages().get("TimeRemaining");
+    private final String cooldown = Main.instance.getConfigGestion().getMessages().get("Cooldown");
 
-    private final String challengeList = Main.instance.getConfigGesture().getMessages().get("ChallengeList");
-    private final String challengeOfList = Main.instance.getConfigGesture().getMessages().get("ChallengeofList");
+    private final String challengeList = Main.instance.getConfigGestion().getMessages().get("ChallengeList");
+    private final String challengeOfList = Main.instance.getConfigGestion().getMessages().get("ChallengeofList");
 
-    private final boolean debugCommand = Main.instance.getConfigGesture().getDebug().get("Commands");
-    private final boolean resetPoints = Main.instance.getConfigGesture().isResetPointsAtNewChallenge();
+    private final boolean debugCommand = Main.instance.getConfigGestion().getDebug().get("Commands");
+    private final boolean resetPoints = Main.instance.getConfigGestion().isResetPointsAtNewChallenge();
 
-    private final int numberOfTop = Main.instance.getConfigGesture().getNumberOfTop();
-    private final int numberOfRewardedPlayer = Main.instance.getConfigGesture().getNumberOfRewardPlayer();
-    private final boolean rankingReward = Main.instance.getConfigGesture().isRankingReward();
-    private final boolean randomReward = Main.instance.getConfigGesture().isRandomReward();
+    private final int numberOfTop = Main.instance.getConfigGestion().getNumberOfTop();
+    private final int numberOfRewardedPlayer = Main.instance.getConfigGestion().getNumberOfRewardPlayer();
+    private final boolean rankingReward = Main.instance.getConfigGestion().isRankingReward();
+    private final boolean randomReward = Main.instance.getConfigGestion().isRandomReward();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
@@ -148,7 +148,7 @@ public class Commands implements CommandExecutor {
                     }
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                                 sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
                                 sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
@@ -172,7 +172,7 @@ public class Commands implements CommandExecutor {
                 case "challenge":
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                                 sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
                                 sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
@@ -205,15 +205,15 @@ public class Commands implements CommandExecutor {
                         }
                         return;
                     }
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                    Bukkit.getScheduler().runTask(Main.instance, () -> {
                         Main.db.clearAll();
                         if (Main.challengeSelected) {
                             Main.instance.getDailyChallenge().clearPlayers();
-                            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                            for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
                                 interfaces.getValue().closeAllInventories();
                             }
                         }
-                        Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                        Main.instance.getConfigGestion().getTasks().stopAllTasks();
                         Main.instance.unregisterCurrentListener();
                         Main.instance.pluginStartingProcess();
                     });
@@ -252,12 +252,12 @@ public class Commands implements CommandExecutor {
                             MessageGesture.sendMessage(sender, alreadyStopEvent);
                             break;
                         }
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                        Bukkit.getScheduler().runTask(Main.instance, () -> {
                             List<Challenger> topPlayers = Main.instance.getDailyChallenge().getTopPlayers(numberOfRewardedPlayer);
                             Main.db.removeTopYesterday();
                             Main.db.saveTopYesterday(Main.instance.getDailyChallenge().getTopPlayers(numberOfTop));
-                            if (Main.instance.getConfigGesture().isBackupEnabled()) {
-                                Main.db.backupDb(Main.instance.getConfigGesture().getNumberOfFilesInFolderForBackup());
+                            if (Main.instance.getConfigGestion().isBackupEnabled()) {
+                                Main.db.backupDb(Main.instance.getConfigGestion().getNumberOfFilesInFolderForBackup());
                             }
                             int number = Main.db.lastDailyWinnerId();
                             Random random = new Random();
@@ -296,11 +296,11 @@ public class Commands implements CommandExecutor {
                             Main.db.resumeOldPoints();
                             if (Main.challengeSelected) {
                                 Main.instance.getDailyChallenge().clearPlayers();
-                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
                                     interfaces.getValue().closeAllInventories();
                                 }
                             }
-                            Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                            Main.instance.getConfigGestion().getTasks().stopAllTasks();
                             Main.instance.unregisterCurrentListener();
                             Main.instance.pluginStartingProcess();
                         });
@@ -313,10 +313,10 @@ public class Commands implements CommandExecutor {
                             break;
                         }
                         Random random = new Random();
-                        int sizeChallenges = random.nextInt(Main.instance.getConfigGesture().getChallengesEvent().size() - 1);
+                        int sizeChallenges = random.nextInt(Main.instance.getConfigGestion().getChallengesEvent().size() - 1);
                         int i = 0;
                         Challenge challengeSelected = null;
-                        for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGesture().getChallengesEvent().entrySet()) {
+                        for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
                             if (i == sizeChallenges) {
                                 challengeSelected = challenge.getValue();
                                 break;
@@ -328,22 +328,22 @@ public class Commands implements CommandExecutor {
                         }
                         String challengeName = challengeSelected.getChallengeName();
                         long milliseconds = challengeSelected.getTimeChallenge().getMilliseconds();
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                        Bukkit.getScheduler().runTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(challengeName, milliseconds);
                             if (Main.challengeSelected) {
                                 Main.db.saveOldPointsForChallengeEvents();
                                 Main.instance.getDailyChallenge().clearPlayers();
-                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
                                     interfaces.getValue().closeAllInventories();
                                 }
                             }
-                            Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                            Main.instance.getConfigGestion().getTasks().stopAllTasks();
                             Main.instance.unregisterCurrentListener();
                             Main.instance.pluginStartingProcess();
                         });
                     }
                     // start a specified event challenge
-                    else if (Main.instance.getConfigGesture().getChallengesEvent().get(args[1]) != null) {
+                    else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
                         if (!sender.hasPermission("vc.event.start.command")) {
                             MessageGesture.sendMessage(sender, errorNoPerms);
                             break;
@@ -353,22 +353,22 @@ public class Commands implements CommandExecutor {
                             MessageGesture.sendMessage(sender, alreadyStartEvent);
                             break;
                         }
-                        Challenge challengeSelected = Main.instance.getConfigGesture().getChallengesEvent().get(args[1]);
+                        Challenge challengeSelected = Main.instance.getConfigGestion().getChallengesEvent().get(args[1]);
                         if (!rowTime.equalsIgnoreCase("")) {
                             challengeSelected = challengeSelected.cloneChallenge(rowTime);
                         }
                         String challengeName = challengeSelected.getChallengeName();
                         long milliseconds = challengeSelected.getTimeChallenge().getMilliseconds();
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                        Bukkit.getScheduler().runTask(Main.instance, () -> {
                             Main.db.insertChallengeEvent(challengeName, milliseconds);
                             if (Main.challengeSelected) {
                                 Main.db.saveOldPointsForChallengeEvents();
                                 Main.instance.getDailyChallenge().clearPlayers();
-                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
                                     interfaces.getValue().closeAllInventories();
                                 }
                             }
-                            Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                            Main.instance.getConfigGestion().getTasks().stopAllTasks();
                             Main.instance.unregisterCurrentListener();
                             Main.instance.pluginStartingProcess();
                         });
@@ -380,7 +380,7 @@ public class Commands implements CommandExecutor {
                             break;
                         }
                         StringBuilder send = new StringBuilder("\n");
-                        for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGesture().getChallengesEvent().entrySet()) {
+                        for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
                             send.append(challengeOfList.replace("{challenge}", challenge.getKey())).append("\n");
                         }
                         MessageGesture.sendMessage(sender, challengeList.replace("{challengeList}", send.toString()));
@@ -393,7 +393,7 @@ public class Commands implements CommandExecutor {
                     }
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                                 sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
                                 sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
@@ -415,22 +415,22 @@ public class Commands implements CommandExecutor {
                         MessageGesture.sendMessage(sender, commandVcList);
                         break;
                     }
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
-                        int size = Main.instance.getConfigGesture().getInterfaces().get("Challenges").getSizeModificableSlot();
+                    Bukkit.getScheduler().runTask(Main.instance, () -> {
+                        int size = Main.instance.getConfigGestion().getInterfaces().get("Challenges").getSizeModificableSlot();
                         ArrayList<Challenge> challenges = new ArrayList<>();
                         for (Challenge challenge : Main.db.getChallenges()) {
                             if (challenges.size() < size) {
                                 challenges.add(challenge);
                             }
                         }
-                        Main.instance.getConfigGesture().getInterfaces().get("Challenges").openInterface(
+                        Main.instance.getConfigGestion().getInterfaces().get("Challenges").openInterface(
                                 challenges, (Player) sender, 1);
                     });
                     break;
                 case "next":
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                                 sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
                                 sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
@@ -460,12 +460,12 @@ public class Commands implements CommandExecutor {
                         break;
                     }
 
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Command Execution", skipPeacefulTime));
+                    Bukkit.getScheduler().runTask(Main.instance, () -> Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Command Execution", skipPeacefulTime));
                     break;
                 case "points":
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                                 sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
                                 sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
@@ -514,7 +514,7 @@ public class Commands implements CommandExecutor {
                         MessageGesture.sendMessage(sender, commandVcReloadHelp);
                         break;
                     }
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                    Bukkit.getScheduler().runTask(Main.instance, () -> {
                         MessageGesture.sendMessage(sender, "&6Reloading...");
                         ReloadGesture.reload(Main.instance.getName());
                         MessageGesture.sendMessage(sender, "&aReloaded!");
@@ -523,7 +523,7 @@ public class Commands implements CommandExecutor {
                 case "remove":
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                                 sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
                                 sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
@@ -618,18 +618,18 @@ public class Commands implements CommandExecutor {
                     MessageGesture.sendMessage(sender, succesfullyRestored);
                     if (Main.challengeSelected) {
                         Main.instance.getDailyChallenge().clearPlayers();
-                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
                             interfaces.getValue().closeAllInventories();
                         }
                     }
-                    Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                    Main.instance.getConfigGestion().getTasks().stopAllTasks();
                     Main.instance.unregisterCurrentListener();
                     Main.instance.pluginStartingProcess();
                     break;
                 case "schedule":
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                                 sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
                                 sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
@@ -650,7 +650,7 @@ public class Commands implements CommandExecutor {
 
                     Challenge challenge1 = null;
                     if (args.length >= 3) {
-                        challenge1 = Main.instance.getConfigGesture().getChallenges().get(args[2]);
+                        challenge1 = Main.instance.getConfigGestion().getChallenges().get(args[2]);
                     }
 
                     // schedule add
@@ -661,7 +661,7 @@ public class Commands implements CommandExecutor {
                         }
                         if (challenge1 == null && !args[2].equalsIgnoreCase("random")) {
                             StringBuilder send = new StringBuilder("\n");
-                            for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGesture().getChallengesEvent().entrySet()) {
+                            for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
                                 send.append(challengeOfList.replace("{challenge}", challenge.getKey())).append("\n");
                             }
                             MessageGesture.sendMessage(sender, challengeList.replace("{challengeList}", send.toString()));
@@ -670,7 +670,7 @@ public class Commands implements CommandExecutor {
                                 List<Challenge> scheduledChallenges = Main.db.getChallenges();
                                 ArrayList<Challenge> remainChallenges = new ArrayList<>();
                                 boolean find;
-                                for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGesture().getChallenges().entrySet()) {
+                                for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallenges().entrySet()) {
                                     find = false;
                                     for (Challenge challenge2 : scheduledChallenges) {
                                         if (challenge.getKey().equalsIgnoreCase(challenge2.getChallengeName())) {
@@ -712,17 +712,17 @@ public class Commands implements CommandExecutor {
                                     finalChallenge = challenge1.cloneChallenge(rowTimeScheduler);
                                 }
                                 Challenge challengeSelected = finalChallenge;
-                                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                                Bukkit.getScheduler().runTask(Main.instance, () -> {
                                     Main.db.addChallenge(challengeSelected);
                                     Main.db.insertChallenge(challengeSelected.getChallengeName(), challengeSelected.getTimeChallenge().getMilliseconds());
                                     MessageGesture.sendMessage(sender, addSuccess);
                                     if (Main.challengeSelected) {
                                         Main.instance.getDailyChallenge().clearPlayers();
-                                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
                                             interfaces.getValue().closeAllInventories();
                                         }
                                     }
-                                    Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                                    Main.instance.getConfigGestion().getTasks().stopAllTasks();
                                     Main.instance.unregisterCurrentListener();
                                     Main.instance.pluginStartingProcess();
                                 });
@@ -745,16 +745,16 @@ public class Commands implements CommandExecutor {
                             if (Main.instance.getDailyChallenge().getChallengeName().equalsIgnoreCase(args[2])) {
                                 MessageGesture.sendMessage(sender, scheduleError);
                             } else {
-                                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                                Bukkit.getScheduler().runTask(Main.instance, () -> {
                                     Main.db.deleteChallengeWithName(args[2]);
                                     MessageGesture.sendMessage(sender, removeSuccess);
                                     if (Main.challengeSelected) {
                                         Main.instance.getDailyChallenge().clearPlayers();
-                                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGesture().getInterfaces().entrySet()) {
+                                        for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
                                             interfaces.getValue().closeAllInventories();
                                         }
                                     }
-                                    Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                                    Main.instance.getConfigGestion().getTasks().stopAllTasks();
                                     Main.instance.unregisterCurrentListener();
                                     Main.instance.pluginStartingProcess();
                                 });
@@ -767,13 +767,13 @@ public class Commands implements CommandExecutor {
                             MessageGesture.sendMessage(sender, errorNoPerms);
                             break;
                         }
-                        if (Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                        if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                             MessageGesture.sendMessage(sender, alreadyDisable);
                             break;
                         }
-                        Main.instance.getConfigGesture().setChallengeGeneration("Nothing");
+                        Main.instance.getConfigGestion().setChallengeGeneration("Nothing");
                         Main.instance.unregisterCurrentListener();
-                        Main.instance.getConfigGesture().getTasks().stopAllTasks();
+                        Main.instance.getConfigGestion().getTasks().stopAllTasks();
                         Main.instance.pluginStartingProcess();
                     }
                     // schedule help command
@@ -784,7 +784,7 @@ public class Commands implements CommandExecutor {
                 case "time":
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                                 sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
                                 sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
@@ -902,7 +902,7 @@ public class Commands implements CommandExecutor {
                 case "top":
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGesture().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
                                 sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
                                 sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
@@ -927,7 +927,7 @@ public class Commands implements CommandExecutor {
                     }
                     List<Challenger> top = new ArrayList<>();
                     if (args.length == 1) {
-                        if (Main.instance.getConfigGesture().isYesterdayTop()) {
+                        if (Main.instance.getConfigGestion().isYesterdayTop()) {
                             top = Main.db.getTopYesterday();
                         } else {
                             top = Main.instance.getDailyChallenge().getTopPlayers(numberOfTop);
@@ -942,7 +942,10 @@ public class Commands implements CommandExecutor {
                     MessageGesture.sendMessage(sender, actuallyInTop);
                     int i = 1;
                     for (Challenger challenger : top) {
-                        MessageGesture.sendMessage(sender, Main.instance.getConfigGesture().getMessages().get("topPlayers" + i).replace("{number}", "" + i).replace("{player}", challenger.getNomePlayer()).replace("{points}", MoneyUtils.transform(challenger.getPoints())));
+                        MessageGesture.sendMessage(sender, Main.instance.getConfigGestion().getMessages().get("TopPlayers" + i)
+                                .replace("{number}", "" + i)
+                                .replace("{player}", challenger.getNomePlayer())
+                                .replace("{points}", MoneyUtils.transform(challenger.getPoints())));
                         i++;
                     }
                     break;

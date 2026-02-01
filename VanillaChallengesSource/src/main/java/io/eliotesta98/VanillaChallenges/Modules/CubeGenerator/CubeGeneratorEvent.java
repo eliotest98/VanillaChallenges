@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 public class CubeGeneratorEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("BlockBreakEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("BlockBreakEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
 
     @EventHandler(priority = EventPriority.NORMAL)

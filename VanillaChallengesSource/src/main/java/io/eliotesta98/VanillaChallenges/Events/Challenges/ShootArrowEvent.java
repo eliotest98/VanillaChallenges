@@ -13,14 +13,22 @@ import org.bukkit.event.Listener;
 public class ShootArrowEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ShootArrowEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ShootArrowEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onShootEvent(org.bukkit.event.entity.EntityShootBowEvent e) {
         debugUtils = new DebugUtils(e);
         long tempo = System.currentTimeMillis();
+        if (!(e.getEntity() instanceof Player)) {
+            if (debugActive) {
+                debugUtils.addLine("Is not a player is a " + e.getEntity().getType());
+                debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
+                debugUtils.debug();
+            }
+            return;
+        }
         final String playerName = e.getEntity().getName();
         final String worldName = e.getEntity().getWorld().getName();
         final double forceShoot = e.getForce();
@@ -45,7 +53,7 @@ public class ShootArrowEvent implements Listener {
                 }
             }
 
-            if(!Controls.hasPermission(playerName)) {
+            if (!Controls.hasPermission(playerName)) {
                 return;
             }
 
@@ -61,10 +69,7 @@ public class ShootArrowEvent implements Listener {
                 return;
             }
 
-            Player p = Bukkit.getPlayer(playerName);
-            if (p != null) {
-                Main.instance.getDailyChallenge().increment(playerName, point);
-            }
+            Main.instance.getDailyChallenge().increment(playerName, point);
 
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));

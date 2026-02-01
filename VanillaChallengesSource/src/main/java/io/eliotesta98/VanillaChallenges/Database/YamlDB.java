@@ -322,7 +322,7 @@ public class YamlDB extends Database {
 
     @Override
     public void insertChallengeEvent(String challengeName, long timeResume) {
-        Challenge challenge = Main.instance.getConfigGesture().getChallengesEvent().get(challengeName).cloneChallenge();
+        Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challengeName).cloneChallenge();
         challenge.setChallengeName("Event_" + challengeName);
         challenge.setTimeChallenge(new Time(timeResume, ':'));
         addChallenge(challenge, 0);

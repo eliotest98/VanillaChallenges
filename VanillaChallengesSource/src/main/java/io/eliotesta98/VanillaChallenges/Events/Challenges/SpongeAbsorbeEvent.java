@@ -15,10 +15,10 @@ import java.util.HashMap;
 public class SpongeAbsorbeEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("SpongeAbsorbEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("SpongeAbsorbEvent");
     private final HashMap<String, String> players = new HashMap<>();
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(final org.bukkit.event.block.BlockPlaceEvent e) {

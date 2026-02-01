@@ -16,9 +16,9 @@ import java.util.HashMap;
 public class ColorSheepEvent implements Listener {
 
     private DebugUtils debugUtils;
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ColorSheepEvent");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ColorSheepEvent");
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     private final HashMap<Entity, String> sheepColored = new HashMap<>();
 

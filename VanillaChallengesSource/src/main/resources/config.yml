@@ -18,7 +18,7 @@ Configuration:
     # If you want to reset the player points at the end of every challenge
     ResetPointsAtNewChallenge: false
 
-    # If you want resume points without zero (Ex 1.000 = 1k)
+    # If you want resume points without zeros (Ex 1.000 = 1k)
     PointsResume: true
 
     # Points if remain online for x minutes

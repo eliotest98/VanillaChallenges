@@ -28,12 +28,12 @@ public class ItemCollector implements Listener {
 
     private static Database db;
     private final DebugUtils debugUtils = new DebugUtils("ItemCollector");
-    private final boolean debugActive = Main.instance.getConfigGesture().getDebug().get("ItemCollector");
-    private final String caseBroken = Main.instance.getConfigGesture().getMessages().get("Errors.CaseBroken");
+    private final boolean debugActive = Main.instance.getConfigGestion().getDebug().get("ItemCollector");
+    private final String caseBroken = Main.instance.getConfigGestion().getMessages().get("Errors.CaseBroken");
     private final List<String> items = Main.instance.getDailyChallenge().getItems();
     private final int point = Main.instance.getDailyChallenge().getPoint();
-    private final String errorAlreadyPlacedChest = Main.instance.getConfigGesture().getMessages().get("Errors.AlreadyPlacedChest");
-    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGesture().getHooks().get("SuperiorSkyblock2");
+    private final String errorAlreadyPlacedChest = Main.instance.getConfigGestion().getMessages().get("Errors.AlreadyPlacedChest");
+    private final boolean superiorSkyBlock2Enabled = Main.instance.getConfigGestion().getHooks().get("SuperiorSkyblock2");
 
     // timer del controllo punti
     final int number = 20 * 60 * 2;
@@ -58,7 +58,7 @@ public class ItemCollector implements Listener {
                     debugUtils.addLine("PlayerJoinName = " + playerName);
                 }
                 chestLocation.put(playerName, new Location(Bukkit.getWorld("world"), 0, -100, 0));
-                playerInventory.addItem(Main.instance.getConfigGesture().getChestCollection());
+                playerInventory.addItem(Main.instance.getConfigGestion().getChestCollection());
             }
             if (debugActive) {
                 debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
@@ -71,7 +71,7 @@ public class ItemCollector implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(org.bukkit.event.block.BlockPlaceEvent e) {
         long tempo = System.currentTimeMillis();
-        if (e.getBlockPlaced().getType() == Main.instance.getConfigGesture().getChestCollection().getType()) {
+        if (e.getBlockPlaced().getType() == Main.instance.getConfigGestion().getChestCollection().getType()) {
             if (debugActive) {
                 debugUtils.addLine("Player Place Block Name = " + e.getPlayer().getName());
             }
@@ -103,7 +103,7 @@ public class ItemCollector implements Listener {
     public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
         long tempo = System.currentTimeMillis();
         final Block block = e.getBlock();
-        if (block.getType() == Main.instance.getConfigGesture().getChestCollection().getType()) {
+        if (block.getType() == Main.instance.getConfigGestion().getChestCollection().getType()) {
             if (chestLocation.get(e.getPlayer().getName()) != null) {
                 Location loc = chestLocation.get(e.getPlayer().getName());
                 if (debugActive) {
@@ -124,13 +124,13 @@ public class ItemCollector implements Listener {
                         block.setType(Material.AIR);
                     }
                     chestLocation.replace(e.getPlayer().getName(), loc, new Location(Bukkit.getWorld("world"), 0, -100, 0));
-                    e.getPlayer().getInventory().addItem(Main.instance.getConfigGesture().getChestCollection());
+                    e.getPlayer().getInventory().addItem(Main.instance.getConfigGestion().getChestCollection());
                 }
             }
         }
         if (debugActive) {
             debugUtils.addLine("Break Block Type = " + block.getType());
-            debugUtils.addLine("Break Block Type Config = " + Main.instance.getConfigGesture().getChestCollection().getType());
+            debugUtils.addLine("Break Block Type Config = " + Main.instance.getConfigGestion().getChestCollection().getType());
             debugUtils.addLine("Player Name = " + e.getPlayer().getName());
             debugUtils.addLine("execution time= " + (System.currentTimeMillis() - tempo));
             debugUtils.debug();
@@ -145,14 +145,14 @@ public class ItemCollector implements Listener {
                     if (debugActive) {
                         debugUtils.addLine("Player Name = " + player.getName());
                     }
-                    if (Main.instance.getConfigGesture().getTasks().isChallengeStart()) {
+                    if (Main.instance.getConfigGestion().getTasks().isChallengeStart()) {
                         return;
                     }
                     if (chestLocation.get(player.getName()) != null) {
                         Location location = chestLocation.get(player.getName());
-                        if (location.getWorld() != null && location.getBlock().getType() == Main.instance.getConfigGesture().getChestCollection().getType()) {
+                        if (location.getWorld() != null && location.getBlock().getType() == Main.instance.getConfigGestion().getChestCollection().getType()) {
                             final String worldName = player.getWorld().getName();
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, () -> {
+                            Bukkit.getScheduler().runTask(Main.instance, () -> {
                                 Chest chest = (Chest) location.getBlock().getState();
                                 if (debugActive) {
                                     debugUtils.addLine("Chest Location = " + location);
@@ -216,11 +216,11 @@ public class ItemCollector implements Listener {
                 debugUtils.debug();
             }
         }, 0, number);
-        Main.instance.getConfigGesture().getTasks().addExternalTasks(task, "ItemCollector", false);
+        Main.instance.getConfigGestion().getTasks().addExternalTasks(task, "ItemCollector", false);
     }
 
     public void saveChests() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.instance, () -> {
+        Bukkit.getScheduler().runTaskTimer(Main.instance, () -> {
             ArrayList<String> chestBroken = new ArrayList<>();
             for (Map.Entry<String, Location> location : chestLocation.entrySet()) {
                 if (location.getValue().getWorld() == null) {
@@ -229,7 +229,7 @@ public class ItemCollector implements Listener {
                         MessageGesture.sendMessage(player, caseBroken);
                         db.deleteChest(player.getName());
                         chestBroken.add(location.getKey());
-                        player.getInventory().addItem(Main.instance.getConfigGesture().getChestCollection());
+                        player.getInventory().addItem(Main.instance.getConfigGestion().getChestCollection());
                     }
                 } else {
                     db.updateChest(location.getKey(), location.getValue());
