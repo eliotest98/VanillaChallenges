@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
+import com.HeroxWar.HeroxCore.TimeGesture.Date.Date;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
@@ -50,12 +51,21 @@ public class YamlDB extends Database {
                 for (String challenge : file.getConfigurationSection("Challenges").getKeys(false)) {
                     Challenge challengeDB = new Challenge();
                     challengeDB.setChallengeName(challenge);
-                    long timeResume = file.getInt("Challenges." + challenge);
-                    // TODO to remove (this is for servers with hours configured Ex. 19)
-                    if (timeResume < 1000) {
-                        timeResume = timeResume * 60 * 60 * 1000;
+                    // TODO da eliminare e rimanere l'else
+                    if (!file.isConfigurationSection("Challenges." + challenge)) {
+                        long timeResume = file.getInt("Challenges." + challenge);
+                        long date = 0;
+                        challengeDB.setTimeChallenge(new Time(timeResume, ':'));
+                        challengeDB.setDate(new Date('.', date));
+                        file.set("Challenges." + challenge + ".Time", timeResume);
+                        file.set("Challenges." + challenge + ".Date", date);
+                        saveFile();
+                    } else {
+                        long timeResume = file.getInt("Challenges." + challenge + ".Time");
+                        long date = file.getLong("Challenges." + challenge + ".Date");
+                        challengeDB.setTimeChallenge(new Time(timeResume, ':'));
+                        challengeDB.setDate(new Date('.', date));
                     }
-                    challengeDB.setTimeChallenge(new Time(timeResume, ':'));
                     addChallenge(challengeDB);
                 }
                 for (String number : file.getConfigurationSection("DailyWinners").getKeys(false)) {
@@ -101,12 +111,21 @@ public class YamlDB extends Database {
                 for (String challenge : file.getConfigurationSection("Challenges").getKeys(false)) {
                     Challenge challengeDB = new Challenge();
                     challengeDB.setChallengeName(challenge);
-                    long timeResume = file.getInt("Challenges." + challenge);
-                    // TODO to remove (this is for servers with hours configured Ex. 19)
-                    if (timeResume < 1000) {
-                        timeResume = timeResume * 60 * 60 * 1000;
+                    // TODO da eliminare e rimanere l'else
+                    if (!file.isConfigurationSection("Challenges." + challenge)) {
+                        long timeResume = file.getInt("Challenges." + challenge);
+                        long date = 0;
+                        challengeDB.setTimeChallenge(new Time(timeResume, ':'));
+                        challengeDB.setDate(new Date('.', date));
+                        file.set("Challenges." + challenge + ".Time", timeResume);
+                        file.set("Challenges." + challenge + ".Date", date);
+                        saveFile();
+                    } else {
+                        long timeResume = file.getInt("Challenges." + challenge + ".Time");
+                        long date = file.getLong("Challenges." + challenge + ".Date");
+                        challengeDB.setTimeChallenge(new Time(timeResume, ':'));
+                        challengeDB.setDate(new Date('.', date));
                     }
-                    challengeDB.setTimeChallenge(new Time(timeResume, ':'));
                     addChallenge(challengeDB);
                 }
             }
@@ -161,7 +180,8 @@ public class YamlDB extends Database {
     @Override
     public void saveChallenges() {
         for (Challenge challenge : getChallenges()) {
-            file.set("Challenges." + challenge.getChallengeName(), challenge.getTimeChallenge().getMilliseconds());
+            file.set("Challenges." + challenge.getChallengeName() + ".Time", challenge.getTimeChallenge().getMilliseconds());
+            file.set("Challenges." + challenge.getChallengeName() + ".Date", challenge.getDate().getMilliseconds());
         }
         saveFile();
     }
@@ -210,7 +230,7 @@ public class YamlDB extends Database {
 
     @Override
     public void updateChallenge(String nomeChallenge, long timeRemain) {
-        file.set("Challenges." + nomeChallenge, timeRemain);
+        file.set("Challenges." + nomeChallenge + ".Time", timeRemain);
         updateChallengeTime(nomeChallenge, timeRemain);
         saveFile();
     }
@@ -257,8 +277,9 @@ public class YamlDB extends Database {
     }
 
     @Override
-    public void insertChallenge(String challengeName, long timeResume) {
-        file.set("Challenges." + challengeName, timeResume);
+    public void insertChallenge(String challengeName, long timeResume, long date) {
+        file.set("Challenges." + challengeName + ".Time", timeResume);
+        file.set("Challenges." + challengeName + ".Date", date);
         saveFile();
     }
 
@@ -321,14 +342,15 @@ public class YamlDB extends Database {
     }
 
     @Override
-    public void insertChallengeEvent(String challengeName, long timeResume) {
+    public void insertChallengeEvent(String challengeName, long timeResume, long date) {
         Challenge challenge = Main.instance.getConfigGestion().getChallengesEvent().get(challengeName).cloneChallenge();
         challenge.setChallengeName("Event_" + challengeName);
         challenge.setTimeChallenge(new Time(timeResume, ':'));
+        challenge.setDate(new Date('.', date));
         addChallenge(challenge, 0);
         clearChallengesFromFile();
         for (Challenge challenge1 : getChallenges()) {
-            insertChallenge(challenge1.getChallengeName(), challenge1.getTimeChallenge().getMilliseconds());
+            insertChallenge(challenge1.getChallengeName(), challenge1.getTimeChallenge().getMilliseconds(), challenge1.getDate().getMilliseconds());
         }
         saveFile();
     }

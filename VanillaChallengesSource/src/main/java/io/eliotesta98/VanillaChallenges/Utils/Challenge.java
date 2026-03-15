@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
 import com.HeroxWar.HeroxCore.MessageGesture;
+import com.HeroxWar.HeroxCore.TimeGesture.Date.Date;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
@@ -56,6 +57,7 @@ public class Challenge {
     private int pointsBoostSinglePlayer = 0;
     private int multiplierSinglePlayer = 1;
     private int minutesSinglePlayer = 0;
+    private Date date = new Date();
     private Time timeChallenge = new Time();
     private String endTimeChallenge = "24:00";
     private String nameChallenge = "NOBODY";
@@ -226,6 +228,14 @@ public class Challenge {
 
     public String getChallengeName() {
         return challengeName;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public void setChallengeName(String challengeName) {
@@ -612,6 +622,7 @@ public class Challenge {
                 ", tasksSinglePlayers=" + tasksSinglePlayers +
                 ", worlds=" + worlds +
                 ", challengeName='" + challengeName + '\'' +
+                ", itemChallenge='" + itemChallenge + '\'' +
                 ", blocks=" + blocks +
                 ", blocksOnPlaced=" + blocksOnPlaced +
                 ", typeChallenge='" + typeChallenge + '\'' +
@@ -639,7 +650,9 @@ public class Challenge {
                 ", pointsBoostSinglePlayer=" + pointsBoostSinglePlayer +
                 ", multiplierSinglePlayer=" + multiplierSinglePlayer +
                 ", minutesSinglePlayer=" + minutesSinglePlayer +
+                ", date=" + date +
                 ", timeChallenge=" + timeChallenge +
+                ", endTimeChallenge='" + endTimeChallenge + '\'' +
                 ", nameChallenge='" + nameChallenge + '\'' +
                 ", deathInLand=" + deathInLand +
                 ", countPointsChallenge=" + countPointsChallenge +
@@ -959,6 +972,26 @@ public class Challenge {
             Main.db.setPeacefulTime(Main.instance.getConfigGestion().getCooldown().cloneTime());
         }
         Main.instance.pluginStartingProcess();
+    }
+
+    public String encodeNbts() {
+        return "vc.challengeName=" + getChallengeName() +
+                ";vc.challengeTime=" + getTimeChallenge().getTime() +
+                ";vc.challengeDate=" + getDate().getDate() +
+                ";vc.challengeDescription=" + getTitle() +
+                ";vc.challengePoint=" + getPoint() +
+                ";vc.challengeItemsInHand=" + getItemsInHand() +
+                ";vc.challengeWords=" + getWorlds() +
+                ";vc.challengeBlocks=" + getBlocks() +
+                ";vc.challengeRewards=" + getRewards() +
+                ";vc.challengeSneaking=" + getSneaking() +
+                ";vc.challengeBlocksOnPlace=" + getBlocksOnPlace() +
+                ";vc.challengeVehicles=" + getVehicle() +
+                ";vc.challengeMobs=" + getMobs() +
+                ";vc.challengeItems=" + getItems() +
+                ";vc.challengeCauses=" + getCauses() +
+                ";vc.challengeColors=" + getColors() +
+                ";vc.challengeItem=" + getItemChallenge();
     }
 
     public Challenge cloneChallenge(String challengeDuration) {

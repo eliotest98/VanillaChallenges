@@ -140,6 +140,8 @@ public class Tasks {
             @Override
             public void run() {
                 Time time = Main.instance.getDailyChallenge().getTimeChallenge();
+                com.HeroxWar.HeroxCore.TimeGesture.Date.Date date = Main.instance.getDailyChallenge().getDate();
+                com.HeroxWar.HeroxCore.TimeGesture.Date.Date today = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date();
                 if (firstTime) {
                     firstTime = false;
                     checkStart.cancel();
@@ -152,10 +154,18 @@ public class Tasks {
                     }
                     Main.instance.getDailyChallenge().setTimeChallenge(time.differenceBetween(new Time(0, 0, 0, 1, ':')));
                 }
+                boolean adjust = Main.instance.getConfigGestion().isAdjustTime();
+                if(adjust) {
+                    if(date.getDay() != today.getDay()) {
+                        Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Day is finished", false);
+                    }
+
+                }
             }
         }, 0, 20L);
         tasks.add(task);
     }
+
 
     public void peacefulTimeTask() {
         this.peacefulTask = Bukkit.getScheduler().runTaskTimer(Main.instance, () -> {

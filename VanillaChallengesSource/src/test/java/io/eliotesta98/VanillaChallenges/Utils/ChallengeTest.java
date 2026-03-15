@@ -1,5 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
+import com.HeroxWar.HeroxCore.TimeGesture.Date.Date;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
@@ -581,7 +582,7 @@ public class ChallengeTest {
                 false, 4, 3,
                 "", false);
         String challengeName = currentChallenge.getChallengeName();
-        plugin.db.insertChallengeEvent(challengeName, 10000);
+        plugin.db.insertChallengeEvent(challengeName, 10000, new Date().getMilliseconds());
 
         currentChallenge = plugin.getDailyChallenge();
         Assertions.assertEquals("Dyer", currentChallenge.getChallengeName());

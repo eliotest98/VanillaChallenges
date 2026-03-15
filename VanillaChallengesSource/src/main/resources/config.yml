@@ -13,6 +13,12 @@ Configuration:
   # Nothing: if you don''t want a scheduler
   ChallengeGeneration: 'Normal'
 
+  # If you want challenge start and finish in the same day
+  # In this case the time of challenge will be adjusted to the current time
+  # If the date is not the same registered in the database the challenge will be skipped and the next one will start
+  # If you want to adjust the time with the provided commands pay attention at this feature!
+  AdjustTime: false
+
   # Points Gesture
   Points:
     # If you want to reset the player points at the end of every challenge
@@ -141,7 +147,7 @@ Interfaces:
           - '&7&oBlocks: {challengeBlocks}.&f * {block}'
           - '&7&oItems in hand: {challengeItemsInHand}.&f * {item}'
           - '&7&oSneaking: &f{challengeSneaking}'
-          - '&7&oBlocks On Place: {challengeBlocksOnPlane}.&f * {block}'
+          - '&7&oBlocks On Place: {challengeBlocksOnPlace}.&f * {block}'
           - '&7&oVehicles: {challengeVehicles}.&f * {vehicle}'
           - '&7&oMobs: {challengeMobs}.&f * {mob}'
           - '&7&oItems: {challengeItems}.&f * {item}'
@@ -175,7 +181,7 @@ Interfaces:
         Type: 'PLAYER_HEAD'
         Texture: '' # set to '' to disable
         Lore:
-          - '&7&oTime Duration: &f{time}'
+          - '&7&oHypothetical Start Date: &f{date}'
           - '&7&oDescription: &f{challengeDescription}'
           - '&7&oPoints: &f{challengePoint}'
           - '&7&oWords: {words}.&f * {word}'
@@ -183,7 +189,7 @@ Interfaces:
           - '&7&oBlocks: {challengeBlocks}.&f * {block}'
           - '&7&oItems in hand: {challengeItemsInHand}.&f * {item}'
           - '&7&oSneaking: &f{challengeSneaking}'
-          - '&7&oBlocks On Place: {challengeBlocksOnPlane}.&f * {block}'
+          - '&7&oBlocks On Place: {challengeBlocksOnPlace}.&f * {block}'
           - '&7&oVehicles: {challengeVehicles}.&f * {vehicle}'
           - '&7&oMobs: {challengeMobs}.&f * {mob}'
           - '&7&oItems: {challengeItems}.&f * {item}'

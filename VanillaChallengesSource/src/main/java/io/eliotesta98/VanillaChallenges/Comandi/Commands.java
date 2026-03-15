@@ -328,8 +328,9 @@ public class Commands implements CommandExecutor {
                         }
                         String challengeName = challengeSelected.getChallengeName();
                         long milliseconds = challengeSelected.getTimeChallenge().getMilliseconds();
+                        long date = challengeSelected.getDate().getMilliseconds();
                         Bukkit.getScheduler().runTask(Main.instance, () -> {
-                            Main.db.insertChallengeEvent(challengeName, milliseconds);
+                            Main.db.insertChallengeEvent(challengeName, milliseconds, date);
                             if (Main.challengeSelected) {
                                 Main.db.saveOldPointsForChallengeEvents();
                                 Main.instance.getDailyChallenge().clearPlayers();
@@ -359,8 +360,9 @@ public class Commands implements CommandExecutor {
                         }
                         String challengeName = challengeSelected.getChallengeName();
                         long milliseconds = challengeSelected.getTimeChallenge().getMilliseconds();
+                        long date = challengeSelected.getDate().getMilliseconds();
                         Bukkit.getScheduler().runTask(Main.instance, () -> {
-                            Main.db.insertChallengeEvent(challengeName, milliseconds);
+                            Main.db.insertChallengeEvent(challengeName, milliseconds, date);
                             if (Main.challengeSelected) {
                                 Main.db.saveOldPointsForChallengeEvents();
                                 Main.instance.getDailyChallenge().clearPlayers();
@@ -591,7 +593,7 @@ public class Commands implements CommandExecutor {
                     YamlConfiguration file = YamlConfiguration.loadConfiguration(configFile);
                     if (file.getConfigurationSection("Challenges") != null) {
                         for (String challenge : file.getConfigurationSection("Challenges").getKeys(true)) {
-                            Main.db.insertChallenge(challenge, file.getInt("Challenges." + challenge));
+                            Main.db.insertChallenge(challenge, file.getInt("Challenges." + challenge + ".Time"), file.getLong("Challenges." + challenge + ".Date"));
                         }
                     }
                     if (file.getConfigurationSection("Points") != null) {
@@ -714,7 +716,7 @@ public class Commands implements CommandExecutor {
                                 Challenge challengeSelected = finalChallenge;
                                 Bukkit.getScheduler().runTask(Main.instance, () -> {
                                     Main.db.addChallenge(challengeSelected);
-                                    Main.db.insertChallenge(challengeSelected.getChallengeName(), challengeSelected.getTimeChallenge().getMilliseconds());
+                                    Main.db.insertChallenge(challengeSelected.getChallengeName(), challengeSelected.getTimeChallenge().getMilliseconds(), challengeSelected.getDate().getMilliseconds());
                                     MessageGesture.sendMessage(sender, addSuccess);
                                     if (Main.challengeSelected) {
                                         Main.instance.getDailyChallenge().clearPlayers();

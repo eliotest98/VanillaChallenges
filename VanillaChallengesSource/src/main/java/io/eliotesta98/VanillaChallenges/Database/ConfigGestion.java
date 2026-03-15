@@ -23,7 +23,7 @@ public class ConfigGestion extends DefaultGestion {
     private final Map<String, Challenge> challengesEvent = new HashMap<>();
     private final Map<String, Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, rankingReward, yesterdayTop, resetPointsAtNewChallenge,
-            backupEnabled, pointsResume, lockedInterface, randomReward = false;
+            backupEnabled, pointsResume, lockedInterface, adjustTime, randomReward = false;
     private String challengeGeneration, url, username, password, mySqlPrefix, database, permissionPointsGive;
     private int timeBroadcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup,
             numberOfRewardPlayer, minimumPoints, number, numberOfTop;
@@ -385,6 +385,7 @@ public class ConfigGestion extends DefaultGestion {
 
         Main.instance.getServer().getConsoleSender().sendMessage("§a" + challengesEvent.size() + " Event Challenges loaded!");
 
+        adjustTime = fileConfiguration.getBoolean("Configuration.AdjustTime");
         numberOfRewardPlayer = fileConfiguration.getInt("Configuration.Top.NumberOfReward");
         timeBroadcastMessageTitle = fileConfiguration.getInt("Configuration.BroadcastMessage.TimeTitleChallenges");
         lockedInterface = fileConfiguration.getBoolean("Configuration.LockedInterface");
@@ -470,7 +471,7 @@ public class ConfigGestion extends DefaultGestion {
                         contaSlots.size(), nameInterface, "", "Generator");
             } else {*/
             customInterface = new Interface(title, openSound, slots, itemsConfig, getDebug().get("ClickGui"),
-                    contaSlots.size(), nameInterface, "", "");
+                    contaSlots.size(), nameInterface, "", "", lockedInterface);
             //}
             interfaces.put(nameInterface, customInterface);
         }
@@ -644,5 +645,14 @@ public class ConfigGestion extends DefaultGestion {
     public void setChallengeGeneration(String challengeGeneration) {
         this.challengeGeneration = challengeGeneration;
         saveSection("Configuration.ChallengeGeneration", challengeGeneration);
+    }
+
+    public void setAdjustTime(boolean adjustTime) {
+        this.adjustTime = adjustTime;
+        saveSection("Configuration.AdjustTime", adjustTime);
+    }
+
+    public boolean isAdjustTime() {
+        return adjustTime;
     }
 }
