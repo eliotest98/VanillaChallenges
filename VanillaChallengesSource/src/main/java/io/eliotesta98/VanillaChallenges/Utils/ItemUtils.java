@@ -1,7 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
-import com.HeroxWar.HeroxCore.MessageGesture;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import io.eliotesta98.VanillaChallenges.Core.Main;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,10 +17,10 @@ public class ItemUtils {
         chest = new ItemStack(Material.getMaterial(type), 1, (short) 0);
         ItemMeta itemm = chest.getItemMeta();
         // setto il nome
-        itemm.setDisplayName(MessageGesture.applyColor(name));
+        itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(name));
         ArrayList<String> newLore = new ArrayList<>();
         for (String s : lore) {
-            newLore.add(MessageGesture.applyColor(s));
+            newLore.add(Main.messageGesturePaper.applyColorLegacy(s));
         }
         itemm.setLore(newLore);
         chest.setItemMeta(itemm);

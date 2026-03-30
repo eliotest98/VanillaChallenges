@@ -70,7 +70,7 @@ public class ChatEvent implements Listener {
         if (e.getMessage().equalsIgnoreCase(word)) {
             Main.instance.getDailyChallenge().increment(e.getPlayer().getName(), (long) point * word.length());
             for (Player p : Bukkit.getOnlinePlayers()) {
-                MessageGesture.sendMessage(p,correctAnswer.replace("{player}", e.getPlayer().getName()));
+                Main.messageGesturePaper.sendMessage(p,correctAnswer.replace("{player}", e.getPlayer().getName()));
             }
             if (debugActive) {
                 debugUtils.addLine("add " + (point * word.length()) + " points at " + e.getPlayer().getName());
@@ -98,9 +98,9 @@ public class ChatEvent implements Listener {
             generateWord();
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!quest.equalsIgnoreCase("")) {
-                    MessageGesture.sendMessage(p,quest);
+                    Main.messageGesturePaper.sendMessage(p,quest);
                 } else {
-                    MessageGesture.sendMessage(p,message.replace("{points}", (word.length() * point) + "").replace("{word}", word));
+                    Main.messageGesturePaper.sendMessage(p,message.replace("{points}", (word.length() * point) + "").replace("{word}", word));
                 }
             }
         }, 0, time);

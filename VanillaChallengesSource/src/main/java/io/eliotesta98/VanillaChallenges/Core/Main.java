@@ -1,6 +1,6 @@
 package io.eliotesta98.VanillaChallenges.Core;
 
-import com.HeroxWar.HeroxCore.MessageGesture;
+import com.HeroxWar.HeroxCore.MessageGesturePaper;
 import com.HeroxWar.HeroxCore.ReloadGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import com.HeroxWar.HeroxCore.Utils.Library;
@@ -21,14 +21,16 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.*;
 import org.bukkit.configuration.file.*;
-import io.eliotesta98.VanillaChallenges.Comandi.Commands;
+import io.eliotesta98.VanillaChallenges.Commands.Commands;
 import io.eliotesta98.VanillaChallenges.Utils.*;
+
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
 import org.bukkit.*;
 
 public class Main extends JavaPlugin {
@@ -41,6 +43,7 @@ public class Main extends JavaPlugin {
     public static Listener currentListener = null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
     public static Version version;
+    public static MessageGesturePaper messageGesturePaper;
 
     @Override
     public void onLoad() {
@@ -56,24 +59,31 @@ public class Main extends JavaPlugin {
 
         new Metrics(this, 17661);
 
-        getServer().getConsoleSender()
-                .sendMessage("\n\n\n§a ___ ___                __  __  __          ______  __            __  __                                    \n" +
-                        "§a|   |   |.---.-..-----.|__||  ||  |.---.-. |      ||  |--..---.-.|  ||  |.-----..-----..-----..-----..-----.\n" +
-                        "§a|   |   ||  _  ||     ||  ||  ||  ||  _  | |   ---||     ||  _  ||  ||  ||  -__||     ||  _  ||  -__||__ --|\n" +
-                        "§a \\_____/ |___._||__|__||__||__||__||___._| |______||__|__||___._||__||__||_____||__|__||___  ||_____||_____|\n" +
-                        "§a                                                                                       |_____|              \n"
-                        + "§a  \r\n" + "§a  \r\n" + "§e  Version " + getDescription().getVersion() + " \r\n"
-                        + "§e© Developed by §feliotesta98 & xSavior_of_God §ewith §4<3 \r\n \r\n \r\n");
+        messageGesturePaper = new MessageGesturePaper(
+                instance.getName(), "VanillaChallenges",
+                true, false, this);
+
+        messageGesturePaper.sendMessage("\n\n\n&a ___ ___                __  __  __          ______  __            __  __                                    \n" +
+                        "&a|   |   |.---.-..-----.|__||  ||  |.---.-. |      ||  |--..---.-.|  ||  |.-----..-----..-----..-----..-----.\n" +
+                        "&a|   |   ||  _  ||     ||  ||  ||  ||  _  | |   ---||     ||  _  ||  ||  ||  -__||     ||  _  ||  -__||__ --|\n" +
+                        "&a \\_____/ |___._||__|__||__||__||__||___._| |______||__|__||___._||__||__||_____||__|__||___  ||_____||_____|\n" +
+                        "&a                                                                                       |_____|              \n"
+                        + "&a  \r\n" + "&a  \r\n" + "&e  Version " + getDescription().getVersion() + " \r\n"
+                        + "&e© Developed by &feliotesta98 & xSavior_of_God &ewith &4<3 \r\n \r\n \r\n");
 
         if (version.isInRange(8, 12)) {
-            this.getServer().getConsoleSender().sendMessage("§6Server version registered < 1.13");
+            messageGesturePaper.sendMessage("&6Server version registered < 1.13");
         } else {
-            this.getServer().getConsoleSender().sendMessage("§6Server version registered > 1.12");
+            messageGesturePaper.sendMessage("&6Server version registered > 1.12");
         }
 
-        this.getServer().getConsoleSender().sendMessage("§6Loading config...");
+        messageGesturePaper.sendMessage("&6Loading config...");
 
         config = new ConfigGestion(this.getDataFolder().getPath(), "config.yml");
+
+        messageGesturePaper = new MessageGesturePaper(
+                instance.getName(), config.getMessages().get("Prefix"),
+                true, false, this);
 
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
         getServer().getScheduler().runTask(this, () -> {
@@ -81,15 +91,18 @@ public class Main extends JavaPlugin {
                 if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
                     Main.EPAPI = new ExpansionPlaceholderAPI().getInstance();
                     Main.EPAPI.register();
-                    Bukkit.getServer().getConsoleSender().sendMessage(
+                    messageGesturePaper.sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fPlaceholderApi&a!"));
+                    messageGesturePaper = new MessageGesturePaper(
+                            instance.getName(), config.getMessages().get("Prefix"),
+                            true, true, this);
                 }
             } else {
                 getConfigGestion().getHooks().replace("PlaceholderAPI", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("CubeGenerator")) {
                 if (getConfigGestion().getHooks().get("CubeGenerator")) {
-                    Bukkit.getServer().getConsoleSender().sendMessage(
+                    messageGesturePaper.sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fCubeGenerator&a!"));
                 }
             } else {
@@ -97,7 +110,7 @@ public class Main extends JavaPlugin {
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
                 if (getConfigGestion().getHooks().get("GriefPrevention")) {
-                    Bukkit.getServer().getConsoleSender().sendMessage(
+                    messageGesturePaper.sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fGriefPrevention&a!"));
                 }
             } else {
@@ -105,7 +118,7 @@ public class Main extends JavaPlugin {
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
                 if (getConfigGestion().getHooks().get("Tombs")) {
-                    Bukkit.getServer().getConsoleSender().sendMessage(
+                    messageGesturePaper.sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fTombs&a!"));
                 }
             } else {
@@ -113,7 +126,7 @@ public class Main extends JavaPlugin {
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Lands")) {
                 if (getConfigGestion().getHooks().get("Lands")) {
-                    Bukkit.getServer().getConsoleSender().sendMessage(
+                    messageGesturePaper.sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
                     LandsUtils.setLandsIntegration();
                 }
@@ -122,7 +135,7 @@ public class Main extends JavaPlugin {
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
                 if (getConfigGestion().getHooks().get("WorldGuard")) {
-                    Bukkit.getServer().getConsoleSender().sendMessage(
+                    messageGesturePaper.sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fWorldGuard&a!"));
                 }
             } else {
@@ -130,20 +143,20 @@ public class Main extends JavaPlugin {
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("SuperiorSkyblock2")) {
                 if (getConfigGestion().getHooks().get("SuperiorSkyblock2")) {
-                    Bukkit.getServer().getConsoleSender().sendMessage(
+                    messageGesturePaper.sendMessage(
                             ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fSuperiorSkyblock2&a!"));
                 }
             } else {
                 getConfigGestion().getHooks().replace("SuperiorSkyblock2", false);
             }
         });
-        getServer().getConsoleSender().sendMessage("§aConfiguration Loaded!");
-        getServer().getConsoleSender().sendMessage("§6Connection to database!");
+        messageGesturePaper.sendMessage("&aConfiguration Loaded!");
+        messageGesturePaper.sendMessage("&6Connection to database!");
         if (getConfigGestion().getDatabase().equalsIgnoreCase("H2")) {
             try {
                 db = new H2Database(getDataFolder().getAbsolutePath());
             } catch (Exception e) {
-                getServer().getConsoleSender().sendMessage("§cTry to restore the database");
+                messageGesturePaper.sendMessage("&cTry to restore the database");
                 restoreDatabase();
                 logger.log(Level.WARNING, e.getMessage());
                 return;
@@ -152,17 +165,17 @@ public class Main extends JavaPlugin {
             try {
                 db = new MySql(config.getUrl());
             } catch (SQLException e) {
-                Main.instance.getServer().getConsoleSender().sendMessage("§cError Database not connected!");
+                messageGesturePaper.sendMessage("&cError Database not connected!");
                 logger.log(Level.SEVERE, e.getMessage());
                 Main.instance.onDisable();
             }
         } else {
             db = new YamlDB();
         }
-        getServer().getConsoleSender().sendMessage("§aDatabase connected!");
+        messageGesturePaper.sendMessage("&aDatabase connected!");
         new UpdateChecker(instance, 101426).getVersion(version1 -> {
             if (!instance.getDescription().getVersion().equals(version1)) {
-                getServer().getConsoleSender().sendMessage(ChatColor.RED + "New Update available for VanillaChallenges!");
+                messageGesturePaper.sendMessage(ChatColor.RED + "New Update available for VanillaChallenges!");
             }
         });
 
@@ -181,7 +194,7 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         DebugUtils debugSystem = new DebugUtils("Disabled");
         long tempo = System.currentTimeMillis();
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "VanillaChallenges has been disabled, §cBye bye! §e:(");
+        messageGesturePaper.sendMessage(ChatColor.GREEN + "VanillaChallenges has been disabled, &cBye bye! &e:(");
         config.getTasks().stopAllTasks();
         if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
             try {
@@ -225,19 +238,19 @@ public class Main extends JavaPlugin {
         boolean oldVersion = version.isInRange(8, 16);
 
         if (oldVersion) {
-            Bukkit.getConsoleSender().sendMessage("Loading legacy libraries...");
+            messageGesturePaper.sendMessage("Loading legacy libraries...");
             Reader targetReader = new InputStreamReader(getResource("plugin.yml"));
 
             YamlConfiguration pluginFile = YamlConfiguration.loadConfiguration(targetReader);
             for (final String libraryPath : pluginFile.getStringList("legacy-libraries")) {
                 final Library library = Library.fromMavenRepo(libraryPath);
-                Bukkit.getConsoleSender().sendMessage("Loading library " + libraryPath);
+                messageGesturePaper.sendMessage("Loading library " + libraryPath);
                 libraries.add(library);
             }
 
             for (final Library library : libraries)
                 library.load(Main.class.getClassLoader());
-            Bukkit.getConsoleSender().sendMessage("Legacy libraries loaded!");
+            messageGesturePaper.sendMessage("Legacy libraries loaded!");
         }
     }
 
@@ -245,9 +258,9 @@ public class Main extends JavaPlugin {
         File db = new File(Main.instance.getDataFolder(), "vanillachallenges.mv.db");
         File dbNew = new File(Main.instance.getDataFolder(), "vanillachallengesOld.mv.db");
         if (db.renameTo(dbNew)) {
-            getServer().getConsoleSender().sendMessage("§cOlder Database Successfully Renamed");
+            messageGesturePaper.sendMessage("&cOlder Database Successfully Renamed");
         } else {
-            getServer().getConsoleSender().sendMessage("§cOlder Database Not Successfully Deleted");
+            messageGesturePaper.sendMessage("&cOlder Database Not Successfully Deleted");
             onDisable();
             return;
         }
@@ -268,10 +281,15 @@ public class Main extends JavaPlugin {
         // if the peacefulTime is finish
         if (!peacefullTime) {
             // select a challenge
-            typeChallenge = db.insertDailyChallenges();
+            db.insertDailyChallenges();
+            if(getDailyChallenge() != null) {
+                typeChallenge = getDailyChallenge().getTypeChallenge();
+            }
         } else {
             config.getTasks().peacefulTimeTask();
         }
+        System.out.println(getDailyChallenge().getTimeChallenge());
+        System.out.println(typeChallenge);
 
         if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
             currentListener = new BlockPlaceEvent();
@@ -371,7 +389,7 @@ public class Main extends JavaPlugin {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
             } else {
                 Time time = Main.db.getPeacefulTime();
-                MessageGesture.sendMessage(Bukkit.getConsoleSender(), config.getMessages().get("Cooldown")
+                messageGesturePaper.sendMessage(Bukkit.getConsoleSender(), config.getMessages().get("Cooldown")
                         .replace("{hours}", time.getHours() + "")
                         .replace("{minutes}", time.getMinutes() + "")
                         .replace("{seconds}", time.getSeconds() + ""));

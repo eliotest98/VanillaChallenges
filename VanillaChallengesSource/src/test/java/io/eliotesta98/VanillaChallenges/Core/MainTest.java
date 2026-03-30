@@ -168,7 +168,7 @@ public class MainTest {
         plugin.getConfigGestion().setChallengeGeneration("Single");
         plugin.setConfigGestion(new ConfigGestion(plugin.getDataFolder().getPath(), "config.yml"));
         plugin.pluginStartingProcess();
-        Assertions.assertEquals(0, plugin.db.getChallenges().size());
+        Assertions.assertEquals(1, plugin.db.getChallenges().size());
         plugin.getDailyChallenge().nextChallenge(
                 false, false,
                 false, 3,

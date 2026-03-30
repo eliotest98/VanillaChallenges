@@ -60,7 +60,7 @@ public class DailyGiveWinners implements Listener {
                             try {
                                 String[] splitItem = reward[0].split("-");
                                 item = new ItemStack(Material.getMaterial(splitItem[0]), 1, Short.parseShort(splitItem[1]));
-                                MessageGesture.sendMessage(player,challengeReward.replace("{number}", reward[1]).replace("{item}", splitItem[0] + "-" + splitItem[1]));
+                                Main.messageGesturePaper.sendMessage(player,challengeReward.replace("{number}", reward[1]).replace("{item}", splitItem[0] + "-" + splitItem[1]));
                             } catch (IllegalArgumentException exception) {
                                 Bukkit.getScheduler().runTask(Main.instance, () -> {
                                     Main.db.deleteDailyWinnerWithId(winner.getId());
@@ -70,7 +70,7 @@ public class DailyGiveWinners implements Listener {
                         } else {
                             try {
                                 item = new ItemStack(Material.getMaterial(reward[0]));
-                                MessageGesture.sendMessage(player,challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0]));
+                                Main.messageGesturePaper.sendMessage(player,challengeReward.replace("{number}", reward[1]).replace("{item}", reward[0]));
                             } catch (IllegalArgumentException exception) {
                                 Bukkit.getScheduler().runTask(Main.instance, () -> {
                                     Main.db.deleteDailyWinnerWithId(winner.getId());
@@ -83,7 +83,7 @@ public class DailyGiveWinners implements Listener {
                         Bukkit.getScheduler().runTask(Main.instance, () -> {
                             if (player.getInventory().firstEmpty() != -1) {
                                 player.getInventory().addItem(finalItem);
-                                MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + finalItem);
+                                Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + finalItem);
                                 Main.db.deleteDailyWinnerWithId(winner.getId());
                             }
                         });
@@ -108,7 +108,7 @@ public class DailyGiveWinners implements Listener {
                         Bukkit.getScheduler().runTask(Main.instance, () -> {
                             String commandRefact = finalCommandRefactor.replace("%player%", player.getName());
                             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandRefact);
-                            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + commandRefact);
+                            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + commandRefact);
                             Main.db.deleteDailyWinnerWithId(winner.getId());
                         });
                     }

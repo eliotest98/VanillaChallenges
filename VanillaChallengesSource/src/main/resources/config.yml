@@ -139,7 +139,7 @@ Interfaces:
         Type: 'PLAYER_HEAD'
         Texture: '' # set to '' to disable
         Lore:
-          - '&7&oTime Duration: &f{time}'
+          - '&7&oDate: &f{date}'
           - '&7&oDescription: &f{challengeDescription}'
           - '&7&oPoints: &f{challengePoint}'
           - '&7&oWords: {words}.&f * {word}'

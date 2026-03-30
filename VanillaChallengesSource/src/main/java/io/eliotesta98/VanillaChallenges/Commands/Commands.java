@@ -1,6 +1,5 @@
-package io.eliotesta98.VanillaChallenges.Comandi;
+package io.eliotesta98.VanillaChallenges.Commands;
 
-import com.HeroxWar.HeroxCore.MessageGesture;
 import com.HeroxWar.HeroxCore.ReloadGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
@@ -84,7 +83,7 @@ public class Commands implements CommandExecutor {
             DebugUtils debug = new DebugUtils("Commands");
             long tempo = System.currentTimeMillis();
             if (!command.getName().equalsIgnoreCase("vanillachallenges")) {// comando se esiste
-                MessageGesture.sendMessage(sender, errorCommandNotFound);
+                Main.messageGesturePaper.sendMessage(sender, errorCommandNotFound);
                 if (debugCommand) {
                     debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                     debug.debug();
@@ -132,7 +131,7 @@ public class Commands implements CommandExecutor {
                 }
                 finale = finale + "&r\n";
                 finale = finale + commandFooter;
-                MessageGesture.sendMessage(sender, finale);
+                Main.messageGesturePaper.sendMessage(sender, finale);
                 if (debugCommand) {
                     debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                     debug.debug();
@@ -143,7 +142,7 @@ public class Commands implements CommandExecutor {
             switch (args[0]) {
                 case "add":
                     if (!sender.hasPermission("vc.add.command")) {
-                        MessageGesture.sendMessage(sender, errorNoPerms);
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (!Main.challengeSelected) {
@@ -155,7 +154,7 @@ public class Commands implements CommandExecutor {
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
-                            MessageGesture.sendMessage(sender, cooldown
+                            Main.messageGesturePaper.sendMessage(sender, cooldown
                                     .replace("{hours}", time.getHours() + "")
                                     .replace("{minutes}", time.getMinutes() + "")
                                     .replace("{seconds}", time.getSeconds() + ""));
@@ -163,11 +162,11 @@ public class Commands implements CommandExecutor {
                         break;
                     }
                     if (args.length > 3) {
-                        MessageGesture.sendMessage(sender, commandVcEconomyChallenge);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcEconomyChallenge);
                         break;
                     }
                     Main.instance.getDailyChallenge().incrementCommands(args[1], Long.parseLong(args[2]));
-                    MessageGesture.sendMessage(sender, pointsadd.replace("{points}", args[2]).replace("{player}", args[1]));
+                    Main.messageGesturePaper.sendMessage(sender, pointsadd.replace("{points}", args[2]).replace("{player}", args[1]));
                     break;
                 case "challenge":
                     if (!Main.challengeSelected) {
@@ -179,7 +178,7 @@ public class Commands implements CommandExecutor {
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
-                            MessageGesture.sendMessage(sender, cooldown
+                            Main.messageGesturePaper.sendMessage(sender, cooldown
                                     .replace("{hours}", time.getHours() + "")
                                     .replace("{minutes}", time.getMinutes() + "")
                                     .replace("{seconds}", time.getSeconds() + ""));
@@ -187,18 +186,18 @@ public class Commands implements CommandExecutor {
                         break;
                     }
                     if (args.length != 1) {
-                        MessageGesture.sendMessage(sender, commandVcChallenge);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcChallenge);
                         break;
                     }
                     Main.instance.getDailyChallenge().message(sender);
                     break;
                 case "clear":
                     if (!sender.hasPermission("vc.clear.command")) {
-                        MessageGesture.sendMessage(sender, errorNoPerms);
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (args.length != 1) {
-                        MessageGesture.sendMessage(sender, commandVcClear);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcClear);
                         if (debugCommand) {
                             debug.addLine("Commands execution time= " + (System.currentTimeMillis() - tempo));
                             debug.debug();
@@ -220,7 +219,7 @@ public class Commands implements CommandExecutor {
                     break;
                 case "event":
                     if (args.length < 2 || args.length > 3) {
-                        MessageGesture.sendMessage(sender, commandVcEvent);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcEvent);
                         break;
                     }
 
@@ -232,7 +231,7 @@ public class Commands implements CommandExecutor {
                         try {
                             int time = Integer.parseInt(rowTime.replace(typeTime, ""));
                         } catch (NumberFormatException e) {
-                            MessageGesture.sendMessage(sender, timeError.replace("{value}", rowTime));
+                            Main.messageGesturePaper.sendMessage(sender, timeError.replace("{value}", rowTime));
                             break;
                         }
                     }
@@ -240,16 +239,16 @@ public class Commands implements CommandExecutor {
                     // event stop
                     if (args[1].equalsIgnoreCase("stop")) {
                         if (!sender.hasPermission("vc.event.stop.command")) {
-                            MessageGesture.sendMessage(sender, errorNoPerms);
+                            Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
                         List<Challenge> challenges = Main.db.getChallenges();
                         if (!challenges.isEmpty() && !challenges.get(0).getChallengeName().contains("Event_")) {
-                            MessageGesture.sendMessage(sender, alreadyStopEvent);
+                            Main.messageGesturePaper.sendMessage(sender, alreadyStopEvent);
                             break;
                         }
                         if (challenges.isEmpty()) {
-                            MessageGesture.sendMessage(sender, alreadyStopEvent);
+                            Main.messageGesturePaper.sendMessage(sender, alreadyStopEvent);
                             break;
                         }
                         Bukkit.getScheduler().runTask(Main.instance, () -> {
@@ -309,7 +308,7 @@ public class Commands implements CommandExecutor {
                     else if (args[1].equalsIgnoreCase("random")) {
                         List<Challenge> challenges = Main.db.getChallenges();
                         if (!challenges.isEmpty() && challenges.get(0).getChallengeName().contains("Event_")) {
-                            MessageGesture.sendMessage(sender, alreadyStartEvent);
+                            Main.messageGesturePaper.sendMessage(sender, alreadyStartEvent);
                             break;
                         }
                         Random random = new Random();
@@ -346,12 +345,12 @@ public class Commands implements CommandExecutor {
                     // start a specified event challenge
                     else if (Main.instance.getConfigGestion().getChallengesEvent().get(args[1]) != null) {
                         if (!sender.hasPermission("vc.event.start.command")) {
-                            MessageGesture.sendMessage(sender, errorNoPerms);
+                            Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
                         List<Challenge> challenges = Main.db.getChallenges();
                         if (!challenges.isEmpty() && challenges.get(0).getChallengeName().contains("Event_")) {
-                            MessageGesture.sendMessage(sender, alreadyStartEvent);
+                            Main.messageGesturePaper.sendMessage(sender, alreadyStartEvent);
                             break;
                         }
                         Challenge challengeSelected = Main.instance.getConfigGestion().getChallengesEvent().get(args[1]);
@@ -378,19 +377,19 @@ public class Commands implements CommandExecutor {
                     // list of challenges
                     else {
                         if (!sender.hasPermission("vc.event.start.command") || !sender.hasPermission("vc.event.stop.command")) {
-                            MessageGesture.sendMessage(sender, errorNoPerms);
+                            Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
                         StringBuilder send = new StringBuilder("\n");
                         for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
                             send.append(challengeOfList.replace("{challenge}", challenge.getKey())).append("\n");
                         }
-                        MessageGesture.sendMessage(sender, challengeList.replace("{challengeList}", send.toString()));
+                        Main.messageGesturePaper.sendMessage(sender, challengeList.replace("{challengeList}", send.toString()));
                     }
                     break;
                 case "list":
                     if (!(sender instanceof Player)) {
-                        MessageGesture.sendMessage(sender, errorYouAreNotAPlayer);
+                        Main.messageGesturePaper.sendMessage(sender, errorYouAreNotAPlayer);
                         break;
                     }
                     if (!Main.challengeSelected) {
@@ -402,7 +401,7 @@ public class Commands implements CommandExecutor {
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
-                            MessageGesture.sendMessage(sender, cooldown
+                            Main.messageGesturePaper.sendMessage(sender, cooldown
                                     .replace("{hours}", time.getHours() + "")
                                     .replace("{minutes}", time.getMinutes() + "")
                                     .replace("{seconds}", time.getSeconds() + ""));
@@ -410,16 +409,16 @@ public class Commands implements CommandExecutor {
                         break;
                     }
                     if (!sender.hasPermission("vc.list.command")) {
-                        MessageGesture.sendMessage(sender, errorNoPerms);
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (args.length != 1) {
-                        MessageGesture.sendMessage(sender, commandVcList);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcList);
                         break;
                     }
                     Bukkit.getScheduler().runTask(Main.instance, () -> {
                         int size = Main.instance.getConfigGestion().getInterfaces().get("Challenges").getSizeModificableSlot();
-                        ArrayList<Challenge> challenges = new ArrayList<>();
+                        List<Challenge> challenges = new ArrayList<>();
                         for (Challenge challenge : Main.db.getChallenges()) {
                             if (challenges.size() < size) {
                                 challenges.add(challenge);
@@ -439,7 +438,7 @@ public class Commands implements CommandExecutor {
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
-                            MessageGesture.sendMessage(sender, cooldown
+                            Main.messageGesturePaper.sendMessage(sender, cooldown
                                     .replace("{hours}", time.getHours() + "")
                                     .replace("{minutes}", time.getMinutes() + "")
                                     .replace("{seconds}", time.getSeconds() + ""));
@@ -447,18 +446,18 @@ public class Commands implements CommandExecutor {
                         break;
                     }
                     if (!sender.hasPermission("vc.next.command")) {
-                        MessageGesture.sendMessage(sender, errorNoPerms);
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (args.length > 2) {
-                        MessageGesture.sendMessage(sender, commandVcNextHelp);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcNextHelp);
                         break;
                     }
 
                     boolean skipPeacefulTime = args.length != 1;
 
                     if (Main.db.getChallenges().get(0).getChallengeName().contains("Event_")) {
-                        MessageGesture.sendMessage(sender, alreadyStartEvent);
+                        Main.messageGesturePaper.sendMessage(sender, alreadyStartEvent);
                         break;
                     }
 
@@ -474,7 +473,7 @@ public class Commands implements CommandExecutor {
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
-                            MessageGesture.sendMessage(sender, cooldown
+                            Main.messageGesturePaper.sendMessage(sender, cooldown
                                     .replace("{hours}", time.getHours() + "")
                                     .replace("{minutes}", time.getMinutes() + "")
                                     .replace("{seconds}", time.getSeconds() + ""));
@@ -483,43 +482,43 @@ public class Commands implements CommandExecutor {
                     }
                     // controllo se ha il permesso
                     if (!sender.hasPermission("vc.points.command")) {
-                        MessageGesture.sendMessage(sender, errorNoPerms);
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (args.length > 2) {
-                        MessageGesture.sendMessage(sender, commandVcPointsHelp);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcPointsHelp);
                         break;
                     }
                     if (args.length == 1) {
                         if (sender instanceof Player) {
                             long points = Main.instance.getDailyChallenge().getPointFromPLayerName(sender.getName());
-                            MessageGesture.sendMessage(sender, pointsInfo.replace("{player}", pointsPlayerPlaceholder).replace("{number}", "" + points));
+                            Main.messageGesturePaper.sendMessage(sender, pointsInfo.replace("{player}", pointsPlayerPlaceholder).replace("{number}", "" + points));
                         } else {
-                            MessageGesture.sendMessage(sender, errorYouAreNotAPlayer);
+                            Main.messageGesturePaper.sendMessage(sender, errorYouAreNotAPlayer);
                         }
                     } else {
                         if (!sender.hasPermission("vc.points.admin.command")) {
-                            MessageGesture.sendMessage(sender, errorNoPerms);
+                            Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
                         long points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
-                        MessageGesture.sendMessage(sender, pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points));
+                        Main.messageGesturePaper.sendMessage(sender, pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points));
                     }
                     break;
                 case "reload":
                     // controllo se ha il permesso
                     if (!sender.hasPermission("vc.reload.command")) {
-                        MessageGesture.sendMessage(sender, errorNoPerms);
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (args.length != 1) {
-                        MessageGesture.sendMessage(sender, commandVcReloadHelp);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcReloadHelp);
                         break;
                     }
                     Bukkit.getScheduler().runTask(Main.instance, () -> {
-                        MessageGesture.sendMessage(sender, "&6Reloading...");
+                        Main.messageGesturePaper.sendMessage(sender, "&6Reloading...");
                         ReloadGesture.reload(Main.instance.getName());
-                        MessageGesture.sendMessage(sender, "&aReloaded!");
+                        Main.messageGesturePaper.sendMessage(sender, "&aReloaded!");
                     });
                     break;
                 case "remove":
@@ -532,7 +531,7 @@ public class Commands implements CommandExecutor {
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
-                            MessageGesture.sendMessage(sender, cooldown
+                            Main.messageGesturePaper.sendMessage(sender, cooldown
                                     .replace("{hours}", time.getHours() + "")
                                     .replace("{minutes}", time.getMinutes() + "")
                                     .replace("{seconds}", time.getSeconds() + ""));
@@ -541,28 +540,28 @@ public class Commands implements CommandExecutor {
                     }
                     // controllo se ha il permesso
                     if (!sender.hasPermission("vc.remove.command")) {
-                        MessageGesture.sendMessage(sender, errorNoPerms);
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (args.length > 2) {
-                        MessageGesture.sendMessage(sender, commandVcEconomyChallenge);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcEconomyChallenge);
                         break;
                     }
                     Main.instance.getDailyChallenge().incrementCommands(args[1], -Long.parseLong(args[2]));
-                    MessageGesture.sendMessage(sender, pointsremove.replace("{points}", args[2]).replace("{player}", args[1]));
+                    Main.messageGesturePaper.sendMessage(sender, pointsremove.replace("{points}", args[2]).replace("{player}", args[1]));
                     break;
                 case "reward":
                     if (!(sender instanceof Player)) {
-                        MessageGesture.sendMessage(sender, errorYouAreNotAPlayer);
+                        Main.messageGesturePaper.sendMessage(sender, errorYouAreNotAPlayer);
                         break;
                     }
                     // controllo se ha il permesso
                     if (!sender.hasPermission("vc.reward.command")) {
-                        MessageGesture.sendMessage(sender, errorNoPerms);
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (args.length > 1) {
-                        MessageGesture.sendMessage(sender, commandVcReward);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcReward);
                         break;
                     }
                     List<DailyWinner> winners = Main.db.getDailyWinners();
@@ -572,7 +571,7 @@ public class Commands implements CommandExecutor {
                     break;
                 case "restore":
                     if (args.length > 3) {
-                        MessageGesture.sendMessage(sender, commandVcRestore);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcRestore);
                         break;
                     }
                     if (args.length == 1) {
@@ -584,7 +583,7 @@ public class Commands implements CommandExecutor {
                                 finale.append(fileLine.replace("{fileName}", folder.listFiles()[i].getName() + "\n"));
                             }
                         }
-                        MessageGesture.sendMessage(sender, finale.toString());
+                        Main.messageGesturePaper.sendMessage(sender, finale.toString());
                         break;
                     }
                     File configFile = new File(Main.instance.getDataFolder() +
@@ -617,7 +616,7 @@ public class Commands implements CommandExecutor {
                             h2.insertChallengerTopYesterday(winnerYesterday, file.getInt("TopYesterday." + winnerYesterday));
                         }
                     }
-                    MessageGesture.sendMessage(sender, succesfullyRestored);
+                    Main.messageGesturePaper.sendMessage(sender, succesfullyRestored);
                     if (Main.challengeSelected) {
                         Main.instance.getDailyChallenge().clearPlayers();
                         for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
@@ -638,7 +637,7 @@ public class Commands implements CommandExecutor {
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
-                            MessageGesture.sendMessage(sender, cooldown
+                            Main.messageGesturePaper.sendMessage(sender, cooldown
                                     .replace("{hours}", time.getHours() + "")
                                     .replace("{minutes}", time.getMinutes() + "")
                                     .replace("{seconds}", time.getSeconds() + ""));
@@ -646,7 +645,7 @@ public class Commands implements CommandExecutor {
                         break;
                     }
                     if (args.length < 2 || args.length > 4) {
-                        MessageGesture.sendMessage(sender, commandVcSchedule);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcSchedule);
                         break;
                     }
 
@@ -658,7 +657,7 @@ public class Commands implements CommandExecutor {
                     // schedule add
                     if (args[1].equalsIgnoreCase("add")) {
                         if (!sender.hasPermission("vc.schedule.add.command")) {
-                            MessageGesture.sendMessage(sender, errorNoPerms);
+                            Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
                         if (challenge1 == null && !args[2].equalsIgnoreCase("random")) {
@@ -666,7 +665,7 @@ public class Commands implements CommandExecutor {
                             for (Map.Entry<String, Challenge> challenge : Main.instance.getConfigGestion().getChallengesEvent().entrySet()) {
                                 send.append(challengeOfList.replace("{challenge}", challenge.getKey())).append("\n");
                             }
-                            MessageGesture.sendMessage(sender, challengeList.replace("{challengeList}", send.toString()));
+                            Main.messageGesturePaper.sendMessage(sender, challengeList.replace("{challengeList}", send.toString()));
                         } else {
                             if (args[2].equalsIgnoreCase("random")) {
                                 List<Challenge> scheduledChallenges = Main.db.getChallenges();
@@ -685,7 +684,7 @@ public class Commands implements CommandExecutor {
                                     }
                                 }
                                 if (remainChallenges.isEmpty()) {
-                                    MessageGesture.sendMessage(sender, addError);
+                                    Main.messageGesturePaper.sendMessage(sender, addError);
                                     break;
                                 } else {
                                     Collections.shuffle(remainChallenges);
@@ -693,7 +692,7 @@ public class Commands implements CommandExecutor {
                                 }
                             }
                             if (Main.db.isChallengePresent(challenge1.getChallengeName())) {
-                                MessageGesture.sendMessage(sender, addError);
+                                Main.messageGesturePaper.sendMessage(sender, addError);
                             } else {
                                 String rowTimeScheduler = "";
                                 if (args.length == 4) {
@@ -703,7 +702,7 @@ public class Commands implements CommandExecutor {
                                     try {
                                         int time = Integer.parseInt(rowTimeScheduler.replace(typeTime, ""));
                                     } catch (NumberFormatException e) {
-                                        MessageGesture.sendMessage(sender, timeError.replace("{value}", rowTimeScheduler));
+                                        Main.messageGesturePaper.sendMessage(sender, timeError.replace("{value}", rowTimeScheduler));
                                         break;
                                     }
                                 }
@@ -717,7 +716,7 @@ public class Commands implements CommandExecutor {
                                 Bukkit.getScheduler().runTask(Main.instance, () -> {
                                     Main.db.addChallenge(challengeSelected);
                                     Main.db.insertChallenge(challengeSelected.getChallengeName(), challengeSelected.getTimeChallenge().getMilliseconds(), challengeSelected.getDate().getMilliseconds());
-                                    MessageGesture.sendMessage(sender, addSuccess);
+                                    Main.messageGesturePaper.sendMessage(sender, addSuccess);
                                     if (Main.challengeSelected) {
                                         Main.instance.getDailyChallenge().clearPlayers();
                                         for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
@@ -734,7 +733,7 @@ public class Commands implements CommandExecutor {
                     // schedule remove
                     else if (args[1].equalsIgnoreCase("remove")) {
                         if (!sender.hasPermission("vc.schedule.remove.command")) {
-                            MessageGesture.sendMessage(sender, errorNoPerms);
+                            Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
                         if (challenge1 == null) {
@@ -742,14 +741,14 @@ public class Commands implements CommandExecutor {
                             for (Challenge challenge : Main.db.getChallenges()) {
                                 send.append(challengeOfList.replace("{challenge}", challenge.getChallengeName())).append("\n");
                             }
-                            MessageGesture.sendMessage(sender, challengeList.replace("{challengeList}", send.toString()));
+                            Main.messageGesturePaper.sendMessage(sender, challengeList.replace("{challengeList}", send.toString()));
                         } else {
                             if (Main.instance.getDailyChallenge().getChallengeName().equalsIgnoreCase(args[2])) {
-                                MessageGesture.sendMessage(sender, scheduleError);
+                                Main.messageGesturePaper.sendMessage(sender, scheduleError);
                             } else {
                                 Bukkit.getScheduler().runTask(Main.instance, () -> {
                                     Main.db.deleteChallengeWithName(args[2]);
-                                    MessageGesture.sendMessage(sender, removeSuccess);
+                                    Main.messageGesturePaper.sendMessage(sender, removeSuccess);
                                     if (Main.challengeSelected) {
                                         Main.instance.getDailyChallenge().clearPlayers();
                                         for (Map.Entry<String, Interface> interfaces : Main.instance.getConfigGestion().getInterfaces().entrySet()) {
@@ -766,11 +765,11 @@ public class Commands implements CommandExecutor {
                     // schedule disable
                     else if (args[1].equalsIgnoreCase("disable")) {
                         if (!sender.hasPermission("vc.schedule.disable.command")) {
-                            MessageGesture.sendMessage(sender, errorNoPerms);
+                            Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
                         if (Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                            MessageGesture.sendMessage(sender, alreadyDisable);
+                            Main.messageGesturePaper.sendMessage(sender, alreadyDisable);
                             break;
                         }
                         Main.instance.getConfigGestion().setChallengeGeneration("Nothing");
@@ -780,7 +779,7 @@ public class Commands implements CommandExecutor {
                     }
                     // schedule help command
                     else {
-                        MessageGesture.sendMessage(sender, commandVcSchedule);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcSchedule);
                     }
                     break;
                 case "time":
@@ -793,7 +792,7 @@ public class Commands implements CommandExecutor {
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
-                            MessageGesture.sendMessage(sender, cooldown
+                            Main.messageGesturePaper.sendMessage(sender, cooldown
                                     .replace("{hours}", time.getHours() + "")
                                     .replace("{minutes}", time.getMinutes() + "")
                                     .replace("{seconds}", time.getSeconds() + ""));
@@ -801,7 +800,7 @@ public class Commands implements CommandExecutor {
                         break;
                     }
                     if (args.length < 2 || args.length > 3) {
-                        MessageGesture.sendMessage(sender, commandVcTime);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcTime);
                         break;
                     }
 
@@ -812,7 +811,7 @@ public class Commands implements CommandExecutor {
                         try {
                             time = Integer.parseInt(rawTime.replace(typeTime, ""));
                         } catch (NumberFormatException exception) {
-                            MessageGesture.sendMessage(sender, timeError.replace("{value}", args[2]));
+                            Main.messageGesturePaper.sendMessage(sender, timeError.replace("{value}", args[2]));
                             break;
                         }
                         Time timeForCommand;
@@ -834,12 +833,12 @@ public class Commands implements CommandExecutor {
                         // time add
                         if (args[1].equalsIgnoreCase("add")) {
                             if (!sender.hasPermission("vc.time.add.command")) {
-                                MessageGesture.sendMessage(sender, errorNoPerms);
+                                Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                                 break;
                             }
                             Main.instance.getDailyChallenge().addTime(timeForCommand);
                             Time timeRemaining = Main.instance.getDailyChallenge().getTimeChallenge();
-                            MessageGesture.sendMessage(sender, timeAdd
+                            Main.messageGesturePaper.sendMessage(sender, timeAdd
                                     .replace("{time}", args[2])
                                     .replace("{hours}", timeRemaining.getHours() + "")
                                     .replace("{minutes}", timeRemaining.getMinutes() + "")
@@ -849,12 +848,12 @@ public class Commands implements CommandExecutor {
                         // time remove
                         else if (args[1].equalsIgnoreCase("remove")) {
                             if (!sender.hasPermission("vc.time.remove.command")) {
-                                MessageGesture.sendMessage(sender, errorNoPerms);
+                                Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                                 break;
                             }
                             Main.instance.getDailyChallenge().removeTime(timeForCommand);
                             Time timeRemaining = Main.instance.getDailyChallenge().getTimeChallenge();
-                            MessageGesture.sendMessage(sender, timeRemove
+                            Main.messageGesturePaper.sendMessage(sender, timeRemove
                                     .replace("{time}", args[2])
                                     .replace("{hours}", timeRemaining.getHours() + "")
                                     .replace("{minutes}", timeRemaining.getMinutes() + "")
@@ -864,23 +863,23 @@ public class Commands implements CommandExecutor {
                         // time set
                         else if (args[1].equalsIgnoreCase("set")) {
                             if (!sender.hasPermission("vc.time.set.command")) {
-                                MessageGesture.sendMessage(sender, errorNoPerms);
+                                Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                                 break;
                             }
                             if (timeForCommand.getMilliseconds() <= 0) {
                                 break;
                             }
                             Main.instance.getDailyChallenge().setTimeChallenge(timeForCommand);
-                            MessageGesture.sendMessage(sender, timeSet.replace("{time}", args[2]));
+                            Main.messageGesturePaper.sendMessage(sender, timeSet.replace("{time}", args[2]));
                         }
                         // time remaining
                         else {
                             if (!sender.hasPermission("vc.time.remaining.command")) {
-                                MessageGesture.sendMessage(sender, errorNoPerms);
+                                Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                                 break;
                             }
                             Time timeRemain = Main.instance.getDailyChallenge().getTimeChallenge();
-                            MessageGesture.sendMessage(sender, timeRemaining
+                            Main.messageGesturePaper.sendMessage(sender, timeRemaining
                                     .replace("{hours}", timeRemain.getHours() + "")
                                     .replace("{minutes}", timeRemain.getMinutes() + "")
                                     .replace("{seconds}", timeRemain.getSeconds() + "")
@@ -890,11 +889,11 @@ public class Commands implements CommandExecutor {
                     // time remaining
                     else {
                         if (!sender.hasPermission("vc.time.remaining.command")) {
-                            MessageGesture.sendMessage(sender, errorNoPerms);
+                            Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
                         Time timeRemain = Main.instance.getDailyChallenge().getTimeChallenge();
-                        MessageGesture.sendMessage(sender, timeRemaining
+                        Main.messageGesturePaper.sendMessage(sender, timeRemaining
                                 .replace("{hours}", timeRemain.getHours() + "")
                                 .replace("{minutes}", timeRemain.getMinutes() + "")
                                 .replace("{seconds}", timeRemain.getSeconds() + "")
@@ -911,7 +910,7 @@ public class Commands implements CommandExecutor {
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
-                            MessageGesture.sendMessage(sender, cooldown
+                            Main.messageGesturePaper.sendMessage(sender, cooldown
                                     .replace("{hours}", time.getHours() + "")
                                     .replace("{minutes}", time.getMinutes() + "")
                                     .replace("{seconds}", time.getSeconds() + ""));
@@ -920,11 +919,11 @@ public class Commands implements CommandExecutor {
                     }
                     // controllo se ha il permesso
                     if (!sender.hasPermission("vc.top.command")) {
-                        MessageGesture.sendMessage(sender, errorNoPerms);
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (args.length > 2) {
-                        MessageGesture.sendMessage(sender, commandVcTopHelp);
+                        Main.messageGesturePaper.sendMessage(sender, commandVcTopHelp);
                         break;
                     }
                     List<Challenger> top = new ArrayList<>();
@@ -936,15 +935,15 @@ public class Commands implements CommandExecutor {
                         }
                     } else if (args[1].equalsIgnoreCase("yesterday")) {
                         if (!sender.hasPermission("vc.top.yesterday.command")) {
-                            MessageGesture.sendMessage(sender, errorNoPerms);
+                            Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
                         top = Main.db.getTopYesterday();
                     }
-                    MessageGesture.sendMessage(sender, actuallyInTop);
+                    Main.messageGesturePaper.sendMessage(sender, actuallyInTop);
                     int i = 1;
                     for (Challenger challenger : top) {
-                        MessageGesture.sendMessage(sender, Main.instance.getConfigGestion().getMessages().get("TopPlayers" + i)
+                        Main.messageGesturePaper.sendMessage(sender, Main.instance.getConfigGestion().getMessages().get("TopPlayers" + i)
                                 .replace("{number}", "" + i)
                                 .replace("{player}", challenger.getNomePlayer())
                                 .replace("{points}", MoneyUtils.transform(challenger.getPoints())));
@@ -992,7 +991,7 @@ public class Commands implements CommandExecutor {
                     }
                     finale = finale + "&r\n";
                     finale = finale + commandFooter;
-                    MessageGesture.sendMessage(sender, finale);
+                    Main.messageGesturePaper.sendMessage(sender, finale);
                     break;
             }
             if (debugCommand) {

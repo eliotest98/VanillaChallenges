@@ -88,7 +88,7 @@ public class ItemCollector implements Listener {
                         chestLocation.replace(e.getPlayer().getName(), chestLocation.get(e.getPlayer().getName()), e.getBlockPlaced().getLocation());
                     } else {
                         e.setCancelled(true);
-                        MessageGesture.sendMessage(e.getPlayer(), errorAlreadyPlacedChest);
+                        Main.messageGesturePaper.sendMessage(e.getPlayer(), errorAlreadyPlacedChest);
                     }
                 }
             }
@@ -226,7 +226,7 @@ public class ItemCollector implements Listener {
                 if (location.getValue().getWorld() == null) {
                     Player player = Bukkit.getPlayer(location.getKey());
                     if (player != null && player.isOnline()) {
-                        MessageGesture.sendMessage(player, caseBroken);
+                        Main.messageGesturePaper.sendMessage(player, caseBroken);
                         db.deleteChest(player.getName());
                         chestBroken.add(location.getKey());
                         player.getInventory().addItem(Main.instance.getConfigGestion().getChestCollection());
