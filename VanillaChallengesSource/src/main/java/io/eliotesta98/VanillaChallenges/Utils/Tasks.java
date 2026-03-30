@@ -113,13 +113,20 @@ public class Tasks {
                 int endHour = Integer.parseInt(endSplit[0]);
                 int endMinutes = Integer.parseInt(endSplit[1]);
 
-                Date end = now.cloneDate();
-                end.setDate(now.getYear() + "." + now.getMonth() + "." + now.getDay() + "." + endHour + "." + endMinutes + ".00");
+                com.HeroxWar.HeroxCore.TimeGesture.Date.Date currentTime = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date();
 
-                Date start = now.cloneDate();
-                start.setDate(now.getYear() + "." + now.getMonth() + "." + now.getDay() + "." + startHour + "." + startMinutes + ".00");
+                Date end = currentTime.cloneDate();
+                end.setDate(currentTime.getYear() + "." + currentTime.getMonth() + "." + currentTime.getDay() + "." + endHour + "." + endMinutes + ".00");
 
-                if (start.getMilliseconds() < now.getMilliseconds() && end.getMilliseconds() > now.getMilliseconds()) {
+                Date start = currentTime.cloneDate();
+                start.setDate(currentTime.getYear() + "." + currentTime.getMonth() + "." + currentTime.getDay() + "." + startHour + "." + startMinutes + ".00");
+
+                System.out.println("[VanillaChallenges] checkStartDay - currentTime: " + currentTime.getDate() + " (" + currentTime.getMilliseconds() + "ms)");
+                System.out.println("[VanillaChallenges] checkStartDay - start: " + start.getDate() + " (" + start.getMilliseconds() + "ms), end: " + end.getDate() + " (" + end.getMilliseconds() + "ms)");
+                System.out.println("[VanillaChallenges] checkStartDay - inWindow: " + (start.getMilliseconds() < currentTime.getMilliseconds() && end.getMilliseconds() > currentTime.getMilliseconds()));
+
+                if (start.getMilliseconds() < currentTime.getMilliseconds() && end.getMilliseconds() > currentTime.getMilliseconds()) {
+                    System.out.println("[VanillaChallenges] checkStartDay - Challenge is within time window, starting checkDay");
                     Main.instance.getConfigGestion().getTasks().checkDay(
                             Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
                             Main.instance.getConfigGestion().isRankingReward(),
@@ -129,6 +136,7 @@ public class Tasks {
                             Main.instance.getConfigGestion().isAdjustTime());
                     setChallengeStart(true);
                 } else {
+                    System.out.println("[VanillaChallenges] checkStartDay - Outside time window, challenge not started");
                     setChallengeStart(false);
                 }
             }
@@ -148,26 +156,54 @@ public class Tasks {
                 if (firstTime) {
                     firstTime = false;
                     checkStart.cancel();
+                    System.out.println("[VanillaChallenges] checkDay - Started. adjust=" + adjust + ", challengeDate=" + date.getDate());
                 }
 
-                if (time.getMilliseconds() <= 0) {
-                    System.out.println("NEXT TIME " + time.getMilliseconds());
-                    Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Challenge Time Finished", false);
-                } else {
-                    if (time.getMilliseconds() % 10000 == 0) {
-                        Main.db.updateChallenge(Main.instance.getDailyChallenge().getChallengeName(), time.getMilliseconds());
-                    }
-                    Main.instance.getDailyChallenge().setTimeChallenge(time.differenceBetween(new Time(0, 0, 0, 1, ':')));
-                }
-
-                if (adjust) {
-                    com.HeroxWar.HeroxCore.TimeGesture.Date.Date now = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date();
-                    if (date.getDay() != now.getDay() || date.getMonth() != now.getMonth()) {
-                        System.out.println("NEXT DAY");
-                        Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Day is finished", false);
+                if (!adjust) {
+                    // Non-adjust mode: simple countdown timer
+                    if (time.getMilliseconds() <= 0) {
+                        System.out.println("[VanillaChallenges] checkDay - Timer reached 0, advancing to next challenge");
+                        Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Challenge Time Finished", false);
                     } else {
-                        com.HeroxWar.HeroxCore.TimeGesture.Date.Date difference = date.differenceBetween(now);
-                        Main.instance.getDailyChallenge().setTimeChallenge(new Time(difference.getMilliseconds(), ':'));
+                        if (time.getMilliseconds() % 10000 == 0) {
+                            System.out.println("[VanillaChallenges] checkDay - Saving time to DB: " + time.getMilliseconds() + "ms");
+                            Main.db.updateChallenge(Main.instance.getDailyChallenge().getChallengeName(), time.getMilliseconds());
+                        }
+                        Main.instance.getDailyChallenge().setTimeChallenge(time.differenceBetween(new Time(0, 0, 0, 1, ':')));
+                    }
+                } else {
+                    // Adjust mode: challenge runs from start time to end time of the same day
+                    com.HeroxWar.HeroxCore.TimeGesture.Date.Date now = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date();
+
+                    // Check if the day has changed (challenge date vs current date)
+                    if (date.getDay() != now.getDay() || date.getMonth() != now.getMonth() || date.getYear() != now.getYear()) {
+                        System.out.println("[VanillaChallenges] checkDay [adjust] - Day changed! challengeDate=" + date.getDate() + ", now=" + now.getDate() + " -> next challenge");
+                        Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Day is finished", false);
+                        return;
+                    }
+
+                    // Calculate end time for today
+                    String endChallenge = Main.instance.getDailyChallenge().getEndTimeChallenge();
+                    String[] endSplit = endChallenge.split(":");
+                    int endHour = Integer.parseInt(endSplit[0]);
+                    int endMinutes = Integer.parseInt(endSplit[1]);
+
+                    com.HeroxWar.HeroxCore.TimeGesture.Date.Date endTime = now.cloneDate();
+                    endTime.setDate(now.getYear() + "." + now.getMonth() + "." + now.getDay() + "." + endHour + "." + endMinutes + ".00");
+
+                    long remainingMs = endTime.getMilliseconds() - now.getMilliseconds();
+
+                    if (remainingMs <= 0) {
+                        // End time reached or passed, stop the challenge and go to next
+                        System.out.println("[VanillaChallenges] checkDay [adjust] - End time reached! endTime=" + endChallenge + ", now=" + now.getDate() + " -> next challenge");
+                        Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Challenge Time Finished", false);
+                    } else {
+                        // Update the displayed remaining time
+                        Main.instance.getDailyChallenge().setTimeChallenge(new Time(remainingMs, ':'));
+                        if (remainingMs % 10000 < 1000) {
+                            System.out.println("[VanillaChallenges] checkDay [adjust] - Remaining: " + remainingMs + "ms, endTime=" + endChallenge);
+                            Main.db.updateChallenge(Main.instance.getDailyChallenge().getChallengeName(), remainingMs);
+                        }
                     }
                 }
             }
