@@ -5,7 +5,6 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -102,7 +101,7 @@ public class Interface {
         DebugUtils debug = new DebugUtils("Interface Creation");
         long tempo = System.currentTimeMillis();
         VanillaChallengesInterfaceHolder holder = new VanillaChallengesInterfaceHolder(slots.size(),
-                ChatColor.translateAlternateColorCodes('&', title));
+                Main.messageGesturePaper.applyColorLegacy(title));
         // prendo l'inventario
         final Inventory inventory = holder.getInventory();
         int slotModificable = items.size() - sizeModificableSlot;

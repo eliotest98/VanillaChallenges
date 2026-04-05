@@ -383,7 +383,7 @@ public class ConfigGestion extends DefaultGestion {
             challengesEvent.put(challengeName, challenge);
         }
 
-        Main.instance.getServer().getConsoleSender().sendMessage("&a" + challengesEvent.size() + " Event Challenges loaded!");
+        Main.messageGesturePaper.sendMessage("&a" + challengesEvent.size() + " Event Challenges loaded!");
 
         adjustTime = fileConfiguration.getBoolean("Configuration.AdjustTime");
         numberOfRewardPlayer = fileConfiguration.getInt("Configuration.Top.NumberOfReward");

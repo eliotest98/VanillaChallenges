@@ -9,7 +9,6 @@ import io.eliotesta98.VanillaChallenges.Events.DailyGiveWinners;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -92,7 +91,7 @@ public class Commands implements CommandExecutor {
             }
             if (args.length == 0) {// se non ha scritto args
                 String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
-                        + " created by &a&leliotesta98 & xSavior_of_God" + "\n&r\n";
+                        + " created by &a&leliotesta98 & xSavior_of_God" + "\n\n";
                 if (sender.hasPermission("vc.add.command")) {
                     finale = finale + commandVcEconomyChallenge + "\n";
                 }
@@ -129,7 +128,7 @@ public class Commands implements CommandExecutor {
                 if (sender.hasPermission("vc.top.command")) {
                     finale = finale + commandVcTopHelp + "\n";
                 }
-                finale = finale + "&r\n";
+                finale = finale + "\n";
                 finale = finale + commandFooter;
                 Main.messageGesturePaper.sendMessage(sender, finale);
                 if (debugCommand) {
@@ -148,9 +147,9 @@ public class Commands implements CommandExecutor {
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
                             if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
@@ -172,9 +171,9 @@ public class Commands implements CommandExecutor {
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
                             if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
@@ -395,9 +394,9 @@ public class Commands implements CommandExecutor {
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
                             if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
@@ -432,9 +431,9 @@ public class Commands implements CommandExecutor {
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
                             if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
@@ -467,9 +466,9 @@ public class Commands implements CommandExecutor {
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
                             if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
@@ -525,9 +524,9 @@ public class Commands implements CommandExecutor {
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
                             if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
@@ -631,9 +630,9 @@ public class Commands implements CommandExecutor {
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
                             if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
@@ -786,9 +785,9 @@ public class Commands implements CommandExecutor {
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
                             if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
@@ -904,9 +903,9 @@ public class Commands implements CommandExecutor {
                     if (!Main.challengeSelected) {
                         if (!Main.db.checkPeacefulTime()) {
                             if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                sender.sendMessage(ChatColor.RED + "No DailyChallenge selected, check the configurations files and restart the plugin!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
                             } else {
-                                sender.sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
                             }
                         } else {
                             Time time = Main.db.getPeacefulTime();
@@ -952,7 +951,7 @@ public class Commands implements CommandExecutor {
                     break;
                 default:
                     String finale = "\n\n&e&l" + Main.instance.getName() + "&7 ● Version " + Main.instance.getDescription().getVersion()
-                            + " created by &a&leliotesta98 & xSavior_of_God" + "\n&r\n";
+                            + " created by &a&leliotesta98 & xSavior_of_God" + "\n\n";
                     if (sender.hasPermission("vc.add.command")) {
                         finale = finale + commandVcEconomyChallenge + "\n";
                     }
@@ -989,7 +988,7 @@ public class Commands implements CommandExecutor {
                     if (sender.hasPermission("vc.top.command")) {
                         finale = finale + commandVcTopHelp + "\n";
                     }
-                    finale = finale + "&r\n";
+                    finale = finale + "\n";
                     finale = finale + commandFooter;
                     Main.messageGesturePaper.sendMessage(sender, finale);
                     break;

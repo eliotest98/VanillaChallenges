@@ -198,8 +198,12 @@ Interfaces:
         SoundClick: ''
 
 
-# you can use a different coloring by using a hexadecimal. for all messages Ex. &{#FFFF00}(yellow).
-# Example for a command: '/vc &{#FFFF00}<reload>&{#000000} command reload Plugin'
+# you can use three different modalities of colors:
+# - Hexadecimal: Ex. &#FFFF00(yellow).
+# - Adventure: Ex. <red></red>
+# - Legacy: Ex. &c(red)
+# Example for a command: '/vc &#FFFF00<reload>&#000000 command reload Plugin'
+# Example for a command: '/vc <yellow><reload></yellow> <green>command reload Plugin</green>'
 Messages:
   Prefix: '&eVanillaChallenges &r'
   Commands:

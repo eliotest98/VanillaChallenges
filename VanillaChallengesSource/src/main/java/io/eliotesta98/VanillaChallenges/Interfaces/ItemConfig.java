@@ -379,17 +379,17 @@ public class ItemConfig {
         }
         String nameChange = name;
         if (name.contains("{number}")) {
-            itemm.setDisplayName(ChatColor.translateAlternateColorCodes('&', nameChange.replace("{number}", nbtList.getNbt("vc.numberPage"))));
+            itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(nameChange.replace("{number}", nbtList.getNbt("vc.numberPage"))));
             item.setItemMeta(itemm);
         } else if (name.contains("{challengeName}")) {
             itemm = item.getItemMeta();
             if (nameChange.contains("{challengeName}")) {
                 nameChange = name.replace("{challengeName}", nbtList.getNbt("vc.challengeName"));
             }
-            itemm.setDisplayName(ChatColor.translateAlternateColorCodes('&', nameChange));
+            itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(nameChange));
             item.setItemMeta(itemm);
         } else {
-            itemm.setDisplayName(ChatColor.translateAlternateColorCodes('&', nameChange));
+            itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(nameChange));
         }
         item.setItemMeta(itemm);
         return nbtList.applyNbt(item);

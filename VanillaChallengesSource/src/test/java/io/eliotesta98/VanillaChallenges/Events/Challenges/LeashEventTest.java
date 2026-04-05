@@ -73,7 +73,6 @@ public class LeashEventTest {
         }
         List<Challenge> challenges = plugin.db.getChallenges();
         while (!challenges.isEmpty()) {
-            //System.out.println(challenges.get(0).getChallengeName());
             plugin.getConfigGestion().setTimeBroadcastMessageTitle(0);
             plugin.getConfigGestion().setActiveOnlinePoints(true);
             plugin.challengeSelected = false;

@@ -91,8 +91,8 @@ public class FileCreator {
             for (String file : copyFiles) {
                 createFileChallenges(folder, file);
             }
-            Main.instance.getServer().getConsoleSender().sendMessage("&e" + copyFiles.size() + " " + folder + " Challenges recreated!");
-            Main.instance.getServer().getConsoleSender().sendMessage("&ePlease not delete files! Disable the challenge in the configuration file!");
+            Main.messageGesturePaper.sendMessage("&e" + copyFiles.size() + " " + folder + " Challenges recreated!");
+            Main.messageGesturePaper.sendMessage("&ePlease not delete files! Disable the challenge in the configuration file!");
         }
     }
 
@@ -100,7 +100,7 @@ public class FileCreator {
         for (String fileName : files) {
             createFileChallenges(folder, fileName);
         }
-        Main.instance.getServer().getConsoleSender().sendMessage("&a" + files.size() + " " + folder + " Challenges created!");
+        Main.messageGesturePaper.sendMessage("&a" + files.size() + " " + folder + " Challenges created!");
     }
 
     public static void createFileChallenges(String folder, String fileName) {

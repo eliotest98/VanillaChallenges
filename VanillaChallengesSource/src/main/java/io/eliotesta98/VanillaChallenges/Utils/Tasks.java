@@ -1,6 +1,5 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
-import com.HeroxWar.HeroxCore.MessageGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Date.Date;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Core.Main;
@@ -10,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Tasks {
 
     private final List<BukkitTask> tasks = new ArrayList<>();
-    private com.HeroxWar.HeroxCore.TimeGesture.Date.Date now = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date();
     private BukkitTask checkStart = null;
     private boolean challengeStart = false;
     private final Map<String, Integer> minutesOnlinePlayer = new ConcurrentHashMap<>();
@@ -39,14 +36,6 @@ public class Tasks {
 
     public void setChallengeStart(boolean challengeStart) {
         this.challengeStart = challengeStart;
-    }
-
-    public com.HeroxWar.HeroxCore.TimeGesture.Date.Date getNow() {
-        return now;
-    }
-
-    public void setNow(com.HeroxWar.HeroxCore.TimeGesture.Date.Date now) {
-        this.now = now;
     }
 
     public void broadcast(long time, String actuallyInTop, String pointsEveryMinutes, String pointsRemainForBoosting,
@@ -121,12 +110,7 @@ public class Tasks {
                 Date start = currentTime.cloneDate();
                 start.setDate(currentTime.getYear() + "." + currentTime.getMonth() + "." + currentTime.getDay() + "." + startHour + "." + startMinutes + ".00");
 
-                System.out.println("[VanillaChallenges] checkStartDay - currentTime: " + currentTime.getDate() + " (" + currentTime.getMilliseconds() + "ms)");
-                System.out.println("[VanillaChallenges] checkStartDay - start: " + start.getDate() + " (" + start.getMilliseconds() + "ms), end: " + end.getDate() + " (" + end.getMilliseconds() + "ms)");
-                System.out.println("[VanillaChallenges] checkStartDay - inWindow: " + (start.getMilliseconds() < currentTime.getMilliseconds() && end.getMilliseconds() > currentTime.getMilliseconds()));
-
                 if (start.getMilliseconds() < currentTime.getMilliseconds() && end.getMilliseconds() > currentTime.getMilliseconds()) {
-                    System.out.println("[VanillaChallenges] checkStartDay - Challenge is within time window, starting checkDay");
                     Main.instance.getConfigGestion().getTasks().checkDay(
                             Main.instance.getConfigGestion().isResetPointsAtNewChallenge(),
                             Main.instance.getConfigGestion().isRankingReward(),
@@ -136,7 +120,6 @@ public class Tasks {
                             Main.instance.getConfigGestion().isAdjustTime());
                     setChallengeStart(true);
                 } else {
-                    System.out.println("[VanillaChallenges] checkStartDay - Outside time window, challenge not started");
                     setChallengeStart(false);
                 }
             }
@@ -156,17 +139,14 @@ public class Tasks {
                 if (firstTime) {
                     firstTime = false;
                     checkStart.cancel();
-                    System.out.println("[VanillaChallenges] checkDay - Started. adjust=" + adjust + ", challengeDate=" + date.getDate());
                 }
 
                 if (!adjust) {
                     // Non-adjust mode: simple countdown timer
                     if (time.getMilliseconds() <= 0) {
-                        System.out.println("[VanillaChallenges] checkDay - Timer reached 0, advancing to next challenge");
                         Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Challenge Time Finished", false);
                     } else {
                         if (time.getMilliseconds() % 10000 == 0) {
-                            System.out.println("[VanillaChallenges] checkDay - Saving time to DB: " + time.getMilliseconds() + "ms");
                             Main.db.updateChallenge(Main.instance.getDailyChallenge().getChallengeName(), time.getMilliseconds());
                         }
                         Main.instance.getDailyChallenge().setTimeChallenge(time.differenceBetween(new Time(0, 0, 0, 1, ':')));
@@ -177,7 +157,6 @@ public class Tasks {
 
                     // Check if the day has changed (challenge date vs current date)
                     if (date.getDay() != now.getDay() || date.getMonth() != now.getMonth() || date.getYear() != now.getYear()) {
-                        System.out.println("[VanillaChallenges] checkDay [adjust] - Day changed! challengeDate=" + date.getDate() + ", now=" + now.getDate() + " -> next challenge");
                         Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Day is finished", false);
                         return;
                     }
@@ -192,16 +171,13 @@ public class Tasks {
                     endTime.setDate(now.getYear() + "." + now.getMonth() + "." + now.getDay() + "." + endHour + "." + endMinutes + ".00");
 
                     long remainingMs = endTime.getMilliseconds() - now.getMilliseconds();
-
                     if (remainingMs <= 0) {
                         // End time reached or passed, stop the challenge and go to next
-                        System.out.println("[VanillaChallenges] checkDay [adjust] - End time reached! endTime=" + endChallenge + ", now=" + now.getDate() + " -> next challenge");
                         Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Challenge Time Finished", false);
                     } else {
                         // Update the displayed remaining time
                         Main.instance.getDailyChallenge().setTimeChallenge(new Time(remainingMs, ':'));
                         if (remainingMs % 10000 < 1000) {
-                            System.out.println("[VanillaChallenges] checkDay [adjust] - Remaining: " + remainingMs + "ms, endTime=" + endChallenge);
                             Main.db.updateChallenge(Main.instance.getDailyChallenge().getChallengeName(), remainingMs);
                         }
                     }

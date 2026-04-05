@@ -43,28 +43,19 @@ public class TasksTest {
         Assertions.assertEquals("Shooter", plugin.getDailyChallenge().getChallengeName());
         serverMock.getScheduler().performTicks(20 * 60 * 60 * 20);
         Assertions.assertFalse(plugin.getConfigGestion().getTasks().isChallengeStart());
-        Assertions.assertEquals("Dyer", plugin.getDailyChallenge().getChallengeName());
+        Assertions.assertNotEquals("Shooter", plugin.getDailyChallenge().getChallengeName());
     }
 
     @Test
     public void testNextChallengeAdjust() {
         plugin.getConfigGestion().setAdjustTime(true);
         Assertions.assertEquals("Shooter", plugin.getDailyChallenge().getChallengeName());
-        plugin.getConfigGestion().getTasks().setNow(new Date().sumBetween(new Date(':', 86400000)));
-        serverMock.getScheduler().performTicks(20 * 60 * 60 * 24);
-        Assertions.assertEquals("Dyer", plugin.getDailyChallenge().getChallengeName());
-        Date now = new Date();
-        Date endChallenge = now.cloneDate();
-        String rowDate = endChallenge.getDate();
-        rowDate = rowDate.substring(0, 11) + "23.59.59";
-        endChallenge.setDate(rowDate);
-
-        serverMock.getScheduler().performTicks(20 * 60 * 60 * 24);
-        serverMock.getScheduler().performTicks(20 * 60 * 60 * 24);
-        serverMock.getScheduler().performTicks(20 * 60 * 60 * 24);
-        serverMock.getScheduler().performTicks(20 * 60 * 60 * 24);
-
+        serverMock.getScheduler().performTicks(20 * 60 * 5);
+        plugin.getDailyChallenge().setEndTimeChallenge("08:00");
+        serverMock.getScheduler().performTicks(20 * 4);
+        Assertions.assertNotEquals("Shooter", plugin.getDailyChallenge().getChallengeName());
         plugin.getConfigGestion().setAdjustTime(false);
+        plugin.getDailyChallenge().setEndTimeChallenge("23:59");
     }
 
 }

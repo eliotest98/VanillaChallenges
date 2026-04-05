@@ -44,13 +44,14 @@ public class Main extends JavaPlugin {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
     public static Version version;
     public static MessageGesturePaper messageGesturePaper;
+    private List<String> libraryLegacyMessages = new ArrayList<>();
 
     @Override
     public void onLoad() {
         instance = this;
         version = new Version();
         // Load libraries where Spigot does not do this automatically
-        loadLibraries();
+        libraryLegacyMessages = loadLibraries();
     }
 
     public void onEnable() {
@@ -59,31 +60,31 @@ public class Main extends JavaPlugin {
 
         new Metrics(this, 17661);
 
-        messageGesturePaper = new MessageGesturePaper(
-                instance.getName(), "VanillaChallenges",
-                true, false, this);
+        messageGesturePaper = new MessageGesturePaper(true, false, instance);
+
+        for(String message: libraryLegacyMessages) {
+            messageGesturePaper.sendMessage(message);
+        }
+        libraryLegacyMessages.clear();
 
         messageGesturePaper.sendMessage("\n\n\n&a ___ ___                __  __  __          ______  __            __  __                                    \n" +
-                        "&a|   |   |.---.-..-----.|__||  ||  |.---.-. |      ||  |--..---.-.|  ||  |.-----..-----..-----..-----..-----.\n" +
-                        "&a|   |   ||  _  ||     ||  ||  ||  ||  _  | |   ---||     ||  _  ||  ||  ||  -__||     ||  _  ||  -__||__ --|\n" +
-                        "&a \\_____/ |___._||__|__||__||__||__||___._| |______||__|__||___._||__||__||_____||__|__||___  ||_____||_____|\n" +
-                        "&a                                                                                       |_____|              \n"
-                        + "&a  \r\n" + "&a  \r\n" + "&e  Version " + getDescription().getVersion() + " \r\n"
-                        + "&e© Developed by &feliotesta98 & xSavior_of_God &ewith &4<3 \r\n \r\n \r\n");
+                "&a|   |   |.---.-..-----.|__||  ||  |.---.-. |      ||  |--..---.-.|  ||  |.-----..-----..-----..-----..-----.\n" +
+                "&a|   |   ||  _  ||     ||  ||  ||  ||  _  | |   ---||     ||  _  ||  ||  ||  -__||     ||  _  ||  -__||__ --|\n" +
+                "&a \\_____/ |___._||__|__||__||__||__||___._| |______||__|__||___._||__||__||_____||__|__||___  ||_____||_____|\n" +
+                "&a                                                                                       |_____|              \n"
+                + "&a  \r\n" + "&a  \r\n" + "&e  Version " + getDescription().getVersion() + " \r\n"
+                + "&e© Developed by &feliotesta98 & xSavior_of_God &ewith &4<3 \r\n \r\n \r\n");
 
         if (version.isInRange(8, 12)) {
             messageGesturePaper.sendMessage("&6Server version registered < 1.13");
         } else {
             messageGesturePaper.sendMessage("&6Server version registered > 1.12");
         }
+        messageGesturePaper.sendMessage("Version Detected: &c" + version.getFormattedServerVersion());
 
         messageGesturePaper.sendMessage("&6Loading config...");
 
         config = new ConfigGestion(this.getDataFolder().getPath(), "config.yml");
-
-        messageGesturePaper = new MessageGesturePaper(
-                instance.getName(), config.getMessages().get("Prefix"),
-                true, false, this);
 
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
         getServer().getScheduler().runTask(this, () -> {
@@ -91,43 +92,36 @@ public class Main extends JavaPlugin {
                 if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
                     Main.EPAPI = new ExpansionPlaceholderAPI().getInstance();
                     Main.EPAPI.register();
-                    messageGesturePaper.sendMessage(
-                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fPlaceholderApi&a!"));
-                    messageGesturePaper = new MessageGesturePaper(
-                            instance.getName(), config.getMessages().get("Prefix"),
-                            true, true, this);
+                    messageGesturePaper.sendMessage("&aAdded compatibility to &fPlaceholderApi&a!");
+                    messageGesturePaper.setPlaceholderAPIEnabled(true);
                 }
             } else {
                 getConfigGestion().getHooks().replace("PlaceholderAPI", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("CubeGenerator")) {
                 if (getConfigGestion().getHooks().get("CubeGenerator")) {
-                    messageGesturePaper.sendMessage(
-                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fCubeGenerator&a!"));
+                    messageGesturePaper.sendMessage("&aAdded compatibility to &fCubeGenerator&a!");
                 }
             } else {
                 getConfigGestion().getHooks().replace("CubeGenerator", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
                 if (getConfigGestion().getHooks().get("GriefPrevention")) {
-                    messageGesturePaper.sendMessage(
-                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fGriefPrevention&a!"));
+                    messageGesturePaper.sendMessage( "&aAdded compatibility to &fGriefPrevention&a!");
                 }
             } else {
                 getConfigGestion().getHooks().replace("GriefPrevention", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Tombs")) {
                 if (getConfigGestion().getHooks().get("Tombs")) {
-                    messageGesturePaper.sendMessage(
-                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fTombs&a!"));
+                    messageGesturePaper.sendMessage("&aAdded compatibility to &fTombs&a!");
                 }
             } else {
                 getConfigGestion().getHooks().replace("Tombs", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("Lands")) {
                 if (getConfigGestion().getHooks().get("Lands")) {
-                    messageGesturePaper.sendMessage(
-                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fLands&a!"));
+                    messageGesturePaper.sendMessage("&aAdded compatibility to &fLands&a!");
                     LandsUtils.setLandsIntegration();
                 }
             } else {
@@ -135,16 +129,14 @@ public class Main extends JavaPlugin {
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
                 if (getConfigGestion().getHooks().get("WorldGuard")) {
-                    messageGesturePaper.sendMessage(
-                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fWorldGuard&a!"));
+                    messageGesturePaper.sendMessage("&aAdded compatibility to &fWorldGuard&a!");
                 }
             } else {
                 getConfigGestion().getHooks().replace("WorldGuard", false);
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("SuperiorSkyblock2")) {
                 if (getConfigGestion().getHooks().get("SuperiorSkyblock2")) {
-                    messageGesturePaper.sendMessage(
-                            ChatColor.translateAlternateColorCodes('&', "&aAdded compatibility to &fSuperiorSkyblock2&a!"));
+                    messageGesturePaper.sendMessage("&aAdded compatibility to &fSuperiorSkyblock2&a!");
                 }
             } else {
                 getConfigGestion().getHooks().replace("SuperiorSkyblock2", false);
@@ -175,7 +167,7 @@ public class Main extends JavaPlugin {
         messageGesturePaper.sendMessage("&aDatabase connected!");
         new UpdateChecker(instance, 101426).getVersion(version1 -> {
             if (!instance.getDescription().getVersion().equals(version1)) {
-                messageGesturePaper.sendMessage(ChatColor.RED + "New Update available for VanillaChallenges!");
+                messageGesturePaper.sendMessage("&cNew Update available for VanillaChallenges!");
             }
         });
 
@@ -194,7 +186,7 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         DebugUtils debugSystem = new DebugUtils("Disabled");
         long tempo = System.currentTimeMillis();
-        messageGesturePaper.sendMessage(ChatColor.GREEN + "VanillaChallenges has been disabled, &cBye bye! &e:(");
+        messageGesturePaper.sendMessage("&aVanillaChallenges has been disabled, &cBye bye! &e:(");
         config.getTasks().stopAllTasks();
         if (getConfigGestion().getHooks().get("PlaceholderAPI")) {
             try {
@@ -232,26 +224,29 @@ public class Main extends JavaPlugin {
         this.dailyChallenge = dailyChallenge;
     }
 
-    private void loadLibraries() {
+    private List<String> loadLibraries() {
         final List<Library> libraries = new ArrayList<>();
 
         boolean oldVersion = version.isInRange(8, 16);
 
+        List<String> messagesToSend = new ArrayList<>();
+
         if (oldVersion) {
-            messageGesturePaper.sendMessage("Loading legacy libraries...");
+            messagesToSend.add("Loading legacy libraries...");
             Reader targetReader = new InputStreamReader(getResource("plugin.yml"));
 
             YamlConfiguration pluginFile = YamlConfiguration.loadConfiguration(targetReader);
             for (final String libraryPath : pluginFile.getStringList("legacy-libraries")) {
                 final Library library = Library.fromMavenRepo(libraryPath);
-                messageGesturePaper.sendMessage("Loading library " + libraryPath);
+                messagesToSend.add("Loading library " + libraryPath);
                 libraries.add(library);
             }
 
             for (final Library library : libraries)
                 library.load(Main.class.getClassLoader());
-            messageGesturePaper.sendMessage("Legacy libraries loaded!");
+            messagesToSend.add("Legacy libraries loaded!");
         }
+        return messagesToSend;
     }
 
     public void restoreDatabase() {
@@ -282,14 +277,12 @@ public class Main extends JavaPlugin {
         if (!peacefullTime) {
             // select a challenge
             db.insertDailyChallenges();
-            if(getDailyChallenge() != null) {
+            if (getDailyChallenge() != null) {
                 typeChallenge = getDailyChallenge().getTypeChallenge();
             }
         } else {
             config.getTasks().peacefulTimeTask();
         }
-        System.out.println(getDailyChallenge().getTimeChallenge());
-        System.out.println(typeChallenge);
 
         if (typeChallenge.equalsIgnoreCase("BlockPlaceChallenge")) {
             currentListener = new BlockPlaceEvent();
@@ -386,7 +379,7 @@ public class Main extends JavaPlugin {
         } else if (currentListener == null) {
             challengeSelected = false;
             if (!peacefullTime) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "No Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                messageGesturePaper.sendMessage("&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
             } else {
                 Time time = Main.db.getPeacefulTime();
                 messageGesturePaper.sendMessage(Bukkit.getConsoleSender(), config.getMessages().get("Cooldown")

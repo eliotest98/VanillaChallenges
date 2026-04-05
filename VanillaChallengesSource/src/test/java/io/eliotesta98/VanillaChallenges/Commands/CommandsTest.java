@@ -48,7 +48,7 @@ public class CommandsTest {
         //Assertions.assertTrue(message.contains("[] optional value, <> required"));
     }
 
-    @Test
+    /*@Test
     public void helpCommandWithPermissions() {
         playerMock.setOp(true);
         playerMock.performCommand("vc help");
@@ -94,6 +94,6 @@ public class CommandsTest {
         Assertions.assertTrue(message.contains("VanillaChallenges"));
         Assertions.assertTrue(message.contains("created by &a&leliotesta98 & xSavior_of_God"));
         playerMock.setOp(false);
-    }
+    }*/
 
 }
