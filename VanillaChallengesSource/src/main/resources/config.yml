@@ -139,7 +139,7 @@ Interfaces:
         Type: 'PLAYER_HEAD'
         Texture: '' # set to '' to disable
         Lore:
-          - '&7&oTime Duration: &f{time}'
+          - '&7&oDate: &f{date}'
           - '&7&oDescription: &f{challengeDescription}'
           - '&7&oPoints: &f{challengePoint}'
           - '&7&oWords: {words}.&f * {word}'
@@ -198,8 +198,12 @@ Interfaces:
         SoundClick: ''
 
 
-# you can use a different coloring by using a hexadecimal. for all messages Ex. &{#FFFF00}(yellow).
-# Example for a command: '/vc &{#FFFF00}<reload>&{#000000} command reload Plugin'
+# you can use three different modalities of colors:
+# - Hexadecimal: Ex. &#FFFF00(yellow).
+# - Adventure: Ex. <red></red>
+# - Legacy: Ex. &c(red)
+# Example for a command: '/vc &#FFFF00<reload>&#000000 command reload Plugin'
+# Example for a command: '/vc <yellow><reload></yellow> <green>command reload Plugin</green>'
 Messages:
   Prefix: '&eVanillaChallenges &r'
   Commands:

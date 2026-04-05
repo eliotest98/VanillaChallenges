@@ -5,7 +5,6 @@ import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -102,7 +101,7 @@ public class Interface {
         DebugUtils debug = new DebugUtils("Interface Creation");
         long tempo = System.currentTimeMillis();
         VanillaChallengesInterfaceHolder holder = new VanillaChallengesInterfaceHolder(slots.size(),
-                ChatColor.translateAlternateColorCodes('&', title));
+                Main.messageGesturePaper.applyColorLegacy(title));
         // prendo l'inventario
         final Inventory inventory = holder.getInventory();
         int slotModificable = items.size() - sizeModificableSlot;
@@ -115,10 +114,14 @@ public class Interface {
                 if (itemsConfig.get(slot).getNameItemConfig().equalsIgnoreCase("Challenge")) {
                     if (items.size() > countItems) {
                         if (items.get(countItems) instanceof Challenge) {
-                            Challenge challenge = (Challenge) items.get(countItems);
+                            Challenge challenge = ((Challenge) items.get(countItems));
                             Challenge challengeComplete = Main.instance.getConfigGestion().getChallenges().get(challenge.getChallengeName());
                             if (challenge.getChallengeName().contains("Event_")) {
                                 challengeComplete = Main.instance.getConfigGestion().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
+                            }
+                            challengeComplete.setDate(challenge.getDate());
+                            if(challenge.getChallengeName().equalsIgnoreCase(Main.instance.getDailyChallenge().getChallengeName())) {
+                                challengeComplete.setTimeChallenge(Main.instance.getDailyChallenge().getTimeChallenge());
                             }
                             String challengeNbts = challengeComplete.encodeNbts();
                             NbtList nbtList = new NbtList("vc.numberPage=" + (numberOfPage) +
@@ -193,6 +196,9 @@ public class Interface {
                     Challenge challengeComplete = Main.instance.getConfigGestion().getChallenges().get(challenge.getChallengeName());
                     if (challenge.getChallengeName().contains("Event_")) {
                         challengeComplete = Main.instance.getConfigGestion().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
+                    }
+                    if(challenge.getChallengeName().equalsIgnoreCase(Main.instance.getDailyChallenge().getChallengeName())) {
+                        challengeComplete.setTimeChallenge(Main.instance.getDailyChallenge().getTimeChallenge());
                     }
                     String challengeNbts = challengeComplete.encodeNbts();
                     NbtList nbtList = new NbtList("vc.numberPage=" + (extendedInventory.getPage()) +

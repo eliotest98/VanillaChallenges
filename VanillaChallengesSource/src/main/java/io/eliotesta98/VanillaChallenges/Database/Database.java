@@ -424,55 +424,82 @@ public abstract class Database {
 
     // Challenges Querys
 
-    public String insertDailyChallenges() {
+    public void insertDailyChallenges() {
         int count = 1;
         String schedulerType = Main.instance.getConfigGestion().getChallengeGeneration();
         List<String> keys = new ArrayList<>(Main.instance.getConfigGestion().getChallenges().keySet());
         if (challenges.isEmpty()) {
-            String nome = "nobody";
             if (schedulerType.equalsIgnoreCase("Random")) {
                 Collections.shuffle(keys);
-                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(keys.get(0));
-                Main.instance.setDailyChallenge(challenge);
-                nome = challenge.getTypeChallenge();
-            } else if (schedulerType.equalsIgnoreCase("Single")) {
-                Collections.shuffle(keys);
-                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(keys.get(0));
-                Main.instance.setDailyChallenge(challenge);
-                return challenge.getTypeChallenge();
-            } else if (schedulerType.equalsIgnoreCase("Normal")) {
                 com.HeroxWar.HeroxCore.TimeGesture.Date.Date date = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date();
                 for (String key : keys) {
-                    Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key);
+                    Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key).cloneChallenge();
+                    String rowDate = date.getDate();
+                    if(challenge.getEndTimeChallenge().equalsIgnoreCase("24:00")) {
+                        // replace hours minutes and seconds yyyy.MM.dd.HH.mm.ss
+                        rowDate = rowDate.substring(0, 11) + "23.59.59";
+                        challenge.setEndTimeChallenge("23.59");
+                    } else {
+                        // replace hours minutes and seconds yyyy.MM.dd.HH.mm.ss
+                        rowDate = rowDate.substring(0, 11) + challenge.getEndTimeChallenge()
+                                .replace(":", ".") + ".00";
+                    }
+                    date.setDate(rowDate);
                     challenge.setDate(date);
                     if (count == 1) {
                         Main.instance.setDailyChallenge(challenge);
-                        nome = challenge.getTypeChallenge();
                     }
                     challenges.add(challenge);
                     count++;
                     // creo la data per il giorno successivo aggiungendo 1 giorno
-                    date = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date('.', date.getMilliseconds() + 86400000);
+                    date = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date('.', date.getMilliseconds() + 864000);
+                }
+            } else if (schedulerType.equalsIgnoreCase("Single")) {
+                Collections.shuffle(keys);
+                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(keys.get(0)).cloneChallenge();
+                challenge.setDate(new com.HeroxWar.HeroxCore.TimeGesture.Date.Date());
+                Main.instance.setDailyChallenge(challenge);
+                challenges.add(challenge);
+            } else if (schedulerType.equalsIgnoreCase("Normal")) {
+                com.HeroxWar.HeroxCore.TimeGesture.Date.Date date = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date();
+                for (String key : keys) {
+                    Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key).cloneChallenge();
+                    String rowDate = date.getDate();
+                    if(challenge.getEndTimeChallenge().equalsIgnoreCase("24:00")) {
+                        // replace hours minutes and seconds yyyy.MM.dd.HH.mm.ss
+                        rowDate = rowDate.substring(0, 11) + "23.59.59";
+                    } else {
+                        // replace hours minutes and seconds yyyy.MM.dd.HH.mm.ss
+                        rowDate = rowDate.substring(0, 11) + challenge.getEndTimeChallenge()
+                                .replace(":", ".") + ".00";
+                    }
+                    date.setDate(rowDate);
+                    challenge.setDate(date);
+                    if (count == 1) {
+                        Main.instance.setDailyChallenge(challenge);
+                    }
+                    challenges.add(challenge);
+                    count++;
+                    // creo la data per il giorno successivo aggiungendo 1 giorno
+                    date = new com.HeroxWar.HeroxCore.TimeGesture.Date.Date('.', date.getMilliseconds() + 864000);
                 }
             } else if (schedulerType.equalsIgnoreCase("Nothing")) {
                 clearChallenges();
-                return nome;
             }
             saveChallenges();
-            return nome;
         } else {
             if (schedulerType.equalsIgnoreCase("Single")) {
                 challenges.clear();
                 clearChallenges();
                 Collections.shuffle(keys);
-                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(keys.get(0));
+                Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(keys.get(0)).cloneChallenge();
+                challenge.setDate(new com.HeroxWar.HeroxCore.TimeGesture.Date.Date());
                 Main.instance.setDailyChallenge(challenge);
-                return challenge.getTypeChallenge();
+                challenges.add(challenge);
             } else if (schedulerType.equalsIgnoreCase("Nothing")) {
                 if (!checkIfEventChallenge()) {
                     challenges.clear();
                     clearChallenges();
-                    return "nobody";
                 }
             }
             List<Challenge> toRemove = new ArrayList<>();
@@ -487,19 +514,17 @@ public abstract class Database {
                 deleteChallengeWithName(challengeToRemove.getChallengeName());
             }
 
-            if (challenges.isEmpty()) {
-                insertDailyChallenges();
-            } else {
+            if (!challenges.isEmpty()) {
                 boolean first = true;
                 Challenge firstChallenge = null;
-                for(Challenge challenge: challenges) {
+                for (Challenge challenge : challenges) {
                     Challenge challenge1;
                     if (challenge.getChallengeName().contains("Event_")) {
-                        challenge1 = Main.instance.getConfigGestion().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
+                        challenge1 = Main.instance.getConfigGestion().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", "")).cloneChallenge();
                     } else {
-                        challenge1 = Main.instance.getConfigGestion().getChallenges().get(challenge.getChallengeName());
+                        challenge1 = Main.instance.getConfigGestion().getChallenges().get(challenge.getChallengeName()).cloneChallenge();
                     }
-                    challenge1.setTimeChallenge(challenge.getTimeChallenge());
+                    challenge1.setTimeChallenge(challenge.getTimeChallenge().cloneTime());
                     challenge.getDate().setPattern("yyyy-MM-dd");
                     challenge1.setDate(challenge.getDate());
                     if (first) {
@@ -509,9 +534,7 @@ public abstract class Database {
                 }
                 Main.instance.setDailyChallenge(firstChallenge);
                 Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
-                return Main.instance.getDailyChallenge().getTypeChallenge();
             }
-            return "nobody";
         }
     }
 
@@ -681,7 +704,7 @@ public abstract class Database {
         List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
         int i = 1;
         for (Challenger challenger : top) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), Main.instance.getConfigGestion().getMessages().get("TopPlayers" + i)
+            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), Main.instance.getConfigGestion().getMessages().get("TopPlayers" + i)
                     .replace("{number}", "" + i)
                     .replace("{player}", challenger.getNomePlayer())
                     .replace("{points}", MoneyUtils.transform(challenger.getPoints())));

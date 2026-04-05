@@ -1,9 +1,9 @@
 package io.eliotesta98.VanillaChallenges.Interfaces;
 
 import com.HeroxWar.HeroxCore.MessageGesture;
-import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import com.HeroxWar.HeroxCore.Utils.Texture;
 import com.HeroxWar.HeroxCore.Utils.TextureException;
+import io.eliotesta98.VanillaChallenges.Core.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -67,10 +67,10 @@ public class ItemConfig {
             ArrayList<String> lorenew = new ArrayList<>();
             for (String lorePart : lore) {
                 if (lorePart.contains("{date}")) {
-                    lorenew.add(MessageGesture.applyColor(lorePart.replace("{date}", nbtList.getNbt("vc.challengeDate"))));
+                    lorenew.add(Main.messageGesturePaper.applyColorLegacy(lorePart.replace("{date}", nbtList.getNbt("vc.challengeDate"))));
                 } else if (lorePart.contains("{challengeDescription}")) {
                     String[] description = nbtList.getNbt("vc.challengeDescription").split(",");
-                    lorenew.add(MessageGesture.applyColor(lorePart.replace("{challengeDescription}", "")));
+                    lorenew.add(Main.messageGesturePaper.applyColorLegacy(lorePart.replace("{challengeDescription}", "")));
                     String[] splitTime = nbtList.getNbt("vc.challengeTime").split(":");
                     for (String rigo : description) {
                         if (rigo.contains("[") || rigo.contains("]")) {
@@ -78,7 +78,7 @@ public class ItemConfig {
                         }
                         if (rigo.contains("{hours}") || rigo.contains("{minutes}") ||
                                 rigo.contains("{seconds}") || rigo.contains("{points}") || rigo.contains("{challengeName}")) {
-                            lorenew.add(MessageGesture.applyColor(rigo
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(rigo
                                     .replace("{hours}", splitTime[1])
                                     .replace("{minutes}", splitTime[2])
                                     .replace("{seconds}", splitTime[3])
@@ -87,73 +87,73 @@ public class ItemConfig {
                             ));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(rigo));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(rigo));
                     }
                 } else if (lorePart.contains("{challengePoint}")) {
-                    lorenew.add(MessageGesture.applyColor(lorePart.replace("{challengePoint}",
+                    lorenew.add(Main.messageGesturePaper.applyColorLegacy(lorePart.replace("{challengePoint}",
                             nbtList.getNbt("vc.challengePoint"))));
                 } else if (lorePart.contains("{challengeItemsInHand}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
                     String initialPart = lorePart.split(Pattern.quote("."))[0];
                     String[] description = nbtList.getNbt("vc.challengeItemsInHand").split(",");
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeItemsInHand}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeItemsInHand}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeItemsInHand}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeItemsInHand}", "")));
                     }
                     for (String rigo : description) {
                         if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         } else if (rigo.contains("]")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{item}", rigo.substring(1, rigo.length() - 1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{item}", rigo.substring(1, rigo.length() - 1))));
                             continue;
                         } else if (rigo.contains("[")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{item}", rigo.substring(1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{item}", rigo.substring(1))));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{item}", rigo.substring(1))));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{item}", rigo.substring(1))));
                     }
                 } else if (lorePart.contains("{words}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
                     String initialPart = lorePart.split(Pattern.quote("."))[0];
                     String[] description = nbtList.getNbt("vc.challengeWords").split(",");
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{words}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{words}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{words}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{words}", "")));
                     }
                     for (String rigo : description) {
                         if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         } else if (rigo.contains("]")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{word}", rigo.substring(1, rigo.length() - 1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{word}", rigo.substring(1, rigo.length() - 1))));
                             continue;
                         } else if (rigo.contains("[")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{word}", rigo.substring(1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{word}", rigo.substring(1))));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{word}", rigo.substring(1))));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{word}", rigo.substring(1))));
                     }
                 } else if (lorePart.contains("{challengeBlocks}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
                     String initialPart = lorePart.split(Pattern.quote("."))[0];
                     String[] description = nbtList.getNbt("vc.challengeBlocks").split(",");
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeBlocks}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeBlocks}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeBlocks}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeBlocks}", "")));
                     }
                     for (String rigo : description) {
                         if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         } else if (rigo.contains("]")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{block}", rigo.substring(1, rigo.length() - 1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{block}", rigo.substring(1, rigo.length() - 1))));
                             continue;
                         } else if (rigo.contains("[")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{block}", rigo.substring(1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{block}", rigo.substring(1))));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{block}", rigo.substring(1))));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{block}", rigo.substring(1))));
                     }
                 } else if (lorePart.contains("{rewards}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
@@ -162,7 +162,7 @@ public class ItemConfig {
                     String[] numbers;
                     String rewards = nbtList.getNbt("vc.challengeRewards");
                     if (rewards.contains(",")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{rewards}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{rewards}", "")));
                         description = rewards.split(",");
                         if (description[0].split(":").length == 3) {
                             for (String s : description) {
@@ -195,12 +195,12 @@ public class ItemConfig {
                                     if (reward == null) {
                                         continue;
                                     }
-                                    lorenew.add(MessageGesture.applyColor(itemRigo.replace("{reward}", reward + "").replace("{number}", numberRew + "")));
+                                    lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{reward}", reward + "").replace("{number}", numberRew + "")));
                                     continue;
                                 } else if (aDescription.equalsIgnoreCase("[]")) {
                                     continue;
                                 }
-                                lorenew.add(MessageGesture.applyColor(itemRigo.replace("{reward}", aDescription).replace("{number}", aNumber)));
+                                lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{reward}", aDescription).replace("{number}", aNumber)));
                             }
                             continue;
                         } else {
@@ -212,9 +212,9 @@ public class ItemConfig {
                         numbers = rewards.split(":")[1].split(",");
                     }
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{rewards}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{rewards}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{rewards}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{rewards}", "")));
                     }
                     for (int i = 0; i < description.length; i++) {
                         String rigo = description[i].substring(1);
@@ -232,146 +232,146 @@ public class ItemConfig {
                                     }
                                 }
                             }
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{reward}", reward + "").replace("{number}", numberRew + "")));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{reward}", reward + "").replace("{number}", numberRew + "")));
                             continue;
                         } else if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{reward}", rigo).replace("{number}", number)));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{reward}", rigo).replace("{number}", number)));
                     }
                 } else if (lorePart.contains("{challengeSneaking}")) {
                     String result = nbtList.getNbt("vc.challengeSneaking");
                     if (!result.equalsIgnoreCase("NOBODY") && !result.equalsIgnoreCase("null")) {
-                        lorenew.add(MessageGesture.applyColor(lorePart.replace("{challengeSneaking}", result)));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(lorePart.replace("{challengeSneaking}", result)));
                     }
                 } else if (lorePart.contains("{challengeBlocksOnPlace}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
                     String initialPart = lorePart.split(Pattern.quote("."))[0];
                     String[] description = nbtList.getNbt("vc.challengeBlocksOnPlace").split(",");
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeBlocksOnPlace}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeBlocksOnPlace}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeBlocksOnPlace}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeBlocksOnPlace}", "")));
                     }
                     for (String rigo : description) {
                         if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         } else if (rigo.contains("]")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{block}", rigo.substring(1, rigo.length() - 1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{block}", rigo.substring(1, rigo.length() - 1))));
                             continue;
                         } else if (rigo.contains("[")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{block}", rigo.substring(1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{block}", rigo.substring(1))));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{block}", rigo.substring(1))));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{block}", rigo.substring(1))));
                     }
                 } else if (lorePart.contains("{challengeVehicles}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
                     String initialPart = lorePart.split(Pattern.quote("."))[0];
                     String[] description = nbtList.getNbt("vc.challengeVehicles").split(",");
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeVehicles}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeVehicles}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeVehicles}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeVehicles}", "")));
                     }
                     for (String rigo : description) {
                         if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         } else if (rigo.contains("]")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{vehicle}", rigo.substring(1, rigo.length() - 1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{vehicle}", rigo.substring(1, rigo.length() - 1))));
                             continue;
                         } else if (rigo.contains("[")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{vehicle}", rigo.substring(1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{vehicle}", rigo.substring(1))));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{vehicle}", rigo.substring(1))));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{vehicle}", rigo.substring(1))));
                     }
                 } else if (lorePart.contains("{challengeMobs}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
                     String initialPart = lorePart.split(Pattern.quote("."))[0];
                     String[] description = nbtList.getNbt("vc.challengeMobs").split(",");
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeMobs}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeMobs}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeMobs}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeMobs}", "")));
                     }
                     for (String rigo : description) {
                         if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         } else if (rigo.contains("]")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{mob}", rigo.substring(1, rigo.length() - 1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{mob}", rigo.substring(1, rigo.length() - 1))));
                             continue;
                         } else if (rigo.contains("[")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{mob}", rigo.substring(1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{mob}", rigo.substring(1))));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{mob}", rigo.substring(1))));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{mob}", rigo.substring(1))));
                     }
                 } else if (lorePart.contains("{challengeItems}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
                     String initialPart = lorePart.split(Pattern.quote("."))[0];
                     String[] description = nbtList.getNbt("vc.challengeItems").split(",");
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeItems}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeItems}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeItems}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeItems}", "")));
                     }
                     for (String rigo : description) {
                         if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         } else if (rigo.contains("]")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{item}", rigo.substring(1, rigo.length() - 1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{item}", rigo.substring(1, rigo.length() - 1))));
                             continue;
                         } else if (rigo.contains("[")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{item}", rigo.substring(1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{item}", rigo.substring(1))));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{item}", rigo.substring(1))));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{item}", rigo.substring(1))));
                     }
                 } else if (lorePart.contains("{challengeCauses}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
                     String initialPart = lorePart.split(Pattern.quote("."))[0];
                     String[] description = nbtList.getNbt("vc.challengeCauses").split(",");
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeCauses}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeCauses}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeCauses}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeCauses}", "")));
                     }
                     for (String rigo : description) {
                         if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         } else if (rigo.contains("]")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{cause}", rigo.substring(1, rigo.length() - 1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{cause}", rigo.substring(1, rigo.length() - 1))));
                             continue;
                         } else if (rigo.contains("[")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{cause}", rigo.substring(1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{cause}", rigo.substring(1))));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{cause}", rigo.substring(1))));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{cause}", rigo.substring(1))));
                     }
                 } else if (lorePart.contains("{challengeColors}")) {
                     String itemRigo = lorePart.split(Pattern.quote("."))[1];
                     String initialPart = lorePart.split(Pattern.quote("."))[0];
                     String[] description = nbtList.getNbt("vc.challengeColors").split(",");
                     if (description.length != 1) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeColors}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeColors}", "")));
                     } else if (!description[0].equalsIgnoreCase("[]")) {
-                        lorenew.add(MessageGesture.applyColor(initialPart.replace("{challengeColors}", "")));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(initialPart.replace("{challengeColors}", "")));
                     }
                     for (String rigo : description) {
                         if (rigo.equalsIgnoreCase("[]")) {
                             continue;
                         } else if (rigo.contains("]")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{color}", rigo.substring(1, rigo.length() - 1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{color}", rigo.substring(1, rigo.length() - 1))));
                             continue;
                         } else if (rigo.contains("[")) {
-                            lorenew.add(MessageGesture.applyColor(itemRigo.replace("{color}", rigo.substring(1))));
+                            lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{color}", rigo.substring(1))));
                             continue;
                         }
-                        lorenew.add(MessageGesture.applyColor(itemRigo.replace("{color}", rigo.substring(1))));
+                        lorenew.add(Main.messageGesturePaper.applyColorLegacy(itemRigo.replace("{color}", rigo.substring(1))));
                     }
                 } else {
-                    lorenew.add(MessageGesture.applyColor(lorePart));
+                    lorenew.add(Main.messageGesturePaper.applyColorLegacy(lorePart));
                 }
             }
             itemm.setLore(lorenew);
@@ -379,17 +379,17 @@ public class ItemConfig {
         }
         String nameChange = name;
         if (name.contains("{number}")) {
-            itemm.setDisplayName(ChatColor.translateAlternateColorCodes('&', nameChange.replace("{number}", nbtList.getNbt("vc.numberPage"))));
+            itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(nameChange.replace("{number}", nbtList.getNbt("vc.numberPage"))));
             item.setItemMeta(itemm);
         } else if (name.contains("{challengeName}")) {
             itemm = item.getItemMeta();
             if (nameChange.contains("{challengeName}")) {
                 nameChange = name.replace("{challengeName}", nbtList.getNbt("vc.challengeName"));
             }
-            itemm.setDisplayName(ChatColor.translateAlternateColorCodes('&', nameChange));
+            itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(nameChange));
             item.setItemMeta(itemm);
         } else {
-            itemm.setDisplayName(ChatColor.translateAlternateColorCodes('&', nameChange));
+            itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(nameChange));
         }
         item.setItemMeta(itemm);
         return nbtList.applyNbt(item);

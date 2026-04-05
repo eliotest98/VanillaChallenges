@@ -1,6 +1,5 @@
 package io.eliotesta98.VanillaChallenges.Utils;
 
-import com.HeroxWar.HeroxCore.MessageGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Date.Date;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Core.Main;
@@ -584,6 +583,10 @@ public class Challenge {
         return startTimeChallenge;
     }
 
+    public void setStartTimeChallenge(String startTimeChallenge) {
+        this.startTimeChallenge = startTimeChallenge;
+    }
+
     public boolean isKeepInventory() {
         return keepInventory;
     }
@@ -602,6 +605,10 @@ public class Challenge {
 
     public String getEndTimeChallenge() {
         return endTimeChallenge;
+    }
+
+    public void setEndTimeChallenge(String endTimeChallenge) {
+        this.endTimeChallenge = endTimeChallenge;
     }
 
     public int getMinutesSinglePlayer() {
@@ -688,7 +695,7 @@ public class Challenge {
                 }
                 Player p = Bukkit.getPlayer(playerName);
                 if (p != null) {
-                    MessageGesture.sendMessage(p, Main.instance.getConfigGestion().getMessages().get("BoostMessageSinglePlayer").replace("{number}", multiplierSinglePlayer + "").replace("{minutes}", number + ""));
+                    Main.messageGesturePaper.sendMessage(p, Main.instance.getConfigGestion().getMessages().get("BoostMessageSinglePlayer").replace("{number}", multiplierSinglePlayer + "").replace("{minutes}", number + ""));
                 }
             }
         }, 0, timeNumber);
@@ -718,7 +725,7 @@ public class Challenge {
                     boostingTask.cancel();
                 }
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    MessageGesture.sendMessage(p, Main.instance.getConfigGestion().getMessages().get("BoostMessage").replace("{number}", multiplier + "").replace("{minutes}", number + ""));
+                    Main.messageGesturePaper.sendMessage(p, Main.instance.getConfigGestion().getMessages().get("BoostMessage").replace("{number}", multiplier + "").replace("{minutes}", number + ""));
                 }
             }
         }, 0, timeNumber);
@@ -739,7 +746,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{blockOnPlaced" + number + "}", "&cDELETE PLACEHOLDER"));
-                    MessageGesture.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {blockOnPlaced" + number + "}");
+                    Main.messageGesturePaper.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {blockOnPlaced" + number + "}");
                 }
             }
             Matcher matcherBlock = blockPattern.matcher(title.get(i));
@@ -753,7 +760,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{block" + number + "}", "&cDELETE PLACEHOLDER"));
-                    MessageGesture.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {block" + number + "}");
+                    Main.messageGesturePaper.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {block" + number + "}");
                 }
             }
             Matcher matcherWorld = worldPattern.matcher(title.get(i));
@@ -767,7 +774,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{world" + number + "}", "&cDELETE PLACEHOLDER"));
-                    MessageGesture.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {world" + number + "}");
+                    Main.messageGesturePaper.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {world" + number + "}");
                 }
             }
             Matcher matcherItem = itemPattern.matcher(title.get(i));
@@ -781,7 +788,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{item" + number + "}", "&cDELETE PLACEHOLDER"));
-                    MessageGesture.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {item" + number + "}");
+                    Main.messageGesturePaper.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {item" + number + "}");
                 }
             }
             Matcher matcherItemInHand = itemInHandPattern.matcher(title.get(i));
@@ -795,7 +802,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{itemInHand" + number + "}", "&cDELETE PLACEHOLDER"));
-                    MessageGesture.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {itemInHand" + number + "}");
+                    Main.messageGesturePaper.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {itemInHand" + number + "}");
                 }
             }
             Matcher matcherVehicle = vehiclePattern.matcher(title.get(i));
@@ -809,7 +816,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{vehicle" + number + "}", "&cDELETE PLACEHOLDER"));
-                    MessageGesture.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {vehicle" + number + "}");
+                    Main.messageGesturePaper.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {vehicle" + number + "}");
                 }
             }
             Matcher causeVehicle = causePattern.matcher(title.get(i));
@@ -823,7 +830,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{cause" + number + "}", "&cDELETE PLACEHOLDER"));
-                    MessageGesture.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {cause" + number + "}");
+                    Main.messageGesturePaper.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {cause" + number + "}");
                 }
             }
             Matcher matcherColor = colorPattern.matcher(title.get(i));
@@ -837,7 +844,7 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{color" + number + "}", "&cDELETE PLACEHOLDER"));
-                    MessageGesture.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {color" + number + "}");
+                    Main.messageGesturePaper.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {color" + number + "}");
                 }
             }
             Matcher matcherMob = mobPattern.matcher(title.get(i));
@@ -851,12 +858,12 @@ public class Challenge {
                 } else {
                     title.set(i,
                             title.get(i).replace("{mob" + number + "}", "&cDELETE PLACEHOLDER"));
-                    MessageGesture.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {mob" + number + "}");
+                    Main.messageGesturePaper.sendMessage(sender, "&c&o&lERROR WITH PLACEHOLDER {mob" + number + "}");
                 }
             }
         }
         for (String s : title) {
-            MessageGesture.sendMessage(sender, s
+            Main.messageGesturePaper.sendMessage(sender, s
                     .replace("{hours}", getTimeChallenge().getHours() + "")
                     .replace("{minutes}", getTimeChallenge().getMinutes() + "")
                     .replace("{seconds}", getTimeChallenge().getSeconds() + "")

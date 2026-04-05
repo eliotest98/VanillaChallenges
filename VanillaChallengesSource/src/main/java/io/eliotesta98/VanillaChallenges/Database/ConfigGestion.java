@@ -88,7 +88,7 @@ public class ConfigGestion extends DefaultGestion {
                 File.separator + "Challenges" + File.separator + "Global").listFiles();
 
         if (listOfChallengesGlobalFiles == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
+            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
             return;
         }
         for (File fileChallenge : listOfChallengesGlobalFiles) {
@@ -226,7 +226,7 @@ public class ConfigGestion extends DefaultGestion {
             challenges.put(challengeName, challenge);
         }
 
-        Main.instance.getServer().getConsoleSender().sendMessage("§a" + challenges.size() + " Global Challenges loaded!");
+        Main.messageGesturePaper.sendMessage("&a" + challenges.size() + " Global Challenges loaded!");
 
         if (folderCreate) {
             FileCreator.createAllFiles("Event");
@@ -238,7 +238,7 @@ public class ConfigGestion extends DefaultGestion {
                 File.separator + "Challenges" + File.separator + "Event").listFiles();
 
         if (listOfChallengesEventFiles == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
+            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
             return;
         }
         for (File fileChallenge : listOfChallengesEventFiles) {
@@ -383,7 +383,7 @@ public class ConfigGestion extends DefaultGestion {
             challengesEvent.put(challengeName, challenge);
         }
 
-        Main.instance.getServer().getConsoleSender().sendMessage("§a" + challengesEvent.size() + " Event Challenges loaded!");
+        Main.messageGesturePaper.sendMessage("&a" + challengesEvent.size() + " Event Challenges loaded!");
 
         adjustTime = fileConfiguration.getBoolean("Configuration.AdjustTime");
         numberOfRewardPlayer = fileConfiguration.getInt("Configuration.Top.NumberOfReward");
@@ -412,13 +412,13 @@ public class ConfigGestion extends DefaultGestion {
         try {
             chestCollection = ItemUtils.getChest(fileConfiguration.getString("Configuration.CollectionChallengeItem.Type"), fileConfiguration.getString("Configuration.CollectionChallengeItem.Name"), lore);
         } catch (ExceptionInInitializerError ignore) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!");
+            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!");
         }
         pointsResume = fileConfiguration.getBoolean("Configuration.Points.PointsResume");
 
         ConfigurationSection section = fileConfiguration.getConfigurationSection("Interfaces");
         if (section == null) {
-            MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
+            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
             return;
         }
         for (String nameInterface : section.getKeys(false)) {
@@ -430,7 +430,7 @@ public class ConfigGestion extends DefaultGestion {
             Map<String, ItemConfig> itemsConfig = new HashMap<>();
             section = fileConfiguration.getConfigurationSection("Interfaces." + nameInterface + ".Items");
             if (section == null) {
-                MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
+                Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
                 return;
             }
             for (String nameItem : section.getKeys(false)) {
@@ -439,12 +439,12 @@ public class ConfigGestion extends DefaultGestion {
                 if (type.contains(";")) {
                     String[] x = type.split(";");
                     if (Material.getMaterial(x[0]) == null) {
-                        MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                        Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
                         type = "DIRT";
                     }
                 } else {
                     if (Material.getMaterial(type) == null) {
-                        MessageGesture.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                        Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
                         type = "DIRT";
                     }
                 }
@@ -484,6 +484,7 @@ public class ConfigGestion extends DefaultGestion {
 
     public void setChallenges(Map<String, Challenge> challenges) {
         this.challenges = challenges;
+        saveSection("Challenges", challenges);
     }
 
     public int getTimeBroadcastMessageTitle() {
@@ -523,6 +524,11 @@ public class ConfigGestion extends DefaultGestion {
 
     public boolean isYesterdayTop() {
         return yesterdayTop;
+    }
+
+    public void setYesterdayTop(boolean yesterdayTop) {
+        this.yesterdayTop = yesterdayTop;
+        saveSection("Configuration.Top.Yesterday", yesterdayTop);
     }
 
     public boolean isResetPointsAtNewChallenge() {
