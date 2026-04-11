@@ -45,10 +45,14 @@ public class Main extends JavaPlugin {
     public static Version version;
     public static MessageGesturePaper messageGesturePaper;
     private List<String> libraryLegacyMessages = new ArrayList<>();
+    public static boolean mockTest = false;
 
     @Override
     public void onLoad() {
         instance = this;
+        if (getClassLoader().getClass().getName().startsWith("org.mockbukkit.mockbukkit")) {
+            mockTest = true;
+        }
         version = new Version();
         // Load libraries where Spigot does not do this automatically
         libraryLegacyMessages = loadLibraries();
@@ -58,7 +62,9 @@ public class Main extends JavaPlugin {
         DebugUtils debugSystem = new DebugUtils("Enabled");
         long tempo = System.currentTimeMillis();
 
-        new Metrics(this, 17661);
+        if(mockTest) {
+            new Metrics(this, 17661);
+        }
 
         messageGesturePaper = new MessageGesturePaper(true, false, instance);
 

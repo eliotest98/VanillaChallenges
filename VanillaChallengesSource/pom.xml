@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.eliotesta98.VanillaChallenges</groupId>
     <artifactId>VanillaChallengesSource</artifactId>
-    <version>2.0.3</version>
+    <version>2.0.4</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8
@@ -263,6 +263,7 @@
         </dependency>
         <!-- CubeGenerator -->
         <dependency>
+
             <groupId>io.eliotesta98.CubeGenerator</groupId>
             <artifactId>CubeGeneratorApi</artifactId>
             <version>1.0</version>

@@ -2,7 +2,7 @@ package io.eliotesta98.VanillaChallenges.Utils;
 
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
+import io.eliotesta98.VanillaChallenges.Core.Main;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.event.Event;
 
@@ -61,16 +61,16 @@ public class DebugUtils {
 
     public void debug() {
         String debug = " Debug VanillaChallenges for " + eventName;
-        Bukkit.getServer().getConsoleSender().sendMessage(" ");
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + debug);
-        Bukkit.getServer().getConsoleSender().sendMessage(" ");
+        Main.messageGesturePaper.sendMessage(" ");
+        Main.messageGesturePaper.sendMessage("&e" + debug);
+        Main.messageGesturePaper.sendMessage(" ");
         for (int i = 0; i < this.getSize(); i++) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + this.getLine(i));
+            Main.messageGesturePaper.sendMessage("&c" + this.getLine(i));
         }
-        Bukkit.getServer().getConsoleSender().sendMessage(" ");
+        Main.messageGesturePaper.sendMessage(" ");
         debug = " Close Debug VanillaChallenges for " + eventName;
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + debug);
-        Bukkit.getServer().getConsoleSender().sendMessage(" ");
+        Main.messageGesturePaper.sendMessage("&e" + debug);
+        Main.messageGesturePaper.sendMessage(" ");
         removeAll();
     }
 

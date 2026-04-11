@@ -577,6 +577,9 @@ public class Commands implements CommandExecutor {
                         File folder = new File(Main.instance.getDataFolder() +
                                 File.separator + "backup");
                         StringBuilder finale = new StringBuilder("\n" + fileList + "\n");
+                        if(folder.listFiles() == null) {
+                            break;
+                        }
                         for (int i = 0; i < folder.listFiles().length; i++) {
                             if (folder.listFiles()[i].length() != 0L) {
                                 finale.append(fileLine.replace("{fileName}", folder.listFiles()[i].getName() + "\n"));

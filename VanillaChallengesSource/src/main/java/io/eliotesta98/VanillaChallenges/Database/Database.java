@@ -1,6 +1,5 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
-import com.HeroxWar.HeroxCore.MessageGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
@@ -435,10 +434,10 @@ public abstract class Database {
                 for (String key : keys) {
                     Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key).cloneChallenge();
                     String rowDate = date.getDate();
-                    if(challenge.getEndTimeChallenge().equalsIgnoreCase("24:00")) {
+                    if (challenge.getEndTimeChallenge().equalsIgnoreCase("24:00")) {
                         // replace hours minutes and seconds yyyy.MM.dd.HH.mm.ss
                         rowDate = rowDate.substring(0, 11) + "23.59.59";
-                        challenge.setEndTimeChallenge("23.59");
+                        challenge.setEndTimeChallenge("23:59");
                     } else {
                         // replace hours minutes and seconds yyyy.MM.dd.HH.mm.ss
                         rowDate = rowDate.substring(0, 11) + challenge.getEndTimeChallenge()
@@ -465,9 +464,10 @@ public abstract class Database {
                 for (String key : keys) {
                     Challenge challenge = Main.instance.getConfigGestion().getChallenges().get(key).cloneChallenge();
                     String rowDate = date.getDate();
-                    if(challenge.getEndTimeChallenge().equalsIgnoreCase("24:00")) {
+                    if (challenge.getEndTimeChallenge().equalsIgnoreCase("24:00")) {
                         // replace hours minutes and seconds yyyy.MM.dd.HH.mm.ss
                         rowDate = rowDate.substring(0, 11) + "23.59.59";
+                        challenge.setEndTimeChallenge("23:59");
                     } else {
                         // replace hours minutes and seconds yyyy.MM.dd.HH.mm.ss
                         rowDate = rowDate.substring(0, 11) + challenge.getEndTimeChallenge()
@@ -533,7 +533,7 @@ public abstract class Database {
                     }
                 }
                 Main.instance.setDailyChallenge(firstChallenge);
-                Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[Vanilla Challenges] " + challenges.size() + " challenges remain on DB");
+                Main.messageGesturePaper.sendMessage("&a" + challenges.size() + " challenges remain on DB");
             }
         }
     }
@@ -704,7 +704,7 @@ public abstract class Database {
         List<Challenger> top = Main.instance.getDailyChallenge().getTopPlayers(Main.instance.getConfigGestion().getNumberOfTop());
         int i = 1;
         for (Challenger challenger : top) {
-            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), Main.instance.getConfigGestion().getMessages().get("TopPlayers" + i)
+            Main.messageGesturePaper.sendMessage(Main.instance.getConfigGestion().getMessages().get("TopPlayers" + i)
                     .replace("{number}", "" + i)
                     .replace("{player}", challenger.getNomePlayer())
                     .replace("{points}", MoneyUtils.transform(challenger.getPoints())));
@@ -740,7 +740,7 @@ public abstract class Database {
                     insertChallengerEvent(player.getKey(), player.getValue());
                 }
             } catch (Exception ex) {
-                Bukkit.getServer().getConsoleSender().sendMessage("Save Points Event: " + ex.getMessage());
+                Main.messageGesturePaper.sendMessage("&cSave Points Event: " + ex.getMessage());
             }
         }
         clearChallengers();

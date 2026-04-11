@@ -1,6 +1,5 @@
 package io.eliotesta98.VanillaChallenges.Events.Challenges.ItemCollector;
 
-import com.HeroxWar.HeroxCore.MessageGesture;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Events.Challenges.Modules.Controls;
