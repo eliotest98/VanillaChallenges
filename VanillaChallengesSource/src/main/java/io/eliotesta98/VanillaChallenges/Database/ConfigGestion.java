@@ -2,13 +2,11 @@ package io.eliotesta98.VanillaChallenges.Database;
 
 import com.HeroxWar.HeroxCore.CommentedConfiguration;
 import com.HeroxWar.HeroxCore.Gestion.DefaultGestion;
-import com.HeroxWar.HeroxCore.MessageGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -88,7 +86,7 @@ public class ConfigGestion extends DefaultGestion {
                 File.separator + "Challenges" + File.separator + "Global").listFiles();
 
         if (listOfChallengesGlobalFiles == null) {
-            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
+            Main.messageGesturePaper.sendMessage("&c&lERROR with Challenge Files, please refresh all files!");
             return;
         }
         for (File fileChallenge : listOfChallengesGlobalFiles) {
@@ -238,7 +236,7 @@ public class ConfigGestion extends DefaultGestion {
                 File.separator + "Challenges" + File.separator + "Event").listFiles();
 
         if (listOfChallengesEventFiles == null) {
-            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Challenge Files, please refresh all files!");
+            Main.messageGesturePaper.sendMessage("&c&lERROR with Challenge Files, please refresh all files!");
             return;
         }
         for (File fileChallenge : listOfChallengesEventFiles) {
@@ -412,13 +410,13 @@ public class ConfigGestion extends DefaultGestion {
         try {
             chestCollection = ItemUtils.getChest(fileConfiguration.getString("Configuration.CollectionChallengeItem.Type"), fileConfiguration.getString("Configuration.CollectionChallengeItem.Name"), lore);
         } catch (ExceptionInInitializerError ignore) {
-            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!");
+            Main.messageGesturePaper.sendMessage("&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!");
         }
         pointsResume = fileConfiguration.getBoolean("Configuration.Points.PointsResume");
 
         ConfigurationSection section = fileConfiguration.getConfigurationSection("Interfaces");
         if (section == null) {
-            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
+            Main.messageGesturePaper.sendMessage("&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
             return;
         }
         for (String nameInterface : section.getKeys(false)) {
@@ -430,7 +428,7 @@ public class ConfigGestion extends DefaultGestion {
             Map<String, ItemConfig> itemsConfig = new HashMap<>();
             section = fileConfiguration.getConfigurationSection("Interfaces." + nameInterface + ".Items");
             if (section == null) {
-                Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
+                Main.messageGesturePaper.sendMessage("&c&lERROR with Interfaces configuration section, please refresh the " + fileConfiguration.getName() + " file!");
                 return;
             }
             for (String nameItem : section.getKeys(false)) {
@@ -439,12 +437,12 @@ public class ConfigGestion extends DefaultGestion {
                 if (type.contains(";")) {
                     String[] x = type.split(";");
                     if (Material.getMaterial(x[0]) == null) {
-                        Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                        Main.messageGesturePaper.sendMessage("&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
                         type = "DIRT";
                     }
                 } else {
                     if (Material.getMaterial(type) == null) {
-                        Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(), "&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
+                        Main.messageGesturePaper.sendMessage("&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
                         type = "DIRT";
                     }
                 }

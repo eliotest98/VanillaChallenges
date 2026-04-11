@@ -1,10 +1,8 @@
 package io.eliotesta98.VanillaChallenges.Interfaces;
 
-import com.HeroxWar.HeroxCore.MessageGesture;
 import com.HeroxWar.HeroxCore.Utils.Texture;
 import com.HeroxWar.HeroxCore.Utils.TextureException;
 import io.eliotesta98.VanillaChallenges.Core.Main;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -392,7 +390,11 @@ public class ItemConfig {
             itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(nameChange));
         }
         item.setItemMeta(itemm);
-        return nbtList.applyNbt(item);
+        if(!Main.mockTest) {
+            return nbtList.applyNbt(item);
+        } else {
+            return item;
+        }
     }
 
     public String getName() {

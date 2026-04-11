@@ -1,6 +1,5 @@
 package io.eliotesta98.VanillaChallenges.Events;
 
-import com.HeroxWar.HeroxCore.MessageGesture;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
@@ -83,7 +82,7 @@ public class DailyGiveWinners implements Listener {
                         Bukkit.getScheduler().runTask(Main.instance, () -> {
                             if (player.getInventory().firstEmpty() != -1) {
                                 player.getInventory().addItem(finalItem);
-                                Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + finalItem);
+                                Main.messageGesturePaper.sendMessage(prefix + "&6Winner: " + player.getName() + " has received his reward: " + finalItem);
                                 Main.db.deleteDailyWinnerWithId(winner.getId());
                             }
                         });
@@ -108,7 +107,7 @@ public class DailyGiveWinners implements Listener {
                         Bukkit.getScheduler().runTask(Main.instance, () -> {
                             String commandRefact = finalCommandRefactor.replace("%player%", player.getName());
                             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandRefact);
-                            Main.messageGesturePaper.sendMessage(Bukkit.getServer().getConsoleSender(),prefix + "&6Winner: " + player.getName() + " has received his reward: " + commandRefact);
+                            Main.messageGesturePaper.sendMessage(prefix + "&6Winner: " + player.getName() + " has received his reward: " + commandRefact);
                             Main.db.deleteDailyWinnerWithId(winner.getId());
                         });
                     }

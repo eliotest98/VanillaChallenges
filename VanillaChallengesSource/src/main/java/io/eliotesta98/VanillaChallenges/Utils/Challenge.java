@@ -383,7 +383,7 @@ public class Challenge {
                             }
                         }
                     } catch (Exception ex) {
-                        Bukkit.getServer().getConsoleSender().sendMessage("Save Points Runtime: " + ex.getMessage());
+                        Main.messageGesturePaper.sendMessage("&cSave Points Runtime: " + ex.getMessage());
                     }
                 });
             }
@@ -427,7 +427,7 @@ public class Challenge {
             }
             return topList;
         } catch (Exception ex) {
-            Bukkit.getServer().getConsoleSender().sendMessage("Top Players: " + ex.getMessage());
+            Main.messageGesturePaper.sendMessage("&cTop Players: " + ex.getMessage());
             return topList;
         }
     }
