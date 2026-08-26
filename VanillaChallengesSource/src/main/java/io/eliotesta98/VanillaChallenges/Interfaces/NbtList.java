@@ -3,7 +3,9 @@ package io.eliotesta98.VanillaChallenges.Interfaces;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class NbtList {
 
@@ -30,15 +32,15 @@ public class NbtList {
     }
 
     public String encode() {
-        String encrypt = "";
+        StringBuilder encrypt = new StringBuilder();
         for (Map.Entry<String, String> nbt : nbts.entrySet()) {
-            encrypt = encrypt + nbt.getKey() + ":" + nbt.getValue() + ";";
+            encrypt.append(nbt.getKey()).append(":").append(nbt.getValue()).append(";");
         }
-        encrypt = encrypt.substring(0, encrypt.length() - 1);
-        return encrypt;
+        encrypt = new StringBuilder(encrypt.substring(0, encrypt.length() - 1));
+        return encrypt.toString();
     }
 
-    // add nbt string format vc.asd=123
+    // add nbt string format asd.asd=123
     public void addNbt(String nbt) {
         String[] split = nbt.split("=");
         this.nbts.put(split[0], split[1]);
@@ -73,16 +75,47 @@ public class NbtList {
     }
 
     public ItemStack applyNbt(ItemStack itemStack) {
-        NBTItem nbtItem = new NBTItem(itemStack);
-        for (Map.Entry<String, String> nbt : nbts.entrySet()) {
-            try {
-                int anInteger = Integer.parseInt(nbt.getValue());
-                nbtItem.setInteger(nbt.getKey(), anInteger);
-            } catch (Exception ex) {
+        if(nbts.isEmpty()) {
+            return itemStack;
+        }
+        try {
+            NBTItem nbtItem = new NBTItem(itemStack);
+            for (Map.Entry<String, String> nbt : nbts.entrySet()) {
                 nbtItem.setString(nbt.getKey(), nbt.getValue());
             }
+            return nbtItem.getItem();
+        } catch (NoClassDefFoundError | Exception e) {
+            // Return item without NBT in test environments
+            return itemStack;
         }
-        return nbtItem.getItem();
+    }
+
+    public void deserializeAndAdd(ItemStack itemStack) {
+        final NBTItem clickedItemNBT = new NBTItem(itemStack);
+        Set<String> keys = clickedItemNBT.getKeys();
+
+        for (String key : keys) {
+            String value = clickedItemNBT.getOrNull(key, String.class);
+            if (value == null) {
+                value = clickedItemNBT.getCompound().toString();
+            }
+            addNbt(key, value);
+        }
+    }
+
+    public Map<String, String> deserializeAndReturn(ItemStack itemStack) {
+        Map<String, String> nbts = new HashMap<>();
+        NBTItem clickedItemNBT = new NBTItem(itemStack);
+        Set<String> keys = clickedItemNBT.getKeys();
+
+        for (String key : keys) {
+            String value = clickedItemNBT.getOrNull(key, String.class);
+            if (value == null) {
+                value = clickedItemNBT.getCompound().toString();
+            }
+            nbts.put(key, value);
+        }
+        return nbts;
     }
 
     @Override

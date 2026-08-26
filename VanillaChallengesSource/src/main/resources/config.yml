@@ -121,6 +121,26 @@ Configuration:
   Cooldown: "0t"
 
 
+  # This section is for points conversion command (vc convert)
+  # If you don''t want this feature simply don''t use this section and unset the permission of command
+  PointsConversion:
+    # If you want to reconvert the points from item to virtual point
+    Reconvert: true
+    # The aspect of the item that will be given to the player when use vc convert command
+    ItemPoint:
+      HideTooltip: true
+      Name: '&cVC Point'
+      Lore: []
+      Material: 'NETHER_STAR'
+      CustomModelData: 0
+      Color:
+        RED: 1
+        GREEN: 1
+        BLUE: 1
+      Enchants: [ ]
+      ItemFlags: [ ]
+
+
 Interfaces:
   Challenges:
     Title: "&aChallenges"
@@ -135,67 +155,177 @@ Interfaces:
     Items:
       Challenge:
         Letter: 'h'
+        HideTooltip: false
         Name: '&a{challengeName}'
-        Type: 'PLAYER_HEAD'
-        Texture: '' # set to '' to disable
         Lore:
+          - '&7&oTime: &f{time}'
           - '&7&oDate: &f{date}'
           - '&7&oDescription: &f{challengeDescription}'
           - '&7&oPoints: &f{challengePoint}'
-          - '&7&oWords: {words}.&f * {word}'
-          - '&7&oRewards: {rewards}.&f * {reward} x {number}'
-          - '&7&oBlocks: {challengeBlocks}.&f * {block}'
-          - '&7&oItems in hand: {challengeItemsInHand}.&f * {item}'
+          - '&7&oWorlds: &f{challengeWorlds}'
+          - '&7&oRewards: &f{rewards}'
+          - '&7&oBlocks: &f{challengeBlocks}'
+          - '&7&oItems in hand: &f{challengeItemsInHand}'
           - '&7&oSneaking: &f{challengeSneaking}'
-          - '&7&oBlocks On Place: {challengeBlocksOnPlace}.&f * {block}'
-          - '&7&oVehicles: {challengeVehicles}.&f * {vehicle}'
-          - '&7&oMobs: {challengeMobs}.&f * {mob}'
-          - '&7&oItems: {challengeItems}.&f * {item}'
-          - '&7&oCauses: {challengeCauses}.&f * {cause}'
-          - '&7&oColors: {challengeColors}.&f * {color}'
-        SoundClick: ''
+          - '&7&oBlocks On Place: &f{challengeBlocksOnPlace}'
+          - '&7&oVehicles: &f{challengeVehicles}'
+          - '&7&oMobs: &f{challengeMobs}'
+          - '&7&oItems: &f{challengeItems}'
+          - '&7&oCauses: &f{challengeCauses}'
+          - '&7&oColors: &f{challengeColors}'
+        Material: 'PLAYER_HEAD'
+        CustomModelData: 0
+        Amount: 1
+        ClickSound:
+          Name: 'minecraft:entity.allay.item_thrown'
+          Volume: 100
+          Pitch: 0.6
+        Color:
+          RED: 1
+          GREEN: 1
+          BLUE: 1
+        Enchants: [ ]
+        ItemFlags:
+          - 'HIDE_ATTRIBUTES'
+          - 'HIDE_DESTROYS'
+          - 'HIDE_ENCHANTS'
+          - 'HIDE_PLACED_ON'
+          - 'HIDE_UNBREAKABLE'
+        Actions:
+          Right: [ ]
+          Left: [ ]
+          Middle: [ ]
+          All: [ ]
       Border:
         Letter: 'b'
+        HideTooltip: true
         Name: " "
-        Type: GRAY_STAINED_GLASS_PANE # STAINED_GLASS_PANE;7 <1.13
-        Texture: '' # set to '' to disable
         Lore: [ ]
-        SoundClick: ''
+        Material: 'GRAY_STAINED_GLASS_PANE' # STAINED_GLASS_PANE;7 <1.13
+        CustomModelData: 0
+        Amount: 1
+        ClickSound:
+          Name: 'minecraft:entity.allay.item_thrown'
+          Volume: 100
+          Pitch: 0.6
+        Color:
+          RED: 1
+          GREEN: 1
+          BLUE: 1
+        Enchants: [ ]
+        ItemFlags:
+          - 'HIDE_ATTRIBUTES'
+          - 'HIDE_DESTROYS'
+          - 'HIDE_ENCHANTS'
+          - 'HIDE_PLACED_ON'
+          - 'HIDE_UNBREAKABLE'
+        Actions:
+          Right: [ ]
+          Left: [ ]
+          Middle: [ ]
+          All: [ ]
       LeftPage:
         Letter: 'l'
-        Type: 'PLAYER_HEAD'
+        HideTooltip: false
         Name: '&6&lPage {number}'
-        Texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWVkNzg4MjI1NzYzMTdiMDQ4ZWVhOTIyMjdjZDg1ZjdhZmNjNDQxNDhkY2I4MzI3MzNiYWNjYjhlYjU2ZmExIn19fQ=='
-        SoundClick: ''
         Lore: [ ]
+        Material: 'basehead:eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWVkNzg4MjI1NzYzMTdiMDQ4ZWVhOTIyMjdjZDg1ZjdhZmNjNDQxNDhkY2I4MzI3MzNiYWNjYjhlYjU2ZmExIn19fQ=='
+        CustomModelData: 0
+        Amount: 1
+        ClickSound:
+          Name: 'minecraft:entity.allay.item_thrown'
+          Volume: 100
+          Pitch: 0.6
+        Color:
+          RED: 1
+          GREEN: 1
+          BLUE: 1
+        Enchants: [ ]
+        ItemFlags:
+          - 'HIDE_ATTRIBUTES'
+          - 'HIDE_DESTROYS'
+          - 'HIDE_ENCHANTS'
+          - 'HIDE_PLACED_ON'
+          - 'HIDE_UNBREAKABLE'
+        Actions:
+          Right: [ ]
+          Left: [ ]
+          Middle: [ ]
+          All:
+            - "CLOSE"
+            - "CALLBACK:LEFT_PAGE"
       RightPage:
         Letter: 'r'
-        Type: 'PLAYER_HEAD'
+        HideTooltip: false
         Name: '&6&lPage {number}'
-        Texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzE1NDQ1ZGExNmZhYjY3ZmNkODI3ZjcxYmFlOWMxZDJmOTBjNzNlYjJjMWJkMWVmOGQ4Mzk2Y2Q4ZTgifX19'
-        SoundClick: ''
         Lore: [ ]
+        Material: 'basehead:eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzE1NDQ1ZGExNmZhYjY3ZmNkODI3ZjcxYmFlOWMxZDJmOTBjNzNlYjJjMWJkMWVmOGQ4Mzk2Y2Q4ZTgifX19'
+        CustomModelData: 0
+        Amount: 1
+        ClickSound:
+          Name: 'minecraft:entity.allay.item_thrown'
+          Volume: 100
+          Pitch: 0.6
+        Color:
+          RED: 1
+          GREEN: 1
+          BLUE: 1
+        Enchants: [ ]
+        ItemFlags:
+          - 'HIDE_ATTRIBUTES'
+          - 'HIDE_DESTROYS'
+          - 'HIDE_ENCHANTS'
+          - 'HIDE_PLACED_ON'
+          - 'HIDE_UNBREAKABLE'
+        Actions:
+          Right: [ ]
+          Left: [ ]
+          Middle: [ ]
+          All:
+            - "CLOSE"
+            - "CALLBACK:RIGHT_PAGE"
       Locked:
         Letter: 'h1'
+        HideTooltip: false
         Name: '&a{challengeName}'
-        Type: 'PLAYER_HEAD'
-        Texture: '' # set to '' to disable
         Lore:
           - '&7&oHypothetical Start Date: &f{date}'
           - '&7&oDescription: &f{challengeDescription}'
           - '&7&oPoints: &f{challengePoint}'
-          - '&7&oWords: {words}.&f * {word}'
-          - '&7&oRewards: {rewards}.&f * {reward} x {number}'
-          - '&7&oBlocks: {challengeBlocks}.&f * {block}'
-          - '&7&oItems in hand: {challengeItemsInHand}.&f * {item}'
+          - '&7&oWorlds: &f{challengeWorlds}'
+          - '&7&oRewards: &f{rewards}'
+          - '&7&oBlocks: &f{challengeBlocks}'
+          - '&7&oItems in hand: &f{challengeItemsInHand}'
           - '&7&oSneaking: &f{challengeSneaking}'
-          - '&7&oBlocks On Place: {challengeBlocksOnPlace}.&f * {block}'
-          - '&7&oVehicles: {challengeVehicles}.&f * {vehicle}'
-          - '&7&oMobs: {challengeMobs}.&f * {mob}'
-          - '&7&oItems: {challengeItems}.&f * {item}'
-          - '&7&oCauses: {challengeCauses}.&f * {cause}'
-          - '&7&oColors: {challengeColors}.&f * {color}'
-        SoundClick: ''
+          - '&7&oBlocks On Place: &f{challengeBlocksOnPlace}'
+          - '&7&oVehicles: &f{challengeVehicles}'
+          - '&7&oMobs: &f{challengeMobs}'
+          - '&7&oItems: &f{challengeItems}'
+          - '&7&oCauses: &f{challengeCauses}'
+          - '&7&oColors: &f{challengeColors}'
+        Material: 'PLAYER_HEAD'
+        CustomModelData: 0
+        Amount: 1
+        ClickSound:
+          Name: 'minecraft:entity.allay.item_thrown'
+          Volume: 100
+          Pitch: 0.6
+        Color:
+          RED: 1
+          GREEN: 1
+          BLUE: 1
+        Enchants: [ ]
+        ItemFlags:
+          - 'HIDE_ATTRIBUTES'
+          - 'HIDE_DESTROYS'
+          - 'HIDE_ENCHANTS'
+          - 'HIDE_PLACED_ON'
+          - 'HIDE_UNBREAKABLE'
+        Actions:
+          Right: [ ]
+          Left: [ ]
+          Middle: [ ]
+          All: [ ]
 
 
 # you can use three different modalities of colors:
@@ -210,12 +340,13 @@ Messages:
     Footer: '&7(&7&l(&c&l!&7&l)&7) &9[] optional value, <> required'
     Economy: '   &e/vc &6<add|remove> <playerName> <points> &7for add or remove points of a player'
     Challenge: '   &e/vc &6<challenge> &7for see the daily challenge selected and time resume'
+    Convert: '   &e/vc &6<convert> <amount> &7for convert economy points to physics points'
     Clear: '   &e/vc &6<clear> &7for clear all informations of databases and refresh'
     Event: '   &e/vc &6<event> <stop|challenge|random> [time] &7for start or stop a challenge event'
     List: '   &e/vc &6<list> &7for see the list of Challenges'
     Next: '   &e/vc &6<next> [skip] &7go to the next challenge and if you want skip the peaceful time'
     Points: '   &e/vc &6<points> [playerName] &7for see your points or points of another player'
-    Reload: '   &e/vc &6<reload> &7command reload Plugin'
+    Reload: '   &e/vc &6<reload> [soft] &7command reload Plugin or only configurations'
     Reward: '   &e/vc &6<reward> &7for receive reward of win'
     Schedule: '   &e/vc &6<schedule> <add|remove|disable> [[challenge|random] [time]] &7for add or remove a challenge from schedule or disable it'
     Time: '   &e/vc &6<time> <add|remove|set|remaining> [time] &7for add, remove, set or see the time remaining of the challenge'

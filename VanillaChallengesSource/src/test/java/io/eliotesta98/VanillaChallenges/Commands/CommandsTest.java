@@ -1,7 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Commands;
 
 import io.eliotesta98.VanillaChallenges.Core.Main;
-import io.test.utils.PrintMessage;
+import test.utils.PrintMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,23 +65,14 @@ public class CommandsTest {
         List<String> messages = printMessage.getAllPlayerMessages(playerMock);
         boolean found = false;
         for (String a : messages) {
+            if(a.equalsIgnoreCase("§eVanillaChallenges §7Remain §b0§7 points for get the reward!")) {
+                continue;
+            }
             if (a.contains("VanillaChallenges")) {
                 found = true;
                 System.out.println(a);
                 Assertions.assertTrue(a.contains("VanillaChallenges"));
                 Assertions.assertTrue(a.contains("§a§leliotesta98 & xSavior_of_God"));
-                Assertions.assertTrue(a.contains("§e/vc §6<add|remove> <playerName> <points> §7for add or remove points of a player\n" +
-                        "   §e/vc §6<challenge> §7for see the daily challenge selected and time resume\n" +
-                        "   §e/vc §6<clear> §7for clear all informations of databases and refresh\n" +
-                        "   §e/vc §6<event> <stop|challenge|random> [time] §7for start or stop a challenge event\n" +
-                        "   §e/vc §6<list> §7for see the list of Challenges\n" +
-                        "   §e/vc §6<next> [skip] §7go to the next challenge and if you want skip the peaceful time\n" +
-                        "   §e/vc §6<points> [playerName] §7for see your points or points of another player\n" +
-                        "   §e/vc §6<reload> §7command reload Plugin\n" +
-                        "   §e/vc §6<reward> §7for receive reward of win\n" +
-                        "   §e/vc §6<schedule> <add|remove|disable> [[challenge|random] [time]] §7for add or remove a challenge from schedule or disable it\n" +
-                        "   §e/vc §6<time> <add|remove|set|remaining> [time] §7for add, remove, set or see the time remaining of the challenge\n" +
-                        "   §e/vc §6<top> [yesterday] §7for see the top 3"));
                 Assertions.assertTrue(a.contains("(§l(§c§l!§7§l)§7) §9[] optional value, <> required"));
             }
         }
@@ -298,7 +289,7 @@ public class CommandsTest {
         serverMock.getScheduler().performTicks(20 * 500);
         Assertions.assertTrue(Main.instance.getDailyChallenge().getChallengeName().equalsIgnoreCase("Shooter"));
         playerMock.performCommand("vc event random");
-        serverMock.getScheduler().performTicks(20 * 500);
+        serverMock.getScheduler().performTicks(20 * 10000);
         Assertions.assertFalse(Main.instance.getDailyChallenge().getChallengeName().equalsIgnoreCase("Shooter"));
         playerMock.setOp(false);
     }

@@ -20,7 +20,7 @@ Dier:
     # For Ex. 24:00-05:00 = 19h
     Time: '0h'  # Worlds where you want the challenge to work, if you want all worlds set []
   Worlds: []
-  # Causes you want for the challenge, if you want all causes set []
+  # Causes you want to damage for the challenge, if you want all causes set []
   # add RANDOM at the end of list for select only one item random from list
   # Ex. Items:
   #       - DIRT
@@ -43,14 +43,14 @@ Dier:
   Items: []
   # Able or disable Sneak when place Es. true or false or NOBODY
   Sneaking: 'NOBODY'
-  # Able or disable death with Lands. (If set true, the player must die in his own land, otherwise he can die anywhere)
-  # ATTENTION! To activate this feature, you have to use the Lands Plugin and activate it in config.yml
+  # Able or disable death with Lands. (If it is true, the player must die in his own land, otherwise he can die anywhere)
+  # ATTENTION! To activate this function, you can use the Land Plugin and activate it in config.yml
   DeathInLand: false
   # How many points you want give at death?
   Point: 1
   # If you want keepInventory for this challenge
   KeepInventory: false
-  # Number of slots you want employed for give the points (min = 0, max all inventory, -1 for disabled)
+  # Number of slots you want employed to receive points (min = 0, max all inventory, -1 for disabling)
   Number: -1
   # if you want a multiplier based on all players
   Boost:
@@ -71,25 +71,25 @@ Dier:
     # For how many minutes you want give the multiplier?
     Minutes: 2
   # Name of Challenge
-  NameChallenge: "&7Dyer Challenge"
+  NameChallenge: "&7Dye Challenge"
   # item representing challenge
   ItemChallenge: 'RECOVERY_COMPASS'
   # Title challenge
   # Placeholder List:
   #  - {challengeName}
-  #  - {block#} where # is a number (start with 1) Ex. {block1}
-  #  - {blockOnPlaced#} where # is a number (start with 1) Ex. {blockOnPlaced1}
-  #  - {points}
+  #  - {challengeBlocks}
+  #  - {challengeBlocksOnPlace}
+  #  - {challengePoint}
   #  - {minutes}
   #  - {slots}
-  #  - {sneaking}
-  #  - {world#} where # is a number (start with 1) Ex. {world1}
-  #  - {item#} where # is a number (start with 1) Ex. {item1}
-  #  - {itemInHand#} where # is a number (start with 1) Ex. {itemInHand1}
-  #  - {vehicle#} where # is a number (start with 1) Ex. {vehicle1}
-  #  - {cause#} where # is a number (start with 1) Ex. {cause1}
-  #  - {color#} where # is a number (start with 1) Ex. {color1}
-  #  - {mob#} where # is a number (start with 1) Ex. {mob1}
+  #  - {challengeSneaking}
+  #  - {challengeWorlds}
+  #  - {challengeItems}
+  #  - {challengeItemsInHand}
+  #  - {challengeVehicles}
+  #  - {challengeCauses}
+  #  - {challengeColors}
+  #  - {challengeMobs}
   #  - {force}
   #  - {power}
   #  - {onGround}
@@ -100,7 +100,7 @@ Dier:
     - '&8█&b██&8████&b███               {challengeName}'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██        &7Dye for receive points'
-    - '&b█&8███&6██&b█&8███             &7({points} point for 1 death)'
+    - '&b█&8███&6██&b█&8███             &7({challengePoint} point for 1 death)'
     - '&8████&6██&8████     &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8███&6█&8██&6█&8███'
     - '&8██&6█&8████&6█&8██'

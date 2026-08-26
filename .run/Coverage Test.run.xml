@@ -1,6 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Coverage Test" type="JUnit" factoryName="JUnit">
     <module name="VanillaChallengesSource" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="io.eliotesta98.VanillaChallenges.Modules.*" />
+        <option name="ENABLED" value="true" />
+        <option name="INCLUDE" value="false" />
+      </pattern>
+    </extension>
     <option name="PACKAGE_NAME" value="" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />

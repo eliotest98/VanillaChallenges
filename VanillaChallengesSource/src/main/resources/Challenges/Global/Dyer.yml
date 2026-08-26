@@ -56,19 +56,19 @@ Dyer:
   # Title challenge
   # Placeholder List:
   #  - {challengeName}
-  #  - {block#} where # is a number (start with 1) Ex. {block1}
-  #  - {blockOnPlaced#} where # is a number (start with 1) Ex. {blockOnPlaced1}
-  #  - {points}
+  #  - {challengeBlocks}
+  #  - {challengeBlocksOnPlace}
+  #  - {challengePoint}
   #  - {minutes}
   #  - {slots}
-  #  - {sneaking}
-  #  - {world#} where # is a number (start with 1) Ex. {world1}
-  #  - {item#} where # is a number (start with 1) Ex. {item1}
-  #  - {itemInHand#} where # is a number (start with 1) Ex. {itemInHand1}
-  #  - {vehicle#} where # is a number (start with 1) Ex. {vehicle1}
-  #  - {cause#} where # is a number (start with 1) Ex. {cause1}
-  #  - {color#} where # is a number (start with 1) Ex. {color1}
-  #  - {mob#} where # is a number (start with 1) Ex. {mob1}
+  #  - {challengeSneaking}
+  #  - {challengeWorlds}
+  #  - {challengeItems}
+  #  - {challengeItemsInHand}
+  #  - {challengeVehicles}
+  #  - {challengeCauses}
+  #  - {challengeColors}
+  #  - {challengeMobs}
   #  - {force}
   #  - {power}
   #  - {onGround}
@@ -79,7 +79,7 @@ Dyer:
     - '&8█&b██&8████&b███         {challengeName}'
     - '&b██&6█&8███&b███&8█'
     - '&b█&8██&6█&8█&b███&8██        &7Color sheep with any color'
-    - '&b█&8███&6██&b█&8███             &7({points} point for 1 sheep)'
+    - '&b█&8███&6██&b█&8███             &7({challengePoint} point for 1 sheep)'
     - '&8████&6██&8████     &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8███&6█&8██&6█&8███'
     - '&8██&6█&8████&6█&8██'

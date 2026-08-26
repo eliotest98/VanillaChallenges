@@ -2,11 +2,14 @@ package io.eliotesta98.VanillaChallenges.Commands;
 
 import com.HeroxWar.HeroxCore.ReloadGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
+import io.eliotesta98.VanillaChallenges.Database.ConfigGestion;
 import io.eliotesta98.VanillaChallenges.Database.Objects.Challenger;
 import io.eliotesta98.VanillaChallenges.Database.Objects.DailyWinner;
 import io.eliotesta98.VanillaChallenges.Database.H2Database;
 import io.eliotesta98.VanillaChallenges.Events.DailyGiveWinners;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
+import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
+import io.eliotesta98.VanillaChallenges.Interfaces.NbtList;
 import io.eliotesta98.VanillaChallenges.Utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -15,6 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import io.eliotesta98.VanillaChallenges.Core.Main;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -45,6 +49,7 @@ public class Commands implements CommandExecutor {
     private final String commandVcPointsHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Points");
     private final String commandVcTopHelp = Main.instance.getConfigGestion().getMessages().get("Commands.Top");
     private final String commandVcClear = Main.instance.getConfigGestion().getMessages().get("Commands.Clear");
+    private final String commandVcConvert = Main.instance.getConfigGestion().getMessages().get("Commands.Convert");
     private final String commandVcChallenge = Main.instance.getConfigGestion().getMessages().get("Commands.Challenge");
     private final String commandVcEconomyChallenge = Main.instance.getConfigGestion().getMessages().get("Commands.Economy");
     private final String commandVcReward = Main.instance.getConfigGestion().getMessages().get("Commands.Reward");
@@ -98,6 +103,9 @@ public class Commands implements CommandExecutor {
                 if (sender.hasPermission("vc.challenge.command")) {
                     finale = finale + commandVcChallenge + "\n";
                 }
+                if (sender.hasPermission("vc.convert.command")) {
+                    finale = finale + commandVcConvert + "\n";
+                }
                 if (sender.hasPermission("vc.clear.command")) {
                     finale = finale + commandVcClear + "\n";
                 }
@@ -138,26 +146,14 @@ public class Commands implements CommandExecutor {
                 return;
             }
 
+            long points;
             switch (args[0]) {
                 case "add":
-                    if (!sender.hasPermission("vc.add.command")) {
-                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
+                    if (isChallengeSelected(sender)) {
                         break;
                     }
-                    if (!Main.challengeSelected) {
-                        if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
-                            } else {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                            }
-                        } else {
-                            Time time = Main.db.getPeacefulTime();
-                            Main.messageGesturePaper.sendMessage(sender, cooldown
-                                    .replace("{hours}", time.getHours() + "")
-                                    .replace("{minutes}", time.getMinutes() + "")
-                                    .replace("{seconds}", time.getSeconds() + ""));
-                        }
+                    if (!sender.hasPermission("vc.add.command")) {
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
                     if (args.length > 3) {
@@ -168,20 +164,7 @@ public class Commands implements CommandExecutor {
                     Main.messageGesturePaper.sendMessage(sender, pointsadd.replace("{points}", args[2]).replace("{player}", args[1]));
                     break;
                 case "challenge":
-                    if (!Main.challengeSelected) {
-                        if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
-                            } else {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                            }
-                        } else {
-                            Time time = Main.db.getPeacefulTime();
-                            Main.messageGesturePaper.sendMessage(sender, cooldown
-                                    .replace("{hours}", time.getHours() + "")
-                                    .replace("{minutes}", time.getMinutes() + "")
-                                    .replace("{seconds}", time.getSeconds() + ""));
-                        }
+                    if (isChallengeSelected(sender)) {
                         break;
                     }
                     if (args.length != 1) {
@@ -189,6 +172,63 @@ public class Commands implements CommandExecutor {
                         break;
                     }
                     Main.instance.getDailyChallenge().message(sender);
+                    break;
+                case "convert":
+                    if (isChallengeSelected(sender)) {
+                        break;
+                    }
+                    if (!(sender instanceof Player)) {
+                        Main.messageGesturePaper.sendMessage(sender, errorYouAreNotAPlayer);
+                        break;
+                    }
+                    Player player = ((Player) sender);
+                    if (!sender.hasPermission("vc.convert.command")) {
+                        Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
+                        break;
+                    }
+                    if (args.length != 2) {
+                        Main.messageGesturePaper.sendMessage(sender, commandVcConvert);
+                        break;
+                    }
+                    long pointsArg;
+                    try {
+                        pointsArg = Long.parseLong(args[1]);
+                    } catch (NumberFormatException e) {
+                        Main.messageGesturePaper.sendMessage(sender, commandVcConvert);
+                        break;
+                    }
+                    points = Main.instance.getDailyChallenge().getPointFromPLayerName(sender.getName());
+                    if (pointsArg < 1) {
+                        pointsArg = 1;
+                    }
+                    if (pointsArg >= points) {
+                        pointsArg = points - 1;
+                    }
+                    Main.instance.getDailyChallenge().incrementCommands(sender.getName(), -pointsArg);
+                    ItemConfig itemPoint = Main.instance.getConfigGestion().getItemPoint();
+                    NbtList nbtList = new NbtList();
+                    nbtList.addNbt("vc.point","true");
+                    long counter = pointsArg / 64;
+                    if (counter == 0) {
+                        itemPoint.setAmount(Long.valueOf(pointsArg).intValue());
+                        Map<Integer, ItemStack> items = player.getInventory().addItem(itemPoint.createItemConfig(nbtList));
+                        for (ItemStack item : items.values()) {
+                            player.getWorld().dropItem(player.getLocation(), item);
+                        }
+                    } else {
+                        for (long i = 0; i < counter; i++) {
+                            itemPoint.setAmount(64);
+                            Map<Integer, ItemStack> items = player.getInventory().addItem(itemPoint.createItemConfig(nbtList));
+                            for (ItemStack item : items.values()) {
+                                player.getWorld().dropItem(player.getLocation(), item);
+                            }
+                        }
+                        itemPoint.setAmount((int) (pointsArg % 64));
+                        Map<Integer, ItemStack> items = player.getInventory().addItem(itemPoint.createItemConfig(nbtList));
+                        for (ItemStack item : items.values()) {
+                            player.getWorld().dropItem(player.getLocation(), item);
+                        }
+                    }
                     break;
                 case "clear":
                     if (!sender.hasPermission("vc.clear.command")) {
@@ -391,20 +431,7 @@ public class Commands implements CommandExecutor {
                         Main.messageGesturePaper.sendMessage(sender, errorYouAreNotAPlayer);
                         break;
                     }
-                    if (!Main.challengeSelected) {
-                        if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
-                            } else {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                            }
-                        } else {
-                            Time time = Main.db.getPeacefulTime();
-                            Main.messageGesturePaper.sendMessage(sender, cooldown
-                                    .replace("{hours}", time.getHours() + "")
-                                    .replace("{minutes}", time.getMinutes() + "")
-                                    .replace("{seconds}", time.getSeconds() + ""));
-                        }
+                    if (isChallengeSelected(sender)) {
                         break;
                     }
                     if (!sender.hasPermission("vc.list.command")) {
@@ -428,20 +455,7 @@ public class Commands implements CommandExecutor {
                     });
                     break;
                 case "next":
-                    if (!Main.challengeSelected) {
-                        if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
-                            } else {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                            }
-                        } else {
-                            Time time = Main.db.getPeacefulTime();
-                            Main.messageGesturePaper.sendMessage(sender, cooldown
-                                    .replace("{hours}", time.getHours() + "")
-                                    .replace("{minutes}", time.getMinutes() + "")
-                                    .replace("{seconds}", time.getSeconds() + ""));
-                        }
+                    if (isChallengeSelected(sender)) {
                         break;
                     }
                     if (!sender.hasPermission("vc.next.command")) {
@@ -463,20 +477,7 @@ public class Commands implements CommandExecutor {
                     Bukkit.getScheduler().runTask(Main.instance, () -> Main.instance.getDailyChallenge().nextChallenge(resetPoints, rankingReward, randomReward, numberOfRewardedPlayer, numberOfTop, "Command Execution", skipPeacefulTime));
                     break;
                 case "points":
-                    if (!Main.challengeSelected) {
-                        if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
-                            } else {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                            }
-                        } else {
-                            Time time = Main.db.getPeacefulTime();
-                            Main.messageGesturePaper.sendMessage(sender, cooldown
-                                    .replace("{hours}", time.getHours() + "")
-                                    .replace("{minutes}", time.getMinutes() + "")
-                                    .replace("{seconds}", time.getSeconds() + ""));
-                        }
+                    if (isChallengeSelected(sender)) {
                         break;
                     }
                     // controllo se ha il permesso
@@ -490,7 +491,7 @@ public class Commands implements CommandExecutor {
                     }
                     if (args.length == 1) {
                         if (sender instanceof Player) {
-                            long points = Main.instance.getDailyChallenge().getPointFromPLayerName(sender.getName());
+                            points = Main.instance.getDailyChallenge().getPointFromPLayerName(sender.getName());
                             Main.messageGesturePaper.sendMessage(sender, pointsInfo.replace("{player}", pointsPlayerPlaceholder).replace("{number}", "" + points));
                         } else {
                             Main.messageGesturePaper.sendMessage(sender, errorYouAreNotAPlayer);
@@ -500,7 +501,7 @@ public class Commands implements CommandExecutor {
                             Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                             break;
                         }
-                        long points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
+                        points = Main.instance.getDailyChallenge().getPointFromPLayerName(args[1]);
                         Main.messageGesturePaper.sendMessage(sender, pointsInfo.replace("{player}", args[1]).replace("{number}", "" + points));
                     }
                     break;
@@ -510,31 +511,33 @@ public class Commands implements CommandExecutor {
                         Main.messageGesturePaper.sendMessage(sender, errorNoPerms);
                         break;
                     }
-                    if (args.length != 1) {
+                    if (args.length > 2) {
                         Main.messageGesturePaper.sendMessage(sender, commandVcReloadHelp);
                         break;
                     }
-                    Bukkit.getScheduler().runTask(Main.instance, () -> {
-                        Main.messageGesturePaper.sendMessage(sender, "&6Reloading...");
-                        ReloadGesture.reload(Main.instance.getName());
-                        Main.messageGesturePaper.sendMessage(sender, "&aReloaded!");
-                    });
+                    if (args.length == 1) {
+                        Bukkit.getScheduler().runTask(Main.instance, () -> {
+                            Main.messageGesturePaper.sendMessage(sender, "&6Reloading...");
+                            ReloadGesture.reload(Main.instance.getName());
+                            Main.messageGesturePaper.sendMessage(sender, "&aReloaded!");
+                        });
+                    } else {
+                        Bukkit.getScheduler().runTask(Main.instance, () -> {
+                            Main.messageGesturePaper.sendMessage(sender, "&6VanillaChallenges unload operation...");
+                            Main.instance.unload();
+                            Main.messageGesturePaper.sendMessage(sender, "&aVanillaChallenges unload operation completed!");
+
+                            Main.messageGesturePaper.sendMessage(sender, "&6Loading config...");
+                            Main.instance.setConfigGestion(new ConfigGestion(
+                                    Main.instance.getDataFolder().getPath(), "config.yml",
+                                    "bho"));
+                            Main.instance.loadConfigs();
+                            Main.messageGesturePaper.sendMessage(sender, "&aConfiguration Reloaded!");
+                        });
+                    }
                     break;
                 case "remove":
-                    if (!Main.challengeSelected) {
-                        if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
-                            } else {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                            }
-                        } else {
-                            Time time = Main.db.getPeacefulTime();
-                            Main.messageGesturePaper.sendMessage(sender, cooldown
-                                    .replace("{hours}", time.getHours() + "")
-                                    .replace("{minutes}", time.getMinutes() + "")
-                                    .replace("{seconds}", time.getSeconds() + ""));
-                        }
+                    if (isChallengeSelected(sender)) {
                         break;
                     }
                     // controllo se ha il permesso
@@ -577,7 +580,7 @@ public class Commands implements CommandExecutor {
                         File folder = new File(Main.instance.getDataFolder() +
                                 File.separator + "backup");
                         StringBuilder finale = new StringBuilder("\n" + fileList + "\n");
-                        if(folder.listFiles() == null) {
+                        if (folder.listFiles() == null) {
                             break;
                         }
                         for (int i = 0; i < folder.listFiles().length; i++) {
@@ -630,20 +633,7 @@ public class Commands implements CommandExecutor {
                     Main.instance.pluginStartingProcess();
                     break;
                 case "schedule":
-                    if (!Main.challengeSelected) {
-                        if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
-                            } else {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                            }
-                        } else {
-                            Time time = Main.db.getPeacefulTime();
-                            Main.messageGesturePaper.sendMessage(sender, cooldown
-                                    .replace("{hours}", time.getHours() + "")
-                                    .replace("{minutes}", time.getMinutes() + "")
-                                    .replace("{seconds}", time.getSeconds() + ""));
-                        }
+                    if (isChallengeSelected(sender)) {
                         break;
                     }
                     if (args.length < 2 || args.length > 4) {
@@ -785,20 +775,7 @@ public class Commands implements CommandExecutor {
                     }
                     break;
                 case "time":
-                    if (!Main.challengeSelected) {
-                        if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
-                            } else {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                            }
-                        } else {
-                            Time time = Main.db.getPeacefulTime();
-                            Main.messageGesturePaper.sendMessage(sender, cooldown
-                                    .replace("{hours}", time.getHours() + "")
-                                    .replace("{minutes}", time.getMinutes() + "")
-                                    .replace("{seconds}", time.getSeconds() + ""));
-                        }
+                    if (isChallengeSelected(sender)) {
                         break;
                     }
                     if (args.length < 2 || args.length > 3) {
@@ -903,20 +880,7 @@ public class Commands implements CommandExecutor {
                     }
                     break;
                 case "top":
-                    if (!Main.challengeSelected) {
-                        if (!Main.db.checkPeacefulTime()) {
-                            if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
-                            } else {
-                                Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
-                            }
-                        } else {
-                            Time time = Main.db.getPeacefulTime();
-                            Main.messageGesturePaper.sendMessage(sender, cooldown
-                                    .replace("{hours}", time.getHours() + "")
-                                    .replace("{minutes}", time.getMinutes() + "")
-                                    .replace("{seconds}", time.getSeconds() + ""));
-                        }
+                    if (isChallengeSelected(sender)) {
                         break;
                     }
                     // controllo se ha il permesso
@@ -961,6 +925,9 @@ public class Commands implements CommandExecutor {
                     if (sender.hasPermission("vc.challenge.command")) {
                         finale = finale + commandVcChallenge + "\n";
                     }
+                    if (sender.hasPermission("vc.convert.command")) {
+                        finale = finale + commandVcConvert + "\n";
+                    }
                     if (sender.hasPermission("vc.clear.command")) {
                         finale = finale + commandVcClear + "\n";
                     }
@@ -1001,6 +968,26 @@ public class Commands implements CommandExecutor {
                 debug.debug();
             }
         });
+        return false;
+    }
+
+    private boolean isChallengeSelected(@NotNull CommandSender sender) {
+        if (!Main.challengeSelected) {
+            if (!Main.db.checkPeacefulTime()) {
+                if (!Main.instance.getConfigGestion().getChallengeGeneration().equalsIgnoreCase("Nothing")) {
+                    Main.messageGesturePaper.sendMessage(sender, "&cNo DailyChallenge selected, check the configurations files and restart the plugin!");
+                } else {
+                    Main.messageGesturePaper.sendMessage(sender, "&cNo Scheduler enabled, remember for use the plugin now you have to use vc event command for start a challenge!");
+                }
+            } else {
+                Time time = Main.db.getPeacefulTime();
+                Main.messageGesturePaper.sendMessage(sender, cooldown
+                        .replace("{hours}", time.getHours() + "")
+                        .replace("{minutes}", time.getMinutes() + "")
+                        .replace("{seconds}", time.getSeconds() + ""));
+            }
+            return true;
+        }
         return false;
     }
 }

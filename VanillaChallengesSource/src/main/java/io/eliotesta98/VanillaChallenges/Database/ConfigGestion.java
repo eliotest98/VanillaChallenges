@@ -1,19 +1,25 @@
 package io.eliotesta98.VanillaChallenges.Database;
 
-import com.HeroxWar.HeroxCore.CommentedConfiguration;
+import com.HeroxWar.HeroxCore.Gestion.CommentedConfiguration;
 import com.HeroxWar.HeroxCore.Gestion.DefaultGestion;
+import com.HeroxWar.HeroxCore.SoundGesture.SoundType;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
 import io.eliotesta98.VanillaChallenges.Interfaces.Interface;
 import io.eliotesta98.VanillaChallenges.Interfaces.ItemConfig;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.*;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class ConfigGestion extends DefaultGestion {
 
@@ -22,6 +28,7 @@ public class ConfigGestion extends DefaultGestion {
     private final Map<String, Interface> interfaces = new HashMap<>();
     private boolean activeOnlinePoints, rankingReward, yesterdayTop, resetPointsAtNewChallenge,
             backupEnabled, pointsResume, lockedInterface, adjustTime, randomReward = false;
+    private boolean reconvert;
     private String challengeGeneration, url, username, password, mySqlPrefix, database, permissionPointsGive;
     private int timeBroadcastMessageTitle, pointsOnlinePoints, minutesOnlinePoints, numberOfFilesInFolderForBackup,
             numberOfRewardPlayer, minimumPoints, number, numberOfTop;
@@ -29,11 +36,12 @@ public class ConfigGestion extends DefaultGestion {
     private final Tasks tasks = new Tasks();
     private final List<String> controlIfChallengeExist = new ArrayList<>();
     private Time cooldown;
+    private ItemConfig itemPoint;
 
     private final FileConfiguration fileConfiguration;
 
-    public ConfigGestion(String path, String fileName) {
-        super(path, fileName, "VanillaChallenges", "bho");
+    public ConfigGestion(String path, String fileName, String... ignoredSections) {
+        super(path, fileName, "VanillaChallenges", ignoredSections);
         fileConfiguration = this.getFileConfiguration();
         this.defaultInformations();
 
@@ -65,6 +73,62 @@ public class ConfigGestion extends DefaultGestion {
                 this.cooldown = new Time(time, ':');
                 break;
         }
+
+        String configurationPath = "Configuration.PointsConversion.ItemPoint";
+        reconvert = fileConfiguration.getBoolean("Configuration.PointsConversion.Reconvert", false);
+        boolean hiddenTooltip = fileConfiguration.getBoolean(configurationPath + ".HideTooltip", false);
+        String type = fileConfiguration.getString(configurationPath + ".Material", "DIRT");
+        String texture = "";
+
+        if (!type.equalsIgnoreCase("")) {
+            if (type.contains("basehead:")) {
+                texture = type.split(":")[1];
+                type = (Material.getMaterial("PLAYER_HEAD") == null) ? "SKULL_ITEM" : "PLAYER_HEAD";
+            } else if (type.contains(";")) {
+                String[] x = type.toUpperCase().split(";");
+                if (Material.getMaterial(x[0]) == null) {
+                    Main.messageGesturePaper.log("&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: " + configurationPath + ".Type", Level.SEVERE);
+                    type = "DIRT";
+                }
+            } else {
+                if (Material.getMaterial(type.toUpperCase()) == null) {
+                    Main.messageGesturePaper.log("&c&lERROR WITH MATERIAL " + type.toUpperCase() + " IN CONFIG.YML AT LINE: " + configurationPath + ".Type", Level.SEVERE);
+                    type = "DIRT";
+                } else {
+                    // Ensure type is in uppercase for consistency
+                    type = type.toUpperCase();
+                }
+            }
+        } else {
+            Main.messageGesturePaper.log("&cNo Material defined for ItemConfig at " + configurationPath + ". Using default DIRT!", Level.SEVERE);
+            type = "DIRT";
+        }
+
+        String name = fileConfiguration.getString(configurationPath + ".Name", "");
+        List<String> lore = new ArrayList<>(fileConfiguration.getStringList(configurationPath + ".Lore"));
+
+        Map<Enchantment, Integer> enchants = new HashMap<>();
+        for (String enchant : fileConfiguration.getStringList(configurationPath + ".Enchants")) {
+            String[] split = enchant.toUpperCase().split(";");
+            enchants.put(Enchantment.getByName(split[0]), Integer.parseInt(split[1]));
+        }
+
+        // Ensure itemFlags are in uppercase for consistency
+        List<String> itemFlags = fileConfiguration.getStringList(configurationPath + ".ItemFlags").stream().map(String::toUpperCase).collect(Collectors.toList());
+
+        int customModelData = fileConfiguration.getInt(configurationPath + ".CustomModelData", 0);
+
+        Color rgb = null;
+        if (fileConfiguration.isSet(configurationPath + ".Color")) {
+            rgb = Color.fromRGB(
+                    fileConfiguration.getInt(configurationPath + ".Color.RED", 0),
+                    fileConfiguration.getInt(configurationPath + ".Color.GREEN", 0),
+                    fileConfiguration.getInt(configurationPath + ".Color.BLUE", 0)
+            );
+        }
+
+        itemPoint = new ItemConfig(name, type, texture, lore,
+                customModelData, 1, hiddenTooltip, enchants, itemFlags, rgb);
 
         FileCreator.addFiles(getHooks());
 
@@ -406,9 +470,9 @@ public class ConfigGestion extends DefaultGestion {
         pointsOnlinePoints = fileConfiguration.getInt("Configuration.Points.OnlinePoints.Point");
         minutesOnlinePoints = fileConfiguration.getInt("Configuration.Points.OnlinePoints.Minutes");
         minimumPoints = fileConfiguration.getInt("Configuration.Points.MinimumPoints");
-        List<String> lore = fileConfiguration.getStringList("Configuration.CollectionChallengeItem.Lore");
+        List<String> challengeItemLore = fileConfiguration.getStringList("Configuration.CollectionChallengeItem.Lore");
         try {
-            chestCollection = ItemUtils.getChest(fileConfiguration.getString("Configuration.CollectionChallengeItem.Type"), fileConfiguration.getString("Configuration.CollectionChallengeItem.Name"), lore);
+            chestCollection = ItemUtils.getChest(fileConfiguration.getString("Configuration.CollectionChallengeItem.Type"), fileConfiguration.getString("Configuration.CollectionChallengeItem.Name"), challengeItemLore);
         } catch (ExceptionInInitializerError ignore) {
             Main.messageGesturePaper.sendMessage("&c&lNBTItem initialization error! The plugin not work property because NbtApi not support this version! Sometimes is for the newest minecraft version, please use an old one!");
         }
@@ -420,8 +484,12 @@ public class ConfigGestion extends DefaultGestion {
             return;
         }
         for (String nameInterface : section.getKeys(false)) {
-            String title = fileConfiguration.getString("Interfaces." + nameInterface + "..Title");
-            String openSound = fileConfiguration.getString("Interfaces." + nameInterface + ".OpenSound");
+            String title = fileConfiguration.getString("Interfaces." + nameInterface + ".Title");
+            SoundType openSound = new SoundType(
+                    fileConfiguration.getString("Interfaces." + nameInterface + ".OpenSound.SoundName"),
+                    fileConfiguration.getInt("Interfaces." + nameInterface + ".OpenSound.Volume"),
+                    fileConfiguration.getDouble("Interfaces." + nameInterface + ".OpenSound.Pitch"));
+
             List<String> slots = new ArrayList<>();
             List<String> contaSlots = new ArrayList<>();
 
@@ -432,25 +500,77 @@ public class ConfigGestion extends DefaultGestion {
                 return;
             }
             for (String nameItem : section.getKeys(false)) {
-                String letter = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Letter");
-                String type = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Type", "DIRT");
-                if (type.contains(";")) {
-                    String[] x = type.split(";");
-                    if (Material.getMaterial(x[0]) == null) {
-                        Main.messageGesturePaper.sendMessage("&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
-                        type = "DIRT";
+                configurationPath = "Interfaces." + nameInterface + ".Items." + nameItem;
+                String letter = fileConfiguration.getString(configurationPath + ".Letter");
+                hiddenTooltip = fileConfiguration.getBoolean(configurationPath + ".HideTooltip", false);
+                type = fileConfiguration.getString(configurationPath + ".Material", "");
+                texture = "";
+
+                if (!type.equalsIgnoreCase("")) {
+                    if (type.contains("basehead:")) {
+                        texture = type.split(":")[1];
+                        type = (Material.getMaterial("PLAYER_HEAD") == null) ? "SKULL_ITEM" : "PLAYER_HEAD";
+                    } else if (type.contains(";")) {
+                        String[] x = type.toUpperCase().split(";");
+                        if (Material.getMaterial(x[0]) == null) {
+                            Main.messageGesturePaper.log("&c&lERROR WITH MATERIAL " + x[0] + " IN CONFIG.YML AT LINE: " + configurationPath + ".Type", Level.SEVERE);
+                            type = "DIRT";
+                        }
+                    } else {
+                        if (Material.getMaterial(type.toUpperCase()) == null) {
+                            Main.messageGesturePaper.log("&c&lERROR WITH MATERIAL " + type.toUpperCase() + " IN CONFIG.YML AT LINE: " + configurationPath + ".Type", Level.SEVERE);
+                            type = "DIRT";
+                        } else {
+                            // Ensure type is in uppercase for consistency
+                            type = type.toUpperCase();
+                        }
                     }
                 } else {
-                    if (Material.getMaterial(type) == null) {
-                        Main.messageGesturePaper.sendMessage("&c&lERROR WITH MATERIAL " + type + " IN CONFIG.YML AT LINE: Interfaces." + nameInterface + ".Items." + nameItem + ".Type");
-                        type = "DIRT";
+                    Main.messageGesturePaper.log("&cNo Material defined for ItemConfig at " + configurationPath + ". Using default DIRT!", Level.SEVERE);
+                    type = "DIRT";
+                }
+
+                int amount = fileConfiguration.getInt(configurationPath + ".Amount", 1);
+                name = fileConfiguration.getString(configurationPath + ".Name", "");
+                lore = new ArrayList<>(fileConfiguration.getStringList(configurationPath + ".Lore"));
+
+                SoundType buttonSound = null;
+                if (fileConfiguration.isSet(configurationPath + ".ClickSound")) {
+                    String buttonRawSound = fileConfiguration.getString(configurationPath + ".ClickSound.SoundName", "").toUpperCase();
+                    double buttonVolume = fileConfiguration.getDouble(configurationPath + ".ClickSound.Volume", 100);
+                    double buttonPitch = fileConfiguration.getDouble(configurationPath + ".ClickSound.Pitch", 1);
+                    buttonSound = new SoundType(buttonRawSound, buttonVolume, buttonPitch);
+                }
+
+                enchants = new HashMap<>();
+                for (String enchant : fileConfiguration.getStringList(configurationPath + ".Enchants")) {
+                    String[] split = enchant.toUpperCase().split(";");
+                    enchants.put(Enchantment.getByName(split[0]), Integer.parseInt(split[1]));
+                }
+
+                // Ensure itemFlags are in uppercase for consistency
+                itemFlags = fileConfiguration.getStringList(configurationPath + ".ItemFlags").stream().map(String::toUpperCase).collect(Collectors.toList());
+
+                customModelData = fileConfiguration.getInt(configurationPath + ".CustomModelData", 0);
+
+                Map<String, List<String>> actions = new HashMap<>();
+
+                if (fileConfiguration.isSet(configurationPath + ".Actions")) {
+                    for (String action : fileConfiguration.getConfigurationSection(configurationPath + ".Actions").getKeys(false)) {
+                        actions.put(action.toUpperCase(), fileConfiguration.getStringList(configurationPath + ".Actions." + action));
                     }
                 }
-                String name = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Name");
-                String texture = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".Texture");
-                String soundClick = fileConfiguration.getString("Interfaces." + nameInterface + ".Items." + nameItem + ".SoundClick");
-                ItemConfig item = new ItemConfig(nameItem, name, type, texture, fileConfiguration.getStringList("Interfaces." + nameInterface + ".Items." + nameItem + ".Lore"), soundClick);
-                itemsConfig.put(letter, item);
+
+                rgb = null;
+                if (fileConfiguration.isSet(configurationPath + ".Color")) {
+                    rgb = Color.fromRGB(
+                            fileConfiguration.getInt(configurationPath + ".Color.RED", 0),
+                            fileConfiguration.getInt(configurationPath + ".Color.GREEN", 0),
+                            fileConfiguration.getInt(configurationPath + ".Color.BLUE", 0)
+                    );
+                }
+                itemsConfig.put(letter, new ItemConfig(nameItem, name, type, texture, lore,
+                        buttonSound, customModelData, amount, hiddenTooltip, enchants, itemFlags, actions, rgb));
             }
 
             fileConfiguration.getStringList("Interfaces." + nameInterface + ".Slots").forEach(value -> {
@@ -469,7 +589,7 @@ public class ConfigGestion extends DefaultGestion {
                         contaSlots.size(), nameInterface, "", "Generator");
             } else {*/
             customInterface = new Interface(title, openSound, slots, itemsConfig, getDebug().get("ClickGui"),
-                    contaSlots.size(), nameInterface, "", "", lockedInterface);
+                    contaSlots.size(), nameInterface, "", "", false);
             //}
             interfaces.put(nameInterface, customInterface);
         }
@@ -658,5 +778,23 @@ public class ConfigGestion extends DefaultGestion {
 
     public boolean isAdjustTime() {
         return adjustTime;
+    }
+
+    public ItemConfig getItemPoint() {
+        return  itemPoint;
+    }
+
+    public void setItemPoint(ItemConfig itemPoint) {
+        this.itemPoint = itemPoint;
+        //saveSection("Configuration.ItemPoint", itemPoint);
+    }
+
+    public boolean isReconvert() {
+        return reconvert;
+    }
+
+    public void setReconvert(boolean reconvert) {
+        this.reconvert = reconvert;
+        saveSection("Configuration.PointsConversion.Reconvert", reconvert);
     }
 }

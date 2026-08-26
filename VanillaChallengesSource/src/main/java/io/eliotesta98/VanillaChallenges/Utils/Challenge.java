@@ -867,7 +867,7 @@ public class Challenge {
                     .replace("{hours}", getTimeChallenge().getHours() + "")
                     .replace("{minutes}", getTimeChallenge().getMinutes() + "")
                     .replace("{seconds}", getTimeChallenge().getSeconds() + "")
-                    .replace("{points}", point + "")
+                    .replace("{challengePoint}", point + "")
                     .replace("{slots}", number + "")
                     .replace("{minutes}", minutes + "")
                     .replace("{challengeName}", nameChallenge)
@@ -982,23 +982,56 @@ public class Challenge {
     }
 
     public String encodeNbts() {
-        return "vc.challengeName=" + getChallengeName() +
-                ";vc.challengeTime=" + getTimeChallenge().getTime() +
-                ";vc.challengeDate=" + getDate().getDate() +
-                ";vc.challengeDescription=" + getTitle() +
-                ";vc.challengePoint=" + getPoint() +
-                ";vc.challengeItemsInHand=" + getItemsInHand() +
-                ";vc.challengeWords=" + getWorlds() +
-                ";vc.challengeBlocks=" + getBlocks() +
-                ";vc.challengeRewards=" + getRewards() +
-                ";vc.challengeSneaking=" + getSneaking() +
-                ";vc.challengeBlocksOnPlace=" + getBlocksOnPlace() +
-                ";vc.challengeVehicles=" + getVehicle() +
-                ";vc.challengeMobs=" + getMobs() +
-                ";vc.challengeItems=" + getItems() +
-                ";vc.challengeCauses=" + getCauses() +
-                ";vc.challengeColors=" + getColors() +
-                ";vc.challengeItem=" + getItemChallenge();
+        return "{challengeName}=" + getChallengeName() +
+                ";{rewards}=" + encodeRewards(getRewards(), " x ", ", ") +
+                ";{hours}=" + getTimeChallenge().getHours() +
+                ";{minutes}=" + getTimeChallenge().getMinutes() +
+                ";{seconds}=" + getTimeChallenge().getSeconds() +
+                ";{time}=" + getTimeChallenge().getTimeFormatted(" ") +
+                ";{date}=" + new Date("yyyy-MM-dd", getDate().getMilliseconds()).getDate() +
+                ";{slots}=" + getNumber() +
+                ";{challengeDescription}=" + encodedList(getTitle(), "\n") +
+                ";{challengePoint}=" + getPoint() +
+                ";{challengeItemsInHand}=" + encodedList(getItemsInHand(), ", ") +
+                ";{challengeWorlds}=" + encodedList(getWorlds(), ", ") +
+                ";{challengeBlocks}=" + encodedList(getBlocks(), ", ") +
+                ";{challengeSneaking}=" + getSneaking() +
+                ";{challengeBlocksOnPlace}=" + encodedList(getBlocksOnPlace(), ", ") +
+                ";{challengeVehicles}=" + encodedList(getVehicle(), ", ") +
+                ";{challengeMobs}=" + encodedList(getMobs(), ", ") +
+                ";{challengeItems}=" + encodedList(getItems(), ", ") +
+                ";{challengeCauses}=" + encodedList(getCauses(), ", ") +
+                ";{challengeColors}=" + encodedList(getColors(), ", ") +
+                ";{challengeItem}=" + getItemChallenge();
+    }
+
+    public String encodedList(List<String> list, String formatter) {
+        if (list == null || list.isEmpty()) {
+            return "[]";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String s : list) {
+            sb.append(s).append(formatter);
+        }
+        if (!formatter.equalsIgnoreCase("\n")) {
+            sb.deleteCharAt(sb.length() - 2);
+        }
+        return sb.toString();
+    }
+
+    public String encodeRewards(List<String> list, String formatter, String formatterLine) {
+        if (list == null || list.isEmpty()) {
+            return "[]";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String s : list) {
+            String[] split = s.split(":");
+            sb.append(split[0]).append(formatter).append(split[1]).append(formatterLine);
+        }
+        if (!formatter.equalsIgnoreCase("\n")) {
+            sb.deleteCharAt(sb.length() - 2);
+        }
+        return sb.toString();
     }
 
     public Challenge cloneChallenge(String challengeDuration) {

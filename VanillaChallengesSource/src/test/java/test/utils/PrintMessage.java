@@ -1,4 +1,4 @@
-package io.test.utils;
+package test.utils;
 
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.command.ConsoleCommandSenderMock;

@@ -50,6 +50,9 @@ permissions:
   vc.clear.command:
     description: for /vc clear
     default: op
+  vc.convert.command:
+    description: for /vc convert amount
+    default: op
   vc.challenge.command:
     description: for /vc challenge
     deafult: op

@@ -1,6 +1,7 @@
 package io.eliotesta98.VanillaChallenges.Interfaces;
 
 import com.HeroxWar.HeroxCore.SoundGesture.SoundType;
+import com.HeroxWar.HeroxCore.TimeGesture.Date.Date;
 import io.eliotesta98.VanillaChallenges.Core.Main;
 import io.eliotesta98.VanillaChallenges.Utils.Challenge;
 import io.eliotesta98.VanillaChallenges.Utils.DebugUtils;
@@ -26,11 +27,11 @@ public class Interface {
 
     private boolean lockableInterface = false;
 
-    public Interface(String title, String soundOpen, List<String> slots, Map<String, ItemConfig> itemsConfig,
+    public Interface(String title, SoundType soundOpen, List<String> slots, Map<String, ItemConfig> itemsConfig,
                      boolean debug, int sizeModificableSlot, String nameInterface,
                      String nameInterfaceToOpen, String nameInterfaceToReturn, boolean lockableInterface) {
         this.title = title;
-        this.soundOpen = new SoundType(soundOpen, 50, 1.0);
+        this.soundOpen = soundOpen;
         this.itemsConfig = itemsConfig;
         this.debug = debug;
         this.sizeModificableSlot = sizeModificableSlot;
@@ -74,6 +75,10 @@ public class Interface {
         return sizeModificableSlot;
     }
 
+    public String getNameInterface() {
+        return nameInterface;
+    }
+
     public String getNameInterfaceToOpen() {
         return nameInterfaceToOpen;
     }
@@ -110,7 +115,7 @@ public class Interface {
             int countItems = 0;
             for (int i = 0; i < slots.size(); i++) {// for every slot
                 String slot = slots.get(i);// get the current slot
-                NbtList nbtListBorder = new NbtList("vc.currentInterface=" + nameInterface + ";vc.positionItem=" + i); // create the nbt list for borders
+                NbtList nbtListBorder = new NbtList("{currentInterface}=" + nameInterface + ";{positionItem}=" + i); // create the nbt list for borders
                 if (itemsConfig.get(slot).getNameItemConfig().equalsIgnoreCase("Challenge")) {
                     if (items.size() > countItems) {
                         if (items.get(countItems) instanceof Challenge) {
@@ -124,13 +129,15 @@ public class Interface {
                                 challengeComplete.setTimeChallenge(Main.instance.getDailyChallenge().getTimeChallenge());
                             }
                             String challengeNbts = challengeComplete.encodeNbts();
-                            NbtList nbtList = new NbtList("vc.numberPage=" + (numberOfPage) +
+                            NbtList nbtList = new NbtList("{number}=" + (numberOfPage) +
                                     ";" + challengeNbts +
-                                    ";vc.positionItem=" + i +
-                                    ";vc.currentInterface=" + nameInterface
+                                    ";{positionItem}=" + i +
+                                    ";{currentInterface}=" + nameInterface
                             );
+
                             if (!lockableInterface) {
-                                inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nbtList));
+                                ItemConfig itemConfig = itemsConfig.get(slot).clone(challengeComplete.getItemChallenge());
+                                inventory.setItem(i, itemConfig.createItemConfig(nbtList));
                             } else {
                                 if (Main.instance.getDailyChallenge().getChallengeName().equalsIgnoreCase(challenge.getChallengeName())) {
                                     inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nbtList));
@@ -143,7 +150,9 @@ public class Interface {
                     }
                 } else if (itemsConfig.get(slot).getNameItemConfig().equalsIgnoreCase("LeftPage")) {
                     if (numberOfPage - 1 != 0) {
-                        NbtList nbtList = new NbtList("vc.numberPage=" + (numberOfPage - 1) + ";vc.currentInterface=" + nameInterface + ";vc.positionItem=" + i);
+                        NbtList nbtList = new NbtList("{number}=" + (numberOfPage - 1) +
+                                ";{currentInterface}=" + nameInterface +
+                                ";{positionItem}=" + i);
                         inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nbtList));
                     } else {
                         for (Map.Entry<String, ItemConfig> itemConfig : itemsConfig.entrySet()) {
@@ -155,7 +164,9 @@ public class Interface {
                     }
                 } else if (itemsConfig.get(slot).getNameItemConfig().equalsIgnoreCase("RightPage")) {
                     if (slotModificable == 0) {
-                        NbtList nbtList = new NbtList("vc.numberPage=" + (numberOfPage + 1) + ";vc.currentInterface=" + nameInterface + ";vc.positionItem=" + i);
+                        NbtList nbtList = new NbtList("{number}=" + (numberOfPage + 1) +
+                                ";{currentInterface}=" + nameInterface +
+                                ";{positionItem}=" + i);
                         inventory.setItem(i, itemsConfig.get(slot).createItemConfig(nbtList));
                     } else {
                         for (Map.Entry<String, ItemConfig> itemConfig : itemsConfig.entrySet()) {
@@ -197,17 +208,19 @@ public class Interface {
                     if (challenge.getChallengeName().contains("Event_")) {
                         challengeComplete = Main.instance.getConfigGestion().getChallengesEvent().get(challenge.getChallengeName().replace("Event_", ""));
                     }
+                    challengeComplete.setDate(challenge.getDate());
                     if(challenge.getChallengeName().equalsIgnoreCase(Main.instance.getDailyChallenge().getChallengeName())) {
                         challengeComplete.setTimeChallenge(Main.instance.getDailyChallenge().getTimeChallenge());
                     }
                     String challengeNbts = challengeComplete.encodeNbts();
-                    NbtList nbtList = new NbtList("vc.numberPage=" + (extendedInventory.getPage()) +
+                    NbtList nbtList = new NbtList("{number}=" + (extendedInventory.getPage()) +
                             ";" + challengeNbts +
-                            ";vc.positionItem=" + i +
-                            ";vc.currentInterface=" + nameInterface
+                            ";{positionItem}=" + i +
+                            ";{currentInterface}=" + nameInterface
                     );
                     if (!lockableInterface) {
-                        extendedInventory.getInventory().setItem(i, itemsConfig.get(slot).createItemConfig(nbtList));
+                        ItemConfig itemConfig = itemsConfig.get(slot).clone(challengeComplete.getItemChallenge());
+                        extendedInventory.getInventory().setItem(i, itemConfig.createItemConfig(nbtList));
                     } else {
                         if (Main.instance.getDailyChallenge().getChallengeName().equalsIgnoreCase(challenge.getChallengeName())) {
                             extendedInventory.getInventory().setItem(i, itemsConfig.get(slot).createItemConfig(nbtList));

@@ -54,19 +54,19 @@ Killer:
   # Title challenge
   # Placeholder List:
   #  - {challengeName}
-  #  - {block#} where # is a number (start with 1) Ex. {block1}
-  #  - {blockOnPlaced#} where # is a number (start with 1) Ex. {blockOnPlaced1}
-  #  - {points}
+  #  - {challengeBlocks}
+  #  - {challengeBlocksOnPlace}
+  #  - {challengePoint}
   #  - {minutes}
   #  - {slots}
-  #  - {sneaking}
-  #  - {world#} where # is a number (start with 1) Ex. {world1}
-  #  - {item#} where # is a number (start with 1) Ex. {item1}
-  #  - {itemInHand#} where # is a number (start with 1) Ex. {itemInHand1}
-  #  - {vehicle#} where # is a number (start with 1) Ex. {vehicle1}
-  #  - {cause#} where # is a number (start with 1) Ex. {cause1}
-  #  - {color#} where # is a number (start with 1) Ex. {color1}
-  #  - {mob#} where # is a number (start with 1) Ex. {mob1}
+  #  - {challengeSneaking}
+  #  - {challengeWorlds}
+  #  - {challengeItems}
+  #  - {challengeItemsInHand}
+  #  - {challengeVehicles}
+  #  - {challengeCauses}
+  #  - {challengeColors}
+  #  - {challengeMobs}
   #  - {force}
   #  - {power}
   #  - {onGround}
@@ -76,7 +76,7 @@ Killer:
     - '&8██&b███&8███&b██'
     - '&8█&b██&8████&b███                  {challengeName}'
     - '&b██&6█&8███&b███&8█'
-    - '&b█&8██&6█&8█&b███&8██        &7Kill any mob for receive {points} point'
+    - '&b█&8██&6█&8█&b███&8██        &7Kill any mob for receive {challengePoint} point'
     - '&b█&8███&6██&b█&8███    &7{hours}h {minutes}m {seconds}s to the end of the challenge'
     - '&8████&6██&8████'
     - '&8███&6█&8██&6█&8███'

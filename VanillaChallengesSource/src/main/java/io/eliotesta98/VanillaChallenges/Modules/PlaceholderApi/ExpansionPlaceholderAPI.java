@@ -218,154 +218,159 @@ public class ExpansionPlaceholderAPI extends PlaceholderExpansion {
                 return MoneyUtils.transform(Main.instance.getDailyChallenge().getPointsBoostSinglePlayer());
             }
         }
-        // %vanillachallenges_top_victories_name_#% # = number
-        if (identifier.contains("top_victories_name_")) {
-            String number = identifier.replace("top_victories_name_", "");
-            int numberTop;
-            try {
-                numberTop = Integer.parseInt(number);
-            } catch (Exception ex) {
-                return "%vanillachallenges_top_victories_name_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_victories_name_1%";
+        if(identifier.contains("top_victories_")) {
+            // %vanillachallenges_top_victories_name_#% # = number
+            if (identifier.contains("top_victories_name_")) {
+                String number = identifier.replace("top_victories_name_", "");
+                int numberTop;
+                try {
+                    numberTop = Integer.parseInt(number);
+                } catch (Exception ex) {
+                    return "%vanillachallenges_top_victories_name_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_victories_name_1%";
+                }
+                if (numberTop < 1) {
+                    numberTop = 1;
+                }
+                try {
+                    return Main.db.getTopVictories().get(numberTop - 1).getPlayerName();
+                } catch (IndexOutOfBoundsException exception) {
+                    return "";
+                }
             }
-            if (numberTop < 1) {
-                numberTop = 1;
-            }
-            try {
-                return Main.db.getTopVictories().get(numberTop - 1).getPlayerName();
-            } catch (IndexOutOfBoundsException exception) {
-                return "";
-            }
-        }
-        // %vanillachallenges_top_victories_points_#% # = number
-        if (identifier.contains("top_victories_points_")) {
-            String number = identifier.replace("top_victories_points_", "");
-            int numberTop;
-            try {
-                numberTop = Integer.parseInt(number);
-            } catch (Exception ex) {
-                return "%vanillachallenges_top_victories_points_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_victories_points_1%";
-            }
-            if (numberTop < 1) {
-                numberTop = 1;
-            }
-            try {
-                return Main.db.getTopVictories().get(numberTop - 1).getNumberOfVictories() + "";
-            } catch (IndexOutOfBoundsException exception) {
-                return "0";
-            }
-        }
-
-        // %vanillachallenges_top_first_place_name_#% # = number
-        if (identifier.contains("top_first_place_name_")) {
-            String number = identifier.replace("top_first_place_name_", "");
-            int numberTop;
-            try {
-                numberTop = Integer.parseInt(number);
-            } catch (Exception ex) {
-                return "%vanillachallenges_top_first_place_name_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_first_place_name_1%";
-            }
-            if (numberTop < 1) {
-                numberTop = 1;
-            }
-            try {
-                return Main.db.getTopFirstPlace().get(numberTop - 1).getPlayerName();
-            } catch (IndexOutOfBoundsException exception) {
-                return "0";
+            // %vanillachallenges_top_victories_points_#% # = number
+            else {
+                String number = identifier.replace("top_victories_", "");
+                int numberTop;
+                try {
+                    numberTop = Integer.parseInt(number);
+                } catch (Exception ex) {
+                    return "%vanillachallenges_top_victories_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_victories_1%";
+                }
+                if (numberTop < 1) {
+                    numberTop = 1;
+                }
+                try {
+                    return Main.db.getTopVictories().get(numberTop - 1).getNumberOfVictories() + "";
+                } catch (IndexOutOfBoundsException exception) {
+                    return "0";
+                }
             }
         }
 
-        // %vanillachallenges_top_first_place_points_#% # = number
-        if (identifier.contains("top_first_place_points_")) {
-            String number = identifier.replace("top_first_place_points_", "");
-            int numberTop;
-            try {
-                numberTop = Integer.parseInt(number);
-            } catch (Exception ex) {
-                return "%vanillachallenges_top_first_place_points_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_first_place_points_1%";
+        if (identifier.contains("top_first_place_")) {
+            // %vanillachallenges_top_first_place_name_#% # = number
+            if (identifier.contains("top_first_place_name_")) {
+                String number = identifier.replace("top_first_place_name_", "");
+                int numberTop;
+                try {
+                    numberTop = Integer.parseInt(number);
+                } catch (Exception ex) {
+                    return "%vanillachallenges_top_first_place_name_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_first_place_name_1%";
+                }
+                if (numberTop < 1) {
+                    numberTop = 1;
+                }
+                try {
+                    return Main.db.getTopFirstPlace().get(numberTop - 1).getPlayerName();
+                } catch (IndexOutOfBoundsException exception) {
+                    return "0";
+                }
             }
-            if (numberTop < 1) {
-                numberTop = 1;
-            }
-            try {
-                return Main.db.getTopFirstPlace().get(numberTop - 1).getNumberOfFirstPlace() + "";
-            } catch (IndexOutOfBoundsException exception) {
-                return "0";
-            }
-        }
-
-        // %vanillachallenges_top_second_place_name_#% # = number
-        if (identifier.contains("top_second_place_name_")) {
-            String number = identifier.replace("top_second_place_name_", "");
-            int numberTop;
-            try {
-                numberTop = Integer.parseInt(number);
-            } catch (Exception ex) {
-                return "%vanillachallenges_top_second_place_name_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_second_place_name_1%";
-            }
-            if (numberTop < 1) {
-                numberTop = 1;
-            }
-            try {
-                return Main.db.getTopSecondPlace().get(numberTop - 1).getPlayerName();
-            } catch (IndexOutOfBoundsException exception) {
-                return "0";
-            }
-        }
-
-        // %vanillachallenges_top_second_place_points_#% # = number
-        if (identifier.contains("top_second_place_points_")) {
-            String number = identifier.replace("top_second_place_points_", "");
-            int numberTop;
-            try {
-                numberTop = Integer.parseInt(number);
-            } catch (Exception ex) {
-                return "%vanillachallenges_top_second_place_points_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_second_place_points_1%";
-            }
-            if (numberTop < 1) {
-                numberTop = 1;
-            }
-            try {
-                return Main.db.getTopSecondPlace().get(numberTop - 1).getNumberOfSecondPlace() + "";
-            } catch (IndexOutOfBoundsException exception) {
-                return "0";
+            // %vanillachallenges_top_first_place_#% # = number
+            else {
+                String number = identifier.replace("top_first_place_", "");
+                int numberTop;
+                try {
+                    numberTop = Integer.parseInt(number);
+                } catch (Exception ex) {
+                    return "%vanillachallenges_top_first_place_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_first_place_1%";
+                }
+                if (numberTop < 1) {
+                    numberTop = 1;
+                }
+                try {
+                    return Main.db.getTopFirstPlace().get(numberTop - 1).getNumberOfFirstPlace() + "";
+                } catch (IndexOutOfBoundsException exception) {
+                    return "0";
+                }
             }
         }
 
-        // %vanillachallenges_top_third_place_name_#% # = number
-        if (identifier.contains("top_third_place_name_")) {
-            String number = identifier.replace("top_third_place_name_", "");
-            int numberTop;
-            try {
-                numberTop = Integer.parseInt(number);
-            } catch (Exception ex) {
-                return "%vanillachallenges_top_third_place_name_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_third_place_name_1%";
+        if (identifier.contains("top_second_place_")) {
+            // %vanillachallenges_top_second_place_name_#% # = number
+            if (identifier.contains("top_second_place_name_")) {
+                String number = identifier.replace("top_second_place_name_", "");
+                int numberTop;
+                try {
+                    numberTop = Integer.parseInt(number);
+                } catch (Exception ex) {
+                    return "%vanillachallenges_top_second_place_name_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_second_place_name_1%";
+                }
+                if (numberTop < 1) {
+                    numberTop = 1;
+                }
+                try {
+                    return Main.db.getTopSecondPlace().get(numberTop - 1).getPlayerName();
+                } catch (IndexOutOfBoundsException exception) {
+                    return "0";
+                }
             }
-            if (numberTop < 1) {
-                numberTop = 1;
-            }
-            try {
-                return Main.db.getTopThirdPlace().get(numberTop - 1).getPlayerName();
-            } catch (IndexOutOfBoundsException exception) {
-                return "0";
+            // %vanillachallenges_top_second_place_#% # = number
+            else {
+                String number = identifier.replace("top_second_place_", "");
+                int numberTop;
+                try {
+                    numberTop = Integer.parseInt(number);
+                } catch (Exception ex) {
+                    return "%vanillachallenges_top_second_place_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_second_place_1%";
+                }
+                if (numberTop < 1) {
+                    numberTop = 1;
+                }
+                try {
+                    return Main.db.getTopSecondPlace().get(numberTop - 1).getNumberOfSecondPlace() + "";
+                } catch (IndexOutOfBoundsException exception) {
+                    return "0";
+                }
             }
         }
 
-        // %vanillachallenges_top_third_place_points_#% # = number
-        if (identifier.contains("top_third_place_points_")) {
-            String number = identifier.replace("top_third_place_points_", "");
-            int numberTop;
-            try {
-                numberTop = Integer.parseInt(number);
-            } catch (Exception ex) {
-                return "%vanillachallenges_top_third_place_points_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_third_place_points_1%";
+        if (identifier.contains("top_third_place_")) {
+            // %vanillachallenges_top_third_place_name_#% # = number
+            if (identifier.contains("top_third_place_name_")) {
+                String number = identifier.replace("top_third_place_name_", "");
+                int numberTop;
+                try {
+                    numberTop = Integer.parseInt(number);
+                } catch (Exception ex) {
+                    return "%vanillachallenges_top_third_place_name_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_third_place_name_1%";
+                }
+                if (numberTop < 1) {
+                    numberTop = 1;
+                }
+                try {
+                    return Main.db.getTopThirdPlace().get(numberTop - 1).getPlayerName();
+                } catch (IndexOutOfBoundsException exception) {
+                    return "0";
+                }
             }
-            if (numberTop < 1) {
-                numberTop = 1;
-            }
-            try {
-                return Main.db.getTopThirdPlace().get(numberTop - 1).getNumberOfThirdPlace() + "";
-            } catch (IndexOutOfBoundsException exception) {
-                return "0";
+            // %vanillachallenges_top_third_place_#% # = number
+            else {
+                String number = identifier.replace("top_third_place_", "");
+                int numberTop;
+                try {
+                    numberTop = Integer.parseInt(number);
+                } catch (Exception ex) {
+                    return "%vanillachallenges_top_third_place_" + number + "% is not valid please use a number! Ex: %vanillachallenges_top_third_place_1%";
+                }
+                if (numberTop < 1) {
+                    numberTop = 1;
+                }
+                try {
+                    return Main.db.getTopThirdPlace().get(numberTop - 1).getNumberOfThirdPlace() + "";
+                } catch (IndexOutOfBoundsException exception) {
+                    return "0";
+                }
             }
         }
 
