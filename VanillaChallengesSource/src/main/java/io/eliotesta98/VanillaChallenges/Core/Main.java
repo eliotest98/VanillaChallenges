@@ -62,7 +62,7 @@ public class Main extends JavaPlugin {
         DebugUtils debugSystem = new DebugUtils("Enabled");
         long tempo = System.currentTimeMillis();
 
-        if(mockTest) {
+        if(!mockTest) {
             new Metrics(this, 17661);
         }
 

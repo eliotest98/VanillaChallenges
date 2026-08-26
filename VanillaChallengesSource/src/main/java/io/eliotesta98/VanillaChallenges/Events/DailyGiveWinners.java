@@ -119,4 +119,19 @@ public class DailyGiveWinners implements Listener {
     private void stopEvent() {
         PlayerJoinEvent.getHandlerList().unregister(this);
     }
+
+    /**
+     * [19:24:20 WARN]: [VanillaChallenges] Plugin VanillaChallenges v2.0.3 generated an exception while executing task 2534
+     * java.util.ConcurrentModificationException: null
+     *         at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1096) ~[?:?]
+     *         at java.base/java.util.ArrayList$Itr.next(ArrayList.java:1050) ~[?:?]
+     *         at VanillaChallenges 2.0.3.jar/io.eliotesta98.VanillaChallenges.Events.DailyGiveWinners.lambda$getRewardsAtPlayers$5(DailyGiveWinners.java:43) ~[VanillaChallenges 2.0.3.jar:?]
+     *         at org.bukkit.craftbukkit.scheduler.CraftTask.run(CraftTask.java:78) ~[paper-1.21.10.jar:1.21.10-91-9934c17]
+     *         at org.bukkit.craftbukkit.scheduler.CraftAsyncTask.run(CraftAsyncTask.java:57) ~[paper-1.21.10.jar:1.21.10-91-9934c17]
+     *         at com.destroystokyo.paper.ServerSchedulerReportingWrapper.run(ServerSchedulerReportingWrapper.java:22) ~[paper-1.21.10.jar:?]
+     *         at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095) ~[?:?]
+     *         at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619) ~[?:?]
+     *         at java.base/java.lang.Thread.run(Thread.java:1447) ~[?:?]
+     */
+
 }
