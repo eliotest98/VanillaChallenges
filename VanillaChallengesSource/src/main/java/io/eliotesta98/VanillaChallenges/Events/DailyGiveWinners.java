@@ -12,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DailyGiveWinners implements Listener {
@@ -39,7 +41,7 @@ public class DailyGiveWinners implements Listener {
     @SuppressWarnings("deprecation")
     public static void getRewardsAtPlayers(Player player, List<DailyWinner> winners) {
         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
-            for (DailyWinner winner : winners) {
+            for (DailyWinner winner : new ArrayList<>(winners)) {
                 if (winner.getPlayerName().equalsIgnoreCase(player.getName())) {
                     String[] reward = winner.getReward().split(":");
                     boolean give = true;

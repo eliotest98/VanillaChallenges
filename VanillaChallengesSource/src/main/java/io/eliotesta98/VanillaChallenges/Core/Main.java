@@ -1,10 +1,9 @@
 package io.eliotesta98.VanillaChallenges.Core;
 
+import com.HeroxWar.HeroxCore.MainCommons;
 import com.HeroxWar.HeroxCore.MessageGesture.MessageGesturePaper;
 import com.HeroxWar.HeroxCore.ReloadGesture;
 import com.HeroxWar.HeroxCore.TimeGesture.Time;
-import com.HeroxWar.HeroxCore.Utils.Library;
-import com.HeroxWar.HeroxCore.Utils.Metrics;
 import com.HeroxWar.HeroxCore.Utils.UpdateChecker;
 import com.HeroxWar.HeroxCore.Utils.Version;
 import io.eliotesta98.VanillaChallenges.Database.*;
@@ -26,15 +25,14 @@ import io.eliotesta98.VanillaChallenges.Utils.*;
 
 import java.io.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.*;
 
-public class Main extends JavaPlugin {
+public class Main extends MainCommons {
     public static Main instance;
+    public static Version version;
     private ConfigGestion config;
     private Challenge dailyChallenge;
     public static ExpansionPlaceholderAPI EPAPI;
@@ -42,57 +40,37 @@ public class Main extends JavaPlugin {
     public static boolean challengeSelected = true;
     public static Listener currentListener = null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
-    public static Version version;
     public static MessageGesturePaper messageGesturePaper;
-    private List<String> libraryLegacyMessages = new ArrayList<>();
-    public static boolean mockTest = false;
     private PointsReconvert pointsReconvert;
 
     @Override
     public void onLoad() {
         instance = this;
-        if (getClassLoader().getClass().getName().startsWith("org.mockbukkit.mockbukkit")) {
-            mockTest = true;
-        }
-        version = new Version();
-        // Load libraries where Spigot does not do this automatically
-        libraryLegacyMessages = loadLibraries();
+        onLoadInit(this);
     }
 
     public void onEnable() {
-        if(mockTest) {
-            new Metrics(this, 17661);
-        }
 
-        messageGesturePaper = new MessageGesturePaper(true, false, instance);
-
-        for(String message: libraryLegacyMessages) {
-            messageGesturePaper.sendMessage(message);
-        }
-        libraryLegacyMessages.clear();
-
-        messageGesturePaper.sendMessage("\n\n\n&a ___ ___                __  __  __          ______  __            __  __                                    \n" +
+        onEnableInit(this, "\n\n\n&a ___ ___                __  __  __          ______  __            __  __                                    \n" +
                 "&a|   |   |.---.-..-----.|__||  ||  |.---.-. |      ||  |--..---.-.|  ||  |.-----..-----..-----..-----..-----.\n" +
                 "&a|   |   ||  _  ||     ||  ||  ||  ||  _  | |   ---||     ||  _  ||  ||  ||  -__||     ||  _  ||  -__||__ --|\n" +
                 "&a \\_____/ |___._||__|__||__||__||__||___._| |______||__|__||___._||__||__||_____||__|__||___  ||_____||_____|\n" +
-                "&a                                                                                       |_____|              \n"
-                + "&a  \r\n" + "&a  \r\n" + "&e  Version " + getDescription().getVersion() + " \r\n"
-                + "&e© Developed by &feliotesta98 & xSavior_of_God &ewith &4<3 \r\n \r\n \r\n");
+                "&a                                                                                       |_____|              \n", 17661);
 
-        if (version.isInRange(8, 12)) {
-            messageGesturePaper.sendMessage("&6Server version registered < 1.13");
-        } else {
-            messageGesturePaper.sendMessage("&6Server version registered > 1.12");
-        }
-        messageGesturePaper.sendMessage("Version Detected: &c" + version.getFormattedServerVersion());
-
-        messageGesturePaper.sendMessage("&6Loading config...");
-        config = new ConfigGestion(this.getDataFolder().getPath(), "config.yml");
+        messageGesturePaper = getMessageGesturePaper();
+        messageGesturePaper.setPrintDebug(false);
+        version = getVersion();
 
         loadConfigs();
     }
 
     public void loadConfigs() {
+        messageGesturePaper.sendMessage("&6Loading config...");
+
+        config = new ConfigGestion(this.getDataFolder().getPath(), "config.yml", "bho");
+
+        messageGesturePaper.setPrefix(config.getMessages().get("Prefix").trim());
+
         // RUNNABLE PER CARICARE LE DIPENDENZE ALLA FINE DELL'AVVIO DEL SERVER :D
         getServer().getScheduler().runTask(this, () -> {
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -100,7 +78,7 @@ public class Main extends JavaPlugin {
                     Main.EPAPI = new ExpansionPlaceholderAPI().getInstance();
                     Main.EPAPI.register();
                     messageGesturePaper.sendMessage("&aAdded compatibility to &fPlaceholderApi&a!");
-                    messageGesturePaper.setPlaceholderAPIEnabled(true);
+                    setPapi(true);
                 }
             } else {
                 config.getHooks().replace("PlaceholderAPI", false);
@@ -114,7 +92,7 @@ public class Main extends JavaPlugin {
             }
             if (Bukkit.getServer().getPluginManager().isPluginEnabled("GriefPrevention")) {
                 if (config.getHooks().get("GriefPrevention")) {
-                    messageGesturePaper.sendMessage( "&aAdded compatibility to &fGriefPrevention&a!");
+                    messageGesturePaper.sendMessage("&aAdded compatibility to &fGriefPrevention&a!");
                 }
             } else {
                 config.getHooks().replace("GriefPrevention", false);
@@ -180,7 +158,7 @@ public class Main extends JavaPlugin {
 
         Bukkit.getServer().getPluginManager().registerEvents(new DailyGiveWinners(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new GuiEvent(), this);
-        if(config.isReconvert()) {
+        if (config.isReconvert()) {
             pointsReconvert = new PointsReconvert();
             Bukkit.getServer().getPluginManager().registerEvents(pointsReconvert, this);
         }
@@ -191,14 +169,8 @@ public class Main extends JavaPlugin {
     }
 
     public void onDisable() {
-        DebugUtils debugSystem = new DebugUtils("Disabled");
-        long tempo = System.currentTimeMillis();
-        messageGesturePaper.sendMessage("&aVanillaChallenges has been disabled, &cBye bye! &e:(");
+        onDisableInit(this);
         unload();
-        if (config.getDebug().get("Disabled")) {
-            debugSystem.addLine("Disabled execution time= " + (System.currentTimeMillis() - tempo));
-            debugSystem.debug();
-        }
     }
 
     public void unload() {
@@ -216,7 +188,7 @@ public class Main extends JavaPlugin {
                 interfaces.getValue().closeAllInventories();
             }
         }
-        if(config.isReconvert()) {
+        if (config.isReconvert()) {
             pointsReconvert.unregister();
         }
         db.disconnect();
@@ -236,31 +208,6 @@ public class Main extends JavaPlugin {
 
     public void setDailyChallenge(Challenge dailyChallenge) {
         this.dailyChallenge = dailyChallenge;
-    }
-
-    private List<String> loadLibraries() {
-        final List<Library> libraries = new ArrayList<>();
-
-        boolean oldVersion = version.isInRange(8, 16);
-
-        List<String> messagesToSend = new ArrayList<>();
-
-        if (oldVersion) {
-            messagesToSend.add("Loading legacy libraries...");
-            Reader targetReader = new InputStreamReader(getResource("plugin.yml"));
-
-            YamlConfiguration pluginFile = YamlConfiguration.loadConfiguration(targetReader);
-            for (final String libraryPath : pluginFile.getStringList("legacy-libraries")) {
-                final Library library = Library.fromMavenRepo(libraryPath);
-                messagesToSend.add("Loading library " + libraryPath);
-                libraries.add(library);
-            }
-
-            for (final Library library : libraries)
-                library.load(Main.class.getClassLoader());
-            messagesToSend.add("Legacy libraries loaded!");
-        }
-        return messagesToSend;
     }
 
     public void restoreDatabase() {
