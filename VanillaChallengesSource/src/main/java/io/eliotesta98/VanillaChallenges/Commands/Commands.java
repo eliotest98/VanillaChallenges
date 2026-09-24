@@ -526,11 +526,6 @@ public class Commands implements CommandExecutor {
                             Main.messageGesturePaper.sendMessage(sender, "&6VanillaChallenges unload operation...");
                             Main.instance.unload();
                             Main.messageGesturePaper.sendMessage(sender, "&aVanillaChallenges unload operation completed!");
-
-                            Main.messageGesturePaper.sendMessage(sender, "&6Loading config...");
-                            Main.instance.setConfigGestion(new ConfigGestion(
-                                    Main.instance.getDataFolder().getPath(), "config.yml",
-                                    "bho"));
                             Main.instance.loadConfigs();
                             Main.messageGesturePaper.sendMessage(sender, "&aConfiguration Reloaded!");
                         });

@@ -17,10 +17,10 @@ public class ItemUtils {
         chest = new ItemStack(Material.getMaterial(type), 1, (short) 0);
         ItemMeta itemm = chest.getItemMeta();
         // setto il nome
-        itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(name));
+        itemm.setDisplayName(Main.messageGesturePaper.applyColorLegacy(name, null));
         ArrayList<String> newLore = new ArrayList<>();
         for (String s : lore) {
-            newLore.add(Main.messageGesturePaper.applyColorLegacy(s));
+            newLore.add(Main.messageGesturePaper.applyColorLegacy(s,null));
         }
         itemm.setLore(newLore);
         chest.setItemMeta(itemm);

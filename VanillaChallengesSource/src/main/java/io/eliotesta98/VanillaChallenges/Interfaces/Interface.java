@@ -106,7 +106,7 @@ public class Interface {
         DebugUtils debug = new DebugUtils("Interface Creation");
         long tempo = System.currentTimeMillis();
         VanillaChallengesInterfaceHolder holder = new VanillaChallengesInterfaceHolder(slots.size(),
-                Main.messageGesturePaper.applyColorLegacy(title));
+                Main.messageGesturePaper.applyColorLegacy(title, p));
         // prendo l'inventario
         final Inventory inventory = holder.getInventory();
         int slotModificable = items.size() - sizeModificableSlot;

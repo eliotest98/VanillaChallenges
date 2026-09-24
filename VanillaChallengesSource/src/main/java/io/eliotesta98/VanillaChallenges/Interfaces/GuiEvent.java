@@ -115,7 +115,7 @@ public class GuiEvent implements Listener {
                     Map<String, ItemConfig> itemConfigs = Main.instance.getConfigGestion().getInterfaces().get(typeInterface).getItemsConfig();
                     ItemConfig itemConfig = itemConfigs.get(slots.get(inventoryClickEvent.getSlot()));
                     if(itemConfig.equals(nbtItem.getItem(), false)) {
-                        callbackActions.executeActions(itemConfigs, slots, clickType, inventoryClickEvent, items);
+                        callbackActions.executeActions(itemConfigs, slots, clickType, inventoryClickEvent, items, ((Player) inventoryClickEvent.getWhoClicked()).getPlayer());
                     }
                 }
             }

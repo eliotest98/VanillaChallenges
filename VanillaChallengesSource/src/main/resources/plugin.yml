@@ -8,9 +8,10 @@ softdepend: [ PlaceholderAPI, CubeGenerator, Tombs, WorldGuard, Lands ]
 libraries:
   - com.googlecode.json-simple:json-simple:1.1.1
   - com.h2database:h2:2.2.220
-  - net.kyori:adventure-api:4.19.0
-  - net.kyori:adventure-text-minimessage:4.25.0
-  - net.kyori:adventure-platform-bukkit:4.4.1
+  - net.kyori:adventure-api:5.2.0
+  - net.kyori:adventure-text-minimessage:5.2.0
+  # if you are on version 26.1 or lower and you want use adventure platform, comment out the next line
+  # - net.kyori:adventure-platform-bukkit:4.4.1
   - org.jetbrains:annotations:24.0.0
 
 legacy-libraries:

@@ -172,10 +172,10 @@ public class ItemConfig {
 
                 if(processedLine.contains("\n")) {
                     for(String singleLine: processedLine.split("\n")) {
-                        newLore.add(Main.messageGesturePaper.applyColorLegacy(singleLine));
+                        newLore.add(Main.messageGesturePaper.applyColorLegacy(singleLine, null));
                     }
                 } else {
-                    newLore.add(Main.messageGesturePaper.applyColorLegacy(processedLine));
+                    newLore.add(Main.messageGesturePaper.applyColorLegacy(processedLine, null));
                 }
             }
         }
@@ -238,7 +238,7 @@ public class ItemConfig {
     private void applyDisplayName(ItemMeta itemMeta, NbtList nbtList) {
         if (name != null && !name.trim().isEmpty()) {
             String processedName = replacePlaceholders(name, nbtList);
-            itemMeta.setDisplayName(Main.messageGesturePaper.applyColorLegacy(processedName));
+            itemMeta.setDisplayName(Main.messageGesturePaper.applyColorLegacy(processedName, null));
         }
     }
 

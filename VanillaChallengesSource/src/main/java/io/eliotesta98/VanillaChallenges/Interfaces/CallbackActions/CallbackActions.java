@@ -54,8 +54,7 @@ public class CallbackActions {
     }
 
     // Custom ExecuteCommand
-    public void executeCommand(String type, String command, InventoryClickEvent inventoryClickEvent, List<?> items) {
-        Player p = (Player) inventoryClickEvent.getWhoClicked();
+    public void executeCommand(String type, String command, Player p, InventoryClickEvent inventoryClickEvent, List<?> items) {
         TextComponent mainComponent = null;
         Title title;
         switch (type.toUpperCase()) {
@@ -63,7 +62,7 @@ public class CallbackActions {
                 p.closeInventory();
                 break;
             case "OPEN":
-                Main.instance.getConfigGestion().getInterfaces().get(command).openInterface(items, p, 1);
+                //Main.instance.getConfigGestion().getInterfaces().get(command).openInterface(items, p, 1);
                 break;
             case "CALLBACK":
                 getCallback(command).execute(inventoryClickEvent, items);
@@ -78,7 +77,7 @@ public class CallbackActions {
                 p.setOp(wasOP);
                 break;
             case "ADVENTURE-MESSAGE":
-                p.sendMessage(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, command)));
+                p.sendMessage(messageGesturePaper.applyColorLegacy(command, p));
                 break;
             case "SOUND":
                 String[] _sound = command.split("%splitter%");
@@ -95,15 +94,15 @@ public class CallbackActions {
                     TextComponent secondComponent = null;
                     for (String row : y) {
                         if (check) {
-                            mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, row)));
+                            mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(row, p));
                             check = false;
                             continue;
                         }
-                        secondComponent = new TextComponent(messageGesturePaper.applyColorLegacy("\n" + messageGesturePaper.translate(p, row)));
+                        secondComponent = new TextComponent(messageGesturePaper.applyColorLegacy("\n" + row, p));
                         mainComponent.addExtra(secondComponent);
                     }
                 } else {
-                    mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, command)));
+                    mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(command, p));
                 }
                 p.spigot().sendMessage(mainComponent);
                 break;
@@ -116,25 +115,25 @@ public class CallbackActions {
                     TextComponent secondComponent = null;
                     for (String row : y) {
                         if (check) {
-                            mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, row)));
+                            mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(row, p));
                             mainComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, zLINK[1]));
                             if (zLINK.length > 2) {
-                                mainComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, zLINK[2]))).create()));
+                                mainComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(zLINK[2], p)).create()));
                             }
                             check = false;
                             continue;
                         }
-                        secondComponent = new TextComponent(messageGesturePaper.applyColorLegacy("\n" + messageGesturePaper.translate(p, row)));
+                        secondComponent = new TextComponent(messageGesturePaper.applyColorLegacy("\n" + row, p));
                         secondComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, zLINK[1]));
                         if (zLINK.length > 2) {
-                            secondComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, zLINK[2]))).create()));
+                            secondComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(zLINK[2], p)).create()));
                         }
                         mainComponent.addExtra(secondComponent);
                     }
                 } else {
-                    mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, zLINK[0])));
+                    mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(zLINK[0], p));
                     if (zLINK.length > 2) {
-                        mainComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, zLINK[2]))).create()));
+                        mainComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(zLINK[2], p)).create()));
                     }
                     mainComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, zLINK[1]));
                 }
@@ -149,25 +148,25 @@ public class CallbackActions {
                     TextComponent secondComponent = null;
                     for (String row : y) {
                         if (check) {
-                            mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, row)));
+                            mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(row, p));
                             mainComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, zSUGGEST_COMMAND[1]));
                             if (zSUGGEST_COMMAND.length > 2) {
-                                mainComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, zSUGGEST_COMMAND[2]))).create()));
+                                mainComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(zSUGGEST_COMMAND[2], p)).create()));
                             }
                             check = false;
                             continue;
                         }
-                        secondComponent = new TextComponent(messageGesturePaper.applyColorLegacy("\n" + messageGesturePaper.translate(p, row)));
+                        secondComponent = new TextComponent(messageGesturePaper.applyColorLegacy("\n" + row, p));
                         secondComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, zSUGGEST_COMMAND[1]));
                         if (zSUGGEST_COMMAND.length > 2) {
-                            secondComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, zSUGGEST_COMMAND[2]))).create()));
+                            secondComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(zSUGGEST_COMMAND[2], p)).create()));
                         }
                         mainComponent.addExtra(secondComponent);
                     }
                 } else {
-                    mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, zSUGGEST_COMMAND[0])));
+                    mainComponent = new TextComponent(messageGesturePaper.applyColorLegacy(zSUGGEST_COMMAND[0], p));
                     if (zSUGGEST_COMMAND.length > 2) {
-                        mainComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, zSUGGEST_COMMAND[2]))).create()));
+                        mainComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(messageGesturePaper.applyColorLegacy(zSUGGEST_COMMAND[2], p)).create()));
                     }
                     mainComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, zSUGGEST_COMMAND[1]));
                 }
@@ -177,16 +176,16 @@ public class CallbackActions {
                 Bukkit.dispatchCommand(p, command);
                 break;
             case "TITLE&SUBTITLE":
-                String[] x = messageGesturePaper.applyColorLegacy(command).split("%splitter%");
-                title = new Title(messageGesturePaper, messageGesturePaper.applyColorLegacy(x[0]), messageGesturePaper.applyColorLegacy(x[1]), 20, 50, 20);
+                String[] x = messageGesturePaper.applyColorLegacy(command, p).split("%splitter%");
+                title = new Title(messageGesturePaper, messageGesturePaper.applyColorLegacy(x[0], p), messageGesturePaper.applyColorLegacy(x[1], p), 20, 50, 20);
                 title.send(p);
                 break;
             case "TITLE":
-                title = new Title(messageGesturePaper, messageGesturePaper.applyColorLegacy(command), "", 20, 50, 20);
+                title = new Title(messageGesturePaper, messageGesturePaper.applyColorLegacy(command, p), "", 20, 50, 20);
                 title.send(p);
                 break;
             case "SUBTITLE":
-                title = new Title(messageGesturePaper, "", messageGesturePaper.applyColorLegacy(command), 20, 50, 20);
+                title = new Title(messageGesturePaper, "", messageGesturePaper.applyColorLegacy(command, p), 20, 50, 20);
                 title.send(p);
                 break;
             case "ADVENTURE-TITLE&SUBTITLE":
@@ -217,7 +216,7 @@ public class CallbackActions {
                 title.sendRich(p);
                 break;
             case "ACTIONBAR":
-                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(messageGesturePaper.applyColorLegacy(messageGesturePaper.translate(p, command))));
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(messageGesturePaper.applyColorLegacy(command, p)));
                 break;
             default:
                 break;
@@ -225,25 +224,25 @@ public class CallbackActions {
     }
 
     public void executeActions(Map<String, ItemConfig> items, List<String> slots, ClickType clickType,
-                               InventoryClickEvent inventoryClickEvent, List<?> itemsDb) {
+                               InventoryClickEvent inventoryClickEvent, List<?> itemsDb, Player player) {
         Map<String, List<String>> actions = items.get(slots.get(inventoryClickEvent.getSlot())).getActions();
         List<String> actionsList = actions.get(clickType.name());
         if (actionsList == null) {
             return;
         }
         // Clicked Type execution
-        executeAction(actionsList, inventoryClickEvent, itemsDb);
+        executeAction(actionsList, inventoryClickEvent, itemsDb, player);
         // All execution
-        executeAction(actions.get("ALL"), inventoryClickEvent, itemsDb);
+        executeAction(actions.get("ALL"), inventoryClickEvent, itemsDb, player);
     }
 
-    private void executeAction(List<String> actionsList, InventoryClickEvent inventoryClickEvent, List<?> items) {
+    private void executeAction(List<String> actionsList, InventoryClickEvent inventoryClickEvent, List<?> items, Player player) {
         for (String execute : actionsList) {
             if (execute.contains(":")) {
                 String[] split = execute.split(":");
-                executeCommand(split[0], split[1], inventoryClickEvent, items);
+                executeCommand(split[0], split[1], player, inventoryClickEvent, items);
             } else {
-                executeCommand(execute, null, inventoryClickEvent, items);
+                executeCommand(execute, null, player, inventoryClickEvent, items);
             }
         }
     }

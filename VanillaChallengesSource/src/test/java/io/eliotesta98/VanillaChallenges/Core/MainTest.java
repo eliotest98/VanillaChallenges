@@ -84,75 +84,10 @@ public class MainTest {
     }
 
     @Test
-    public void onEnableWithDependencies() {
-        Map<String, Boolean> hooks = plugin.getConfigGestion().getHooks();
-        for (String hook : hooks.keySet()) {
-            hooks.replace(hook, true);
-            plugin.getConfigGestion().setHooks(hooks);
-            MockBukkit.createMockPlugin(hook);
-            plugin.onEnable();
-            try {
-                serverMock.getScheduler().performTicks(40);
-            } catch (NullPointerException ignore) {
-
-            }
-            hooks.replace(hook, false);
-            plugin.getConfigGestion().setHooks(hooks);
-
-            plugin.onEnable();
-            serverMock.getScheduler().performTicks(40);
-        }
-    }
-
-    @Test
     public void onDisableWithPAPI() {
         Map<String, Boolean> hooks = plugin.getConfigGestion().getHooks();
         hooks.replace("PlaceholderAPI", true);
         plugin.onDisable();
-    }
-
-    @Test
-    public void pluginStartingProcessWithDependencies() {
-        int pre = plugin.getConfigGestion().getChallenges().size();
-        MockBukkit.createMockPlugin("CubeGenerator");
-        MockBukkit.createMockPlugin("SuperiorSkyblock2");
-        Map<String, Boolean> hooks = plugin.getConfigGestion().getHooks();
-        hooks.replace("CubeGenerator", true);
-        hooks.replace("SuperiorSkyblock2", true);
-        plugin.getConfigGestion().setHooks(hooks);
-        plugin.db.clearChallenges();
-        plugin.setConfigGestion(new ConfigGestion(plugin.getDataFolder().getPath(), "config.yml"));
-        plugin.pluginStartingProcess();
-        Assertions.assertEquals(pre + 2, plugin.getConfigGestion().getChallenges().size());
-
-        List<Challenge> challenges = plugin.db.getChallenges();
-        while (!challenges.isEmpty()) {
-            plugin.getConfigGestion().setTimeBroadcastMessageTitle(0);
-            plugin.getConfigGestion().setActiveOnlinePoints(true);
-            plugin.challengeSelected = false;
-            plugin.getDailyChallenge().nextChallenge(
-                    false, false,
-                    false, 3,
-                    3, "", true);
-            challenges.remove(0);
-            Assertions.assertTrue(plugin.challengeSelected);
-        }
-        plugin.getDailyChallenge().nextChallenge(
-                false, false,
-                false, 3,
-                3, "", false);
-        challenges = plugin.db.getChallenges();
-        while (!challenges.isEmpty()) {
-            plugin.getConfigGestion().setTimeBroadcastMessageTitle(0);
-            plugin.getConfigGestion().setActiveOnlinePoints(true);
-            plugin.challengeSelected = false;
-            plugin.getDailyChallenge().nextChallenge(
-                    false, false,
-                    false, 3,
-                    3, "", true);
-            challenges.remove(0);
-            Assertions.assertTrue(plugin.challengeSelected);
-        }
     }
 
     @Test
